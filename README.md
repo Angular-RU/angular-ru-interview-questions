@@ -56,3 +56,7 @@ Angular:
 - Как применять валидацию для форм?
 - Что такое реактивные формы в Angular?
 - Что такое Shadow DOM и как с ним работать в Angular?
+- Что такое Observable?
+- В чём разница между Observable и Promise?
+- В чём разница между Observable и Subject?
+- Какие методы в Angular используют Observable?
