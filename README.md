@@ -20,8 +20,8 @@
 
 <details>
 <summary>Что такое Angular?</summary>
-<div>
-  in progress..
+<div><br>
+Angular представляет фреймворк от компании Google для создания клиентских приложений. Прежде всего он нацелен на разработку SPA-решений (Single Page Application), то есть одностраничных приложений. <br><br>
 </div>
 </details>
 
