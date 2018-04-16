@@ -16,9 +16,9 @@
 
 **Angular**:
 
-##### Основные концепции
-
 - [Angular Interview Questions by Google Developer Expert](https://github.com/Yonet/Angular-Interview-Questions)
+
+##### Основные концепции
 
 <details>
 <summary>Что такое Angular?</summary>
