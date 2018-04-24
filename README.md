@@ -608,7 +608,7 @@ Change Detection Mechanism - продвигается только вперед 
 </details>
 
 <details>
-<summary>Что такое Karma, QUnit, Jasmine (зачем их используют совместно при разработке на Angular)?</summary>
+<summary>Что такое Karma, Jest, Jasmine (зачем их используют совместно при разработке на Angular)?</summary>
 <div>
   in progress..
 </div>
