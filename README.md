@@ -401,9 +401,102 @@ app.component.html
 
 <details>
 <summary>Как обновлять представление, если ваша модель данных обновляется вне 'зоны'?</summary>
-<div>
-  in progress..
-</div>
+<br>
+
+1. Используя метод `ApplicationRef.prototype.tick`, который запустит `change detection` на всем дереве компонентов.
+
+```typescript
+import { Component, ApplicationRef, NgZone } from '@angular/core';
+
+@Component({
+    selector: 'app-root',
+    template: `
+        <h1>Hello, {{ name }}!</h1>
+    `
+})
+export class AppComponent {
+    /**
+    * @var {string}
+    */
+    public name: string = null;
+
+    constructor(private app: ApplicationRef, private zone: NgZone) {
+        this.zone.runOutsideAngular(() => {
+            setTimeout(() => {
+                this.name = window.prompt('What is your name?', 'Jake');
+                this.app.tick();
+            }, 5000);
+        });
+    }
+}
+```
+
+2. Используя метод `NgZone.prototype.run`, который также запустит `change detection` на всем дереве.
+
+```typescript
+import { Component, NgZone } from '@angular/core';
+
+import { SomeService } from './some.service'
+
+@Component({
+    selector: 'app-root',
+    template: `
+        <h1>Hello, {{ name }}!</h1>
+    `,
+    providers: [SomeService]
+})
+export class AppComponent {
+    /**
+    * @var {string}
+    */
+   public name: string = null;
+
+   constructor(private zone: NgZone, private service: SomeService) {
+       this.zone.runOutsideAngular(() => {
+           this.service.getName().then((name: string) => {
+               this.zone.run(() => this.name = name);
+           });
+       });
+   }
+}
+```
+
+Метод `run` под капотом сам вызывает `tick`, а параметром принимает функцию, которую нужно выполнить перед `tick`. То есть:
+
+```typescript
+this.zone.run(() => this.name = name);
+
+// идентично
+
+this.name = name;
+this.app.tick();
+```
+
+3. Используя метод `ChangeDetectorRef.prototype.detectChanges`, который запустит `change detection` на текущем компоненте и дочерних.
+
+```typescript
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
+
+@Component({
+    selector: 'app-root',
+    template: `
+        <h1>Hello, {{ name }}!</h1>
+    `
+})
+export class AppComponent {
+    /**
+    * @var {string}
+    */
+   public name: string = null;
+
+   constructor(private zone: NgZone, private ref: ChangeDetectorRef) {
+       this.zone.runOutsideAngular(() => {
+           this.name = window.prompt('What is your name?', 'Jake');
+           this.ref.detectChanges();
+       });
+   }
+}
+```
 </details>
 
 
@@ -416,35 +509,34 @@ app.component.html
 
 <details>
 <summary>Что такое Change Detection, как работает Change Detection Mechanism?</summary>
-<div>
+
 <h4>1. Change Detection</h4>
+  
 Change Detection - процесс синхронизации модели с представлением. В Angular поток информации однонаправленный, даже при использовании `ngModel` для реализации двустороннего связывания, которая является синтаксическим сахаром поверх однонаправленного потока.
-<br><br>
+
 <h4>2. Change Detection Mechanism </h4>
-Change Detection Mechanism - продвигается только вперед и никогда не оглядывается назад, начиная с корневого (рут) компонента до последнего. В этом и есть смысл одностороннего потока данных. Архитектура Angular приложения очень проста — дерево компонентов. Каждый компонент указывает на дочерний, но дочерний не указывает на родительский. Односторонний поток устраняет необходимость $digest цикла.
-</div><br>
+Change Detection Mechanism - продвигается только вперед и никогда не оглядывается назад, начиная с корневого (рут) компонента до последнего. В этом и есть смысл одностороннего потока данных. Архитектура Angular приложения очень проста — дерево компонентов. Каждый компонент указывает на дочерний, но дочерний не указывает на родительский. Односторонний поток устраняет необходимость `$digest` цикла.
 </details>
 
 <details>
 <summary>Какие существуют стратегии обнаружения изменений?</summary>
-<div>
+<br>
 
-<br>Всего есть две стратегии - `Default` и `OnPush`. Если все компоненты используют первую стратегию, то `Zone` проверяет все дерево независимо от того, где произошло изменение. Чтобы сообщить Angular, что мы будем соблюдать условия повышения производительности нужно использовать стратегию обнаружения изменений `OnPush`. Это сообщит Angular, что наш компонент зависит только от входных данных и любой объект, который передается ему должен считаться immutable. Это все построено на принципе автомата Мили, где текущее состояние зависит только от входных значений.
-</div><br>
+Всего есть две стратегии - `Default` и `OnPush`. Если все компоненты используют первую стратегию, то `Zone` проверяет все дерево независимо от того, где произошло изменение. Чтобы сообщить Angular, что мы будем соблюдать условия повышения производительности нужно использовать стратегию обнаружения изменений `OnPush`. Это сообщит Angular, что наш компонент зависит только от входных данных и любой объект, который передается ему должен считаться immutable. Это все построено на принципе автомата Мили, где текущее состояние зависит только от входных значений.
 </details>
 
 <details>
 <summary>Сколько Change Detector'ов может быть во всем приложении?</summary>
-<div>
-<br>У каждого компонента есть свой Change Detector, все Change Detector'ы наследуются от AbstractChangeDetector.
-</div><br>
+<br>
+  
+У каждого компонента есть свой Change Detector, все Change Detector'ы наследуются от AbstractChangeDetector.
 </details>
 
 <details>
 <summary>Основное отличие constructor от ngOnInit?</summary>
-<div>
-<br>Конструктор сам по себе является фичей самого класса, а не Angular. Основная разница в том, что Angular запустит `ngOnInit`, после того, как закончит настройку компонента, то есть, это сигнал, благодаря которому свойства `@Input()` и другие байндинги, и декорируемые свойства доступны в `ngOnInit`, но не определены внутри конструктора, по дизайну.
-</div><br>
+<br>
+
+Конструктор сам по себе является фичей самого класса, а не Angular. Основная разница в том, что Angular запустит `ngOnInit`, после того, как закончит настройку компонента, то есть, это сигнал, благодаря которому свойства `@Input()` и другие байндинги, и декорируемые свойства доступны в `ngOnInit`, но не определены внутри конструктора, по дизайну.
 </details>
 
 
@@ -503,9 +595,68 @@ Change Detection Mechanism - продвигается только вперед 
 
 <details>
 <summary>Что такое HTTP Interceptors?</summary>
-<div>
-  in progress..
-</div>
+<br>
+
+Interceptor (перехватчик) - просто причудливое слово для функции, которая получает запросы / ответы до того, как они будут обработаны / отправлены на сервер. Нужно использовать перехватчики, если имеет смысл предварительно обрабатывать многие типы запросов одним способом. Например нужно для всех запросов устанавливать хедер авторизации `Bearer`:
+
+```typescript
+// token.interceptor.ts
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+
+import { Observable } from 'rxjs/Observable';
+
+@Injectable()
+export class TokenInterceptor implements HttpInterceptor {
+    /**
+     * @param req
+     * @param next
+     * @returns {Observable}
+     */
+    public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        const token = localStorage.getItem('token') as string;
+
+        if (token) {
+            req = req.clone({
+                setHeaders: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+
+        return next.handle(req);
+    }
+}
+```
+
+И регистрируем перехватчик как синглтон в провайдерах модуля:
+
+```typescript
+// app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { AppComponent } from './app.component';
+
+import { TokenInterceptor } from './token.interceptor';
+
+@NgModule({
+    imports: [
+        BrowserModule
+    ],
+    declarations: [
+        AppComponent
+    ],
+    bootstrap: [AppComponent],
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: TokenInterceptor,
+        multi: true // <--- может быть зарегистрирован массив перехватчиков
+    }]
+})
+export class AppModule {}
+```
 </details>
 
 
@@ -551,6 +702,13 @@ Change Detection Mechanism - продвигается только вперед 
 
 <details>
 <summary>В чем разница между Routing и Navigation?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Как загрузить данные до того как активируется роут?</summary>
 <div>
   in progress..
 </div>
