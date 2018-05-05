@@ -135,162 +135,173 @@
 <summary>Для чего нужны директивы ng-template, ng-container, ng-content?</summary>
 <div>
   <h4>1. ng-template</h4>
-  &lt;template&gt; — это механизм для отложенного рендера клиентского контента, который не отображается во время загрузки, но может быть инициализирован при помощи JavaScript. <br><br>
-  Template можно представить себе как фрагмент контента, сохранённый для последующего использования в документе. Хотя парсер и обрабатывает содержимое элемента &lt;template&gt; во время загрузки страницы, он делает это только чтобы убедиться в валидности содержимого; само содержимое при этом не отображается. <br><br>
-  &lt;ng-template&gt; - является имплементацией стандартного элемента template, данный элемент появился с четвертой версии Angular, это было сделано с точки зрения совместимости со встраиваемыми на страницу template элементами, которые могли попасть в шаблон ваших компонентов по тем или иным причинам. <br><br>
+  
+  `<template>` — это механизм для отложенного рендера клиентского контента, который не отображается во время загрузки, но может быть инициализирован при помощи JavaScript. <br><br>
+  Template можно представить себе как фрагмент контента, сохранённый для последующего использования в документе. Хотя парсер и обрабатывает содержимое элемента `template` во время загрузки страницы, он делает это только чтобы убедиться в валидности содержимого; само содержимое при этом не отображается. <br><br>
+  
+  `<ng-template>` - является имплементацией стандартного элемента template, данный элемент появился с четвертой версии Angular, это было сделано с точки зрения совместимости со встраиваемыми на страницу template элементами, которые могли попасть в шаблон ваших компонентов по тем или иным причинам. <br><br>
 
 Пример:
-<pre>
-&lt;div class="lessons-list" *ngIf="lessons else loading"&gt;
-  ... 
-&lt;/div&gt;
 
-&lt;ng-template #loading&gt;
-    &lt;div&gt;Loading...&lt;/div&gt;
-&lt;/ng-template&gt;
-</pre>
+```html
+<div class="lessons-list" *ngIf="lessons else loading">
+  ... 
+</div>
+
+<ng-template #loading>
+    <div>Loading...</div>
+</ng-template>
+```
 
   <h4>2. ng-container</h4>
   
-  &lt;ng-container"&gt; - это логический контейнер, который может использоваться для группировки узлов, но не отображается в дереве DOM как узел (node).
+  `<ng-container>` - это логический контейнер, который может использоваться для группировки узлов, но не отображается в дереве DOM как узел (node).
 
   На самом деле структурные директивы (*ngIf, *ngFor, ..) являются синтаксическим сахаром для наших шаблонов. В реальности, данные шаблоны трансформируются в такие конструкции:
   
-<pre>
-&lt;ng-template [ngIf]="lessons" [ngIfElse]="loading"&gt;
-   &lt;div class="lessons-list"&gt;
+```html
+<ng-template [ngIf]="lessons" [ngIfElse]="loading">
+   <div class="lessons-list">
      ... 
-   &lt;/div&gt;
-&lt;/div&gt;
+   </div>
+</div>
 
-&lt;ng-template #loading&gt;
-    &lt;div&gt;Loading...&lt;/div&gt;
-&lt;/ng-template&gt;
-</pre>
+<ng-template #loading>
+    <div>Loading...</div>
+</ng-template>
+```
 
 Но что делать, если я хочу применить несколько структурных директив?
 (спойлер: к сожалению, так нельзя сделать)
 
-<pre>
-&lt;div class="lesson" *ngIf="lessons" *ngFor="let lesson of lessons"&gt;
-  &lt;div class="lesson-detail"&gt;
+```html
+<div class="lesson" *ngIf="lessons" *ngFor="let lesson of lessons">
+  <div class="lesson-detail">
       {{lesson | json}}
-  &lt;/div&gt;
-&lt;/div&gt; 
-</pre>
+  </div>
+</div> 
+```
 
-<pre>
+```
 Uncaught Error: Template parse errors:
 Can't have multiple template bindings on one element. Use only one attribute 
 named 'template' or prefixed with *
-</pre>
+```
 
 Но можно сделать так:
 
-<pre>
-&lt;div *ngIf="lessons"&gt;
-  &lt;div class="lesson" *ngFor="let lesson of lessons"&gt;
-    &lt;div class="lesson-detail"&gt;
+```html
+<div *ngIf="lessons">
+  <div class="lesson" *ngFor="let lesson of lessons">
+    <div class="lesson-detail">
         {{lesson | json}}
-    &lt;/div&gt;
-  &lt;/div&gt; 
-&lt;/div&gt;
-</pre>
+    </div>
+  </div> 
+</div>
+```
 
 Однако, чтобы избежать необходимости создавать дополнительный div, мы можем вместо этого использовать директиву ng-container:
 
-<pre>
-&lt;ng-container *ngIf="lessons"&gt;
-    &lt;div class="lesson" *ngFor="let lesson of lessons"&gt;
-        &lt;div class="lesson-detail"&gt;
+```
+<ng-container *ngIf="lessons">
+    <div class="lesson" *ngFor="let lesson of lessons">
+        <div class="lesson-detail">
             {{lesson | json}}
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/ng-container&gt;
-</pre>
+        </div>
+    </div>
+</ng-container>
+```
 
 Как мы видим, директива ng-container предоставляет нам элемент, в котором мы можем использовать структурную директиву, без необходимости создавать дополнительный элемент.
 
 Еще пара примечательных примеров, если все же вы хотите использовать ng-template вместо ng-container, по определенным правилам вы не сможете использовать полную конструкцию структурных директив.
 
 Вы можете писать либо так:
-<pre>
-&lt;div class="mainwrap"&gt;
-    &lt;ng-container *ngIf="true"&gt;
-        &lt;h2&gt;Title&lt;/h2&gt;
-        &lt;div&gt;Content&lt;/div&gt;
-    &lt;/ng-container&gt;
-&lt;/div&gt;
-</pre>
+
+```html
+<div class="mainwrap">
+    <ng-container *ngIf="true">
+        <h2>Title</h2>
+        <div>Content</div>
+    </ng-container>
+</div>
+```
 
 Либо так:
-<pre>
-&lt;div class="mainwrap"&gt;
-    &lt;ng-template [ngIf]="true"&gt;
-        &lt;h2&gt;Title&lt;/h2&gt;
-        &lt;div&gt;Content&lt;/div&gt;
-    &lt;/ng-template&gt;
-&lt;/div&gt;
-</pre>
+
+```html
+<div class="mainwrap">
+    <ng-template [ngIf]="true">
+        <h2>Title</h2>
+        <div>Content</div>
+    </ng-template>
+</div>
+```
 
 На выходе, при рендеринге будет одно и тоже:
-<pre>
-&lt;div class="mainwrap"&gt;
-      &lt;h2&gt;Title&lt;/h2&gt;
-      &lt;div&gt;Content&lt;/div&gt;
-&lt;/div&gt;
-</pre>
+
+```html
+<div class="mainwrap">
+      <h2>Title</h2>
+      <div>Content</div>
+</div>
+```
 
  <h4>3. ng-content</h4>
- &lt;ng-content&gt; - позволяет внедрять родительским компонентам html-код в дочерние компоненты.
+ 
+ `<ng-content>` - позволяет внедрять родительским компонентам html-код в дочерние компоненты.
  
 Здесь на самом деле, немного сложнее уже чем с ng-template, ng-container. Так как ng-content решает задачу проецирования контента в ваши веб-компоненты. Веб-компоненты состоят из нескольких отдельных технологий. Вы можете думать о Веб-компонентах как о переиспользуемых виджетах пользовательского интерфейса, которые создаются с помощью открытых веб-технологий. Они являются частью браузера и поэтому не нуждаются во внешних библиотеках, таких как jQuery или Dojo. Существующий Веб-компонент может быть использован без написания кода, просто путем импорта выражения на HTML-страницу. Веб-компоненты используют новые или разрабатываемые стандартные возможности браузера.
 
 Давайте представим ситуацию от обратного, нам нужно параметризировать наш компонент. Мы хотим сделать так, чтобы на вход в компонент мы могли передать какие-либо статичные данные. Это можно сделать несколькими способами. 
 
 comment.component.ts:
-<pre>
+
+```ts
 @Component({
   selector: 'comment',
   template: `
-    &lt;h1&gt;Комментарий: &lt;/h1&gt;
-    &lt;p&gt;{{data}}&lt;/p&gt;
+    <h1>Комментарий: </h1>
+    <p>{{data}}</p>
   `
 })
 export class CommentComponent {
   @Input() data: string = null;
 }
-</pre>
+```
 
 app.component.html
-<pre>
-&lt;div *ngFor="let message of comments"&gt;
-  &lt;comment [data]="message"&gt;&lt;/comment&gt;
-&lt;/div&gt;
-</pre>
+
+```html
+<div *ngFor="let message of comments">
+  <comment [data]="message"></comment>
+</div>
+```
 
 Но можно поступить и другим путем. <br>
 comment.component.ts:
-<pre>
+
+```ts
 @Component({
   selector: 'comment',
   template: `
-    &lt;h1>Комментарий: &lt;/h1&gt;
-    &lt;ng-content&gt;&lt;/ng-content&gt;
+    <h1>Комментарий: </h1>
+    <ng-content></ng-content>
   `
 })
 export class CommentComponent { 
 }
-</pre>
+```
 
 app.component.html
-<pre>
-&lt;div *ngFor="let message of comments"&gt;
-  &lt;comment>
-    &lt;p&gt;{{message}}&lt;/p&gt;
-  &lt;/comment&gt;
-&lt;/div&gt;
-</pre>
+
+```html
+<div *ngFor="let message of comments">
+  <comment>
+    <p>{{message}}</p>
+  </comment>
+</div>
+```
 
 Конечно, эти примеры плохо демонстрируют подводные камни, свои плюсы и минусы. Но второй способ демонстрирует подход при работе, когда мы оперируем независимыми абстракциями и можем проецировать контент внутрь наших компонентов (подход веб-компонентов).
 
@@ -415,9 +426,7 @@ import { Component, ApplicationRef, NgZone } from '@angular/core';
     `
 })
 export class AppComponent {
-    /**
-    * @var {string}
-    */
+
     public name: string = null;
 
     constructor(private app: ApplicationRef, private zone: NgZone) {
@@ -428,6 +437,7 @@ export class AppComponent {
             }, 5000);
         });
     }
+    
 }
 ```
 
@@ -435,7 +445,6 @@ export class AppComponent {
 
 ```typescript
 import { Component, NgZone } from '@angular/core';
-
 import { SomeService } from './some.service'
 
 @Component({
@@ -446,9 +455,7 @@ import { SomeService } from './some.service'
     providers: [SomeService]
 })
 export class AppComponent {
-    /**
-    * @var {string}
-    */
+
    public name: string = null;
 
    constructor(private zone: NgZone, private service: SomeService) {
@@ -458,6 +465,7 @@ export class AppComponent {
            });
        });
    }
+   
 }
 ```
 
@@ -484,9 +492,7 @@ import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
     `
 })
 export class AppComponent {
-    /**
-    * @var {string}
-    */
+
    public name: string = null;
 
    constructor(private zone: NgZone, private ref: ChangeDetectorRef) {
@@ -495,6 +501,7 @@ export class AppComponent {
            this.ref.detectChanges();
        });
    }
+   
 }
 ```
 </details>
@@ -599,8 +606,9 @@ Change Detection Mechanism - продвигается только вперед 
 
 Interceptor (перехватчик) - просто причудливое слово для функции, которая получает запросы / ответы до того, как они будут обработаны / отправлены на сервер. Нужно использовать перехватчики, если имеет смысл предварительно обрабатывать многие типы запросов одним способом. Например нужно для всех запросов устанавливать хедер авторизации `Bearer`:
 
+ token.interceptor.ts
+ 
 ```typescript
-// token.interceptor.ts
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 
@@ -608,11 +616,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-    /**
-     * @param req
-     * @param next
-     * @returns {Observable}
-     */
+
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const token = localStorage.getItem('token') as string;
 
@@ -631,14 +635,13 @@ export class TokenInterceptor implements HttpInterceptor {
 
 И регистрируем перехватчик как синглтон в провайдерах модуля:
 
+app.module.ts
+
 ```typescript
-// app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { AppComponent } from './app.component';
-
 import { TokenInterceptor } from './token.interceptor';
 
 @NgModule({
