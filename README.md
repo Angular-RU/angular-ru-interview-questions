@@ -606,6 +606,15 @@ Change Detection Mechanism - продвигается только вперед 
 </div>
 </details>
 
+<details>
+<summary>В чём разница между switchMap, mergeMap, concatMap?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+
 ##### Angular with Backend integrations
 
 <details>
