@@ -84,8 +84,6 @@
   <li>Встроенные анимации</li>
 </ul>
 
-<br><img src="https://qph.ec.quoracdn.net/main-qimg-274d4fe4ce8bbcdcbcd99662959873ac.webp"><br>
-
 </div>
 </details>
 
