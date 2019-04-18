@@ -6,6 +6,7 @@
 
 - [Coding Interview University](https://github.com/jwasham/coding-interview-university)
 - [Awesome Interviews](https://github.com/alex/what-happens-when)
+- [Angular Interview Questions](https://github.com/sudheerj/angular-interview-questions)
 
 **Frontend**: 
 
