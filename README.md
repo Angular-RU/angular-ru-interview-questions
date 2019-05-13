@@ -99,7 +99,11 @@
 <details>
 <summary>Что такое MVVM и в чем разница перед MVC?</summary>
 <div>
-  in progress..
+  MVVM - шаблон проектирования архитектуры приложения. Состоит из 3 компонентов: Model, View, ViewModel.
+  Отличие от MVС заключаются в:
+  - View реагирует на действия пользователя и передает их во View Model через Data Binding.
+  - View Model, в отличие от контроллера в MVC, имеет Binder, автоматизирущий связь между View и связанными свойствами в View Model.
+  Сам Binding может быть односторонним или двухсторонним.
 </div>
 </details>
 
@@ -132,7 +136,8 @@
 <details>
 <summary>В чем разница между структурной и атрибутной директивой, назовите встроенные директивы?</summary>
 <div>
-  in progress..
+  Структурные директивы влияют на DOM и могут добавлять/удалять элементы. Встроенные: ng-template, NgIf,  NgFor, NgSwitch,  etc.
+  Атрибутные директивы меняют внешний вид или поведение элементов, компонентов или других директив. Встроенные: NgStyle, NgClass.
 </div>
 </details>
 
@@ -320,7 +325,68 @@ app.component.html
 <details>
 <summary>Что такое директива и как создать собственную?</summary>
 <div>
-  in progress..
+  Директивы бывают трех видов: компонент, структуные и атрибутные (см. выше). 
+
+  С созданием компонентов у вас не должно возникнуть сложностей, подробнее про создание атрибутных директив:
+  
+    @Directive({
+    selector: '[appHighlight]'
+  })
+    export class HighlightDirective {
+     constructor() { }
+  }
+
+  Декоратор определяет селектор атрибута [appHighlight], [] указывают что это селектор атрибута. Angular найдет каждый элемент в шаблоне с этим атрибутом и применит к ним логику директивы.
+
+  export class HighlightDirective {
+      constructor(el: ElementRef) {
+         el.nativeElement.style.backgroundColor = 'yellow';
+      }
+  }
+  
+  Необходимо указать в конструткторе ElementRef, чтобы через его свойство nativeElement иметь прямой доступ к DOM элементу, который должен быть изменен.
+  Теперь, используя @HostListener, можно добавить обработчики событий, взаимодействующие с декоратором.
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.highlight('yellow');
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.highlight(null);
+  }
+
+  private highlight(color: string) {
+    this.el.nativeElement.style.backgroundColor = color;
+  }
+
+
+  Структурные директивы создаются так:
+
+  Напишем UnlessDirective, которая будет противоположна NgIf. Необходимо использовать @Directive, и импортировать Input, TemplateRef, и ViewContainerRef. Они вам понадобятся при воздании любой структурной директивы. Применить декоратор к классу директивы и установить CSS-селектор.
+
+  import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+
+  @Directive({ selector: '[appUnless]'})
+  export class UnlessDirective {
+  }
+
+В конструкторе мы получаем доступ к viewcontainer и содержимое <ng-template>.
+
+  constructor(
+    private templateRef: TemplateRef<any>,
+    private viewContainer: ViewContainerRef) { }
+
+Эта директива предполагает работу с true/false. Для этого нужно свойство appUnless, добавленное через @Input. 
+
+  @Input() set appUnless(condition: boolean) {
+    if (!condition && !this.hasView) {
+      this.viewContainer.createEmbeddedView(this.templateRef);
+      this.hasView = true;
+    } else if (condition && this.hasView) {
+      this.viewContainer.clear();
+      this.hasView = false;
+    }
+  }
 </div>
 </details>
 
@@ -328,7 +394,11 @@ app.component.html
 <details>
 <summary>Что такое директива, компонент, модуль, сервис, пайп в Angular и для чего они нужны?</summary>
 <div>
-  in progress..
+  Директива - см. выше.
+  Компонент контролирует участок экрана, т.н. view.
+  Сервис - класс с узкой, четко определенной целью. Это может быть значение, функция, запрос, etc. Главное в них то, что они повторно используются, отделяя чистую функциональность компонента. 
+  Пайп - преобразует отображение значений в шаблоне, к примеру отображение дат в разных локалях или изменяют в отображении регистр строк. Можно писать свои, кастомные.
+
 </div>
 </details>
 
@@ -336,7 +406,6 @@ app.component.html
 <details>
 <summary>Расскажите об основных параметрах @NgModule, @Component, @Directive, @Injectable, @Pipe</summary>
 <div>
-  in progress..
 </div>
 </details>
 
