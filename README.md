@@ -19,6 +19,218 @@
 
 - [Angular Interview Questions by Google Developer Expert](https://github.com/Yonet/Angular-Interview-Questions)
 
+##### Основны TypeScript
+
+<details>
+<summary>Что такое декоратор?</summary>
+  <div><br>
+  Декоратор - способ добавления метаданных к объявлению класса. Это специальный вид объявления, который может быть присоединен к объявлению класса, методу, методу доступа, свойству или параметру. 
+  <br>Декораторы используют форму @expression, где expression - функция, которая будет вызываться во время выполнения с информацией о декорированном объявлении.
+  <br>Чтобы написать собственный декоратор, нам нужно сделать его factory и определить тип:
+    <ul>
+  <li>ClassDecorator</li>
+  <li>PropertyDecorator</li>
+  <li>MethodDecorator/li>
+  <li>ParameterDecorator</li>
+    </ul>
+    
+  <b>Декоратор класса</b>
+  <div>
+  Вызывается перед объявлением класса, применяется к конструктору класса и может использоваться для наблюдения, изменения или замены определения класса. Expression декоратора класса будет вызываться как функция во время выполнения, при этом конструктор декорированного класса является единственным аргументом. Если класс декоратора возвращает значение, он заменит объявление класса вернувшимся значением.
+
+  ```ts
+  export function logClass(target: Function) {
+    // save a reference to the original constructor
+    const original = target;
+
+    // a utility function to generate instances of a class
+    function construct(constructor, args) {
+        const c: any = function () {
+            return constructor.apply(this, args);
+        }
+        c.prototype = constructor.prototype;
+        return new c();
+    }
+
+    // the new constructor behaviour
+    const f: any = function (...args) {
+        console.log(`New: ${original['name']} is created`);
+        //New: Employee is created
+        return construct(original, args);
+    }
+
+    // copy prototype so intanceof operator still works
+    f.prototype = original.prototype;
+
+    // return new constructor (will override original)
+    return f;
+}
+
+@logClass
+class Employee {
+
+}
+
+let emp = new Employee();
+console.log('emp instanceof Employee');
+//emp instanceof Employee
+console.log(emp instanceof Employee);
+//true
+  ```
+  </div>
+  
+  <br><b>Декоратор свойства</b>
+  <div>
+Объявляется непосредственно перед объявлением метода. Будет вызываться как функция во время выполнения со следующими двумя аргументами:
+  <ul>
+    <li>target - прототип текущего объекта, т.е. если Employee является объектом, Employee.prototype</li>
+    <li>propertyKey - название свойства</li>
+  </ul>
+
+  ```ts
+  function logParameter(target: Object, propertyName: string) {
+
+    // property value
+    let _val = this[propertyName];
+
+    // property getter method
+    const getter = () => {
+        console.log(`Get: ${propertyName} => ${_val}`);
+        return _val;
+    };
+
+    // property setter method
+    const setter = newVal => {
+        console.log(`Set: ${propertyName} => ${newVal}`);
+        _val = newVal;
+    };
+
+    // Delete property.
+    if (delete this[propertyName]) {
+
+        // Create new property with getter and setter
+        Object.defineProperty(target, propertyName, {
+            get: getter,
+            set: setter,
+            enumerable: true,
+            configurable: true
+        });
+    }
+}
+
+class Employee {
+
+    @logParameter
+    name: string;
+
+}
+
+const emp = new Employee();
+emp.name = 'Mohan Ram';
+console.log(emp.name);
+// Set: name => Mohan Ram
+// Get: name => Mohan Ram
+// Mohan Ram
+  ```
+  </div>
+  <br><b>Декоратор метода</b>
+  <div>
+Объявляется непосредственно перед объявлением метода. Будет вызываться как функция во время выполнения со следующими двумя аргументами:
+  <ul>
+    <li>target - прототип текущего объекта, т.е. если Employee является объектом, Employee.prototype</li>
+    <li>propertyKey - название свойства</li>
+    <li>descriptor - дескриптор свойства метода т.е. - Object.getOwnPropertyDescriptor (Employee.prototype, propertyKey)</li>
+  </ul>
+ 
+   ```ts
+   export function logMethod(
+    target: Object,
+    propertyName: string,
+    propertyDesciptor: PropertyDescriptor): PropertyDescriptor {
+    // target === Employee.prototype
+    // propertyName === "greet"
+    // propertyDesciptor === Object.getOwnPropertyDescriptor(Employee.prototype, "greet")
+    const method = propertyDesciptor.value;
+
+    propertyDesciptor.value = function (...args: any[]) {
+
+        // convert list of greet arguments to string
+        const params = args.map(a => JSON.stringify(a)).join();
+
+        // invoke greet() and get its return value
+        const result = method.apply(this, args);
+
+        // convert result to string
+        const r = JSON.stringify(result);
+
+        // display in console the function call details
+        console.log(`Call: ${propertyName}(${params}) => ${r}`);
+
+        // return the result of invoking the method
+        return result;
+    }
+    return propertyDesciptor;
+};
+
+class Employee {
+
+    constructor(
+        private firstName: string,
+        private lastName: string
+    ) {
+    }
+
+    @logMethod
+    greet(message: string): string {
+        return `${this.firstName} ${this.lastName} says: ${message}`;
+    }
+
+}
+
+const emp = new Employee('Mohan Ram', 'Ratnakumar');
+emp.greet('hello');
+//Call: greet("hello") => "Mohan Ram Ratnakumar says: hello"
+   ```
+   </div>
+   
+   <br><b>Декоратор параметра</b>
+  <div>
+Объявляется непосредственно перед объявлением метода. Будет вызываться как функция во время выполнения со следующими двумя аргументами:
+  <ul>
+    <li>target - прототип текущего объекта, т.е. если Employee является объектом, Employee.prototype</li>
+    <li>propertyKey - название свойства</li>
+    <li>index - индекс параметра в массиве аргументов</li>
+  </ul>
+   
+   ```ts
+   function logParameter(target: Object, propertyName: string, index: number) {
+
+    // generate metadatakey for the respective method
+    // to hold the position of the decorated parameters
+    const metadataKey = `log_${propertyName}_parameters`;
+    if (Array.isArray(target[metadataKey])) {
+        target[metadataKey].push(index);
+    }
+    else {
+        target[metadataKey] = [index];
+    }
+}
+
+class Employee {
+    greet(@logParameter message: string): void {
+        console.log(`hello ${message}`);
+    }
+}
+const emp = new Employee();
+emp.greet('world');
+ ```
+ </div>
+   
+</details>
+
+
+
+
 ##### Основные концепции
 
 <details>
