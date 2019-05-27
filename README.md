@@ -30,7 +30,7 @@
     <ul>
   <li>ClassDecorator</li>
   <li>PropertyDecorator</li>
-  <li>MethodDecorator/li>
+  <li>MethodDecorator</li>
   <li>ParameterDecorator</li>
     </ul>
     
@@ -38,44 +38,44 @@
   <div>
   Вызывается перед объявлением класса, применяется к конструктору класса и может использоваться для наблюдения, изменения или замены определения класса. Expression декоратора класса будет вызываться как функция во время выполнения, при этом конструктор декорированного класса является единственным аргументом. Если класс декоратора возвращает значение, он заменит объявление класса вернувшимся значением.
 
-  ```ts
-  export function logClass(target: Function) {
-    // save a reference to the original constructor
-    const original = target;
-
-    // a utility function to generate instances of a class
-    function construct(constructor, args) {
-        const c: any = function () {
-            return constructor.apply(this, args);
+  ```typescript
+    export function logClass(target: Function) {
+        // Сохранение ссылки на оригинальный конструктор
+        const original = target;
+    
+        // Функция генерирует экземпляры класса
+        function construct(constructor, args) {
+            const c: any = function () {
+                return constructor.apply(this, args);
+            }
+            c.prototype = constructor.prototype;
+            return new c();
         }
-        c.prototype = constructor.prototype;
-        return new c();
+    
+        // Определение поведения нового конструктора
+        const f: any = function (...args) {
+            console.log(`New: ${original['name']} is created`);
+            //New: Employee создан
+            return construct(original, args);
+        }
+    
+        // Копирование прототипа, чтобы оператор intanceof работал
+        f.prototype = original.prototype;
+    
+        // Возвращает новый конструктор, переписывающий оригинальный
+        return f;
     }
 
-    // the new constructor behaviour
-    const f: any = function (...args) {
-        console.log(`New: ${original['name']} is created`);
-        //New: Employee is created
-        return construct(original, args);
+    @logClass
+    class Employee {
+    
     }
 
-    // copy prototype so intanceof operator still works
-    f.prototype = original.prototype;
-
-    // return new constructor (will override original)
-    return f;
-}
-
-@logClass
-class Employee {
-
-}
-
-let emp = new Employee();
-console.log('emp instanceof Employee');
-//emp instanceof Employee
-console.log(emp instanceof Employee);
-//true
+    let emp = new Employee();
+    console.log('emp instanceof Employee');
+    //emp instanceof Employee
+    console.log(emp instanceof Employee);
+    //true
   ```
   </div>
   
@@ -87,50 +87,49 @@ console.log(emp instanceof Employee);
     <li>propertyKey - название свойства</li>
   </ul>
 
-  ```ts
-  function logParameter(target: Object, propertyName: string) {
-
-    // property value
-    let _val = this[propertyName];
-
-    // property getter method
-    const getter = () => {
-        console.log(`Get: ${propertyName} => ${_val}`);
-        return _val;
-    };
-
-    // property setter method
-    const setter = newVal => {
-        console.log(`Set: ${propertyName} => ${newVal}`);
-        _val = newVal;
-    };
-
-    // Delete property.
-    if (delete this[propertyName]) {
-
-        // Create new property with getter and setter
-        Object.defineProperty(target, propertyName, {
-            get: getter,
-            set: setter,
-            enumerable: true,
-            configurable: true
-        });
+  ```typescript
+    function logParameter(target: Object, propertyName: string) {
+    
+        // Значение свойства
+        let _val = this[propertyName];
+    
+        // Геттер свойства
+        const getter = () => {
+            console.log(`Get: ${propertyName} => ${_val}`);
+            return _val;
+        };
+    
+        // Сеттер свойства
+        const setter = newVal => {
+            console.log(`Set: ${propertyName} => ${newVal}`);
+            _val = newVal;
+        };
+    
+        // Удаление свойства
+        if (delete this[propertyName]) {
+    
+            // Создает новое свойство с геттером и сеттером
+            Object.defineProperty(target, propertyName, {
+                get: getter,
+                set: setter,
+                enumerable: true,
+                configurable: true
+            });
+        }
     }
-}
-
-class Employee {
-
-    @logParameter
-    name: string;
-
-}
-
-const emp = new Employee();
-emp.name = 'Mohan Ram';
-console.log(emp.name);
-// Set: name => Mohan Ram
-// Get: name => Mohan Ram
-// Mohan Ram
+    
+    class Employee {
+    
+        @logParameter
+        name: string;
+    }
+    
+    const emp = new Employee();
+    emp.name = 'Mohan Ram';
+    console.log(emp.name);
+    // Set: name => Mohan Ram
+    // Get: name => Mohan Ram
+    // Mohan Ram
   ```
   </div>
   <br><b>Декоратор метода</b>
@@ -138,58 +137,55 @@ console.log(emp.name);
 Объявляется непосредственно перед объявлением метода. Будет вызываться как функция во время выполнения со следующими двумя аргументами:
   <ul>
     <li>target - прототип текущего объекта, т.е. если Employee является объектом, Employee.prototype</li>
-    <li>propertyKey - название свойства</li>
-    <li>descriptor - дескриптор свойства метода т.е. - Object.getOwnPropertyDescriptor (Employee.prototype, propertyKey)</li>
+    <li>propertyName - название свойства</li>
+    <li>descriptor - дескриптор свойства метода т.е. - Object.getOwnPropertyDescriptor (Employee.prototype, propertyName)</li>
   </ul>
  
-   ```ts
-   export function logMethod(
-    target: Object,
-    propertyName: string,
-    propertyDesciptor: PropertyDescriptor): PropertyDescriptor {
-    // target === Employee.prototype
-    // propertyName === "greet"
-    // propertyDesciptor === Object.getOwnPropertyDescriptor(Employee.prototype, "greet")
-    const method = propertyDesciptor.value;
-
-    propertyDesciptor.value = function (...args: any[]) {
-
-        // convert list of greet arguments to string
-        const params = args.map(a => JSON.stringify(a)).join();
-
-        // invoke greet() and get its return value
-        const result = method.apply(this, args);
-
-        // convert result to string
-        const r = JSON.stringify(result);
-
-        // display in console the function call details
-        console.log(`Call: ${propertyName}(${params}) => ${r}`);
-
-        // return the result of invoking the method
-        return result;
+   ```typescript
+    export function logMethod(
+        target: Object,
+        propertyName: string,
+        propertyDesciptor: PropertyDescriptor): PropertyDescriptor {
+        const method = propertyDesciptor.value;
+    
+        propertyDesciptor.value = function (...args: any[]) {
+    
+            // Конвертация списка аргументов greet в строку
+            const params = args.map(a => JSON.stringify(a)).join();
+    
+            // Вызов greet() и получение вернувшегося значения
+            const result = method.apply(this, args);
+    
+            // Конвертация результата в строку
+            const r = JSON.stringify(result);
+    
+            // Отображение в консоли деталей вызова
+            console.log(`Call: ${propertyName}(${params}) => ${r}`);
+    
+            // Возвращение результата вызова
+            return result;
+        }
+        return propertyDesciptor;
     }
-    return propertyDesciptor;
-};
-
-class Employee {
-
-    constructor(
-        private firstName: string,
-        private lastName: string
-    ) {
+    
+    class Employee {
+    
+        constructor(
+            private firstName: string,
+            private lastName: string
+        ) {
+        }
+    
+        @logMethod
+        greet(message: string): string {
+            return `${this.firstName} ${this.lastName} says: ${message}`;
+        }
+    
     }
-
-    @logMethod
-    greet(message: string): string {
-        return `${this.firstName} ${this.lastName} says: ${message}`;
-    }
-
-}
-
-const emp = new Employee('Mohan Ram', 'Ratnakumar');
-emp.greet('hello');
-//Call: greet("hello") => "Mohan Ram Ratnakumar says: hello"
+    
+    const emp = new Employee('Mohan Ram', 'Ratnakumar');
+    emp.greet('hello');
+    //Call: greet("hello") => "Mohan Ram Ratnakumar says: hello"
    ```
    </div>
    
@@ -202,27 +198,28 @@ emp.greet('hello');
     <li>index - индекс параметра в массиве аргументов</li>
   </ul>
    
-   ```ts
-   function logParameter(target: Object, propertyName: string, index: number) {
-
-    // generate metadatakey for the respective method
-    // to hold the position of the decorated parameters
-    const metadataKey = `log_${propertyName}_parameters`;
-    if (Array.isArray(target[metadataKey])) {
-        target[metadataKey].push(index);
+   ```typescript
+    function logParameter(target: Object, propertyName: string, index: number) {
+    
+        // Генерация метаданных для соответствующего метода
+        // для сохранения позиции декорированных параметров
+        const metadataKey = `log_${propertyName}_parameters`;
+        
+        if (Array.isArray(target[metadataKey])) {
+            target[metadataKey].push(index);
+        }   
+        else {
+            target[metadataKey] = [index];
+        }
     }
-    else {
-        target[metadataKey] = [index];
+    
+    class Employee {
+        greet(@logParameter message: string): void {
+            console.log(`hello ${message}`);
+        }
     }
-}
-
-class Employee {
-    greet(@logParameter message: string): void {
-        console.log(`hello ${message}`);
-    }
-}
-const emp = new Employee();
-emp.greet('world');
+    const emp = new Employee();
+    emp.greet('world');
  ```
  </div>
    
