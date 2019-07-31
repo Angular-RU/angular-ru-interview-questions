@@ -309,7 +309,7 @@
 <summary>Что такое MVVM и в чем разница перед MVC?</summary>
 <div>
   <br> <b>MVVM</b> - шаблон проектирования архитектуры приложения. Состоит из 3 ключевых блоков: Model, View, ViewModel.
-  <br>Отличие от MVС заключаются в: <br>
+  <br>Отличие от MVС заключаются в: <br> <br>
   
   <li>View реагирует на действия пользователя и передает их во View Model через Data Binding.</li>
   <li>View Model, в отличие от контроллера в MVC, имеет осоьый механизм, автоматизирущий связь между View и связанными свойствами в ViewModel.</li>
@@ -347,8 +347,8 @@
 <details>
 <summary>В чем разница между структурной и атрибутной директивой, назовите встроенные директивы?</summary>
 <div>
-  <br><li>Структурные директивы влияют на DOM и могут добавлять/удалять элементы (ng-template, NgIf, NgFor, NgSwitch, etc) </li>
-  <li>Атрибутные директивы меняют внешний вид или поведение элементов, компонентов или других директив (NgStyle, NgClass, etc).</li>
+  <br><li>Структурные директивы влияют на DOM и могут добавлять/удалять элементы  <br> (ng-template, NgIf, NgFor, NgSwitch, etc) </li>
+  <li>Атрибутные директивы меняют внешний вид или поведение элементов, компонентов или других директив  <br> (NgStyle, NgClass, etc).</li>
 </div>
 </details>
 
@@ -539,65 +539,80 @@ app.component.html
 
   <h4>Создание атрибутных директив:</h4>
   
-    @Directive({
-    selector: '[appHighlight]'
-    })
-    export class HighlightDirective {
-     constructor() { }
-     }
+```ts
+@Directive({ 
+   selector: '[appHighlight]' 
+})
+export class HighlightDirective { .. }
+```
 
-  <br>Декоратор определяет селектор атрибута [appHighlight], [] указывают что это селектор атрибута. Angular найдет каждый элемент в шаблоне с этим атрибутом и применит к ним логику директивы.
+  <br>Декоратор определяет селектор атрибута [appHighlight], [] - указывают что это селектор атрибута. Angular найдет каждый элемент в шаблоне с этим атрибутом и применит к ним логику директивы.
 
-    export class HighlightDirective {
-      constructor(el: ElementRef) {
-         el.nativeElement.style.backgroundColor = 'yellow';
-      }
-    }
+```ts
+@Directive({ 
+  selector: '[appHighlight]' 
+})
+export class HighlightDirective {
+  constructor(el: ElementRef) {
+     el.nativeElement.style.backgroundColor = 'yellow';
+  }
+}
+```
   
   <br>Необходимо указать в конструткторе ElementRef, чтобы через его свойство nativeElement иметь прямой доступ к DOM элементу, который должен быть изменен.
   <br>Теперь, используя @HostListener, можно добавить обработчики событий, взаимодействующие с декоратором.
 
-    @HostListener('mouseenter') onMouseEnter() {
+```ts
+@HostListener('mouseenter') 
+public onMouseEnter(): void {
     this.highlight('yellow');
-     }
+}
 
-    @HostListener('mouseleave') onMouseLeave() {
-    this.highlight(null);
-    }
+@HostListener('mouseleave') 
+public onMouseLeave(): void {
+   this.highlight(null);
+}
     
-    private highlight(color: string) {
-    this.el.nativeElement.style.backgroundColor = color;
-    }
-
+private highlight(color: string): void {
+   this.el.nativeElement.style.backgroundColor = color;
+}
+```
 
   <h4>Структурные директивы создаются так:</h4>
 
   Напишем UnlessDirective, которая будет противоположна NgIf. 
   <br>Необходимо использовать @Directive, и импортировать Input, TemplateRef, и ViewContainerRef. Они вам понадобятся при воздании любой структурной директивы. 
 
-      import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+```ts
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
     
-      @Directive({ selector: '[appUnless]'})
-      export class UnlessDirective {
-      }
+@Directive({ selector: '[appUnless]'})
+  export class UnlessDirective {
+}
+```
 
 В конструкторе мы получаем доступ к viewcontainer и содержимое <ng-template>.
 
-      constructor(
-        private templateRef: TemplateRef<any>,
-        private viewContainer: ViewContainerRef) { }
+```
+  constructor(
+    private templateRef: TemplateRef<any>,
+    private viewContainer: ViewContainerRef) { }
+```
 
 Наша директива предполагает работу с true/false. Для этого нужно свойство appUnless, добавленное через @Input. 
 
-      @Input() set appUnless(condition: boolean) {
-        if (!condition && !this.hasView) {
-          this.viewContainer.createEmbeddedView(this.templateRef);
-          this.hasView = true;
-        } else if (condition && this.hasView) {
-          this.viewContainer.clear();
-          this.hasView = false;
-        }
-      }
+```ts
+@Input() public set appUnless(condition: boolean) {
+  if (!condition && !this.hasView) {
+       this.viewContainer.createEmbeddedView(this.templateRef);
+       this.hasView = true;
+  } else if (condition && this.hasView) {
+       this.viewContainer.clear();
+       this.hasView = false;
+  }
+}
+```
+
 </div>
 </details>
 
