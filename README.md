@@ -1177,3 +1177,43 @@ export class AppModule {}
   in progress..
 </div>
 </details>
+
+
+##### Code convention
+
+<details>
+<summary>Требования к написанию кода на TypeScript</summary>
+<div>
+  
+  
+```ts
+// my-class.interface.ts
+export interface MyClass {
+ ...
+}
+
+// my-class.impl.ts
+export class MyClassImpl implements MyClass {
+  public field: string;
+  
+  public myMethod(): void {
+    // ...
+  }
+  
+  private myProtectedMethod(): Date {
+    return new Date();
+  }
+  
+  private myPrivateMethod(): MyClassImpl {
+    // ...
+    
+    return this;
+  }
+
+}
+```
+ 
+Обязательное указание модификаторов доступа и типов данных, используемых в коде.
+  
+</div>
+</details>
