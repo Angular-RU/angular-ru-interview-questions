@@ -659,32 +659,35 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
  
  <h4>@Directive может содержать следующие параметры:</h4>
   <li>selector - CSS-селектор, который идентифицирует эту директиву в шаблоне и запускает создание этой директивы.</li>
-  <li>inputs - свойство для определения значение `@Input()` параметра. Значение из `inputs` можно сразу использовать в шаблоне, без объявления переменной в классе. Пример объявления: `inputs: ['name', 'id: id-from-parent']`. Значение в `inputs` массиве может состоять из:
+  <li>inputs - свойство для определения значение @Input() параметра. Значение из inputs можно сразу использовать в шаблоне, без объявления переменной в классе. Пример объявления: inputs: ['name', 'id: id-from-parent']. Значение в inputs массиве может состоять из:
     <ul>
-      <li> `directiveProperty` - наименование свойства `@Input`, которое будет использоваться в дочернем компоненте для вывода в шаблоне и использования в самом классе.
-      <li> `bindingProperty` - наименование свойства, из которого будет производится чтение и запись в `directiveProperty`. Не обязательное. При отсутсвии параметра значение будет браться из `directiveProperty`
+      <li> directiveProperty - наименование свойства @Input, которое будет использоваться в дочернем компоненте для вывода в шаблоне и использования в самом классе.
+      <li> bindingProperty - наименование свойства, из которого будет производится чтение и запись в directiveProperty. Не обязательное. При отсутсвии параметра значение будет браться из directiveProperty
     </ul>
     Пример использования:
+
     ```ts
-    @Component({
-      selector: 'child-component',
-      template: `Name {{name}} Id {{id}}`,
-      inputs: [ 'name', 'id: parentId'],
-    })
-    export class ChildComponent {}
+      @Component({
+        selector: 'child-component',
+        template: `Name {{name}} Id {{id}}`,
+        inputs: [ 'name', 'id: parentId'],
+      })
+      export class ChildComponent {}
 
 
-    @Component({
-      selector: 'parent-component',
-      template: `<child-component [name]="parentName" [parentId]="parentIdValue" ></child-component>`,
-    })
-    export class Parent {
-      public parentIdValue = '123';
-      public parentName = 'Name'
-    }
+      @Component({
+        selector: 'parent-component',
+        template: `<child-component [name]="parentName" [parentId]="parentIdValue" ></child-component>`,
+      })
+      export class Parent {
+        public parentIdValue = '123';
+        public parentName = 'Name'
+      }
     ```
+
   </li>
-  <li>outputs - свойство для определения `@Output`. В отличии от `inputs`, объявление свойства в классе обязательно. Пример: 
+  <li>outputs - свойство для определения @Output. В отличии от inputs, объявление свойства в классе обязательно. Пример: 
+
     ```ts
     @Component({
       selector: 'child-dir',
