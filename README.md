@@ -733,7 +733,181 @@ class MainComponent {
 <details>
 <summary>Что такое динамические компоненты и как их можно использовать в Angular?</summary>
 <div>
- in progress
+  <p>Динамические компоненты - компоненты, которые добавляются на страницу во время выполнения приложения (runtime). Динамические компоненты можно использовать в тех случаях, когда компонент можно отобразить не сразу при загрузке страницы. Например: диалоговые окна, нотификации, контент в табах.</p>
+  <p>Для того, чтобы использовать динамические компоненты, необходимо убедиться, что:
+    <ol>
+      <li> добавлен элемент ("якорь") - ng-container/ng-template - на нужной странице/в шаблоне, куда будет помещен динамический компонент. Именно в этот элемент будет загружаться динамический компонент.</li>
+      <li> в классе компонента определено свойство для хранения ng-container/ng-template. Например:
+
+```typescript
+@Component({
+  template: `<div> 
+    <ng-container #dynamicContent></ng-container>
+  </div>
+  `
+})
+export class AppComponent {
+  @ViewChild('dynamicContent', { read: ViewContainerRef }) 
+  public dynamicContainer: ViewContainerRef;
+}
+```
+  </li>
+  <li> при загрузке страницы ng-container/ng-template определен и загружен. Проверить загрузку и определение "якоря" можно в хуке ngAfterViewInit()</li>
+  </ol>
+  </p>
+  <p>
+    В динамический компонент можно внедрить зависимости. Зависимости могут понадобится для общения основного и динамического компонентов. Перед внедрением зависимости нужно создать injector. Создание injector похоже на определение параметра providers в @NgModule. Пример создания Injector:
+
+```typescript
+// класс, который будет использоваться в constructor
+export abstract class IDynamicComponentProps {
+  public abstract onClickDynamicComponent(): void;
+  public abstract items: Array<string>;
+}
+
+// Использование зависимости в динамическом компоненте
+@Component({
+  template: `
+    <span *ngFor='let item of dynamicItems'>{{item}}</span>
+    <button (click)='onClick()'></button>
+  `
+})
+export class DynamicComponent {
+  public dynamicItems: Array<string> =
+    this.dynamicComponentProps.items;
+  constructor(
+    private dynamicComponentProps: IDynamicComponentProps,
+  ) {}
+
+  public onClick(): void {
+    this.dynamicComponentProps.onClickDynamicComponent();
+  }
+}
+
+// Создание инжектора в сервисе или родительском компоненте
+@Component({
+  ...
+})
+export class ParentComponent {
+  public onClickHandler: EventEmitter<number> = new EventEmitter();
+  public parentItems: Array<string> = ['str1', 'str2'];
+  constructor(
+    private injector: Injector,
+  ) {}
+
+  public createInjector() {
+    const injector: Injector = Injector.create(
+        [
+          {
+            provide: IDynamicComponentProps,
+            useValue:{ 
+              onClickDynamicComponent: () => { this.onClickHandler.emit(0) },
+              items: this.parentItems
+            }
+          }
+        ],
+        this.injector
+      );
+  }
+}
+```
+  </p>
+  <h4>Последовательность действий для отображения динамического компонента</h4>
+  <ol>
+    <li> Добавить в шаблон "якорь" для компонента, объявить переменную для работы с этим элементом</li>
+    <li> Очистить содержимое динамического компонента (при необходимости)</li>
+    <li> Создать ComponentFactory с помощью resolveComponentFactory()</li>
+    <li> Вызвать метод из созданного ComponentFactory для создания компонента на странице.</li>
+  </ol>
+  <p>Примечание: Для динамического компонента не обязательно создавать Injector. Обязательным параметром для метода createComponent является только ComponentFactory.</p>
+  <p>Ниже указана последовательность действий, реализованная кодом. В примере используется Основной компонент (MainComponent), динамический компонент (DynamicCompoent) и сервис для рендера (MainComponentService)</p>
+
+```typescript
+
+//основной компонент
+@Component({
+  selector: 'main-component',
+  template: `<h1>Dynamic Component Example</h1>
+    <ng-container #dynamicComponent></ng-container>
+  `
+})
+export class MainComponent {
+  @ViewChild('dynamicComponent', { read: ViewContainerRef }) 
+  public dynamicContainer: ViewContainerRef;
+
+  public parentItems: Array<string> = ['str1', 'str2'];
+  constructor(
+    private mainComponentService: MainComponentService
+  ){
+    this.mainComponentService.onClickHandler()
+      .subscribe(x => console.log(x)) //console - 0 form dynamic component
+  }
+
+  public ngAfterViewInit(): void {
+    this.mainComponentService.render(this.dynamicContainer, this.parentItems);
+  }
+}
+
+//класс для DI
+export abstract class IDynamicComponentProps {
+  public abstract onClickDynamicComponent(): void;
+  public abstract items: Array<string>;
+}
+
+//сервис для рендера
+@Injectable()
+export class MainComponentService {
+  public onClickHandler: EventEmitter<number> = 
+    new EventEmitter();
+  constructor(
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private injector: Injector
+  ) { 
+  }
+
+  public render(container: ViewContainerRef, parentItems: Array<string>): void {
+    if (!isUndefined(container)) {
+      container.clear()
+    }
+
+    const injector: Injector = Injector.create(
+      [
+        {
+          provide: IDynamicComponentProps,
+          useValue:{ 
+            onClickDynamicComponent: () => { this.onClickHandler.emit(0) },
+            items: parentItems
+          }
+        }
+      ],
+      this.injector
+    );
+
+    const factory = this.componentFactoryResolver.resolveComponentFactory(DynamicCompoent);
+    
+    container.createComponent(factory, 0, injector);
+  }
+}
+
+//динамический компонент
+@Component({
+  template: `
+    <span *ngFor='let item of dynamicItems'>{{item}}</span>
+    <button (click)='onClick()'></button>
+  `
+})
+export class DynamicComponent {
+  public dynamicItems: Array<string> =
+    this.dynamicComponentProps.items;
+  constructor(
+    private dynamicComponentProps: IDynamicComponentProps,
+  ) {}
+
+  public onClick(): void {
+    this.dynamicComponentProps.onClickDynamicComponent();
+  }
+}
+```
 </div>
 </details>
 
