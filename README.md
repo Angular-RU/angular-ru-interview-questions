@@ -925,14 +925,174 @@ export class DynamicComponent {
 <details>
 <summary>Объясните механизм загрузки (bootstrap) Angular-приложения в браузере?</summary>
 <div>
-  in progress..
+  <p>Запуск Angular приложения начинается с файла <b>main.ts</b>. Этот файл содержит в себе примерно следующее:</p>
+
+```typescript
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule } from './app/app.module';
+const platform = platformBrowserDynamic();
+platform.bootstrapModule(AppModule);
+```
+<p>platformBrowserDynamic запускает AppModule. После этого, начинает работать логика в AppModule. </p>
+<p>В AppModule обычно задается компонент, который будет использоваться для отображения при загрузке. Компонент находится в параметре <b>bootstrap</b></p>
+
+```typescript
+@NgModule({
+    imports:      [ BrowserModule, FormsModule ],
+    declarations: [ AppComponent ],
+    bootstrap:    [ AppComponent ]
+})
+```
+
 </div>
 </details>
 
 <details>
 <summary>Как происходит взаимодействие компонентов в Angular (опишите components view)?</summary>
 <div>
-  in progress..
+  <p>Взаимодействие компонентов может быть: </p>
+  <ul>
+    <li><b>между родительским и дочерним компонентом</b> - селектор одного компонента объявлен в шаблоне другого</li>
+    <li><b>между компонентами одного уровня</b> - селекторы компонентов не вложенные</li>
+  </ul>
+  <p></p>
+  <h4>Способы взаимодействия</h4>
+  <ol>
+    <li>
+      <p><b>@Input()/@Output() декораторы свойств</b> - используются между дочерним и родительским компонентами. В @Input() можно получить значение из родителя. Через @Output() отправить данные из дочернего в родительский компонент.</p>
+      <p>В шаблоне родительского компонента ставится селектор дочернего. В селекторе дочернего компонента прописываются атрибуты, через которые будут передаваться данные в переменные @Input()/@Output(). Для обозначения @Input свойства в селекторе нужно прописать <child [title]='parentTitle'></child>. Для обозначения @Output свойства в селекторе нужно прописать <child (getChanges)='onGetChanges($event)'></child>.</p>
+      <p>В классе родительского компонента нужно обозначить public свойства/методы, которые будут прописаны в атрибутах дочернего селектора.</p>
+      <p>В классе дочернего компонента нужно прописать public свойства с декораторами @Input()/@Output(). Названия свойств должны совпадать с именами в атрибутах дочернего селектора. В @Input() можно передать значения как обычных типов данных (string, number, Array и тп), как и потоки(Subject, Observable). В @Output обычно используется EventEmitter. Через него можно отправить значения в функцию родительского компонента, которая прописана в атрибуте селектора.</p>
+      <p>Пример</p>
+
+```typescript 
+@Component({
+  selector: 'app-parent',
+  template: `
+    <div>
+      <app-child [title]='parentTitle' (setChanges)='onGetChanges($event)'></app-child>
+    </div>
+  `,
+})
+
+export class AppParentComponent {
+  public parentTitle: string = "Title";
+
+  public onGetChanges(value: number): void {
+    // actions with child's value
+  }
+} 
+
+@Component({
+  selector: 'app-child',
+  template: `
+    <div>
+      <h1>{{title}}</h1>
+      <button type='button' (click)='onClickChange()'>Change!</button>
+    </div>
+  `,
+})
+
+export class AppChildComponent {
+  @Input()
+  public title: string;
+
+  @Output()
+  setChanges: EventEmitter<number> = new EventEmitter();
+
+  public onClickChange(): void {
+    this.setChanges.emit(42);
+  }
+} 
+```
+  </li>
+  <li>
+    <p><b>@ViewChild() директива</b> - получение доступа к свойствам дочернего компонента. В родительском шаблоне нужно указать селектор дочернего. Так же, в родительском компоненте нужно обозначить public свойство с директивой @ViewChild(). Пример</p>
+
+```typescript
+@Component({
+  selector: 'app-parent',
+  template: `<app-child></app-child>`
+})
+export class AppParentComponent {
+  @ViewChild(AppChildComponent) 
+  public viewChild: AppChildComponent;
+
+  public ngAfterViewInit(): void {
+    console.log(this.viewChild.title);
+  }
+} 
+```
+  </li>
+  <li><p><b>DI</b> - передача свойств дочернему компоненту через зависимости. Смотри пример с динамическим рендером компонентов.</p></li>
+  <li>
+    <p><b>Через сервис</b> - передача данных между компонентами через единый сервис. Этим способом можно взаимодействовать с компонентами одного уровня.</p>
+    <p>Необходимо создать общий сервис, который объявляется в параметре providers в общем модуле соединяемых компонентов. В сервисе можно создать public свойства и методы для передачи данных. Можно использовать Observable и Subjects для передачи данных. Пример:</p>
+
+```typescript
+@Component({
+  selector: 'first-component',
+  template: `
+    <p>{{text}}</p>
+    <button type='button' (click)='onClick()>Click First Component</button>
+  `
+})
+export class FirstComponent {
+  public text: string;
+
+  constructor(
+    private appService: AppService,
+  ){
+    this.appService.whenGetFirstText$
+      .subscribe(text => this.text = text)
+  }
+
+  public onClick(): void {
+    this.appService.onFirstClick();
+  }
+} 
+
+@Component({
+  selector: 'second-component',
+  template: `
+    <p>{{text}}</p>
+    <button type='button' (click)='onClick()>Click Second Component</button>
+  `
+})
+export class SecondComponent {
+  public text: string;
+
+  constructor(
+    private appService: AppService,
+  ){
+    this.appService.whenGetSecondText$
+      .subscribe(text => this.text = text)
+  }
+
+  public onClick(): void {
+    this.appService.onSecondClick();
+  }
+} 
+
+
+@Injectable()
+export class AppService {
+  public whenGetFirstText$: Subject<string>;
+  public whenGetSecondText$: Subject<string>;
+
+  constructor(){}
+
+  public onSecondClick(): void {
+    this.whenGetFirstText$.next('text1');
+  }
+  public onFirstClick(): void {
+    this.whenGetSecondText$.next('text2');
+  }
+
+}
+```
+  </li>
+  </ol>
 </div>
 </details>
 
