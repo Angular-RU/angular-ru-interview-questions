@@ -966,7 +966,7 @@ export class AppModule {}
       <p><b>@Input()/@Output() декораторы свойств</b> - используются между дочерним и родительским компонентами. В @Input() можно получить значение из родителя. Через @Output() отправить данные из дочернего в родительский компонент.</p>
       <p>В шаблоне родительского компонента ставится селектор дочернего. В селекторе дочернего компонента прописываются атрибуты, через которые будут передаваться данные в переменные @Input()/@Output(). Для обозначения @Input свойства в селекторе нужно прописать <child [title]='parentTitle'></child>. Для обозначения @Output свойства в селекторе нужно прописать <child (getChanges)='onGetChanges($event)'></child>.</p>
       <p>В классе родительского компонента нужно обозначить public свойства/методы, которые будут прописаны в атрибутах дочернего селектора.</p>
-      <p>В классе дочернего компонента нужно прописать public свойства с декораторами @Input()/@Output(). Названия свойств должны совпадать с именами в атрибутах дочернего селектора. В @Input() можно передать значения как обычных типов данных (string, number, Array и тп), так и потоки(Subject, Observable). В @Output обычно используется EventEmitter. Через него можно отправить значения в функцию родительского компонента, которая прописана в атрибуте селектора.</p>
+      <p>В классе дочернего компонента нужно прописать public свойства с декораторами @Input()/@Output(). Названия свойств должны совпадать с именами в атрибутах дочернего селектора. В @Input() можно передать значения как обычных типов данных (string, number, Array и тп), так и потоки (Subject, Observable). В @Output обычно используется EventEmitter. Через него можно отправить значения в функцию родительского компонента, которая прописана в атрибуте селектора.</p>
       <p>Пример</p>
 
 ```typescript 
@@ -998,11 +998,9 @@ export class ParentComponent {
 })
 
 export class ChildComponent {
-  @Input()
-  public count: number;
+  @Input() public count: number;
 
-  @Output()
-  increment: EventEmitter<number> = new EventEmitter();
+  @Output() public increment: EventEmitter<number> = new EventEmitter();
 
   public onClickIncrement(): void {
     const result = this.count++;
@@ -1022,11 +1020,13 @@ export class ChildComponent {
   template: `<child #childRef *ngIf='isShowChild'></child>`
 })
 export class ParentComponent {
-  @ViewChild('childRef', {static: false}) 
-  public viewChild: ChildComponent;
+  @ViewChild('childRef', {static: false}) public viewChild: ChildComponent;
 
   public isShowChild: boolean = false;
 
+  public ngOnInit(): void {
+    //this.viewChild is available
+  }
   public ngAfterViewInit(): void {
     console.log(this.viewChild.title);
   }
@@ -1037,8 +1037,7 @@ export class ParentComponent {
   template: `<child #childRef></child>`
 })
 export class ParentComponent {
-  @ViewChild('childRef', {static: false}) 
-  public viewChild: ChildComponent;
+  @ViewChild('childRef', {static: false}) public viewChild: ChildComponent;
 
   public ngAfterViewInit(): void {
     console.log(this.viewChild.title);
@@ -1051,71 +1050,39 @@ export class ParentComponent {
     <p>Необходимо создать общий сервис, который объявляется в параметре providers в общем модуле соединяемых компонентов. В сервисе можно создать public свойства и методы для передачи данных. Можно использовать Observable и Subjects для передачи данных. Пример:</p>
 
 ```typescript
-@Component({
-  selector: 'counter-component',
-  template: `
-    <button type='button' (click)='increment()>+1</button>
-    <button type='reset' (click)='reset()>reset</button>
-  `
-})
-export class CounterComponent {
-  private currentCount: number;
-  private whenDestroyComponent$: Subject<null> = new Subject(); // используется для отписки в связке с ngOnDestroy и takeUntil
-  constructor(
-    private countService: CountService,
-  ){}
-  
-  public ngOnInit(): void {
-    this.countService.getCount()
-      .pipe(takeUntil(this.whenDestroyComponent$))
-      .subscribe(count => this.currentCount = count)
-  }
-
-  public ngOnDestroy(): void {
-    this.whenDestroyComponent$.next(null);
-    this.whenDestroyComponent$.complete();
-  }
-
-  public increment(): void {
-    this.countService.setValue(this.currentCount+1);
-  }
-  public reset(): void {
-    this.countService.resetCount()
-  }
-} 
-
-@Component({
-  selector: 'output-component',
-  template: `
-    <p>{{count$ | async}}</p>
-  `
-})
-export class OutputComponent {
-  public count$: Observable<number> = 
-    this.countService.getCount();
-  constructor(
-    private countService: CountService,
-  ){}
-} 
-
-
 @Injectable()
 export class CountService {
   private count$:  BehaviorSubject<number> = new BehaviorSubject(0);
 
-  constructor(){}
-
-  public getCount(): Observable<number> {
+  public get value$(): Observable<number> {
     return this.count$.asObservable();
   }
-  public setCount(value: number): void {
+ 
+  public get value(): number {
+    return this.count$.getValue();
+  }
+
+  public setState(value: number): void {
     this.count$.next(value);
   }
 
-  public resetCount(): void {
+  public reset(): void {
     this.count$.next(0);
   }
 
+}
+
+@Component({
+  selector: 'counter',
+  template: `
+     value = {{ counter.value$ | async }}  <br/>
+    <button type='button' (click)='counter.setState(counter.value + 1)>+1</button>
+    <button type='button' (click)='counter.setState(counter.value - 1)>-1</button>
+    <button type='reset' (click)='counter.reset()>reset</button>
+  `
+})
+export class CounterComponent {
+  constructor(private counter: CountService) { }
 }
 ```
   </li>
