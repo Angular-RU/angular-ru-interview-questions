@@ -925,14 +925,165 @@ export class DynamicComponent {
 <details>
 <summary>Объясните механизм загрузки (bootstrap) Angular-приложения в браузере?</summary>
 <div>
-  in progress..
+  <p>Запуск Angular приложения начинается с файла <b>main.ts</b>. Этот файл содержит в себе примерно следующее:</p>
+
+```typescript
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule } from './app/app.module';
+
+const platform = platformBrowserDynamic();
+
+platform.bootstrapModule(AppModule);
+```
+<p>platformBrowserDynamic запускает AppModule. После этого, начинает работать логика в AppModule. </p>
+<p>В AppModule обычно задается компонент, который будет использоваться для отображения при загрузке. Компонент находится в параметре <b>bootstrap</b></p>
+
+```typescript
+@NgModule({
+    imports:      [ BrowserModule, FormsModule ],
+    declarations: [ AppComponent ],
+    bootstrap:    [ AppComponent ]
+})
+
+export class AppModule {}
+```
+
 </div>
 </details>
 
 <details>
 <summary>Как происходит взаимодействие компонентов в Angular (опишите components view)?</summary>
 <div>
-  in progress..
+  <p>Взаимодействие компонентов может быть: </p>
+  <ul>
+    <li><b>между родительским и дочерним компонентом</b> - селектор одного компонента объявлен в шаблоне другого</li>
+    <li><b>между компонентами одного уровня</b> - селекторы компонентов не вложенные</li>
+  </ul>
+  <p></p>
+  <h4>Способы взаимодействия</h4>
+  <ol>
+    <li>
+      <p><b>@Input()/@Output() декораторы свойств</b> - используются между дочерним и родительским компонентами. В @Input() можно получить значение из родителя. Через @Output() отправить данные из дочернего в родительский компонент.</p>
+      <p>В шаблоне родительского компонента ставится селектор дочернего. В селекторе дочернего компонента прописываются атрибуты, через которые будут передаваться данные в переменные @Input()/@Output(). Для обозначения @Input свойства в селекторе нужно прописать <child [title]='parentTitle'></child>. Для обозначения @Output свойства в селекторе нужно прописать <child (getChanges)='onGetChanges($event)'></child>.</p>
+      <p>В классе родительского компонента нужно обозначить public свойства/методы, которые будут прописаны в атрибутах дочернего селектора.</p>
+      <p>В классе дочернего компонента нужно прописать public свойства с декораторами @Input()/@Output(). Названия свойств должны совпадать с именами в атрибутах дочернего селектора. В @Input() можно передать значения как обычных типов данных (string, number, Array и тп), так и потоки (Subject, Observable). В @Output обычно используется EventEmitter. Через него можно отправить значения в функцию родительского компонента, которая прописана в атрибуте селектора.</p>
+      <p>Пример</p>
+
+```typescript 
+@Component({
+  selector: 'parent',
+  template: `
+    <div>
+      <child [count]='value' (increment)='onInstement($event)'></child>
+    </div>
+  `,
+})
+
+export class ParentComponent {
+  public value: number = 0;
+
+  public onIncrement(value: number): void {
+    // actions with child's value
+  }
+} 
+
+@Component({
+  selector: 'child',
+  template: `
+    <div>
+      <button type='button' (click)='onClickIncrement()'>+1</button>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush //см пункт "Какие существуют стратегии обнаружения изменений?"
+})
+
+export class ChildComponent {
+  @Input() public count: number;
+
+  @Output() public increment: EventEmitter<number> = new EventEmitter();
+
+  public onClickIncrement(): void {
+    const result = this.count++;
+    this.setChanges.emit(result);
+  }
+} 
+```
+  </li>
+  <li>
+    <p><b>@ViewChild() директива</b> - получение доступа к свойствам дочернего компонента. В родительском шаблоне нужно указать селектор дочернего. Так же, в родительском компоненте нужно обозначить public свойство с директивой @ViewChild().</p>
+    <p>По умолчанию, доступ к свойствам @ViewChild() можно получить в хуке ngAfterViewInit(). Так же, нужно учитывать свойство <b>static</b> при использовании @ViewChild(). <b>static</b> параметр указывает, когда можно получить доступ к ViewChild() - до или после change detection. Это может понадобится, когда @ViewChild используется в циклах (*ngFor) или доступен только по условию (*ngIf). Если static = false, то доступ можно получить до change detection в хуке ngAfterViewInit(). </p>
+    <p>Примеры</p>
+
+```typescript
+@Component({
+  selector: 'parent',
+  template: `<child #childRef *ngIf='isShowChild'></child>`
+})
+export class ParentComponent {
+  @ViewChild('childRef', {static: false}) public viewChild: ChildComponent;
+
+  public isShowChild: boolean = false;
+
+  public ngAfterViewInit(): void {
+    console.log(this.viewChild.title);
+  }
+}
+
+@Component({
+  selector: 'parent',
+  template: `<child #childRef></child>`
+})
+export class ParentComponent {
+  @ViewChild('childRef', {static: false}) public viewChild: ChildComponent;
+
+  public ngAfterViewInit(): void {
+    console.log(this.viewChild.title);
+  }
+} 
+```
+  </li>
+  <li>
+    <p><b>Через сервис</b> - передача данных между компонентами через единый сервис. Этим способом можно взаимодействовать с компонентами одного уровня. Так же, можно избавиться от иерархии зависимостей и не использовать всплывающие события (Output)</p>
+    <p>Необходимо создать общий сервис, который объявляется в параметре providers в общем модуле соединяемых компонентов. В сервисе можно создать public свойства и методы для передачи данных. Можно использовать Observable и Subjects для передачи данных. Пример:</p>
+
+```typescript
+@Injectable()
+export class CountService {
+  private count$:  BehaviorSubject<number> = new BehaviorSubject(0);
+
+  public get value$(): Observable<number> {
+    return this.count$.asObservable();
+  }
+ 
+  public get value(): number {
+    return this.count$.getValue();
+  }
+
+  public setState(value: number): void {
+    this.count$.next(value);
+  }
+
+  public reset(): void {
+    this.count$.next(0);
+  }
+
+}
+
+@Component({
+  selector: 'counter',
+  template: `
+     value = {{ counter.value$ | async }}  <br/>
+    <button type='button' (click)='counter.setState(counter.value + 1)>+1</button>
+    <button type='button' (click)='counter.setState(counter.value - 1)>-1</button>
+    <button type='reset' (click)='counter.reset()>reset</button>
+  `
+})
+export class CounterComponent {
+  constructor(private counter: CountService) { }
+}
+```
+  </li>
+  </ol>
 </div>
 </details>
 
