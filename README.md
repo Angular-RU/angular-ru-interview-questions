@@ -915,7 +915,233 @@ export class DynamicComponent {
 <details>
 <summary>Как применить анимацию к компонентам?</summary>
 <div>
-  in progress..
+  <p>Анимации в Angular построены на основе функциональности CSS. При работе с анимациями нужно иметь ввиду, что применять анимацию можно только к тем свойствам, которые можно анимировать.</p>
+  <p>Перед началом создания анимаций нужно:
+    <ul>
+      <li> Подключить модуль BrowserAnimationsModule в основной модуль приложения (root)</li>
+      <li> Подключить функции для анимации в нужном компоненте: 
+
+```js
+  import {
+    trigger,
+    state,
+    style,
+    animate,
+    transition,
+    // ...
+  } from '@angular/animations'
+```
+  </li>
+    <li>Добавить свойство animations в декоратор компонента @Component():
+
+```typescript
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css'],
+  animations: [
+    // animation triggers go here
+  ]
+})
+```
+  </li>
+</ul>
+</p>
+  <p>
+    Анимация состоит из:
+    <ol>
+      <li>триггера - событие, по которому возникает анимация. Для инициализации триггера используется функция <b>trigger()</b>. В параметрах функции нужно указать событие, которое будет указано в компоненте и к которому будет привязана анимация. Так же, указывается массив из функций <b>state()</b> и <b>transition()</b> </li>
+      <li>состояний в конце перехода - стили, которые будут применятся к элементу в конце анимации. Для объявления состояний используется функция <b>state()</b>. В функции нужно указать название состояния, указать стили состояния с помощью функции <b>style()</b>. Если анимация отключена (<b>[@.disabled]='true'</b>), то стили конечных состояний нужно прописать.</li>
+      <li>промежуточных состояний - стилей, которые применяются к элементу между окончательными состояниями. С помощью промежуточных состояний можно анимировать переходы. Для этого используется функция <b>transition()</b>. В функции нужно прописать выражение, в котором указано направление между состояниями и функции для определения стилей между состояниями, анимации.</li>
+    </ol>
+  </p>
+  <p>Для объявления триггера, нужно прописать функцию <b>trigger()</b> в метаданных компонента, в свойстве <b>animations</b>. Первым параметром нужно указать событие, которое будет привязано в шаблоне к элементу. Вторым параметром нужно указать состояни <b>state()</b> и анимации в <b>transition()</b>. Например:
+
+```typescript
+@Component({
+  selector: 'example',
+  animations: [
+    trigger('toggle', [
+      state('open', style({
+        height: '200px',
+        opacity: 1,
+        backgroundColor: 'yellow'
+      })),
+      state('closed', style({
+        height: '100px',
+        opacity: 0.5,
+        backgroundColor: 'green'
+      })), 
+      transition('open => closed', [
+        animate('1s')
+      ]),
+      transition('closed => open', [
+        animate('0.5s')
+      ]),
+      //...
+    ]),
+  ],
+  template: `<div [@toggle]="isOpen ? 'open' : 'closed'"></div>`,
+})
+export class ExampleComponent {}
+```
+  </p>
+  <h4>Дополнительные состояния переходов</h4>
+  <p>При работе с переходами можно указывать не только состояния, указанные в функции state(). Анимации в Angular поддерживают следующие состояния:
+    <ul>
+      <li><b>*</b> - любое состояние. Полезно для определения переходов, которые применяются независимо от начального или конечного состояния HTML-элемента. Можно использовать конструкцию <b>* => *</b>, для того, чтобы определить переходы тем состояниям, у которых не назначена анимация. Эту конструкцию можно добавить после того, как будут перечислены конкретные переходы состояний.</li>
+      <li><b>void</b> - состояние, когда элемент появляется в DOM или удаляется из него. Например, при ngIf. Void входит в состояние *. </li>
+    </ul>
+
+```typescript
+animations: [
+  trigger('openClose', [
+    state('open', style({
+      height: '200px',
+      opacity: 1,
+      backgroundColor: 'yellow'
+    })),
+    state('closed', style({
+      height: '100px',
+      opacity: 0.5,
+      backgroundColor: 'green'
+    })),
+    transition('open => closed', [
+      animate('1s')
+    ]),
+    transition('closed => open', [
+      animate('0.5s')
+    ]),
+    transition('* => closed', [
+      animate('1s')
+    ]),
+    transition('* => open', [
+      animate('0.5s')
+    ]),
+    transition ('* => open', [
+      animate ('1s',
+        style ({ opacity: '*' }),
+      ),
+    ]),
+    transition('* => *', [
+      animate('1s')
+    ]),
+  ]
+  )
+]
+```
+<p>
+    Два вышеперечисленных состояния можно использовать вместе - <b>void => *</b> и <b> * => void</b>. У этих конструкций есть алиасы - :enter (void => *) и :leave (* => void). Например:
+</p>
+
+```typescript
+trigger('eventTrigger', [
+  transition('void => *', [
+    style({ opacity: 0 }),
+    animate('5s', style({ opacity: 1 })),
+  ]),
+  // or
+  transition(':enter', [
+    style({ opacity: 0 }),
+    animate('5s', style({ opacity: 1 })),
+  ]),
+
+  //-------------//
+
+  transition('* => void', [
+    animate('5s', style({ opacity: 0 }))
+  ])
+  //or
+  transition(':leave', [
+    animate('5s', style({ opacity: 0 }))
+  ])
+]),
+```
+  </p>
+  <p>Для работы с переходами можно использовать числовые и булевые значения. При работе с числовыми значениями, можно использовать алиасы :increment и :decrement. С булевыми значениями можно просто прописать true/false. Например:
+
+```typescript
+@Component({
+  selector: 'toggle',
+  animations: [
+    trigger('isOpen', [
+      state('true', style({ height: '*' })),
+      state('false', style({ height: '0px' })),
+      transition('true <=> false', [
+        animate('1s')
+      ]),
+    ]),
+  ],
+  template: `<div [@isOpen]="isOpen ? true : false"></div>`,
+})
+export class ToggleComponent {
+  public isOpen: boolean = true;
+}
+
+@Component({
+  template: `<ul class="heroes" [@filterAnimation]="heroTotal"></ul>`
+  animations: [
+    trigger('filterAnimation', [
+      transition(':enter, * => 0, * => -1', []),
+      transition(':increment', [
+        query(':enter', [
+          style({ opacity: 0, width: '0px' }),
+          stagger(50, [
+            animate('300ms ease-out', style({ opacity: 1, width: '*' })),
+          ]),
+        ], { optional: true })
+      ]),
+      transition(':decrement', [
+        query(':leave', [
+          stagger(50, [
+            animate('300ms ease-out', style({ opacity: 0, width: '0px' })),
+          ]),
+        ])
+      ]),
+    ]),
+  ]
+})
+export class HeroListPageComponent implements OnInit {
+  public heroTotal: number = -1;
+}
+```
+  </p>
+  <p><b>Примечание:</b> хорошей практикой является перенос анимаций в отдельные файлы *.animation.ts. Эта практика уменьшит размер файла компонента, обеспечит декомпозицию, даст возможность переиспользования анимаций.</p>
+  
+  [Гайд ангуляра по переиспользованию анимаций](https://angular.io/guide/reusable-animations) 
+
+
+  <h4>Отключение анимации</h4>
+  <p>Анимацию можно принудительно отключить как в отдельном компоненте, так и во всем приложении.</p>
+  <p>Для отключения анимации в компоненте нужно указать [@.disabled]='isDisabled' в нужной ноде компонента. Например: 
+
+  ```html
+    <div [@.disabled]="isDisabled"></div>
+  ```
+
+</p>
+  <p>Для отключения анимации во всем приложении, нужно укзаать @HostBinding('@.disabled') в корневом компоненте. Например:
+
+  ```typescript
+@Component({
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls: ['app.component.css'],
+    animations: [
+      // animation  go here
+    ]
+})
+export class AppComponent {
+    @HostBinding('@.disabled')
+    public animationsDisabled = true;
+}
+```
+
+  </p>
+  <h4>Дополнительная функциональность для анимаций</h4>
+  <p>Можно указывать конкретные значения стилей в определенный промежуток времени с помощью <b>keyframes()</b></p>
+  <p>Есть возможность запускать анимации параллельно, указав их в функции <b>group()</b>. Запускать последовательно с помощью функции <b>sequence()</b>.</p>
+  <p>Анимацию можно применять к конкретному селектору, который можно указать в параметрах фукнции <b>query()</b>. Так же. можно управлять анимациями дочерних элементов с помощью <b>animateChild()</b> (только для анимаций, описанных с помощью Angular)</p>
 </div>
 </details>
 
