@@ -1230,7 +1230,7 @@ export class ChildComponent {
 
   public onClickIncrement(): void {
     const result = this.count++;
-    this.setChanges.emit(result);
+    this.increment.emit(result);
   }
 } 
 ```
