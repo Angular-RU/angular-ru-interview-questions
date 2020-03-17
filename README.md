@@ -1711,7 +1711,66 @@ export class AppModule {}
 <details>
 <summary>Каков жизненный цикл у Angular Router?</summary>
 <div>
-  in progress..
+  <p>
+    <img src='http://susdev.ru/wp-content/uploads/2019/02/router-navigation-lifecycle.png' />
+    <a href='http://susdev.ru/angular-router-series-router-navigation-cycle/'>Источник информации</a>
+  </p>
+  <p>
+    <ol>
+      <li><b>NavigationStart</b> - начало навигации. Возникает во время нажатия на директиву <b>router link</b>, вызове функций <b>navigate</b> и <b>navigateByUrl</b></li>
+      <li><b>RoutesRecognized</b> - cопоставление URL-адресов и редиректы. Роутер сопоставляет URL-адрес навигации из первого события с одним из свойств path в конфигурации, применяя любые редиректы по-пути.</li>
+      <li><b>GuardsCheckStart, GuardsCheckEnd</b> - функции, которые использует роутер для определения может ли он выполнить навигацию. Пример:
+
+```typescript
+  // router configuration
+  { path: 'users', ..., canActivate: [CanActivateGuard] }
+
+  // router guard implementation
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    return this.auth.isAuthorized(route.queryParams.login);
+  }
+```
+  <br />
+
+  Если вызов `isAuthorized(route.queryParams.login)` возвращает true, guard завершится успехом. В противном случае, guard упадет, роутер сгенерирует событие `NavigationCancel` и отменит всю дальнейшую навигацию.
+  <br />
+
+  Другие guard включают `canLoad` (должен ли модуль быть лениво загружен или нет). `canActivateChild` и `canDeactivate` (которые полезны для предотвращение ухода пользователя со страницы, например, при заполнении формы).
+  </li>
+  <li><b>ResolveStart, ResolveEnd</b> - функции, которые мы можем использовать для подгрузки данных во время навигации. Например:
+
+```typescript
+  // router configuration
+  {  path: 'users', ..., resolve: { users: UserResolver } }
+
+  // router resolver implementation
+  export class UserResolver implements Resolve<Observable<any>> {
+    constructor(private userService: MockUserDataService) {}
+    resolve(): Observable<any> {
+      return this.userService.getUsers();
+    }
+  }
+```
+<br/>
+
+ Результат, то есть данные, будет положен в `data` объект сервиса `ActivatedRoute` c ключем `users`. Данная информация может быть прочитаны с помощью подписки на `data` `observable`.
+
+```typescript
+export class UsersComponent implements OnInit {
+  public users = [];
+  constructor(private route: ActivatedRoute) {}
+  ngOnInit() {
+    this.route.data.subscribe(data => this.users = data.users);
+  }
+}
+```
+
+  </li>
+  <li><b>ActivationStart, ActivationEnd, ChildActivationStart, ChildActivationEnd</b> - события, во время которых активироуются компоненты и отображаются их с помощью <router-outlet>.Роутер может извлечь необходимую информацию о компоненте из дерева ActivatedRouteSnapshots. Он был построен в предыдущие шаги навигационного цикла.</li>
+  <li><b>Updating the URL</b> - последний шаг в навигационном цикле — это обновление URL-адреса в adress bar</li>
+  </ol>
+</p>
+
 </div>
 </details>
 
