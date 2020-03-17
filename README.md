@@ -1760,7 +1760,7 @@ export class UsersComponent implements OnInit {
   public users = [];
   constructor(private route: ActivatedRoute) {}
   ngOnInit() {
-    this.route.data.subscribe(data => this.users = data.users);
+    this.route.data.pipe(first()).subscribe(data => this.users = data.users);
   }
 }
 ```
