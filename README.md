@@ -1606,23 +1606,37 @@ Change Detection Mechanism - продвигается только вперед 
 <details>
 <summary>В чём разница между Observable и Promise?</summary>
 <div>
- <br>Promise обрабатывает одно значение по завершению асинхронной операции, вне зависимости от ее исхода, и не поддерживают отмену операции.
- <br>Observable же является потоком, и позволяет передавать как ноль, так и несколько событий, когда callback вызывается для каждого события.
+ <br>
+ <p>Promise обрабатывает одно значение по завершению асинхронной операции, вне зависимости от ее исхода, и не поддерживают отмену операции.</p>
+ <p>Observable же является потоком, и позволяет передавать как ноль, так и несколько событий, когда callback вызывается для каждого события.</p>
 </div>
 </details>
 
 <details>
-<summary>В чём разница между Observable и BehaviorSubject/Subject?</summary>
+<summary>В чём разница между Observable и BehaviorSubject/Subject (Higher Order Observables)?</summary>
 <div>
-  <br>
-  Subjects - специальные Observable. Представьте, что есть спикер с микрофоном, который выступает в комнате, полной людей. Это и есть Subjects, их сообщение передается сразу нескольким получателям. Обычные же Observables можно сравнить с разговором 1 на 1.
-  <br><li>Subject - является multicast, то есть может передавать значение сразу нескольким подписчикам.</li>
-  <br><li>BehaviorSubject - требует начальное значение и передает текущее значение новым подпискам.</li>
+<br>
+
+<p>Subjects - специальные Observable. Представьте, что есть спикер с микрофоном, который выступает в комнате, полной людей. 
+Это и есть Subjects, их сообщение передается сразу нескольким получателям. Обычные же Observables можно сравнить с разговором 1 на 1.</p>
+
+<ul>
+    <li>Subject - является multicast, то есть может передавать значение сразу нескольким подписчикам.</li>
+    <li>BehaviorSubject - требует начальное значение и передает текущее значение новым подпискам.</li>
+</ul>
 </div>
 </details>
 
 <details>
-<summary>В чём разница между switchMap, mergeMap, concatMap?</summary>
+<summary>В чем разница между Subject, BehaviorSubject, ReplaySubject, AsyncSubject?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>В чём разница между операторами switchMap, mergeMap, concatMap?</summary>
 <div>
   <br>
   <ul>  
@@ -1630,6 +1644,13 @@ Change Detection Mechanism - продвигается только вперед 
       <li>mergeMap - в отличие от switchMap позволяет реализовать одновременно несколько внутренних подписок. </li>
       <li>concatMap - послеждовательно обрабатывает каждое событие, в отличие от mergeMap.</li>
   </ul>
+</div>
+</details>
+
+<details>
+<summary>Как бы вы кешировали наблюдаемые данные из потоков (stream)?</summary>
+<div>
+  in progress..
 </div>
 </details>
 
