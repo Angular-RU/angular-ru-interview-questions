@@ -170,7 +170,6 @@
 </div>
 </details>
 
-
 <details>
 <summary>Поддерживает ли TypeScript перегрузку методов?</summary>
 <div>
