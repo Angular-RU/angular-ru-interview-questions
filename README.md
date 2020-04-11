@@ -1567,30 +1567,10 @@ Change Detection Mechanism - продвигается только вперед 
 <br>
 </details>
 
-##### Angular data flow
+##### RxJS
 
 <details>
-<summary>Что такое Dependency Injection?</summary>
-<div>
-<br>Это важный паттерн шаблон проектирования приложений. В Angular внедрение зависимостей реализовано из-под капота.<br>
-<br>Зависимости - это сервисы или объекты, которые нужны классу для выполнения своих функций. DI -позволяет запрашивать зависимости от внешних источников.
-</div>
-</details>
-
-<details>
-<summary>Что такое Singleton Service и с какой целью его используют в Angular?</summary>
-<div>
-<br>
-
-  Это сервисы, объявленные в приложении и имеющие один экземляр на все приложение. 
-  Его можно объявить двумя способами:
-  <li>Объявить его @Injectable(root)</li>
-  <li>Включить его в AppModule в providers, либо в единственный модуль импортируемый в AppModule.</li>
-</div>
-</details>
-
-<details>
-<summary>Как можно определить свой обработчик ErrorHandler, Logging, Cache в Angular?</summary>
+<summary>Для чего нужен RxJS и какую проблему он решает?</summary>
 <div>
   in progress..
 </div>
@@ -1654,7 +1634,48 @@ Change Detection Mechanism - продвигается только вперед 
 </div>
 </details>
 
+##### Angular data flow
 
+<details>
+<summary>Что такое Dependency Injection?</summary>
+<div>
+<br>Это важный паттерн шаблон проектирования приложений. В Angular внедрение зависимостей реализовано из-под капота.<br>
+<br>Зависимости - это сервисы или объекты, которые нужны классу для выполнения своих функций. DI -позволяет запрашивать зависимости от внешних источников.
+</div>
+</details>
+
+<details>
+<summary>Что такое Singleton Service и с какой целью его используют в Angular?</summary>
+<div>
+<br>
+
+  Это сервисы, объявленные в приложении и имеющие один экземляр на все приложение. 
+  Его можно объявить двумя способами:
+  <li>Объявить его @Injectable(root)</li>
+  <li>Включить его в AppModule в providers, либо в единственный модуль импортируемый в AppModule.</li>
+</div>
+</details>
+
+<details>
+<summary>Как можно определить свой обработчик ErrorHandler, Logging, Cache в Angular?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Что такое управление состоянием приложения?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>В чем отличие между NGRX, NGXS, Akita и какую проблему они решают?</summary>
+<div>
+  in progress..
+</div>
+</details>
 
 ##### Angular with Backend integrations
 
