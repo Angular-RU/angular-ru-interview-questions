@@ -157,13 +157,6 @@
 </details>
 
 <details>
-<summary>Зачем нам нужны определения типов, где есть JavaScript c динамической типизацией?</summary>
-<div>
-  in progress..
-</div>
-</details>
-
-<details>
 <summary>Что такое пользовательский тип данных</summary>
 <div>
   in progress..
