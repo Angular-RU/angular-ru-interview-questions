@@ -2244,3 +2244,11 @@ export class MyClassImpl implements MyClass {
   
 </div>
 </details>
+
+
+<details>
+<summary>Зачем нужен ESLint (TSLint) и Prettier?</summary>
+<div>
+  in progress..
+</div>
+</details>
