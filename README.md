@@ -19,10 +19,190 @@
 
 - [Angular Interview Questions by Google Developer Expert](https://github.com/Yonet/Angular-Interview-Questions)
 
+##### Базовые вопросы для Junior/Middle
+
+<details>
+<summary>В чем отличие фреймворка от библиотеки (приведите примеры и отличия)?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Какие популярные CSS, JS библиотеки вы знаете?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Знаете ли вы как браузер обрабатывает index.html (расскажите про Critical Rendering Path)?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Какие типы данных есть в JavaScript?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Как устроена память в JavaScript (memory heap, memory stack)?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Что такое this и расскажите про область видимости?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>В чем отличие var от const, let?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Объясните, как работает наследование прототипов, что такое цепочка прототипов, и когда появилось ключевое слова class в JS?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Что такое структура данных и какие виды вы знаете (Стек, etc)?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Что такое Promise и для чего используется в JS?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Что такое call-stack, task-queue (приведите примеры работы)?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Что такое макро и микро задачи в JS?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Назовите основные принципы ООП?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Что такое класс и интерфейс?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Что такое конструктор класса?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Расскажите про стек TCP/IP, а также более подробно про, что такое HTTP и какую роль он играет при разработке приложений?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Что такое REST API, как происходит взаимодействие (расскажите про основные коды ошибок, заголовки пакетов и способы их отправки)?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
 ##### Основны TypeScript
 
 <details>
-<summary>Что такое декоратор?</summary>
+<summary>Зачем нам нужны определения типов, где есть JavaScript c динамической типизацией?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Зачем нам нужны определения типов, где есть JavaScript c динамической типизацией?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Что такое пользовательский тип данных</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Что такое Union Type (тип объединения) и для чего используется?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Поддерживает ли TypeScript перегрузку методов?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Возможна ли перегрузка конструктора в TypeScript?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>Поддерживает ли TypeScript перегрузку методов (конструкторов)?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+
+<details>
+<summary>Что такое декоратор и какие виды декораторов вы знаете?</summary>
 
 <br>
 
@@ -1994,11 +2174,26 @@ export class UsersComponent implements OnInit {
 </details>
 
 <details>
-<summary>Что такое Karma, Jest, Jasmine (зачем их используют совместно при разработке на Angular)?</summary>
+<summary>Что такое Karma, Jasmine (зачем их используют совместно при разработке на Angular)?</summary>
 <div>
   in progress..
 </div>
 </details>
+
+<details>
+<summary>В чем разница между Jest и Karma?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
+<details>
+<summary>В чем разница между Protractor и Cypress?</summary>
+<div>
+  in progress..
+</div>
+</details>
+
 
 <details>
 <summary>Как протестировать входные параметры и всплывающие события компонентов?</summary>
