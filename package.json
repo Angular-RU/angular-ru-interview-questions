@@ -1,0 +1,24 @@
+{
+  "name": "angular-ru-interview-questions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Вопросы подготовлены непосредственно для того, чтобы определить уровень разработчика, насколько глубоко, поверхностно или сносно он знает Angular. Вопросы для собеседования на знание JavaScript или Web-стека хорошо освещены в других местах, поэтому ниже будет добавлен список ресурсов по этой теме:",
+  "homepage": "https://github.com/Angular-RU/angular-ru-interview-questions#readme",
+  "bugs": {
+    "url": "https://github.com/Angular-RU/angular-ru-interview-questions/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Angular-RU/angular-ru-interview-questions.git"
+  },
+  "license": "MIT",
+  "author": "angular-ru@yandex.ru",
+  "scripts": {
+    "format": "yarn sort-package-json \"package.json\" && yarn prettier \"**/*.{ts,html,css,scss,md,js,json}\""
+  },
+  "dependencies": {
+    "@angular-ru/build-tools": "15.200.0",
+    "@angular-ru/common": "15.206.0",
+    "@angular-ru/prettier-config": "15.172.0"
+  }
+}

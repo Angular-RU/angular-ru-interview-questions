@@ -1,4 +1,4 @@
-## Вопросы на собеседовании по Angular  [![Angular-RU](https://img.shields.io/badge/Telegram_chat:-Angular_RU-216bc1.svg?style=flat)](https://t.me/angular_ru)
+## Вопросы на собеседовании по Angular [![Angular-RU](https://img.shields.io/badge/Telegram_chat:-Angular_RU-216bc1.svg?style=flat)](https://t.me/angular_ru)
 
 Вопросы подготовлены непосредственно для того, чтобы определить уровень разработчика, насколько глубоко, поверхностно или сносно он знает Angular. Вопросы для собеседования на знание JavaScript или Web-стека хорошо освещены в других местах, поэтому ниже будет добавлен список ресурсов по этой теме:
 
@@ -8,10 +8,10 @@
 - [Awesome Interviews](https://github.com/alex/what-happens-when)
 - [Angular Interview Questions](https://github.com/sudheerj/angular-interview-questions)
 
-**Frontend**: 
+**Frontend**:
 
 - [Front-end Job Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
-- [The Best Frontend JavaScript Interview Questions](https://performancejs.com/post/hde6d32/The-Best-Frontend-JavaScript-Interview-Questions-(Written-by-a-Frontend-Engineer))
+- [The Best Frontend JavaScript Interview Questions](<https://performancejs.com/post/hde6d32/The-Best-Frontend-JavaScript-Interview-Questions-(Written-by-a-Frontend-Engineer)>)
 - [Frontend Guidelines Questionnaire](https://github.com/bradfrost/frontend-guidelines-questionnaire)
 - [Подготовка к интервью на Front-end разработчика](https://proglib.io/p/frontend-interview/)
 
@@ -63,7 +63,6 @@
 </div>
 </details>
 
-
 <details>
 <summary>В чем отличие var от const, let?</summary>
 <div>
@@ -77,7 +76,6 @@
   in progress..
 </div>
 </details>
-
 
 <details>
 <summary>Что такое структура данных и какие виды вы знаете (Стек, etc)?</summary>
@@ -93,14 +91,12 @@
 </div>
 </details>
 
-
 <details>
 <summary>Что такое call-stack, task-queue (приведите примеры работы)?</summary>
 <div>
   in progress..
 </div>
 </details>
-
 
 <details>
 <summary>Что такое макро и микро задачи в JS?</summary>
@@ -109,7 +105,6 @@
 </div>
 </details>
 
-
 <details>
 <summary>Назовите основные принципы ООП?</summary>
 <div>
@@ -117,14 +112,12 @@
 </div>
 </details>
 
-
 <details>
 <summary>Что такое класс и интерфейс?</summary>
 <div>
   in progress..
 </div>
 </details>
-
 
 <details>
 <summary>Что такое конструктор класса?</summary>
@@ -177,7 +170,6 @@
 </div>
 </details>
 
-
 <details>
 <summary>Возможна ли перегрузка конструктора в TypeScript?</summary>
 <div>
@@ -192,15 +184,15 @@
 </div>
 </details>
 
-
 <details>
 <summary>Что такое декоратор и какие виды декораторов вы знаете?</summary>
 
 <br>
 
-  Декоратор - способ добавления метаданных к объявлению класса. Это специальный вид объявления, который может быть присоединен к объявлению класса, методу, методу доступа, свойству или параметру. <br>
-  <br>Декораторы используют форму @expression, где expression - функция, которая будет вызываться во время выполнения с информацией о декорированном объявлении.<br>
-  <br>Чтобы написать собственный декоратор, нам нужно сделать его factory и определить тип:
+Декоратор — способ добавления метаданных к объявлению класса. Это специальный вид объявления, который может быть присоединен к объявлению класса, методу, методу доступа, свойству или параметру. <br>
+<br>Декораторы используют форму @expression, где expression - функция, которая будет вызываться во время выполнения с информацией о декорированном объявлении.<br>
+<br>И, чтобы написать собственный декоратор, нам нужно сделать его factory и определить тип:
+
   <ul>
     <li>ClassDecorator</li>
     <li>PropertyDecorator</li>
@@ -211,47 +203,46 @@
   <b>Декоратор класса</b>
   <div>
 
-  Вызывается перед объявлением класса, применяется к конструктору класса и может использоваться для наблюдения, изменения или замены определения класса. Expression декоратора класса будет вызываться как функция во время выполнения, при этом конструктор декорированного класса является единственным аргументом. Если класс декоратора возвращает значение, он заменит объявление класса вернувшимся значением. <br>
+Вызывается перед объявлением класса, применяется к конструктору класса и может использоваться для наблюдения, изменения или замены определения класса. Expression декоратора класса будет вызываться как функция во время выполнения, при этом конструктор декорированного класса является единственным аргументом. Если класс декоратора возвращает значение, он заменит объявление класса вернувшимся значением. <br>
 
-  ```ts
-    export function logClass(target: Function) {
-        // Сохранение ссылки на оригинальный конструктор
-        const original = target;
-    
-        // Функция генерирует экземпляры класса
-        function construct(constructor, args) {
-            const c: any = function () {
-                return constructor.apply(this, args);
-            }
-            c.prototype = constructor.prototype;
-            return new c();
-        }
-    
-        // Определение поведения нового конструктора
-        const f: any = function (...args) {
-            console.log(`New: ${original['name']} is created`);
-            //New: Employee создан
-            return construct(original, args);
-        }
-    
-        // Копирование прототипа, чтобы оператор intanceof работал
-        f.prototype = original.prototype;
-    
-        // Возвращает новый конструктор, переписывающий оригинальный
-        return f;
-    }
+```ts
+export function logClass(target: Function) {
+  // Сохранение ссылки на оригинальный конструктор
+  const original = target;
 
-    @logClass
-    class Employee {
-    
-    }
+  // Функция генерирует экземпляры класса
+  function construct(constructor, args) {
+    const c: any = function () {
+      return constructor.apply(this, args);
+    };
+    c.prototype = constructor.prototype;
+    return new c();
+  }
 
-    let emp = new Employee();
-    console.log('emp instanceof Employee');
-    //emp instanceof Employee
-    console.log(emp instanceof Employee);
-    //true
-  ```
+  // Определение поведения нового конструктора
+  const f: any = function (...args) {
+    console.log(`New: ${original["name"]} is created`);
+    //New: Employee создан
+    return construct(original, args);
+  };
+
+  // Копирование прототипа, чтобы оператор intanceof работал
+  f.prototype = original.prototype;
+
+  // Возвращает новый конструктор, переписывающий оригинальный
+  return f;
+}
+
+@logClass
+class Employee {}
+
+let emp = new Employee();
+console.log("emp instanceof Employee");
+//emp instanceof Employee
+console.log(emp instanceof Employee);
+//true
+```
+
   </div>
   
   <br><b>Декоратор свойства</b>
@@ -265,50 +256,48 @@
     <li>propertyKey - название свойства</li>
   </ul>
 
-  ```ts
-    function logParameter(target: Object, propertyName: string) {
-    
-        // Значение свойства
-        let _val = this[propertyName];
-    
-        // Геттер свойства
-        const getter = () => {
-            console.log(`Get: ${propertyName} => ${_val}`);
-            return _val;
-        };
-    
-        // Сеттер свойства
-        const setter = newVal => {
-            console.log(`Set: ${propertyName} => ${newVal}`);
-            _val = newVal;
-        };
-    
-        // Удаление свойства
-        if (delete this[propertyName]) {
-    
-            // Создает новое свойство с геттером и сеттером
-            Object.defineProperty(target, propertyName, {
-                get: getter,
-                set: setter,
-                enumerable: true,
-                configurable: true
-            });
-        }
-    }
-    
-    class Employee {
-    
-        @logParameter
-        name: string;
-    }
-    
-    const emp = new Employee();
-    emp.name = 'Mohan Ram';
-    console.log(emp.name);
-    // Set: name => Mohan Ram
-    // Get: name => Mohan Ram
-    // Mohan Ram
-  ```
+```ts
+function logParameter(target: Object, propertyName: string) {
+  // Значение свойства
+  let _val = this[propertyName];
+
+  // Геттер свойства
+  const getter = () => {
+    console.log(`Get: ${propertyName} => ${_val}`);
+    return _val;
+  };
+
+  // Сеттер свойства
+  const setter = (newVal) => {
+    console.log(`Set: ${propertyName} => ${newVal}`);
+    _val = newVal;
+  };
+
+  // Удаление свойства
+  if (delete this[propertyName]) {
+    // Создает новое свойство с геттером и сеттером
+    Object.defineProperty(target, propertyName, {
+      get: getter,
+      set: setter,
+      enumerable: true,
+      configurable: true,
+    });
+  }
+}
+
+class Employee {
+  @logParameter
+  name: string;
+}
+
+const emp = new Employee();
+emp.name = "Mohan Ram";
+console.log(emp.name);
+// Set: name => Mohan Ram
+// Get: name => Mohan Ram
+// Mohan Ram
+```
+
   </div>
   
   <br><b>Декоратор метода</b>
@@ -375,7 +364,7 @@
 
 <div>
 
-  Объявляется непосредственно перед объявлением метода. Будет вызываться как функция во время выполнения со следующими двумя аргументами:
+Объявляется непосредственно перед объявлением метода. Будет вызываться как функция во время выполнения со следующими двумя аргументами:
 
   <ul>
     <li>target - прототип текущего объекта, т.е. если Employee является объектом, Employee.prototype</li>
@@ -386,40 +375,35 @@
 </div>
 
 ```ts
-    function logParameter(target: Object, propertyName: string, index: number) {
-    
-        // Генерация метаданных для соответствующего метода
-        // для сохранения позиции декорированных параметров
-        const metadataKey = `log_${propertyName}_parameters`;
-        
-        if (Array.isArray(target[metadataKey])) {
-            target[metadataKey].push(index);
-        }   
-        else {
-            target[metadataKey] = [index];
-        }
-    }
-    
-    class Employee {
-        greet(@logParameter message: string): void {
-            console.log(`hello ${message}`);
-        }
-    }
-    const emp = new Employee();
-    emp.greet('world');
+function logParameter(target: Object, propertyName: string, index: number) {
+  // Генерация метаданных для соответствующего метода
+  // для сохранения позиции декорированных параметров
+  const metadataKey = `log_${propertyName}_parameters`;
+
+  if (Array.isArray(target[metadataKey])) {
+    target[metadataKey].push(index);
+  } else {
+    target[metadataKey] = [index];
+  }
+}
+
+class Employee {
+  greet(@logParameter message: string): void {
+    console.log(`hello ${message}`);
+  }
+}
+const emp = new Employee();
+emp.greet("world");
 ```
-  
+
 </details>
-
-
-
 
 ##### Основные концепции
 
 <details>
 <summary>Что такое Angular?</summary>
 <div><br>
-<img src="https://d2eip9sf3oo6c2.cloudfront.net/series/square_covers/000/000/033/thumb/egghead-angular-material-course-sq.png" align="left"><p><b>Angular</b>&nbsp;&mdash; это платформа для разработки мобильных и&nbsp;десктопных веб-приложений. Наши приложения теперь представляют из&nbsp;себя &laquo;толстый клиент&raquo;, где управление отображением и&nbsp;часть логики перенесены на&nbsp;сторону браузера. Так сервер уделяет больше времени доставке данных, плюс пропадает необходимость в&nbsp;постоянной перерисовке. С&nbsp;Angular мы&nbsp;описываем структуру приложения декларативно, а&nbsp;с&nbsp;TypeScript начинаем допускать меньше ошибок, благодаря статической типизации. В&nbsp;Angular присутствует огромное количество возможностей из&nbsp;коробки. Это может быть одновременно и&nbsp;хорошо и&nbsp;плохо, в&nbsp;зависимости от&nbsp;того, что вам необходимо.</p><hr>
+<img src="https://d2eip9sf3oo6c2.cloudfront.net/series/square_covers/000/000/033/thumb/egghead-angular-material-course-sq.png" align="left" alt=""><p><b>Angular</b>&nbsp;&mdash; это платформа для разработки мобильных и&nbsp;десктопных веб-приложений. Наши приложения теперь представляют из&nbsp;себя &laquo;толстый клиент&raquo;, где управление отображением и&nbsp;часть логики перенесены на&nbsp;сторону браузера. Так сервер уделяет больше времени доставке данных, плюс пропадает необходимость в&nbsp;постоянной перерисовке. С&nbsp;Angular мы&nbsp;описываем структуру приложения декларативно, а&nbsp;с&nbsp;TypeScript начинаем допускать меньше ошибок, благодаря статической типизации. В&nbsp;Angular присутствует огромное количество возможностей из&nbsp;коробки. Это может быть одновременно и&nbsp;хорошо и&nbsp;плохо, в&nbsp;зависимости от&nbsp;того, что вам необходимо.</p><hr>
   
 <b>Какие плюсы можно выделить</b>:
 <ul>
@@ -490,7 +474,6 @@
 </div>
 </details>
 
-
 <details>
 <summary>Что такое MVVM и в чем разница перед MVC?</summary>
 <div>
@@ -498,12 +481,11 @@
   <br>Отличие от MVС заключаются в: <br> <br>
   
   <li>View реагирует на действия пользователя и передает их во View Model через Data Binding.</li>
-  <li>View Model, в отличие от контроллера в MVC, имеет особый механизм, автоматизирущий связь между View и связанными свойствами в ViewModel.</li>
+  <li>View Model, в отличие от контроллера в MVC, имеет особый механизм, автоматизирующий связь между View и связанными свойствами в ViewModel.</li>
   
   <br>Привязка данных между View и ViewModel может быть односторонней или двусторонней (one-way, two-way data-binding).
 </div>
 </details>
-
 
 ##### Angular Template синтаксис
 
@@ -511,7 +493,7 @@
 <summary>Что такое интерполяция в Angular?</summary>
 <div><br>
   
-Разметка интерполяции с внедренными выражениями используется в Angular для присвоение данных текстовым нодам и значения аттрибутов. Например:
+Разметка интерполяции с внедренными выражениями используется в Angular для присвоения данных текстовым нодам и значения аттрибутов. Например:
   
   ```html
     <a href="img/{{username}}.jpg">Hello {{username}}!</a>
@@ -521,7 +503,6 @@
 </div>
 
 </details>
-
 
 <details>
 <summary>Какие способы использования шаблонов в Angular вы знаете?</summary>
@@ -538,7 +519,6 @@
 </div>
 </details>
 
-
 <details>
 <summary>Для чего нужны директивы ng-template, ng-container, ng-content?</summary>
 <div>
@@ -552,12 +532,10 @@
 Пример:
 
 ```html
-<div class="lessons-list" *ngIf="lessons else loading">
-  ... 
-</div>
+<div class="lessons-list" *ngIf="lessons else loading">...</div>
 
 <ng-template #loading>
-    <div>Loading...</div>
+  <div>Loading...</div>
 </ng-template>
 ```
 
@@ -565,12 +543,12 @@
   
   `<ng-container>` - это логический контейнер, который может использоваться для группировки узлов, но не отображается в дереве DOM как узел (node).
 
-  На самом деле структурные директивы (*ngIf, *ngFor, ..) являются синтаксическим сахаром для наших шаблонов. В реальности, данные шаблоны трансформируются в такие конструкции:
-  
+На самом деле структурные директивы (*ngIf, *ngFor, …) являются синтаксическим сахаром для наших шаблонов. В реальности, данные шаблоны трансформируются в такие конструкции:
+
 ```html
 <ng-template [ngIf]="lessons" [ngIfElse]="loading">
    <div class="lessons-list">
-     ... 
+     ...
    </div>
 </div>
 
@@ -584,15 +562,13 @@
 
 ```html
 <div class="lesson" *ngIf="lessons" *ngFor="let lesson of lessons">
-  <div class="lesson-detail">
-      {{lesson | json}}
-  </div>
-</div> 
+  <div class="lesson-detail">{{lesson | json}}</div>
+</div>
 ```
 
 ```
 Uncaught Error: Template parse errors:
-Can't have multiple template bindings on one element. Use only one attribute 
+Can't have multiple template bindings on one element. Use only one attribute
 named 'template' or prefixed with *
 ```
 
@@ -601,10 +577,8 @@ named 'template' or prefixed with *
 ```html
 <div *ngIf="lessons">
   <div class="lesson" *ngFor="let lesson of lessons">
-    <div class="lesson-detail">
-        {{lesson | json}}
-    </div>
-  </div> 
+    <div class="lesson-detail">{{lesson | json}}</div>
+  </div>
 </div>
 ```
 
@@ -612,11 +586,9 @@ named 'template' or prefixed with *
 
 ```html
 <ng-container *ngIf="lessons">
-    <div class="lesson" *ngFor="let lesson of lessons">
-        <div class="lesson-detail">
-            {{lesson | json}}
-        </div>
-    </div>
+  <div class="lesson" *ngFor="let lesson of lessons">
+    <div class="lesson-detail">{{lesson | json}}</div>
+  </div>
 </ng-container>
 ```
 
@@ -627,31 +599,31 @@ named 'template' or prefixed with *
 Вы можете писать либо так:
 
 ```html
-<div class="mainwrap">
-    <ng-container *ngIf="true">
-        <h2>Title</h2>
-        <div>Content</div>
-    </ng-container>
+<div class="mainWrap">
+  <ng-container *ngIf="true">
+    <h2>Title</h2>
+    <div>Content</div>
+  </ng-container>
 </div>
 ```
 
 Либо так:
 
 ```html
-<div class="mainwrap">
-    <ng-template [ngIf]="true">
-        <h2>Title</h2>
-        <div>Content</div>
-    </ng-template>
+<div class="mainWrap">
+  <ng-template [ngIf]="true">
+    <h2>Title</h2>
+    <div>Content</div>
+  </ng-template>
 </div>
 ```
 
 На выходе, при рендеринге будет одно и тоже:
 
 ```html
-<div class="mainwrap">
-      <h2>Title</h2>
-      <div>Content</div>
+<div class="mainWrap">
+  <h2>Title</h2>
+  <div>Content</div>
 </div>
 ```
 
@@ -661,17 +633,17 @@ named 'template' or prefixed with *
  
 Здесь на самом деле, немного сложнее уже чем с ng-template, ng-container. Так как ng-content решает задачу проецирования контента в ваши веб-компоненты. Веб-компоненты состоят из нескольких отдельных технологий. Вы можете думать о Веб-компонентах как о переиспользуемых виджетах пользовательского интерфейса, которые создаются с помощью открытых веб-технологий. Они являются частью браузера и поэтому не нуждаются во внешних библиотеках, таких как jQuery или Dojo. Существующий Веб-компонент может быть использован без написания кода, просто путем импорта выражения на HTML-страницу. Веб-компоненты используют новые или разрабатываемые стандартные возможности браузера.
 
-Давайте представим ситуацию от обратного, нам нужно параметризировать наш компонент. Мы хотим сделать так, чтобы на вход в компонент мы могли передать какие-либо статичные данные. Это можно сделать несколькими способами. 
+Давайте представим ситуацию от обратного, нам нужно параметризовать наш компонент. Мы хотим сделать так, чтобы на вход в компонент мы могли передать какие-либо статичные данные. Это можно сделать несколькими способами.
 
 comment.component.ts:
 
 ```ts
 @Component({
-  selector: 'comment',
+  selector: "comment",
   template: `
-    <h1>Комментарий: </h1>
-    <p>{{data}}</p>
-  `
+    <h1>Комментарий:</h1>
+    <p>{{ data }}</p>
+  `,
 })
 export class CommentComponent {
   @Input() data: string = null;
@@ -691,14 +663,13 @@ comment.component.ts:
 
 ```ts
 @Component({
-  selector: 'comment',
+  selector: "comment",
   template: `
-    <h1>Комментарий: </h1>
+    <h1>Комментарий:</h1>
     <ng-content></ng-content>
-  `
+  `,
 })
-export class CommentComponent { 
-}
+export class CommentComponent {}
 ```
 
 app.component.html
@@ -716,7 +687,7 @@ app.component.html
 </div>
 </details>
 
-##### Angular development enviroments
+##### Angular development environments
 
 <details>
 <summary>Что такое директива и как создать собственную?</summary>
@@ -724,7 +695,7 @@ app.component.html
 
 <br>
 
-Директивы бывают трех видов: компонент, структуные и атрибутные (см. выше). 
+Директивы бывают трех видов: компонент, структурные и атрибутные (см. выше).
 
 <h4>Создание атрибутных директив:</h4>
   
@@ -732,7 +703,7 @@ app.component.html
 @Directive({ 
    selector: '[appHighlight]' 
 })
-export class HighlightDirective { .. }
+export class HighlightDirective {  }
 ```
 
 <br>
@@ -740,46 +711,48 @@ export class HighlightDirective { .. }
 Декоратор определяет селектор атрибута [appHighlight], [] - указывают что это селектор атрибута. Angular найдет каждый элемент в шаблоне с этим атрибутом и применит к ним логику директивы.
 
 ```ts
-@Directive({ 
-  selector: '[appHighlight]' 
+@Directive({
+  selector: "[appHighlight]",
 })
 export class HighlightDirective {
   constructor(el: ElementRef) {
-     el.nativeElement.style.backgroundColor = 'yellow';
+    el.nativeElement.style.backgroundColor = "yellow";
   }
 }
 ```
-  
-<br>Необходимо указать в конструткторе ElementRef, чтобы через его свойство nativeElement иметь прямой доступ к DOM элементу, который должен быть изменен.
+
+<br>Необходимо указать в конструкторе ElementRef, чтобы через его свойство nativeElement иметь прямой доступ к DOM элементу, который должен быть изменен.
 <br>Теперь, используя @HostListener, можно добавить обработчики событий, взаимодействующие с декоратором.
 
 ```ts
-@HostListener('mouseenter') 
-public onMouseEnter(): void {
-    this.highlight('yellow');
-}
+@Component()
+class EtcComponent {
+  @HostListener("mouseenter")
+  public onMouseEnter(): void {
+    this.highlight("yellow");
+  }
 
-@HostListener('mouseleave') 
-public onMouseLeave(): void {
-   this.highlight(null);
-}
-    
-private highlight(color: string): void {
-   this.el.nativeElement.style.backgroundColor = color;
+  @HostListener("mouseleave")
+  public onMouseLeave(): void {
+    this.highlight(null);
+  }
+
+  private highlight(color: string): void {
+    this.el.nativeElement.style.backgroundColor = color;
+  }
 }
 ```
 
 <h4>Структурные директивы создаются так:</h4>
 
-Напишем UnlessDirective, которая будет противоположна NgIf. 
-<br>Необходимо использовать @Directive, и импортировать Input, TemplateRef, и ViewContainerRef. Они вам понадобятся при воздании любой структурной директивы. 
+Напишем UnlessDirective, которая будет противоположна NgIf.
+<br>Необходимо использовать @Directive, и импортировать Input, TemplateRef, и ViewContainerRef. Они вам понадобятся при воздании любой структурной директивы.
 
 ```ts
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-    
-@Directive({ selector: '[appUnless]'})
-  export class UnlessDirective {
-}
+import { Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+
+@Directive({ selector: "[appUnless]" })
+export class UnlessDirective {}
 ```
 
 В конструкторе мы получаем доступ к view container и содержимое <ng-template>.
@@ -790,23 +763,25 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
     private viewContainer: ViewContainerRef) { }
 ```
 
-Наша директива предполагает работу с true/false. Для этого нужно свойство appUnless, добавленное через @Input. 
+Наша директива предполагает работу с true/false. Для этого нужно свойство appUnless, добавленное через @Input.
 
 ```ts
-@Input() public set appUnless(condition: boolean) {
-  if (!condition && !this.hasView) {
-       this.viewContainer.createEmbeddedView(this.templateRef);
-       this.hasView = true;
-  } else if (condition && this.hasView) {
-       this.viewContainer.clear();
-       this.hasView = false;
+@Directive({ selector: "[appUnless]" })
+export class UnlessDirective {
+  @Input() public set appUnless(condition: boolean) {
+    if (!condition && !this.hasView) {
+      this.viewContainer.createEmbeddedView(this.templateRef);
+      this.hasView = true;
+    } else if (condition && this.hasView) {
+      this.viewContainer.clear();
+      this.hasView = false;
+    }
   }
 }
 ```
 
 </div>
 </details>
-
 
 <details>
 <summary>Что такое директива, компонент, модуль, сервис, пайп в Angular и для чего они нужны?</summary>
@@ -823,7 +798,6 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 </details>
 
-
 <details>
 <summary>Расскажите об основных параметрах @NgModule, @Component, @Directive, @Injectable, @Pipe</summary>
 <div>
@@ -834,11 +808,11 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
  <li>providers - список инжектируемых объектов, которые добавляются в этот модуль</li>
  <li>declarations - компоненты, директивы и пайпы, принадлежащие этому модулю</li>
  <li>imports - модули, которые экспортируются декларируемыми и доступны в шаблоне этого модуля</li>
- <li>exports - компоненты, директивы и пайпы, которые объявлены декларируемыми, и могут быть импользованы в шаблоне любого компонента, которые принадлежит NgModule импортирующему их.</li>
- <li>entryComponent - компилируемые компоненты при определенни NgModule, для динамической загрузки в view.</li>
+ <li>exports - компоненты, директивы и пайпы, которые объявлены декларируемыми, и могут быть им пользованы в шаблоне любого компонента, которые принадлежит NgModule импортирующему их.</li>
+ <li>entryComponent - компилируемые компоненты при определении NgModule, для динамической загрузки в view.</li>
  <li>bootstrap - компоненты, которые загружаются при загрузке этого модуля, автоматически добавляются в entryComponent. </li>
  <li>schemas - набор схем, объявляющих разрешенные элементы в MgModules</li>
- <li>id - имя или путь, уникальный идентификатор этого NgModule в getModuleFactory. Если не заоплнять - не будет там зарегистрирован.</li>
+ <li>id - имя или путь, уникальный идентификатор этого NgModule в getModuleFactory. Если не заполнять - не будет там зарегистрирован.</li>
  <li>jit - если true, то этот модуль будет пропущен компилятором AOT и всегда будет компилироваться JIT.</li>
  
  <h4>@Component может содержать следующие параметры:</h4>
@@ -849,7 +823,7 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
  <li>template - инлайн шаблон для этого компонента.</li>
  <li>styleUrls - один и более путь до файла, содержащего CSS, абсолютный или относительный.</li>
  <li>styles - инлайн CSS, используемые в этом компоненте.</li>
- <li>animations - один и более вызовов анимации trigger(), содержащих state() и transistion(). </li>
+ <li>animations - один и более вызовов анимации trigger(), содержащих state() и transition(). </li>
  <li>encapsulation - правила инкапсуляции для шаблона и CSS.</li>
  <li>interpolation - переопределение базовых знаков интерполяции.</li>
  <li>entryComponents - компоненты, которые должны быть скомпилированы вместе с этим компонентом. Для каждого упомянутого здесь компонента создается ComponentFactory и сохраняется в ComponentFactoryResolver.</li>
@@ -866,40 +840,46 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 ```ts
 @Component({
-  selector: 'child-component',
-  template: `Name {{name}} Id {{id}}`,
-  inputs: [ 'name', 'id: parentId'],
+  selector: "child-component",
+  template: `Name {{ name }} Id {{ id }}`,
+  inputs: ["name", "id: parentId"],
 })
 export class ChildComponent {}
 
 @Component({
-  selector: 'parent-component',
-  template: `<child-component [name]="parentName" [parentId]="parentIdValue" ></child-component>`,
+  selector: "parent-component",
+  template: `
+    <child-component
+      [name]="parentName"
+      [parentId]="parentIdValue"
+    ></child-component>
+  `,
 })
 export class Parent {
-  public parentIdValue = '123';
-  public parentName = 'Name'
+  public parentIdValue = "123";
+  public parentName = "Name";
 }
 ```
 
   </li>
-  <li>outputs - свойство для определения @Output. В отличии от inputs, объявление свойства в классе обязательно. Пример: 
+  <li>outputs - свойство для определения @Output. В отличии от inputs, объявление свойства в классе обязательно. Пример:
 
 ```ts
 @Component({
-  selector: 'child-dir',
-  outputs: [ 'bankNameChange' ]
-  template: `<input (input)="bankNameChange.emit($event.target.value)" />`
+  selector: "child-dir",
+  outputs: ["bankNameChange"],
+  template: `<input (input)="bankNameChange.emit($event.target.value)" />`,
 })
 class ChildDir {
   bankNameChange: EventEmitter<string> = new EventEmitter<string>();
 }
 
 @Component({
-  selector: 'main',
+  selector: "main",
   template: `
-    {{ bankName }} <child-dir (bankNameChange)="onBankNameChange($event)"></child-dir>
-  `
+    {{ bankName }}
+    <child-dir (bankNameChange)="onBankNameChange($event)"></child-dir>
+  `,
 })
 class MainComponent {
   bankName: string;
@@ -909,16 +889,16 @@ class MainComponent {
   }
 }
 ```
-    
+
   </li>
   <li>providers - настраивает инжектор этой директивы или компонента с помощью токена.</li>
   <li>exportAs - определяет имя, которое можно использовать в шаблоне для присвоения этой директивы переменной.</li>
   <li>queries - настраивает запросы, которые могут быть инжектированы в директиву.</li>
-  <li>host - состоставляет свойства класса со сбайнженными элементами для свойств, атрибутов и ивентов. </li>
+  <li>host - составляет свойства класса со сбайнженными элементами для свойств, атрибутов и ивентов. </li>
   <li>jit - если true, то этот модуль будет пропущен компилятором AOT и всегда будет компилироваться JIT.</li>
   
   <h4>@Injectable может содержать следующие параметры:</h4>
-  <li>providedIn - определяет, где будет заинжектировано, либо, если объявлено "root" растространится на все приложение. </li>
+  <li>providedIn - определяет, где будет заинжектировано, либо, если объявлено "root" распространится на все приложение. </li>
   
   <h4>@Pipe может содержать следующие параметры:</h4>
   <li>name - имя пайпа, которое будет использовано в шаблоне.</li>
@@ -926,7 +906,6 @@ class MainComponent {
  
 </div>
 </details>
-
 
 <details>
 <summary>Что такое динамические компоненты и как их можно использовать в Angular?</summary>
@@ -941,20 +920,20 @@ class MainComponent {
 
 ```ts
 @Component({
-  template: `<div> 
+  template: `<div>
     <ng-container #dynamicContent></ng-container>
-  </div>
-  `
+  </div> `,
 })
 export class AppComponent {
-  @ViewChild('dynamicContent', { read: ViewContainerRef }) 
+  @ViewChild("dynamicContent", { read: ViewContainerRef })
   public dynamicContainer: ViewContainerRef;
 }
 ```
+
   </li>
   <li> при загрузке страницы ng-container/ng-template определен и загружен. Проверить загрузку и определение "якоря" можно в хуке ngAfterViewInit()</li>
   </ol>
-  </p>
+
   <p>
     В динамический компонент можно внедрить зависимости. Зависимости могут понадобится для общения основного и динамического компонентов. Перед внедрением зависимости нужно создать injector. Создание injector похоже на определение параметра providers в @NgModule. Пример создания Injector:
 
@@ -1000,7 +979,7 @@ export class ParentComponent {
         [
           {
             provide: IDynamicComponentProps,
-            useValue:{ 
+            useValue:{
               onClickDynamicComponent: () => { this.onClickHandler.emit(0) },
               items: this.parentItems
             }
@@ -1011,6 +990,7 @@ export class ParentComponent {
   }
 }
 ```
+
   </p>
   <h4>Последовательность действий для отображения динамического компонента</h4>
   <ol>
@@ -1023,24 +1003,20 @@ export class ParentComponent {
   <p>Ниже указана последовательность действий, реализованная кодом. В примере используется Основной компонент (MainComponent), динамический компонент (DynamicCompoent) и сервис для рендера (MainComponentService)</p>
 
 ```ts
-
 //основной компонент
 @Component({
-  selector: 'main-component',
+  selector: "main-component",
   template: `<h1>Dynamic Component Example</h1>
-    <ng-container #dynamicComponent></ng-container>
-  `
+    <ng-container #dynamicComponent></ng-container> `,
 })
 export class MainComponent {
-  @ViewChild('dynamicComponent', { read: ViewContainerRef }) 
+  @ViewChild("dynamicComponent", { read: ViewContainerRef })
   public dynamicContainer: ViewContainerRef;
 
-  public parentItems: Array<string> = ['str1', 'str2'];
-  constructor(
-    private mainComponentService: MainComponentService
-  ){
-    this.mainComponentService.onClickHandler()
-      .subscribe(x => console.log(x)) //console - 0 form dynamic component
+  public parentItems: Array<string> = ["str1", "str2"];
+  constructor(private mainComponentService: MainComponentService) {
+    this.mainComponentService.onClickHandler().subscribe((x) => console.log(x));
+    // console - 0 form dynamic component
   }
 
   public ngAfterViewInit(): void {
@@ -1048,43 +1024,45 @@ export class MainComponent {
   }
 }
 
-//класс для DI
+// класс для DI
 export abstract class IDynamicComponentProps {
   public abstract onClickDynamicComponent(): void;
   public abstract items: Array<string>;
 }
 
-//сервис для рендера
+// сервис для рендера
 @Injectable()
 export class MainComponentService {
-  public onClickHandler: EventEmitter<number> = 
-    new EventEmitter();
+  public onClickHandler: EventEmitter<number> = new EventEmitter();
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private injector: Injector
-  ) { 
-  }
+  ) {}
 
   public render(container: ViewContainerRef, parentItems: Array<string>): void {
     if (!isUndefined(container)) {
-      container.clear()
+      container.clear();
     }
 
     const injector: Injector = Injector.create(
       [
         {
           provide: IDynamicComponentProps,
-          useValue:{ 
-            onClickDynamicComponent: () => { this.onClickHandler.emit(0) },
-            items: parentItems
-          }
-        }
+          useValue: {
+            onClickDynamicComponent: () => {
+              this.onClickHandler.emit(0);
+            },
+            items: parentItems,
+          },
+        },
       ],
       this.injector
     );
 
-    const factory = this.componentFactoryResolver.resolveComponentFactory(DynamicCompoent);
-    
+    const factory = this.componentFactoryResolver.resolveComponentFactory(
+      DynamicCompoent
+    );
+
     container.createComponent(factory, 0, injector);
   }
 }
@@ -1092,25 +1070,22 @@ export class MainComponentService {
 //динамический компонент
 @Component({
   template: `
-    <span *ngFor='let item of dynamicItems'>{{item}}</span>
-    <button (click)='onClick()'></button>
-  `
+    <span *ngFor="let item of dynamicItems">{{ item }}</span>
+    <button (click)="onClick()"></button>
+  `,
 })
 export class DynamicComponent {
-  public dynamicItems: Array<string> =
-    this.dynamicComponentProps.items;
-  constructor(
-    private dynamicComponentProps: IDynamicComponentProps,
-  ) {}
+  public dynamicItems: Array<string> = this.dynamicComponentProps.items;
+  constructor(private dynamicComponentProps: IDynamicComponentProps) {}
 
   public onClick(): void {
     this.dynamicComponentProps.onClickDynamicComponent();
   }
 }
 ```
+
 </div>
 </details>
-
 
 <details>
 <summary>Как применить анимацию к компонентам?</summary>
@@ -1126,18 +1101,17 @@ export class DynamicComponent {
     </ul>
 
 ```js
-  import {
-    trigger,
-    state,
-    style,
-    animate,
-    transition,
-    // ...
-  } from '@angular/animations'
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  // ...
+} from "@angular/animations";
 ```
 
 <li>Добавить свойство animations в декоратор компонента @Component():</li><br>
-
 
 ```ts
 @Component({
@@ -1157,31 +1131,32 @@ export class DynamicComponent {
       <li>состояний в конце перехода - стили, которые будут применятся к элементу в конце анимации. Для объявления состояний используется функция <b>state()</b>. В функции нужно указать название состояния, указать стили состояния с помощью функции <b>style()</b>. Если анимация отключена (<b>[@.disabled]='true'</b>), то стили конечных состояний нужно прописать.</li>
       <li>промежуточных состояний - стилей, которые применяются к элементу между окончательными состояниями. С помощью промежуточных состояний можно анимировать переходы. Для этого используется функция <b>transition()</b>. В функции нужно прописать выражение, в котором указано направление между состояниями и функции для определения стилей между состояниями, анимации.</li>
     </ol>
-  </p>
-  
-  <p>Для объявления триггера, нужно прописать функцию <b>trigger()</b> в метаданных компонента, в свойстве <b>animations</b>. Первым параметром нужно указать событие, которое будет привязано в шаблоне к элементу. Вторым параметром нужно указать состояни <b>state()</b> и анимации в <b>transition()</b>. Например:
+
+  <p>Для объявления триггера, нужно прописать функцию <b>trigger()</b> в метаданных компонента, в свойстве <b>animations</b>. Первым параметром нужно указать событие, которое будет привязано в шаблоне к элементу. Вторым параметром нужно указать состояние <b>state()</b> и анимации в <b>transition()</b>. Например:
 
 ```ts
 @Component({
-  selector: 'example',
+  selector: "example",
   animations: [
-    trigger('toggle', [
-      state('open', style({
-        height: '200px',
-        opacity: 1,
-        backgroundColor: 'yellow'
-      })),
-      state('closed', style({
-        height: '100px',
-        opacity: 0.5,
-        backgroundColor: 'green'
-      })), 
-      transition('open => closed', [
-        animate('1s')
-      ]),
-      transition('closed => open', [
-        animate('0.5s')
-      ]),
+    trigger("toggle", [
+      state(
+        "open",
+        style({
+          height: "200px",
+          opacity: 1,
+          backgroundColor: "yellow",
+        })
+      ),
+      state(
+        "closed",
+        style({
+          height: "100px",
+          opacity: 0.5,
+          backgroundColor: "green",
+        })
+      ),
+      transition("open => closed", [animate("1s")]),
+      transition("closed => open", [animate("0.5s")]),
       //...
     ]),
   ],
@@ -1189,6 +1164,7 @@ export class DynamicComponent {
 })
 export class ExampleComponent {}
 ```
+
   </p>
   <h4>Дополнительные состояния переходов</h4>
   <p>При работе с переходами можно указывать не только состояния, указанные в функции state(). Анимации в Angular поддерживают следующие состояния:
@@ -1199,81 +1175,67 @@ export class ExampleComponent {}
 
 ```ts
 animations: [
-  trigger('openClose', [
-    state('open', style({
-      height: '200px',
-      opacity: 1,
-      backgroundColor: 'yellow'
-    })),
-    state('closed', style({
-      height: '100px',
-      opacity: 0.5,
-      backgroundColor: 'green'
-    })),
-    transition('open => closed', [
-      animate('1s')
-    ]),
-    transition('closed => open', [
-      animate('0.5s')
-    ]),
-    transition('* => closed', [
-      animate('1s')
-    ]),
-    transition('* => open', [
-      animate('0.5s')
-    ]),
-    transition ('* => open', [
-      animate ('1s',
-        style ({ opacity: '*' }),
-      ),
-    ]),
-    transition('* => *', [
-      animate('1s')
-    ]),
-  ]
-  )
-]
+  trigger("openClose", [
+    state(
+      "open",
+      style({
+        height: "200px",
+        opacity: 1,
+        backgroundColor: "yellow",
+      })
+    ),
+    state(
+      "closed",
+      style({
+        height: "100px",
+        opacity: 0.5,
+        backgroundColor: "green",
+      })
+    ),
+    transition("open => closed", [animate("1s")]),
+    transition("closed => open", [animate("0.5s")]),
+    transition("* => closed", [animate("1s")]),
+    transition("* => open", [animate("0.5s")]),
+    transition("* => open", [animate("1s", style({ opacity: "*" }))]),
+    transition("* => *", [animate("1s")]),
+  ]),
+];
 ```
+
 <p>
     Два вышеперечисленных состояния можно использовать вместе - <b>void => *</b> и <b> * => void</b>. У этих конструкций есть алиасы - :enter (void => *) и :leave (* => void). Например:
 </p>
 
 ```ts
-trigger('eventTrigger', [
-  transition('void => *', [
+const animation = trigger("eventTrigger", [
+  transition("void => *", [
     style({ opacity: 0 }),
-    animate('5s', style({ opacity: 1 })),
+    animate("5s", style({ opacity: 1 })),
   ]),
   // or
-  transition(':enter', [
+  transition(":enter", [
     style({ opacity: 0 }),
-    animate('5s', style({ opacity: 1 })),
+    animate("5s", style({ opacity: 1 })),
   ]),
 
   //-------------//
 
-  transition('* => void', [
-    animate('5s', style({ opacity: 0 }))
-  ])
+  transition("* => void", [animate("5s", style({ opacity: 0 }))]),
   //or
-  transition(':leave', [
-    animate('5s', style({ opacity: 0 }))
-  ])
-]),
+  transition(":leave", [animate("5s", style({ opacity: 0 }))]),
+]);
 ```
-  </p>
-  <p>Для работы с переходами можно использовать числовые и булевые значения. При работе с числовыми значениями, можно использовать алиасы :increment и :decrement. С булевыми значениями можно просто прописать true/false. Например:
+
+  <p>Для работы с переходами можно использовать числовые и булевы значения. При работе с числовыми значениями, можно использовать алиасы :increment и :decrement. С булевыми значениями можно просто прописать true/false. Например:
 
 ```ts
 @Component({
-  selector: 'toggle',
+  selector: "toggle",
   animations: [
-    trigger('isOpen', [
-      state('true', style({ height: '*' })),
-      state('false', style({ height: '0px' })),
-      transition('true <=> false', [
-        animate('1s')
-      ]),
+    trigger("isOpen", [
+      state("true", style({ height: "*" })),
+      state("false", style({ height: "0px" })),
+      transition("true <=> false", [animate("1s")]),
     ]),
   ],
   template: `<div [@isOpen]="isOpen ? true : false"></div>`,
@@ -1283,27 +1245,31 @@ export class ToggleComponent {
 }
 
 @Component({
-  template: `<ul class="heroes" [@filterAnimation]="heroTotal"></ul>`
+  template: `<ul class="heroes" [@filterAnimation]="heroTotal"></ul>`,
   animations: [
-    trigger('filterAnimation', [
-      transition(':enter, * => 0, * => -1', []),
-      transition(':increment', [
-        query(':enter', [
-          style({ opacity: 0, width: '0px' }),
-          stagger(50, [
-            animate('300ms ease-out', style({ opacity: 1, width: '*' })),
-          ]),
-        ], { optional: true })
+    trigger("filterAnimation", [
+      transition(":enter, * => 0, * => -1", []),
+      transition(":increment", [
+        query(
+          ":enter",
+          [
+            style({ opacity: 0, width: "0px" }),
+            stagger(50, [
+              animate("300ms ease-out", style({ opacity: 1, width: "*" })),
+            ]),
+          ],
+          { optional: true }
+        ),
       ]),
-      transition(':decrement', [
-        query(':leave', [
+      transition(":decrement", [
+        query(":leave", [
           stagger(50, [
-            animate('300ms ease-out', style({ opacity: 0, width: '0px' })),
+            animate("300ms ease-out", style({ opacity: 0, width: "0px" })),
           ]),
-        ])
+        ]),
       ]),
     ]),
-  ]
+  ],
 })
 export class HeroListPageComponent implements OnInit {
   public heroTotal: number = -1;
@@ -1314,12 +1280,11 @@ export class HeroListPageComponent implements OnInit {
   
 <p><b>Примечание:</b> хорошей практикой является перенос анимаций в отдельные файлы *.animation.ts. Эта практика уменьшит размер файла компонента, обеспечит декомпозицию, даст возможность переиспользования анимаций.</p>
   
-[Гайд ангуляра по переиспользованию анимаций](https://angular.io/guide/reusable-animations) 
-
+[Гайд ангуляра по переиспользованию анимаций](https://angular.io/guide/reusable-animations)
 
 <h4>Отключение анимации</h4>
 <p>Анимацию можно принудительно отключить как в отдельном компоненте, так и во всем приложении.</p>
-<p>Для отключения анимации в компоненте нужно указать [@.disabled]='isDisabled' в нужной ноде компонента. Например: 
+<p>Для отключения анимации в компоненте нужно указать [@.disabled]='isDisabled' в нужной ноде компонента. Например:
 
 ```html
 <div [@.disabled]="isDisabled"></div>
@@ -1327,20 +1292,20 @@ export class HeroListPageComponent implements OnInit {
 
 </p>
 
-<p>Для отключения анимации во всем приложении, нужно укзаать @HostBinding('@.disabled') в корневом компоненте. Например:
+<p>Для отключения анимации во всем приложении, нужно указать @HostBinding('@.disabled') в корневом компоненте. Например:
 
-  ```ts
+```ts
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
-    styleUrls: ['app.component.css'],
-    animations: [
-      // animation  go here
-    ]
+  selector: "app-root",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.css"],
+  animations: [
+    // animation  go here
+  ],
 })
 export class AppComponent {
-    @HostBinding('@.disabled')
-    public animationsDisabled = true;
+  @HostBinding("@.disabled")
+  public animationsDisabled = true;
 }
 ```
 
@@ -1352,7 +1317,6 @@ export class AppComponent {
 </div>
 </details>
 
-
 ##### Angular render lifecycle and core environments
 
 <details>
@@ -1362,23 +1326,23 @@ export class AppComponent {
 <p>Запуск Angular приложения начинается с файла <b>main.ts</b>. Этот файл содержит в себе примерно следующее:</p>
 
 ```ts
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './app/app.module';
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from "./app/app.module";
 
 const platform = platformBrowserDynamic();
 
 platform.bootstrapModule(AppModule);
 ```
+
 <p>platformBrowserDynamic запускает AppModule. После этого, начинает работать логика в AppModule. </p>
 <p>В AppModule обычно задается компонент, который будет использоваться для отображения при загрузке. Компонент находится в параметре <b>bootstrap</b></p>
 
 ```ts
 @NgModule({
-    imports:      [ BrowserModule, FormsModule ],
-    declarations: [ AppComponent ],
-    bootstrap:    [ AppComponent ]
+  imports: [BrowserModule, FormsModule],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
-
 export class AppModule {}
 ```
 
@@ -1405,34 +1369,32 @@ export class AppModule {}
       <p>В классе дочернего компонента нужно прописать public свойства с декораторами @Input()/@Output(). Названия свойств должны совпадать с именами в атрибутах дочернего селектора. В @Input() можно передать значения как обычных типов данных (string, number, Array и тп), так и потоки (Subject, Observable). В @Output обычно используется EventEmitter. Через него можно отправить значения в функцию родительского компонента, которая прописана в атрибуте селектора.</p>
       <p>Пример</p>
 
-```ts 
+```ts
 @Component({
-  selector: 'parent',
+  selector: "parent",
   template: `
     <div>
-      <child [count]='value' (increment)='onInstement($event)'></child>
+      <child [count]="value" (increment)="onInstement($event)"></child>
     </div>
   `,
 })
-
 export class ParentComponent {
   public value: number = 0;
 
   public onIncrement(value: number): void {
     // actions with child's value
   }
-} 
+}
 
 @Component({
-  selector: 'child',
+  selector: "child",
   template: `
     <div>
-      <button type='button' (click)='onClickIncrement()'>+1</button>
+      <button type="button" (click)="onClickIncrement()">+1</button>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush //см пункт "Какие существуют стратегии обнаружения изменений?"
+  changeDetection: ChangeDetectionStrategy.OnPush, //см пункт "Какие существуют стратегии обнаружения изменений?"
 })
-
 export class ChildComponent {
   @Input() public count: number;
 
@@ -1442,8 +1404,9 @@ export class ChildComponent {
     const result = this.count++;
     this.increment.emit(result);
   }
-} 
+}
 ```
+
   </li>
   <li>
     <p><b>@ViewChild() директива</b> - получение доступа к свойствам дочернего компонента. В родительском шаблоне нужно указать селектор дочернего. Так же, в родительском компоненте нужно обозначить public свойство с директивой @ViewChild().</p>
@@ -1452,11 +1415,11 @@ export class ChildComponent {
 
 ```ts
 @Component({
-  selector: 'parent',
-  template: `<child #childRef *ngIf='isShowChild'></child>`
+  selector: "parent",
+  template: `<child #childRef *ngIf="isShowChild"></child>`,
 })
 export class ParentComponent {
-  @ViewChild('childRef', {static: false}) public viewChild: ChildComponent;
+  @ViewChild("childRef", { static: false }) public viewChild: ChildComponent;
 
   public isShowChild: boolean = false;
 
@@ -1466,17 +1429,18 @@ export class ParentComponent {
 }
 
 @Component({
-  selector: 'parent',
-  template: `<child #childRef></child>`
+  selector: "parent",
+  template: `<child #childRef></child>`,
 })
 export class ParentComponent {
-  @ViewChild('childRef', {static: false}) public viewChild: ChildComponent;
+  @ViewChild("childRef", { static: false }) public viewChild: ChildComponent;
 
   public ngAfterViewInit(): void {
     console.log(this.viewChild.title);
   }
-} 
+}
 ```
+
   </li>
   <li>
     <p><b>Через сервис</b> - передача данных между компонентами через единый сервис. Этим способом можно взаимодействовать с компонентами одного уровня. Так же, можно избавиться от иерархии зависимостей и не использовать всплывающие события (Output)</p>
@@ -1485,12 +1449,12 @@ export class ParentComponent {
 ```ts
 @Injectable()
 export class CountService {
-  private count$:  BehaviorSubject<number> = new BehaviorSubject(0);
+  private count$: BehaviorSubject<number> = new BehaviorSubject(0);
 
   public get value$(): Observable<number> {
     return this.count$.asObservable();
   }
- 
+
   public get value(): number {
     return this.count$.getValue();
   }
@@ -1502,22 +1466,22 @@ export class CountService {
   public reset(): void {
     this.count$.next(0);
   }
-
 }
 
 @Component({
-  selector: 'counter',
+  selector: "counter",
   template: `
      value = {{ counter.value$ | async }}  <br/>
     <button type='button' (click)='counter.setState(counter.value + 1)>+1</button>
     <button type='button' (click)='counter.setState(counter.value - 1)>-1</button>
     <button type='reset' (click)='counter.reset()>reset</button>
-  `
+  `,
 })
 export class CounterComponent {
-  constructor(private counter: CountService) { }
+  constructor(private counter: CountService) {}
 }
 ```
+
   </li>
   </ol>
 </div>
@@ -1528,19 +1492,19 @@ export class CounterComponent {
 <div>
 <br>
 
-  <b>После</b> создания компонента или директивы через вызов конструктора, Angular вызывает методы жизненного цикла в следующей последовательности в строго определенные моменты:
-  <li>ngOnChanges() - вызывается когда Angular при/переприсваивает привязанные данные к input properties. Метод получает объект SimpleChanges, со старыми и новыми значениями. Вызывается перед NgOnInit и каждый раз, когда изменяется одно или несколько связанных свойств.</li>
-  <li>ngOnInit() - инициализует директиву/компонент после того, как Angular впервые отобразит связанные свойства и устанавливает входящие параметры.</li>
-  <li>ngDoCheck() - при обнаружении изменений, которые Angular не может самостоятельно обнаружить, реаигрует на них. </li>
+<b>После</b> создания компонента или директивы через вызов конструктора, Angular вызывает методы жизненного цикла в следующей последовательности в строго определенные моменты:
+
+  <li>ngOnChanges() - вызывается когда Angular переприсваивает привязанные данные к input properties. Метод получает объект SimpleChanges, со старыми и новыми значениями. Вызывается перед NgOnInit и каждый раз, когда изменяется одно или несколько связанных свойств.</li>
+  <li>ngOnInit() - инициализирует директиву/компонент после того, как Angular впервые отобразит связанные свойства и устанавливает входящие параметры.</li>
+  <li>ngDoCheck() - при обнаружении изменений, которые Angular не может самостоятельно обнаружить, реагирует на них. </li>
   <li>ngAfterContentInit() - вызывается после того, как Angular спроецирует внешний контент в отображение компонента или отображение с директивой. Вызывается единожды, после первого ngDoCheck().</li>
   <li>ngAfterContentChecked() - реагирует на проверку Angular-ом проецируемого содержимого. Вызывается после ngAfterContentInit() и каждый последующий ngDoCheck().</li>
   <li>ngAfterViewInit() - вызывается после инициализации отображения компонента и дочерних/директив. Вызывается единожды, после первого ngAfterContentChecked().</li>
   <li>ngAfterViewChecked() - реагирует на проверку отображения компонента и дочерних/директив. Вызывается после ngAfterViewInit() и каждый последующий ngAfterContentChecked().</li>
-  <li>ngOnDestroy() - после уничтожния директивы/компонента выполняется очистка. Отписывает Observables и отключает обработчики событий, чтобы избежать утечек памяти.</li>
+  <li>ngOnDestroy() - после уничтожения директивы/компонента выполняется очистка. Отписывает Observables и отключает обработчики событий, чтобы избежать утечек памяти.</li>
   
 </div>
 </details>
-
 
 <details>
 <summary>Что такое Shadow DOM и как с ним работать в Angular?</summary>
@@ -1548,7 +1512,6 @@ export class CounterComponent {
   in progress..
 </div>
 </details>
-
 
 <details>
 <summary>Что такое Data Binding и какие проблемы связанные с ним вы знаете?</summary>
@@ -1591,11 +1554,13 @@ export class CounterComponent {
 <div>
   <br>
 
-  <a href="https://angular.io/api/core/NgZone">NgZone</a> - это сервис, который является обёрткой над zone.js, для выполнения кода внутри или вне зоны Angular. Этот сервис создаёт зону с именем angular для автоматического запуска обнаружения изменений, когда выполняются следующие условия:
-  <li>Когда выполняется синхронная или асинхронная функция</li>
-  <li>Когда нет запланированной микрозадачи в очереди</li>
+<a href="https://angular.io/api/core/NgZone">NgZone</a> - это сервис, который является обёрткой над zone.js, для выполнения кода внутри или вне зоны Angular. Этот сервис создаёт зону с именем angular для автоматического запуска обнаружения изменений, когда выполняются следующие условия:
 
-  <br>Наиболее распространённое применение NgZone — это оптимизация производительности посредством выполнения асинхронной логики вне зоны Angular (метод <code>runOutsideAngular</code>), тем самым не вызывая обнаружение изменений или обработку ошибок. Или наоборот, данный сервис может использоваться для выполнения логики внутри зоны (метод <code>run</code>), что в конечном итоге приведёт к тому, что Angular снова вызовет обнаружение изменений и при необходимости перерисует представление.
+  <li>Когда выполняется синхронная или асинхронная функция</li>
+  <li>Когда нет запланированной микро-задачи в очереди</li>
+
+<br>Наиболее распространённое применение NgZone — это оптимизация производительности посредством выполнения асинхронной логики вне зоны Angular (метод <code>runOutsideAngular</code>), тем самым не вызывая обнаружение изменений или обработку ошибок. Или наоборот, данный сервис может использоваться для выполнения логики внутри зоны (метод <code>run</code>), что в конечном итоге приведёт к тому, что Angular снова вызовет обнаружение изменений и при необходимости перерисует представление.
+
 </div>
 </details>
 
@@ -1606,62 +1571,54 @@ export class CounterComponent {
 1. Используя метод `ApplicationRef.prototype.tick`, который запустит `change detection` на всем дереве компонентов.
 
 ```ts
-import { Component, ApplicationRef, NgZone } from '@angular/core';
+import { Component, ApplicationRef, NgZone } from "@angular/core";
 
 @Component({
-    selector: 'app-root',
-    template: `
-        <h1>Hello, {{ name }}!</h1>
-    `
+  selector: "app-root",
+  template: ` <h1>Hello, {{ name }}!</h1> `,
 })
 export class AppComponent {
+  public name: string = null;
 
-    public name: string = null;
-
-    constructor(private app: ApplicationRef, private zone: NgZone) {
-        this.zone.runOutsideAngular(() => {
-            setTimeout(() => {
-                this.name = window.prompt('What is your name?', 'Jake');
-                this.app.tick();
-            }, 5000);
-        });
-    }
-    
+  constructor(private app: ApplicationRef, private zone: NgZone) {
+    this.zone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.name = window.prompt("What is your name?", "Jake");
+        this.app.tick();
+      }, 5000);
+    });
+  }
 }
 ```
 
 2. Используя метод `NgZone.prototype.run`, который также запустит `change detection` на всем дереве.
 
 ```ts
-import { Component, NgZone } from '@angular/core';
-import { SomeService } from './some.service'
+import { Component, NgZone } from "@angular/core";
+import { SomeService } from "./some.service";
 
 @Component({
-    selector: 'app-root',
-    template: `
-        <h1>Hello, {{ name }}!</h1>
-    `,
-    providers: [SomeService]
+  selector: "app-root",
+  template: ` <h1>Hello, {{ name }}!</h1> `,
+  providers: [SomeService],
 })
 export class AppComponent {
+  public name: string = null;
 
-   public name: string = null;
-
-   constructor(private zone: NgZone, private service: SomeService) {
-       this.zone.runOutsideAngular(() => {
-           this.service.getName().then((name: string) => {
-               this.zone.run(() => this.name = name);
-           });
-       });
-   }
-   
+  constructor(private zone: NgZone, private service: SomeService) {
+    this.zone.runOutsideAngular(() => {
+      this.service.getName().then((name: string) => {
+        this.zone.run(() => (this.name = name));
+      });
+    });
+  }
 }
 ```
 
 Метод `run` под капотом сам вызывает `tick`, а параметром принимает функцию, которую нужно выполнить перед `tick`. То есть:
 
 ```ts
-this.zone.run(() => this.name = name);
+this.zone.run(() => (this.name = name));
 
 // идентично
 
@@ -1672,29 +1629,25 @@ this.app.tick();
 3. Используя метод `ChangeDetectorRef.prototype.detectChanges`, который запустит `change detection` на текущем компоненте и дочерних.
 
 ```ts
-import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef } from "@angular/core";
 
 @Component({
-    selector: 'app-root',
-    template: `
-        <h1>Hello, {{ name }}!</h1>
-    `
+  selector: "app-root",
+  template: ` <h1>Hello, {{ name }}!</h1> `,
 })
 export class AppComponent {
+  public name: string = null;
 
-   public name: string = null;
-
-   constructor(private zone: NgZone, private ref: ChangeDetectorRef) {
-       this.zone.runOutsideAngular(() => {
-           this.name = window.prompt('What is your name?', 'Jake');
-           this.ref.detectChanges();
-       });
-   }
-   
+  constructor(private zone: NgZone, private ref: ChangeDetectorRef) {
+    this.zone.runOutsideAngular(() => {
+      this.name = window.prompt("What is your name?", "Jake");
+      this.ref.detectChanges();
+    });
+  }
 }
 ```
-</details>
 
+</details>
 
 <details>
 <summary>Что такое EventEmitter и как подписываться на события?</summary>
@@ -1713,7 +1666,7 @@ Change Detection - процесс синхронизации модели с п�
 
 <h4>2. Change Detection Mechanism </h4>
 
-Change Detection Mechanism - продвигается только вперед и никогда не оглядывается назад, начиная с корневого (рут) компонента до последнего. В этом и есть смысл одностороннего потока данных. Архитектура Angular приложения очень проста — дерево компонентов. Каждый компонент указывает на дочерний, но дочерний не указывает на родительский. Односторонний поток устраняет необходимость `$digest` цикла. 
+Change Detection Mechanism - продвигается только вперед и никогда не оглядывается назад, начиная с корневого (рут) компонента до последнего. В этом и есть смысл одностороннего потока данных. Архитектура Angular приложения очень проста — дерево компонентов. Каждый компонент указывает на дочерний, но дочерний не указывает на родительский. Односторонний поток устраняет необходимость `$digest` цикла.
 
 <br>
 </details>
@@ -1722,16 +1675,16 @@ Change Detection Mechanism - продвигается только вперед 
 <summary>Какие существуют стратегии обнаружения изменений?</summary>
 <br>
 
-Всего есть две стратегии - `Default` и `OnPush`. Если все компоненты используют первую стратегию, то `Zone` проверяет все дерево независимо от того, где произошло изменение. Чтобы сообщить Angular, что мы будем соблюдать условия повышения производительности нужно использовать стратегию обнаружения изменений `OnPush`. Это сообщит Angular, что наш компонент зависит только от входных данных и любой объект, который передается ему должен считаться immutable. Это все построено на принципе автомата Мили, где текущее состояние зависит только от входных значений. 
+Всего есть две стратегии - `Default` и `OnPush`. Если все компоненты используют первую стратегию, то `Zone` проверяет все дерево независимо от того, где произошло изменение. Чтобы сообщить Angular, что мы будем соблюдать условия повышения производительности нужно использовать стратегию обнаружения изменений `OnPush`. Это сообщит Angular, что наш компонент зависит только от входных данных и любой объект, который передается ему должен считаться immutable. Это все построено на принципе автомата Мили, где текущее состояние зависит только от входных значений.
 
 <br>
 
 </details>
 
 <details>
-<summary>Сколько Change Detector'ов может быть во всем приложении?</summary>
+<summary>Сколько Change Detector(ов) может быть во всем приложении?</summary>
 <br>
-У каждого компонента есть свой Change Detector, все Change Detector'ы наследуются от AbstractChangeDetector.  
+У каждого компонента есть свой Change Detector, все Change Detector(ы) наследуются от AbstractChangeDetector.  
 <br>
 </details>
 
@@ -1756,7 +1709,7 @@ Change Detection Mechanism - продвигается только вперед 
 <details>
 <summary>Что такое Observable?</summary>
 <div>
-  <br>Observable — это набюдатель, который подписывается и реагирует на все события до момента отписки. 
+  <br>Observable— это наблюдатель, который подписывается и реагирует на все события до момента отписки. 
 </div>
 </details>
 
@@ -1799,7 +1752,6 @@ Change Detection Mechanism - продвигается только вперед 
 </div>
 </details>
 
-
 <details>
 <summary>В чём разница между операторами switchMap, mergeMap, concatMap?</summary>
 <div>
@@ -1807,7 +1759,7 @@ Change Detection Mechanism - продвигается только вперед 
   <ul>  
       <li>switchMap - отменит подписку на Observable, возвращенный ее аргументом project, как только он снова вызовет ее в новом элементе.</li>
       <li>mergeMap - в отличие от switchMap позволяет реализовать одновременно несколько внутренних подписок. </li>
-      <li>concatMap - послеждовательно обрабатывает каждое событие, в отличие от mergeMap.</li>
+      <li>concatMap - последовательно обрабатывает каждое событие, в отличие от mergeMap.</li>
   </ul>
 </div>
 </details>
@@ -1834,8 +1786,9 @@ Change Detection Mechanism - продвигается только вперед 
 <div>
 <br>
 
-  Это сервисы, объявленные в приложении и имеющие один экземляр на все приложение. 
-  Его можно объявить двумя способами:
+Это сервисы, объявленные в приложении и имеющие один экземпляр на все приложение.
+Его можно объявить двумя способами:
+
   <li>Объявить его @Injectable(root)</li>
   <li>Включить его в AppModule в providers, либо в единственный модуль импортируемый в AppModule.</li>
 </div>
@@ -1865,30 +1818,31 @@ Change Detection Mechanism - продвигается только вперед 
 ##### Angular with Backend integrations
 
 <details>
-<summary>Какими способами можно взаимодействовать с API бекенда, что требуется для проксирования запросов?</summary>
+<summary>Какими способами можно взаимодействовать с API бэкенда, что требуется для проксирования запросов?</summary>
 <div>
   <br>
   <b>Взаимодействие с API</b>
 
-  В экосистеме ангуляр существует пакет для общения с сервером
-  (@angular/common/http), которого достаточно для повседневной разработки. Его интерфейс основан на rxjs потоках, поэтому его легко использовать для работы с потоками данных в приложении.
-  <br>
+В экосистеме ангуляр существует пакет для общения с сервером
+(@angular/common/http), которого достаточно для повседневной разработки. Его интерфейс основан на rxjs потоках, поэтому его легко использовать для работы с потоками данных в приложении.
+<br>
 
-  Кроме этого, как и в ванильной версии javascript, можно использовать XMLHttpRequest, fetch API, axios(или многие другие библиотеки), но их использование вместо встроенного клиента, считается неоправданным и всячески возбраняется.
+Кроме этого, как и в ванильной версии javascript, можно использовать XMLHttpRequest, fetch API, axios(или многие другие библиотеки), но их использование вместо встроенного клиента, считается неоправданным и всячески возбраняется.
 
-  Существуют и другие способы взаимодействия с сервером(см. Вебсокеты), но для них не существует каноничных встроенных библиотек, поэтому используются сторонние библиотеки или собственные реалиации. Хорошей практикой здесь будет привести интерфейс построенный на промисах и обратных вызовах(callback) к интерфейсу основанному на rxjs потоках, для естественного использования в экосистеме Angular.
-  
+Существуют и другие способы взаимодействия с сервером(см. Веб-сокеты), но для них не существует каноничных встроенных библиотек, поэтому используются сторонние библиотеки или собственные реалиации. Хорошей практикой здесь будет привести интерфейс построенный на промисах и обратных вызовах(callback) к интерфейсу основанному на rxjs потоках, для естественного использования в экосистеме Angular.
+
   <br>
   <b>Proxy</b>
 
-  Чтобы тестировать взаимодействие приложения с сервером, который должен находиться на том же домене, используется <a href="https://angular.io/guide/build#proxying-to-a-backend-server"> функциональность в Angular CLI</a> для этого нужно создать файл с конфигурацией прокси, где будут указаны:
+Чтобы тестировать взаимодействие приложения с сервером, который должен находиться на том же домене, используется <a href="https://angular.io/guide/build#proxying-to-a-backend-server"> функциональность в Angular CLI</a> для этого нужно создать файл с конфигурацией прокси, где будут указаны:
+
   <ul>
     <li>Контекст для проксирования</li>
     <li>Ссылка на работающий экземпляр API</li>
     <li>secure: false для работы в тестовой среде без сертификатов</li>
   </ul>
 
-  Также большинство серверов не настроены для работы с разными доменами(<a href="https://developer.mozilla.org/ru/docs/Web/HTTP/CORS">CORS</a>), поэтому для корректной работы на API сервере, необходимо явно указать с какого домена(ов) можно принимать запросы.
+Также большинство серверов не настроены для работы с разными доменами(<a href="https://developer.mozilla.org/ru/docs/Web/HTTP/CORS">CORS</a>), поэтому для корректной работы на API сервере, необходимо явно указать с какого домена(ов) можно принимать запросы.
 
 </div>
 </details>
@@ -1899,29 +1853,36 @@ Change Detection Mechanism - продвигается только вперед 
 <br>
 Interceptor (перехватчик) - просто причудливое слово для функции, которая получает запросы / ответы до того, как они будут обработаны / отправлены на сервер. Нужно использовать перехватчики, если имеет смысл предварительно обрабатывать многие типы запросов одним способом. Например нужно для всех запросов устанавливать хедер авторизации `Bearer`:
 
- token.interceptor.ts
- 
+token.interceptor.ts
+
 ```ts
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+} from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  public intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    const token = localStorage.getItem("token") as string;
 
-    public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const token = localStorage.getItem('token') as string;
-
-        if (token) {
-            req = req.clone({
-                setHeaders: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-        }
-
-        return next.handle(req);
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     }
+
+    return next.handle(req);
+  }
 }
 ```
 
@@ -1930,32 +1891,30 @@ export class TokenInterceptor implements HttpInterceptor {
 app.module.ts
 
 ```ts
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AppComponent } from './app.component';
-import { TokenInterceptor } from './token.interceptor';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { AppComponent } from "./app.component";
+import { TokenInterceptor } from "./token.interceptor";
 
 @NgModule({
-    imports: [
-        BrowserModule
-    ],
-    declarations: [
-        AppComponent
-    ],
-    bootstrap: [AppComponent],
-    providers: [{
-        provide: HTTP_INTERCEPTORS,
-        useClass: TokenInterceptor,
-        multi: true // <--- может быть зарегистрирован массив перехватчиков
-    }]
+  imports: [BrowserModule],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true, // <--- может быть зарегистрирован массив перехватчиков
+    },
+  ],
 })
 export class AppModule {}
 ```
+
 <br>
 
 </details>
-
 
 <details>
 <summary>Как использовать Json Web Tokens для аутентификации при разработке на Angular?</summary>
@@ -1985,14 +1944,13 @@ export class AppModule {}
 </div>
 </details>
 
-
 <details>
 <summary>Каков жизненный цикл у Angular Router?</summary>
 <div>
   <br>
   <p>
-    <img src='http://susdev.ru/wp-content/uploads/2019/02/router-navigation-lifecycle.png' />
-    <a href='http://susdev.ru/angular-router-series-router-navigation-cycle/'>Источник информации</a>
+    <img src='https://susdev.ru/wp-content/uploads/2019/02/router-navigation-lifecycle.png'  alt=""/>
+    <a href='https://susdev.ru/angular-router-series-router-navigation-cycle/'>Источник информации</a>
   </p>
   <p>
     <ol>
@@ -2001,57 +1959,74 @@ export class AppModule {}
       <li><b>GuardsCheckStart, GuardsCheckEnd</b> - функции, которые использует роутер для определения может ли он выполнить навигацию. Пример:
 
 ```ts
-  // router configuration
-  { path: 'users', ..., canActivate: [CanActivateGuard] }
+// router configuration
+const config = {
+  path: "users",
+  /* ... */
+  canActivate: [CanActivateGuard],
+};
 
+class Guard {
   // router guard implementation
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
     return this.auth.isAuthorized(route.queryParams.login);
   }
+}
 ```
+
   <br />
 
-  Если вызов `isAuthorized(route.queryParams.login)` возвращает true, guard завершится успехом. В противном случае, guard упадет, роутер сгенерирует событие `NavigationCancel` и отменит всю дальнейшую навигацию.
-  <br />
+Если вызов `isAuthorized(route.queryParams.login)` возвращает true, guard завершится успехом. В противном случае guard упадет, роутер сгенерирует событие `NavigationCancel` и отменит всю дальнейшую навигацию.
+<br />
 
-  Другие guard включают `canLoad` (должен ли модуль быть лениво загружен или нет). `canActivateChild` и `canDeactivate` (которые полезны для предотвращение ухода пользователя со страницы, например, при заполнении формы).
+Другие guard включают `canLoad` (должен ли модуль быть лениво загружен или нет). `canActivateChild` и `canDeactivate` (которые полезны для предотвращения ухода пользователя со страницы, например, при заполнении формы).
+
   </li>
   <li><b>ResolveStart, ResolveEnd</b> - функции, которые мы можем использовать для подгрузки данных во время навигации. Например:
 
 ```ts
-  // router configuration
-  {  path: 'users', ..., resolve: { users: UserResolver } }
+// router configuration
+const config = {
+  path: "users",
+  /* ... */
+  resolve: { users: UserResolver },
+};
 
-  // router resolver implementation
-  export class UserResolver implements Resolve<Observable<any>> {
-    constructor(private userService: MockUserDataService) {}
-    resolve(): Observable<any> {
-      return this.userService.getUsers();
-    }
+// router resolver implementation
+export class UserResolver implements Resolve<Observable<any>> {
+  constructor(private userService: MockUserDataService) {}
+  resolve(): Observable<any> {
+    return this.userService.getUsers();
   }
+}
 ```
+
 <br/>
 
- Результат, то есть данные, будет положен в `data` объект сервиса `ActivatedRoute` c ключем `users`. Данная информация может быть прочитаны с помощью подписки на `data` `observable`.
+Результат, то есть данные, будет положен в `data` объект сервиса `ActivatedRoute` с ключом `users`. Данная информация может быть прочитаны с помощью подписки на `data` `observable`.
 
 ```ts
 export class UsersComponent implements OnInit {
   public users = [];
   constructor(private route: ActivatedRoute) {}
   ngOnInit() {
-    this.route.data.pipe(first()).subscribe(data => this.users = data.users);
+    this.route.data
+      .pipe(first())
+      .subscribe((data) => (this.users = data.users));
   }
 }
 ```
 
   </li>
-  <li><b>ActivationStart, ActivationEnd, ChildActivationStart, ChildActivationEnd</b> - события, во время которых активироуются компоненты и отображаются их с помощью <router-outlet>.Роутер может извлечь необходимую информацию о компоненте из дерева ActivatedRouteSnapshots. Он был построен в предыдущие шаги навигационного цикла.</li>
+  <li><b>ActivationStart, ActivationEnd, ChildActivationStart, ChildActivationEnd</b> - события, во время которых активируются компоненты и отображаются их с помощью <router-outlet>.Роутер может извлечь необходимую информацию о компоненте из дерева ActivatedRouteSnapshots. Он был построен в предыдущие шаги навигационного цикла.</li>
   <li><b>Updating the URL</b> - последний шаг в навигационном цикле — это обновление URL-адреса в address bar</li>
   </ol>
 
 </div>
 </details>
-
 
 <details>
 <summary>Что такое ленивая загрузка (Lazy-loading) и для чего она используется?</summary>
@@ -2059,7 +2034,6 @@ export class UsersComponent implements OnInit {
   in progress..
 </div>
 </details>
-
 
 <details>
 <summary>В чем разница между Routing и Navigation?</summary>
@@ -2075,7 +2049,6 @@ export class UsersComponent implements OnInit {
 </div>
 </details>
 
-
 ##### Angular Forms (also big ui enterprise)
 
 <details>
@@ -2083,7 +2056,7 @@ export class UsersComponent implements OnInit {
 <div>
   <br>
   <li>FormControl - отслеживает значение и статус валидации отдельного элемента формы.</li>
-  <li>FormGroup - отслеживает состояние и статус валидациии группы FormControl </li>
+  <li>FormGroup - отслеживает состояние и статус валидации группы FormControl </li>
   <br>Они используются для создания и работы с формами.
 </div>
 </details>
@@ -2095,15 +2068,13 @@ export class UsersComponent implements OnInit {
 </div>
 </details>
 
-
 <details>
 <summary>Как применять валидацию для простых и сложных форм?</summary>
 <div>
   В реактивных формах валидация реализуется в компоненте. Есть два типа валидаторов: синхронные и асинхронные.
-  <br>Можно использовать встроенные валидаторы, либо создать свои. Валидаторы доабвляются 
+  <br>Можно использовать встроенные валидаторы, либо создать свои. Валидаторы добавляются 
 </div>
 </details>
-
 
 ##### Build environments
 
@@ -2120,11 +2091,11 @@ export class UsersComponent implements OnInit {
   <br>
   <p>Angular приложение можно скомпилировать с помощью команд <b>ng serve</b> и <b>ng build</b>. При этом, можно работать с разными видами компиляции:
   <ul>
-    <li> <b>JIT</b> - (Just-In-Time compilation) - компиляция "на лету", динамическая компилияция. В Angular используется по умолчанию.</li>
+    <li> <b>JIT</b> - (Just-In-Time compilation) - компиляция "на лету", динамическая компиляция. В Angular используется по умолчанию.</li>
     <li> <b>AOT</b> -  (Ahead-Of-Time compilation) - компиляции перед исполнением.</li>
   </ul>
   <p>Основные различия:</p>
-  <table border="1">
+  <table>
     <thead>
       <tr><td>Параметры</td><td>JIT</td><td>AOT</td></tr>
     </thead>
@@ -2199,14 +2170,12 @@ export class UsersComponent implements OnInit {
 </div>
 </details>
 
-
 <details>
 <summary>Как протестировать входные параметры и всплывающие события компонентов?</summary>
 <div>
   in progress..
 </div>
 </details>
-
 
 ##### Code convention
 
@@ -2216,40 +2185,36 @@ export class UsersComponent implements OnInit {
   
 <br>
 
-На самом деле требования бывают разные и зависят от команды к команде. 
-Самые эффективные для себя считаю использование модификаторов доступа и принудительного указания типов данных для всех переменных, 
+На самом деле требования бывают разные и зависят от команды к команде.
+Самые эффективные для себя считаю использование модификаторов доступа и принудительного указания типов данных для всех переменных,
 методов и членов класса, которые вы используете в коде. Желательно все необходимые правила конвенции кода настраивать в ESLint.
-  
-```ts
-// my-class.interface.ts
-export interface MyClass {
- ...
-}
 
-// my-class.impl.ts
-export class MyClassImpl implements MyClass {
+```ts
+// my.ts
+export interface My {}
+
+// my-impl.ts
+export class MyImp implements My {
   public field: string;
-  
+
   public myMethod(): void {
     // ...
   }
-  
+
   private myProtectedMethod(): Date {
     return new Date();
   }
-  
+
   private myPrivateMethod(): MyClassImpl {
     // ...
-    
+
     return this;
   }
-
 }
 ```
-  
+
 </div>
 </details>
-
 
 <details>
 <summary>Зачем нужен ESLint (TSLint) и Prettier?</summary>
