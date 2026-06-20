@@ -523,6 +523,232 @@ var users = Array(); // Array — нативный объект
 
 </details>
 
+### Массивы, объекты и даты
+
+<details>
+<summary>Что такое Object.groupBy и когда его использовать?</summary>
+
+`Object.groupBy()` группирует элементы iterable по ключу, который возвращает callback. Результат - объект, поэтому API удобно использовать, когда ключи группировки можно представить строками или symbols.
+
+```ts
+const operations = [
+  { date: "2017-07-31", amount: 5422 },
+  { date: "2018-03-31", amount: 5654 },
+  { date: "2017-08-31", amount: 5451 },
+];
+
+const byYear = Object.groupBy(operations, ({ date }) => date.slice(0, 4));
+
+// {
+//   "2017": [...],
+//   "2018": [...]
+// }
+```
+
+`Object.groupBy()` подходит, например, для группировки операций по году или задач по статусу. Возвращаемый объект имеет `null` в качестве prototype, поэтому методы вроде `hasOwnProperty()` у него напрямую недоступны.
+
+</details>
+
+<details>
+<summary>Чем Object.groupBy отличается от Map.groupBy?</summary>
+
+`Object.groupBy()` возвращает объект и удобен для строковых ключей. `Map.groupBy()` возвращает `Map` и сохраняет ключ без преобразования в строку: им может быть объект, дата или другое значение.
+
+```ts
+const active = { label: "active" };
+const archived = { label: "archived" };
+
+const users = [
+  { name: "Max", status: active },
+  { name: "Anna", status: archived },
+  { name: "Kate", status: active },
+];
+
+const grouped = Map.groupBy(users, ({ status }) => status);
+
+grouped.get(active);
+// [{ name: "Max", ... }, { name: "Kate", ... }]
+```
+
+Выбор зависит от того, какие ключи нужны и будет ли результат дальше использоваться как объект или `Map`.
+
+</details>
+
+<details>
+<summary>Что такое Object.fromEntries?</summary>
+
+`Object.fromEntries()` преобразует iterable пар `[key, value]` в объект. Это обратная операция к `Object.entries()`; ее удобно сочетать с `map`, `filter`, `Map` и `URLSearchParams`.
+
+```ts
+const entries = [
+  ["name", "Max"],
+  ["role", "frontend"],
+];
+
+const user = Object.fromEntries(entries);
+// { name: "Max", role: "frontend" }
+```
+
+Пример фильтрации свойств:
+
+```ts
+const params = {
+  search: "angular",
+  page: 1,
+  empty: undefined,
+};
+
+const cleaned = Object.fromEntries(
+  Object.entries(params).filter(([, value]) => value !== undefined)
+);
+
+// { search: "angular", page: 1 }
+```
+
+</details>
+
+<details>
+<summary>Что такое Array.prototype.reduce?</summary>
+
+`reduce()` последовательно сворачивает массив в одно значение. Результатом может быть число, объект, массив или `Map`.
+
+```ts
+const total = [10, 20, 30].reduce((sum, value) => sum + value, 0);
+// 60
+```
+
+Initial value стоит задавать явно, особенно если массив может быть пустым:
+
+```ts
+const byYear = operations.reduce<Record<string, typeof operations>>(
+  (groups, operation) => {
+    const year = operation.date.slice(0, 4);
+
+    groups[year] ??= [];
+    groups[year].push(operation);
+
+    return groups;
+  },
+  {}
+);
+```
+
+Не стоит использовать `reduce()`, если `map`, `filter`, `some`, `every` или `find` выражают намерение понятнее.
+
+</details>
+
+<details>
+<summary>Чем toSorted отличается от sort?</summary>
+
+`sort()` сортирует массив на месте, а `toSorted()` возвращает новый массив. `toSorted()` удобнее для immutable state, Angular signals и Redux-подобных подходов.
+
+```ts
+const numbers = [10, 2, 30];
+const sorted = numbers.toSorted((first, second) => first - second);
+
+console.log(numbers); // [10, 2, 30]
+console.log(sorted); // [2, 10, 30]
+```
+
+`sort()` изменяет исходный массив:
+
+```ts
+const numbers = [10, 2, 30];
+
+numbers.sort((first, second) => first - second);
+
+console.log(numbers); // [2, 10, 30]
+```
+
+Для чисел нужен comparator, иначе значения сортируются как строки.
+
+</details>
+
+<details>
+<summary>Какие базовые API есть у Date?</summary>
+
+`Date` хранит момент времени, а не календарную дату без времени.
+
+```ts
+const now = new Date();
+
+now.getFullYear();
+now.getMonth(); // 0-11
+now.getDate(); // День месяца
+
+Date.now(); // Текущий timestamp в миллисекундах
+now.getTime(); // Timestamp конкретной даты
+```
+
+`getFullYear()`, `getMonth()` и `getDate()` используют локальную таймзону. Их UTC-варианты: `getUTCFullYear()`, `getUTCMonth()` и `getUTCDate()`.
+
+</details>
+
+<details>
+<summary>Что такое ISO-формат даты?</summary>
+
+ISO 8601 - распространенный стандарт записи даты и времени. В JavaScript часто встречается формат `YYYY-MM-DDTHH:mm:ss.sssZ`.
+
+```ts
+const iso = "2026-06-20T10:30:00.000Z";
+```
+
+`T` разделяет дату и время, а `Z` обозначает UTC. Важно не путать UTC с локальным временем пользователя.
+
+</details>
+
+<details>
+<summary>Что делает Date.prototype.toISOString?</summary>
+
+`toISOString()` возвращает строку в ISO-подобном формате `YYYY-MM-DDTHH:mm:ss.sssZ`. Результат всегда представлен в UTC.
+
+```ts
+const date = new Date("2026-06-20T10:30:00+03:00");
+
+date.toISOString();
+// "2026-06-20T07:30:00.000Z"
+```
+
+Метод удобен для API, логов, сериализации и приведения моментов времени к единому формату.
+
+</details>
+
+<details>
+<summary>Какие ошибки часто допускают при работе с Date?</summary>
+
+- Забывают, что `getMonth()` возвращает значения от `0` до `11`.
+- Путают локальное время и UTC.
+- Парсят строки нестандартного формата с зависимым от среды результатом.
+- Сравнивают даты как локализованные строки.
+- Не учитывают, что `setDate()`, `setMonth()` и `setFullYear()` мутируют объект.
+- Ожидают, что `Date` хранит календарную дату без времени.
+
+```ts
+const date = new Date();
+
+date.setDate(date.getDate() + 1); // Мутирует исходный объект
+```
+
+Для более сложной работы с датами развивается `Temporal`, но базовые вопросы обычно сфокусированы на `Date`.
+
+</details>
+
+<details>
+<summary>Как сравнивать даты в JavaScript?</summary>
+
+Моменты времени удобно сравнивать по timestamp через `getTime()`:
+
+```ts
+const first = new Date("2026-06-20T10:00:00.000Z");
+const second = new Date("2026-06-20T12:00:00.000Z");
+
+first.getTime() < second.getTime(); // true
+```
+
+Для API моменты времени обычно передают в ISO/UTC. Если значение является календарной датой без времени, например днем рождения, его часто безопаснее хранить отдельной строкой `YYYY-MM-DD`, чтобы не получить сдвиг из-за таймзоны.
+
+</details>
+
 ### HTTP и REST
 
 <details>
