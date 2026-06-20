@@ -608,6 +608,69 @@ const cleaned = Object.fromEntries(
 </details>
 
 <details>
+<summary>Что делает Object.hasOwn?</summary>
+
+`Object.hasOwn(object, key)` проверяет, есть ли свойство непосредственно у объекта, а не в его prototype chain.
+
+```ts
+const user = Object.create({ role: "admin" }) as {
+  name?: string;
+  role: string;
+};
+
+user.name = "Max";
+
+Object.hasOwn(user, "name"); // true
+Object.hasOwn(user, "role"); // false
+"role" in user; // true
+```
+
+В отличие от `object.hasOwnProperty()`, статический метод работает с объектами без prototype и объектами, переопределившими `hasOwnProperty`.
+
+</details>
+
+<details>
+<summary>Чем Object.hasOwn отличается от оператора in?</summary>
+
+`Object.hasOwn()` проверяет только собственное свойство. Оператор `in` ищет ключ и в самом объекте, и во всей prototype chain.
+
+`Object.hasOwn()` подходит для проверки входных данных и словарей. `in` полезен, когда наличие унаследованного свойства тоже является частью контракта, а в TypeScript еще используется для narrowing union types.
+
+</details>
+
+<details>
+<summary>Чем Object.entries отличается от Object.fromEntries?</summary>
+
+`Object.entries()` превращает собственные enumerable string-keyed свойства объекта в массив пар `[key, value]`. `Object.fromEntries()` выполняет обратное преобразование.
+
+```ts
+const user = { name: "Max", role: "frontend" };
+const entries = Object.entries(user);
+const copy = Object.fromEntries(entries);
+```
+
+Symbols не попадают в `Object.entries()`.
+
+</details>
+
+<details>
+<summary>Что возвращает Object.keys и в каком порядке?</summary>
+
+`Object.keys()` возвращает массив собственных enumerable строковых ключей. Symbol-ключи в результат не входят.
+
+Integer-like ключи идут по возрастанию, остальные строковые ключи - в порядке добавления:
+
+```ts
+const value = { 10: "ten", 2: "two", name: "Max" };
+
+Object.keys(value); // ["2", "10", "name"]
+```
+
+Порядок определен спецификацией, но бизнес-логику сортировки лучше выражать явно, а не связывать со способом хранения объекта.
+
+</details>
+
+<details>
 <summary>Что такое Array.prototype.reduce?</summary>
 
 `reduce()` последовательно сворачивает массив в одно значение. Результатом может быть число, объект, массив или `Map`.
@@ -638,6 +701,41 @@ const byYear = operations.reduce<Record<string, typeof operations>>(
 </details>
 
 <details>
+<summary>Чем flat отличается от flatMap?</summary>
+
+`flat(depth)` создает новый массив, раскрывая вложенные массивы на указанную глубину. `flatMap(callback)` сначала преобразует каждый элемент, затем раскрывает результат на один уровень.
+
+```ts
+const nested = [[1, 2], [3]];
+nested.flat(); // [1, 2, 3]
+
+const users = [
+  { name: "Max", roles: ["admin", "editor"] },
+  { name: "Anna", roles: ["viewer"] },
+];
+
+const roles = users.flatMap(({ roles }) => roles);
+// ["admin", "editor", "viewer"]
+```
+
+</details>
+
+<details>
+<summary>Когда использовать flatMap вместо map().flat()?</summary>
+
+`flatMap()` короче выражает преобразование, при котором один входной элемент дает ноль, один или несколько выходных элементов.
+
+```ts
+const values = [1, -1, 2];
+const positive = values.flatMap((value) => (value > 0 ? [value] : []));
+// [1, 2]
+```
+
+`flatMap()` раскрывает только один уровень. Если нужна другая глубина или преобразование и flatten являются отдельными шагами, понятнее использовать `map().flat(depth)`.
+
+</details>
+
+<details>
 <summary>Чем toSorted отличается от sort?</summary>
 
 `sort()` сортирует массив на месте, а `toSorted()` возвращает новый массив. `toSorted()` удобнее для immutable state, Angular signals и Redux-подобных подходов.
@@ -661,6 +759,89 @@ console.log(numbers); // [2, 10, 30]
 ```
 
 Для чисел нужен comparator, иначе значения сортируются как строки.
+
+</details>
+
+<details>
+<summary>Чем reverse отличается от toReversed?</summary>
+
+`reverse()` меняет порядок элементов исходного массива. `toReversed()` возвращает новый массив и не мутирует источник.
+
+```ts
+const source = [1, 2, 3];
+const reversed = source.toReversed();
+
+console.log(source); // [1, 2, 3]
+console.log(reversed); // [3, 2, 1]
+```
+
+</details>
+
+<details>
+<summary>Чем splice отличается от toSpliced?</summary>
+
+`splice()` изменяет исходный массив и возвращает удаленные элементы. `toSpliced()` возвращает новый массив с примененным изменением.
+
+```ts
+const source = ["a", "b", "c"];
+const updated = source.toSpliced(1, 1, "x");
+
+console.log(source); // ["a", "b", "c"]
+console.log(updated); // ["a", "x", "c"]
+```
+
+</details>
+
+<details>
+<summary>Что делает array.with?</summary>
+
+`array.with(index, value)` возвращает копию массива с замененным элементом. Исходный массив не меняется; поддерживаются и отрицательные индексы.
+
+```ts
+const source = ["draft", "review", "done"];
+const updated = source.with(1, "approved");
+
+console.log(source); // ["draft", "review", "done"]
+console.log(updated); // ["draft", "approved", "done"]
+```
+
+Недопустимый индекс приводит к `RangeError`.
+
+</details>
+
+<details>
+<summary>Почему immutable-методы массивов полезны в Angular?</summary>
+
+`toSorted()`, `toReversed()`, `toSpliced()` и `with()` создают новую ссылку. Это делает обновление signals, OnPush-компонентов и store предсказуемым.
+
+```ts
+readonly users = signal<ReadonlyArray<User>>([]);
+
+sortByName(): void {
+  this.users.update((users) =>
+    users.toSorted((first, second) => first.name.localeCompare(second.name)),
+  );
+}
+```
+
+Мутация массива на месте может не создать ожидаемого реактивного обновления и усложняет сравнение предыдущего и нового состояния.
+
+</details>
+
+<details>
+<summary>Что такое sparse array?</summary>
+
+Sparse array, разреженный массив, содержит пустые слоты, в которых нет свойства с соответствующим индексом. Это не то же самое, что явное значение `undefined`.
+
+```ts
+const sparse = [1, , 3];
+
+0 in sparse; // true
+1 in sparse; // false
+sparse.length; // 3
+```
+
+Методы ведут себя по-разному: `map()` сохраняет пустой слот, `filter()`, `forEach()` и `flatMap()` не вызывают callback для него, а spread и `Array.from()` превращают слот в `undefined`. В прикладном коде разреженных массивов обычно избегают.
 
 </details>
 
@@ -746,6 +927,204 @@ first.getTime() < second.getTime(); // true
 ```
 
 Для API моменты времени обычно передают в ISO/UTC. Если значение является календарной датой без времени, например днем рождения, его часто безопаснее хранить отдельной строкой `YYYY-MM-DD`, чтобы не получить сдвиг из-за таймзоны.
+
+</details>
+
+### Promise и асинхронность
+
+<details>
+<summary>Чем Promise.all отличается от Promise.allSettled?</summary>
+
+`Promise.all()` успешно завершается, когда выполнены все promises, и возвращает значения в исходном порядке. При первом rejection итоговый promise сразу отклоняется: это fail-fast поведение.
+
+`Promise.allSettled()` ждет завершения всех операций и возвращает для каждой `{ status, value }` или `{ status, reason }`. Он подходит для частично успешных независимых запросов.
+
+```ts
+const results = await Promise.allSettled([
+  loadProfile(),
+  loadRecommendations(),
+]);
+
+const successful = results.filter(
+  (result): result is PromiseFulfilledResult<unknown> =>
+    result.status === "fulfilled"
+);
+```
+
+`Promise.all([])` возвращает fulfilled promise со значением `[]`; обработчик `then` или продолжение после `await` все равно выполняется асинхронно.
+
+</details>
+
+<details>
+<summary>Что произойдет при ошибке внутри Promise.all?</summary>
+
+Итоговый promise отклонится с причиной первого обнаруженного rejection. Остальные запущенные операции автоматически не отменяются и могут продолжить работу.
+
+Если допустим частичный результат, используют `Promise.allSettled()` или обрабатывают ошибку каждого promise отдельно. Если операции нужно остановить, им передают общий `AbortSignal`.
+
+</details>
+
+<details>
+<summary>Когда использовать Promise.race?</summary>
+
+`Promise.race()` возвращает результат первого settled promise: как fulfilled, так и rejected. Метод подходит для выбора первого ответа, соревнования альтернативных источников или timeout-сигнала.
+
+Важно: проигравшие операции автоматически не отменяются.
+
+</details>
+
+<details>
+<summary>Чем Promise.any отличается от Promise.race?</summary>
+
+`Promise.any()` возвращает первый fulfilled результат и игнорирует промежуточные rejections. Если отклонены все promises, он завершается `AggregateError`.
+
+`Promise.race()` завершается при первом settled результате, поэтому первый rejection сразу отклонит итоговый promise.
+
+`Promise.any()` полезен для нескольких взаимозаменяемых источников, где нужен первый успешный ответ.
+
+</details>
+
+<details>
+<summary>Что такое Promise.withResolvers?</summary>
+
+`Promise.withResolvers<T>()` создает promise и отдельно возвращает связанные функции `resolve` и `reject`.
+
+```ts
+const { promise, resolve, reject } = Promise.withResolvers<string>();
+
+button.addEventListener("click", () => resolve("confirmed"), { once: true });
+
+const result = await promise;
+```
+
+Метод удобен при адаптации callback/event API, но внешнее управление promise усложняет жизненный цикл. Для обычной последовательной логики чаще проще `async/await`.
+
+</details>
+
+<details>
+<summary>Что такое Promise.try?</summary>
+
+`Promise.try(callback, ...args)` синхронно вызывает callback и возвращает promise. Обычное значение становится fulfillment, возвращенный promise ожидается, а синхронная ошибка превращается в rejection.
+
+```ts
+const result = await Promise.try(parseConfig, rawConfig);
+```
+
+API удобно на границе, где callback может быть синхронным или асинхронным. Это новый стандартный метод, поэтому перед использованием нужно проверить поддержку целевых browsers и runtime.
+
+</details>
+
+### URL и query params
+
+<details>
+<summary>Что такое URL и URLSearchParams?</summary>
+
+`URL` разбирает и изменяет адрес через структурированные свойства. `URLSearchParams` работает с query parameters и корректно кодирует имена и значения.
+
+```ts
+const url = new URL("/users", "https://example.com");
+
+url.searchParams.set("page", "2");
+url.searchParams.set("search", "Angular & RxJS");
+
+url.toString();
+// "https://example.com/users?page=2&search=Angular+%26+RxJS"
+```
+
+Это безопаснее и понятнее ручной конкатенации query string.
+
+</details>
+
+<details>
+<summary>Как добавлять, изменять и удалять query parameters?</summary>
+
+```ts
+const params = new URLSearchParams("page=1");
+
+params.set("page", "2");
+params.append("tag", "angular");
+params.delete("page");
+
+params.toString(); // "tag=angular"
+```
+
+`get(name)` возвращает первое значение или `null`, если параметра нет. Все значения хранятся как строки.
+
+</details>
+
+<details>
+<summary>Чем URLSearchParams.append отличается от set?</summary>
+
+`append()` добавляет еще одно значение и сохраняет существующие. `set()` заменяет все значения параметра одним новым значением.
+
+```ts
+const params = new URLSearchParams();
+
+params.append("tag", "angular");
+params.append("tag", "rxjs");
+
+params.get("tag"); // "angular"
+params.getAll("tag"); // ["angular", "rxjs"]
+```
+
+Для multi-value параметров используют `append()` и `getAll()`.
+
+</details>
+
+### Отмена асинхронных операций
+
+<details>
+<summary>Что такое AbortController и AbortSignal?</summary>
+
+`AbortController` управляет отменой, а его `signal` передается поддерживающей отмену операции. Вызов `abort()` переводит signal в состояние `aborted` и сообщает причину наблюдателям.
+
+```ts
+const controller = new AbortController();
+
+const request = fetch("/api/users", {
+  signal: controller.signal,
+});
+
+controller.abort();
+await request; // Rejection с AbortError
+```
+
+Один signal можно передать нескольким связанным операциям.
+
+</details>
+
+<details>
+<summary>Как сделать timeout для fetch?</summary>
+
+Современный вариант использует `AbortSignal.timeout()`:
+
+```ts
+const response = await fetch("/api/users", {
+  signal: AbortSignal.timeout(5_000),
+});
+```
+
+Если нужен ручной контроль, создают `AbortController`, вызывают `abort()` через timer и очищают timer в `finally`.
+
+```ts
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 5_000);
+
+try {
+  return await fetch("/api/users", { signal: controller.signal });
+} finally {
+  clearTimeout(timeoutId);
+}
+```
+
+</details>
+
+<details>
+<summary>Чем отмена запроса отличается от игнорирования результата?</summary>
+
+Игнорирование результата не останавливает сетевую работу и обработку ответа. Настоящая отмена через `AbortSignal` позволяет поддерживающему API прекратить ненужную операцию и освободить ресурсы раньше.
+
+В Angular это встречается в autocomplete, навигации между страницами и уничтожении компонентов. `HttpClient` Observable отменяет запрос при unsubscribe; `switchMap` использует это для отмены предыдущего поиска. Для `fetch` и других Web APIs передают `AbortSignal`.
 
 </details>
 
