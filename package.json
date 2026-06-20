@@ -14,7 +14,7 @@
   "license": "MIT",
   "author": "angular-ru@yandex.ru",
   "scripts": {
-    "format": "yarn sort-package-json \"package.json\" && yarn prettier \"**/*.{ts,html,css,scss,md,js,json}\""
+    "format": "npx sort-package-json \"package.json\" && npx prettier \"**/*.{ts,html,css,scss,md,js,json}\" --write"
   },
   "dependencies": {
     "@angular-ru/build-tools": "15.200.0",
