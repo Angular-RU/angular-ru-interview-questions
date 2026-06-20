@@ -1674,7 +1674,754 @@ console.log("D");
 
 ООП не требует применять наследование везде. В Angular чаще полезны композиция компонентов и сервисов, DI и небольшие интерфейсы.
 
+Пример сочетает четыре принципа:
+
+```ts
+interface NotificationChannel {
+  send(message: string): void;
+}
+
+abstract class BaseNotificationChannel implements NotificationChannel {
+  constructor(private readonly prefix: string) {}
+
+  protected format(message: string): string {
+    return `${this.prefix}: ${message}`;
+  }
+
+  abstract send(message: string): void;
+}
+
+class EmailChannel extends BaseNotificationChannel {
+  send(message: string): void {
+    sendEmail(this.format(message));
+  }
+}
+
+class PushChannel extends BaseNotificationChannel {
+  send(message: string): void {
+    sendPush(this.format(message));
+  }
+}
+
+function notify(channel: NotificationChannel, message: string): void {
+  channel.send(message);
+}
+```
+
+- `private prefix` демонстрирует инкапсуляцию.
+- `NotificationChannel` и `BaseNotificationChannel` задают абстракцию.
+- `EmailChannel` и `PushChannel` используют наследование.
+- `notify()` работает полиморфно с любой реализацией контракта.
+
 Отдельно часто спрашивают SOLID: пять принципов проектирования, которые помогают уменьшать связанность и делать код расширяемым и тестируемым.
+
+</details>
+
+### Принципы проектирования и качество кода
+
+<details>
+<summary>Что такое SOLID и зачем эти принципы нужны во frontend-разработке?</summary>
+
+SOLID объединяет пять принципов проектирования:
+
+- **S, Single Responsibility Principle**: у модуля должна быть одна причина для изменения.
+- **O, Open/Closed Principle**: код открыт для расширения, но закрыт для постоянного изменения.
+- **L, Liskov Substitution Principle**: реализация должна сохранять контракт базового типа.
+- **I, Interface Segregation Principle**: лучше несколько узких контрактов, чем один универсальный.
+- **D, Dependency Inversion Principle**: высокоуровневый код зависит от абстракций, а не от деталей.
+
+Во frontend-разработке SOLID помогает разделять UI, бизнес-правила и доступ к данным, заменять реализации через DI, упрощать тестирование и локализовать изменения.
+
+Это рекомендации, а не цель сами по себе. Если применение принципа добавляет больше абстракций, чем пользы, решение стоит упростить.
+
+</details>
+
+<details>
+<summary>Что означает Single Responsibility Principle? Как он проявляется в Angular-компонентах и сервисах?</summary>
+
+SRP означает, что модуль отвечает за одну связанную область поведения и имеет одну основную причину для изменения.
+
+Angular-компоненту обычно стоит заниматься отображением и пользовательскими событиями. Получение данных, бизнес-правила, преобразование DTO и аналитика могут находиться в отдельных сервисах или чистых функциях.
+
+Признак нарушения SRP: изменение API, правил валидации или способа показа уведомлений каждый раз требует редактировать один и тот же большой компонент.
+
+Компонент оставляет себе UI, а facade управляет сценарием:
+
+```ts
+@Injectable({ providedIn: "root" })
+class UserProfileFacade {
+  private readonly api = inject(UserApi);
+  private readonly userState = signal<User | null>(null);
+
+  readonly user = this.userState.asReadonly();
+
+  load(userId: string): void {
+    this.api.getUser(userId).subscribe((user) => this.userState.set(user));
+  }
+}
+
+@Component({
+  selector: "app-user-profile",
+  template: `
+    @if (user(); as currentUser) {
+        <h2>{{ currentUser.name }}</h2>
+    }
+  `,
+})
+class UserProfileComponent {
+  readonly userId = input.required<string>();
+
+  private readonly facade = inject(UserProfileFacade);
+  readonly user = this.facade.user;
+
+  load(): void {
+    this.facade.load(this.userId());
+  }
+}
+```
+
+SRP не означает «один метод на класс». Несколько операций могут оставаться вместе, если относятся к одной ответственности.
+
+</details>
+
+<details>
+<summary>Что означает Open/Closed Principle? Как расширять поведение без постоянной правки существующего кода?</summary>
+
+OCP предлагает проектировать стабильный код так, чтобы новое поведение можно было добавить через новую реализацию, конфигурацию или композицию, не переписывая проверенную логику.
+
+Например, вместо растущего `if` по способам оплаты можно определить общий контракт стратегии и зарегистрировать реализации через Angular providers.
+
+```ts
+interface DiscountStrategy {
+  supports(customerType: string): boolean;
+  calculate(total: number): number;
+}
+
+class RegularDiscount implements DiscountStrategy {
+  supports(customerType: string): boolean {
+    return customerType === "regular";
+  }
+
+  calculate(total: number): number {
+    return total;
+  }
+}
+
+class PremiumDiscount implements DiscountStrategy {
+  supports(customerType: string): boolean {
+    return customerType === "premium";
+  }
+
+  calculate(total: number): number {
+    return total * 0.9;
+  }
+}
+
+function calculatePrice(
+  strategies: ReadonlyArray<DiscountStrategy>,
+  customerType: string,
+  total: number
+): number {
+  const strategy = strategies.find((item) => item.supports(customerType));
+
+  return strategy?.calculate(total) ?? total;
+}
+```
+
+Чтобы добавить новый тип клиента, достаточно добавить еще одну стратегию. `calculatePrice()` менять не нужно.
+
+Не нужно заранее создавать plugin-систему для каждой функции. Точку расширения вводят, когда существует реальная вариативность и ожидаются независимые реализации.
+
+</details>
+
+<details>
+<summary>Что означает Liskov Substitution Principle? Почему реализация не должна ломать контракт?</summary>
+
+LSP требует, чтобы любую реализацию можно было использовать там, где ожидается базовый контракт, без неожиданного изменения корректности программы.
+
+Реализация не должна:
+
+- требовать более строгие входные данные, чем обещает контракт;
+- возвращать результат слабее заявленного;
+- неожиданно выбрасывать ошибки для допустимых операций;
+- менять важные побочные эффекты и инварианты.
+
+Например, production repository и тестовый mock должны одинаково соблюдать контракт загрузки пользователя. Если mock возвращает `undefined`, хотя контракт обещает `User | null`, тест уже проверяет другое поведение.
+
+```ts
+interface UserRepository {
+  findById(id: string): Promise<User | null>;
+}
+
+class HttpUserRepository implements UserRepository {
+  async findById(id: string): Promise<User | null> {
+    return fetchUser(id);
+  }
+}
+
+class InMemoryUserRepository implements UserRepository {
+  constructor(private readonly users: ReadonlyArray<User>) {}
+
+  async findById(id: string): Promise<User | null> {
+    return this.users.find((user) => user.id === id) ?? null;
+  }
+}
+
+async function getUserName(
+  repository: UserRepository,
+  id: string
+): Promise<string> {
+  const user = await repository.findById(id);
+
+  return user?.name ?? "Unknown user";
+}
+```
+
+Обе реализации можно передать в `getUserName()`: они принимают те же данные и возвращают `User | null`.
+
+</details>
+
+<details>
+<summary>Что означает Interface Segregation Principle? Почему большие универсальные интерфейсы могут быть проблемой?</summary>
+
+ISP предлагает не заставлять потребителя зависеть от методов, которые ему не нужны.
+
+Вместо общего `UserService` с чтением, записью, экспортом, аналитикой и правами доступа полезнее выделить узкие контракты, например `UserReader` и `UserWriter`.
+
+Небольшие интерфейсы:
+
+- точнее выражают потребности клиента;
+- проще реализуются и подменяются в тестах;
+- уменьшают связанность;
+- реже требуют каскадных изменений.
+
+Слишком мелкое дробление тоже ухудшает навигацию. Границы должны соответствовать реальным ролям и сценариям.
+
+```ts
+interface UserReader {
+  findById(id: string): Observable<User>;
+}
+
+interface UserWriter {
+  update(user: User): Observable<User>;
+}
+
+class UserDetailsFacade {
+  constructor(private readonly users: UserReader) {}
+
+  load(id: string): Observable<User> {
+    return this.users.findById(id);
+  }
+}
+```
+
+`UserDetailsFacade` зависит только от чтения и не получает методы изменения, экспорта или удаления пользователей.
+
+</details>
+
+<details>
+<summary>Что означает Dependency Inversion Principle? Как этот принцип связан с Angular DI, InjectionToken и тестированием?</summary>
+
+DIP означает, что бизнес-логика зависит от стабильного контракта, а конкретная работа с HTTP, storage или браузерным API подключается снаружи.
+
+В Angular runtime-контракт можно представить классом или `InjectionToken`:
+
+```ts
+export interface UserRepository {
+  findById(id: string): Observable<User>;
+}
+
+export const USER_REPOSITORY = new InjectionToken<UserRepository>(
+  "USER_REPOSITORY"
+);
+
+@Injectable({ providedIn: "root" })
+export class UserService {
+  private readonly repository = inject(USER_REPOSITORY);
+
+  load(id: string): Observable<User> {
+    return this.repository.findById(id);
+  }
+}
+
+export const userRepositoryProvider = {
+  provide: USER_REPOSITORY,
+  useClass: HttpUserRepository,
+};
+```
+
+Компонент или сервис получает `USER_REPOSITORY` через `inject()`, а provider связывает токен с HTTP-реализацией. В тесте тот же токен можно связать с fake или mock без изменения потребителя.
+
+```ts
+TestBed.configureTestingModule({
+  providers: [
+    UserService,
+    {
+      provide: USER_REPOSITORY,
+      useValue: {
+        findById: (id: string) => of({ id, name: "Test user" }),
+      } satisfies UserRepository,
+    },
+  ],
+});
+```
+
+DI является механизмом, а DIP является принципом проектирования. Наличие constructor injection само по себе не гарантирует соблюдение DIP.
+
+</details>
+
+<details>
+<summary>Что такое DRY? Всегда ли дублирование кода плохо?</summary>
+
+DRY означает, что одно знание или бизнес-правило должно иметь один авторитетный источник.
+
+Это не запрет на одинаковые строки. Два похожих фрагмента можно оставить раздельными, если они относятся к разным обязанностям и могут развиваться независимо.
+
+Убирать дублирование стоит, когда при изменении одного правила приходится синхронно исправлять несколько мест. Простое визуальное сходство еще не доказывает необходимость общей абстракции.
+
+```ts
+const FREE_DELIVERY_THRESHOLD = 5_000;
+
+function hasFreeDelivery(orderTotal: number): boolean {
+  return orderTotal >= FREE_DELIVERY_THRESHOLD;
+}
+
+const checkoutMessage = hasFreeDelivery(total)
+  ? "Бесплатная доставка"
+  : "Доставка рассчитывается отдельно";
+
+const deliveryPrice = hasFreeDelivery(total) ? 0 : DEFAULT_DELIVERY_PRICE;
+```
+
+Здесь вынесено именно бизнес-правило бесплатной доставки. Если порог изменится, его не придется искать в нескольких компонентах.
+
+</details>
+
+<details>
+<summary>Чем опасна преждевременная абстракция?</summary>
+
+Преждевременная абстракция появляется, когда общий механизм создают до того, как стали понятны реальные различия и стабильная общая часть.
+
+Типичные последствия:
+
+- сложный API с большим числом параметров и флагов;
+- условные ветки внутри «универсального» компонента;
+- изменение одного сценария ломает остальные;
+- абстракцию труднее понять, чем исходное дублирование.
+
+Практичный подход: сначала реализовать несколько конкретных случаев, затем извлекать только подтвержденную общую модель.
+
+Похожий код еще не обязательно имеет одну ответственность:
+
+```ts
+function formatInvoiceDate(date: Date): string {
+  return invoiceDateFormatter.format(date);
+}
+
+function formatAnalyticsDate(date: Date): string {
+  return date.toISOString();
+}
+```
+
+Обе функции форматируют дату, но их контракты меняются по разным причинам. Объединение через универсальный `formatDate(date, mode, options)` может только связать независимые области.
+
+</details>
+
+<details>
+<summary>Что такое KISS? Как понять, что решение стало слишком сложным?</summary>
+
+KISS предлагает выбирать самое простое решение, которое корректно выполняет текущие требования и остается понятным для команды.
+
+Признаки лишней сложности:
+
+- для локальной задачи появились фабрики, стратегии и несколько уровней наследования;
+- поведение нельзя объяснить без долгого изучения инфраструктуры;
+- большая часть конфигурации используется только одним сценарием;
+- изменение требует пройти через много косвенных вызовов.
+
+Простота не означает примитивность. Важны ясные границы, точные типы, обработка ошибок и тесты, но без ненужной универсальности.
+
+```ts
+// Достаточно для текущего требования.
+function getDisplayName(user: User): string {
+  return user.nickname?.trim() || user.name;
+}
+
+// Избыточно без реальных вариантов форматирования.
+class DisplayNameFactory {
+  create(strategy: DisplayNameStrategy, user: User): string {
+    return strategy.format(user);
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Что такое YAGNI? Почему не стоит писать функциональность заранее?</summary>
+
+YAGNI означает, что функциональность не следует реализовывать, пока у нее нет подтвержденной потребности.
+
+Код «на будущее» увеличивает объем тестирования и поддержки, усложняет API и часто основывается на неверном прогнозе требований.
+
+Хорошее применение YAGNI: реализовать текущий сценарий просто и оставить код достаточно ясным, чтобы его можно было изменить позже. Это не оправдание для отсутствия типов, тестов или разделения ответственности.
+
+```ts
+@Injectable({ providedIn: "root" })
+class ThemeService {
+  private readonly themeState = signal<"light" | "dark">("light");
+
+  readonly theme = this.themeState.asReadonly();
+
+  toggle(): void {
+    this.themeState.update((theme) => (theme === "light" ? "dark" : "light"));
+  }
+}
+```
+
+Если продукту нужны только две темы, не требуется заранее проектировать marketplace тем, загрузчик plugins и удаленную конфигурацию.
+
+</details>
+
+<details>
+<summary>Чем YAGNI отличается от плохой архитектуры?</summary>
+
+YAGNI ограничивает преждевременную функциональность, но не отменяет текущие требования к качеству.
+
+Даже минимальное решение должно:
+
+- корректно моделировать известные состояния;
+- иметь понятные границы ответственности;
+- обрабатывать реальные ошибки;
+- быть доступным и тестируемым;
+- не создавать очевидный тупик для ближайших подтвержденных изменений.
+
+Расширяемость заранее оправданна, если вариативность уже является требованием, существует публичный контракт или изменение позже будет объективно дорогим.
+
+</details>
+
+<details>
+<summary>Что такое Separation of Concerns?</summary>
+
+Separation of Concerns разделяет систему на части, каждая из которых отвечает за отдельный аспект.
+
+В Angular это может выглядеть так:
+
+- компонент отвечает за представление и UI-события;
+- сервис или facade координирует сценарий;
+- data-access слой работает с HTTP;
+- mapper преобразует DTO в доменную модель;
+- guard проверяет доступ к маршруту;
+- interceptor обрабатывает общую HTTP-инфраструктуру.
+
+Границы проводят по ответственности и причинам изменения, а не механически по количеству строк.
+
+```ts
+interface UserDto {
+  readonly id: string;
+  readonly first_name: string;
+  readonly last_name: string;
+}
+
+function mapUser(dto: UserDto): User {
+  return {
+    id: dto.id,
+    fullName: `${dto.first_name} ${dto.last_name}`,
+  };
+}
+
+@Injectable({ providedIn: "root" })
+class UserApi {
+  private readonly http = inject(HttpClient);
+
+  getUser(id: string): Observable<User> {
+    return this.http
+      .get<UserDto>(`/api/users/${id}`)
+      .pipe(map((dto) => mapUser(dto)));
+  }
+}
+```
+
+`UserApi` отвечает за транспорт, а `mapUser()` за преобразование модели. Чистую функцию можно тестировать без `TestBed` и HTTP.
+
+</details>
+
+<details>
+<summary>Что такое cohesion и coupling?</summary>
+
+**Cohesion**, связность внутри модуля, показывает, насколько его части относятся к одной задаче. Высокая cohesion обычно желательна.
+
+**Coupling**, зацепление между модулями, показывает, насколько сильно один модуль знает детали другого. Низкое и явное coupling обычно упрощает изменения.
+
+Хороший модуль содержит тесно связанную логику одной области и взаимодействует с другими модулями через небольшие контракты. Полностью устранить зависимости невозможно, важно сделать их направленными и контролируемыми.
+
+```ts
+@Injectable({ providedIn: "root" })
+class CartStore {
+  private readonly itemsState = signal<ReadonlyArray<CartItem>>([]);
+
+  readonly items = this.itemsState.asReadonly();
+  readonly total = computed(() =>
+    this.items().reduce((sum, item) => sum + item.price * item.quantity, 0)
+  );
+
+  add(item: CartItem): void {
+    this.itemsState.update((items) => [...items, item]);
+  }
+}
+```
+
+Состояние корзины, добавление товара и расчет суммы обладают высокой cohesion. Отправку аналитики и показ уведомлений лучше не включать в этот store.
+
+</details>
+
+<details>
+<summary>Что лучше использовать во frontend: композицию или наследование? Почему?</summary>
+
+Во frontend чаще предпочитают композицию, потому что она позволяет независимо сочетать поведение и не создает жесткую иерархию классов.
+
+В Angular для композиции применяют компоненты, сервисы, директивы, content projection, host directives и DI.
+
+Наследование уместно, когда существует устойчивое отношение «является» и подкласс полностью соблюдает контракт базового типа. Глубокие иерархии компонентов обычно хрупкие: базовый класс накапливает скрытое состояние и связывает несвязанные сценарии.
+
+```ts
+@Directive({
+  selector: "[appTrackClick]",
+  host: {
+    "(click)": "track()",
+  },
+})
+class TrackClickDirective {
+  private readonly analytics = inject(AnalyticsService);
+
+  track(): void {
+    this.analytics.track("button_click");
+  }
+}
+
+@Component({
+  selector: "app-save-button",
+  hostDirectives: [TrackClickDirective],
+  template: `<button type="button">Сохранить</button>`,
+})
+class SaveButtonComponent {}
+```
+
+Компонент получает дополнительное поведение через композицию с директивой, а не через `BaseTrackedComponent`.
+
+</details>
+
+<details>
+<summary>Что такое premature optimization?</summary>
+
+Premature optimization, преждевременная оптимизация, усложняет код ради предполагаемой проблемы производительности до измерений и подтвержденного bottleneck.
+
+Сначала определяют пользовательскую метрику и измеряют проблему через Angular DevTools, browser Performance panel, Lighthouse, bundle analyzer или production telemetry. Затем оптимизируют подтвержденный hot path и повторяют измерение.
+
+Это не отменяет разумных defaults: lazy loading, корректный `track`, отсутствие тяжелых вычислений в шаблоне и подходящие структуры данных.
+
+```ts
+// Сначала измерили и выяснили, что поиск повторяется для большого списка.
+const usersById = new Map(users.map((user) => [user.id, user]));
+
+function findUser(id: string): User | undefined {
+  return usersById.get(id);
+}
+```
+
+Такое изменение обосновано измеренной горячей операцией. Добавлять кеширование для маленького списка без замеров было бы преждевременно.
+
+</details>
+
+<details>
+<summary>Что такое code smell? Приведите примеры во frontend/Angular-коде.</summary>
+
+Code smell, запах кода, не обязательно является ошибкой, но указывает на возможную проблему дизайна.
+
+Примеры:
+
+- компонент или сервис с несколькими несвязанными обязанностями;
+- длинный список зависимостей;
+- повторение одного бизнес-правила;
+- растущий `if` или `switch` по типам;
+- магические строки и числа;
+- неявные side effects;
+- ручные подписки без понятного жизненного цикла;
+- множество boolean inputs, комбинации которых создают недопустимые состояния.
+
+Запах является поводом исследовать контекст, а не автоматически применять рефакторинг.
+
+Например, набор boolean-флагов допускает противоречивые состояния:
+
+```ts
+interface BadRequestState {
+  readonly isLoading: boolean;
+  readonly hasError: boolean;
+  readonly isEmpty: boolean;
+}
+
+type RequestState<T> =
+  | { readonly status: "loading" }
+  | { readonly status: "error"; readonly message: string }
+  | { readonly status: "empty" }
+  | { readonly status: "success"; readonly data: T };
+```
+
+Discriminated union делает недопустимые комбинации состояний непредставимыми.
+
+</details>
+
+<details>
+<summary>Что такое technical debt? Когда технический долг допустим?</summary>
+
+Technical debt, технический долг, это накопленная стоимость будущих изменений из-за сделанного сейчас упрощения или устаревшего решения.
+
+Долг может быть допустим, когда команда осознанно принимает компромисс ради проверки гипотезы, критического срока или временной совместимости.
+
+Управляемый долг должен иметь понятную причину, ограниченный риск, тестовую страховку и зафиксированный план пересмотра. Неосознанная сложность без владельца и плана является уже не стратегией, а растущей стоимостью поддержки.
+
+</details>
+
+<details>
+<summary>Что такое refactoring? Чем рефакторинг отличается от переписывания кода?</summary>
+
+Refactoring изменяет внутреннюю структуру кода без изменения его наблюдаемого поведения. Его цель: улучшить читаемость, границы, тестируемость или возможность дальнейших изменений.
+
+Переписывание заменяет значительную часть реализации и часто заново воспроизводит поведение. Оно имеет больший риск пропустить неявные требования.
+
+Безопасный рефакторинг выполняют небольшими шагами под существующими тестами. Если поведение меняется, это уже отдельное функциональное изменение, даже если оно сделано одновременно с улучшением структуры.
+
+```ts
+// До рефакторинга.
+const priceBeforeRefactoring = total - total * discountPercent * 0.01;
+
+// После рефакторинга с тем же поведением.
+function applyDiscount(total: number, discountPercent: number): number {
+  return total * (1 - discountPercent / 100);
+}
+
+const priceAfterRefactoring = applyDiscount(total, discountPercent);
+```
+
+Выделение именованной функции улучшило читаемость и тестируемость, но не изменило результат.
+
+</details>
+
+<details>
+<summary>Как понять, что Angular-компонент или сервис стал слишком большим?</summary>
+
+Размер определяется не только количеством строк. Важнее признаки смешения обязанностей:
+
+- модуль изменяется по нескольким независимым причинам;
+- его сложно назвать без слов `Manager`, `Common` или `Utils`;
+- тест требует много несвязанных mocks;
+- компонент одновременно управляет UI, API, routing, storage и аналитикой;
+- добавление сценария требует еще одного режима или boolean-флага;
+- части состояния имеют разные жизненные циклы.
+
+Разделять стоит по связанным сценариям и причинам изменения. Большой, но цельный модуль может быть понятнее нескольких искусственно мелких файлов.
+
+```ts
+@Component({
+  selector: "app-user-page",
+  templateUrl: "./user-page.html",
+})
+class UserPageComponent {
+  readonly userId = input.required<string>();
+
+  private readonly facade = inject(UserPageFacade);
+  readonly state = this.facade.state;
+
+  retry(): void {
+    this.facade.load(this.userId());
+  }
+}
+```
+
+После вынесения orchestration в facade компонент описывает только входные данные, отображаемое состояние и UI-события.
+
+</details>
+
+<details>
+<summary>Где должна находиться бизнес-логика: в компоненте, сервисе, store или отдельной функции?</summary>
+
+Расположение зависит от ответственности:
+
+- компонент содержит локальное UI-поведение и связывает данные с шаблоном;
+- чистая функция подходит для вычислений и преобразований без зависимостей;
+- сервис координирует use case, инфраструктуру или разделяемую логику;
+- store хранит разделяемое состояние и переходы между его состояниями.
+
+Бизнес-правило не стоит помещать в шаблон или привязывать к конкретному компоненту, если оно должно переиспользоваться и тестироваться независимо.
+
+Signals удобны для локального и разделяемого синхронного состояния, RxJS для асинхронных потоков и координации. Выбор реактивного инструмента не определяет архитектурный слой сам по себе.
+
+```ts
+function calculateOrderTotal(
+  items: ReadonlyArray<OrderItem>,
+  discount: number
+): number {
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  return subtotal * (1 - discount);
+}
+
+@Injectable({ providedIn: "root" })
+class CheckoutStore {
+  private readonly itemsState = signal<ReadonlyArray<OrderItem>>([]);
+  private readonly discountState = signal(0);
+
+  readonly total = computed(() =>
+    calculateOrderTotal(this.itemsState(), this.discountState())
+  );
+}
+```
+
+Бизнес-расчет остается чистой функцией, а store хранит состояние и создает реактивное производное значение.
+
+</details>
+
+<details>
+<summary>Как проектировать код, чтобы его было проще тестировать?</summary>
+
+Тестируемость обычно является следствием хороших границ:
+
+- отделять чистую бизнес-логику от I/O и framework APIs;
+- передавать внешние зависимости через DI;
+- использовать узкие контракты;
+- явно моделировать loading, error и empty states;
+- избегать скрытого глобального состояния и неявных side effects;
+- возвращать результат или observable state вместо изменения удаленных объектов;
+- тестировать наблюдаемое поведение, а не внутренние методы.
+
+Если для unit-теста небольшого правила требуется поднять большой Angular graph, это сигнал, что правило стоит вынести в чистую функцию или более узкий сервис.
+
+```ts
+export function canPlaceOrder(
+  items: ReadonlyArray<OrderItem>,
+  balance: number
+): boolean {
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  return items.length > 0 && balance >= total;
+}
+
+describe("canPlaceOrder", () => {
+  it("allows an order when the balance covers its total", () => {
+    const items = [{ price: 300, quantity: 2 }];
+
+    expect(canPlaceOrder(items, 600)).toBe(true);
+  });
+});
+```
+
+Для проверки бизнес-правила не нужны `TestBed`, DOM, HTTP и mocks.
 
 </details>
 
