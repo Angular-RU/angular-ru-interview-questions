@@ -91,3 +91,13 @@
     color: #991b1b;
     background: #fef2f2;
 }
+
+.booking-message {
+    margin: 24px 0 0;
+    padding: 16px 18px;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    color: #166534;
+    background: #f0fdf4;
+    font-weight: 600;
+}

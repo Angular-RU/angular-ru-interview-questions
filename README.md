@@ -33,6 +33,16 @@ providers; поддерживаемые старые API помечены как
 - **Middle+/Senior**: архитектурные компромиссы, управление состоянием, SSR и hydration, security, libraries, design
   systems и tooling.
 
+## Быстрый маршрут подготовки
+
+- **Если есть 1 час**: Angular Core — components, DI, providers и lifecycle; Change Detection, OnPush и Signals; RxJS —
+  Observable, Subject, `switchMap` и `mergeMap`; Forms, HTTP и Router; основы performance; Micro Frontends demo — host,
+  remote, manifest, `remoteEntry.json` и fallback UI.
+- **Если есть 1 день**: пройдите маршрут на 1 час, затем добавьте JavaScript, TypeScript, browser rendering, testing,
+  security и SSR.
+- **Если есть 3 дня**: изучите основные разделы по порядку, запустите примеры и отдельно повторите архитектурные
+  trade-offs, production и вопросы уровня Middle+/Senior.
+
 ## Содержание
 
 - [Web Platform](#web-platform)
@@ -159,46 +169,27 @@ button {
 <details>
 <summary>Веса в CSS</summary>
 
-Веса в CSS — это специфичность, то есть приоритет селектора.
+Специфичность селектора записывают как три числа: `ID - классы - типы`.
 
-Пример весов:
-
-```css
-/* 0 (0,0,0) */
-* {}
-
-/* 1 (0,1,0) */
-button {}
-
-/* 10 (0,1,0) */
-.button {}
-
-/* 100 (1,0,0) */
-#button {}
-
-/* 1000 (1,0,0,0) */
-style="color: red"
-```
-
-div, button, p - 1 .class, [attr], :hover - 10 #id - 100 inline style - 1000 !important - перебивает почти все
-
-Пример:
+- универсальный селектор `*`: `0-0-0`;
+- селектор типа `button`: `0-0-1`;
+- class, attribute и pseudo-class: `0-1-0`;
+- ID selector: `1-0-0`.
 
 ```css
 button {
-  color: blue;
 }
-
 .button {
-  color: red;
+}
+#button {
 }
 ```
 
-```html
-<button class="button">Click</button>
-```
+Если все три селектора подходят одному элементу, победит `#button` со специфичностью `1-0-0`, затем `.button` с `0-1-0`,
+затем `button` с `0-0-1`. При одинаковой специфичности выигрывает правило, расположенное позже в cascade.
 
-Будет red, потому что .button весит больше, чем button. Чем селектор конкретнее, тем выше его вес.
+Inline style рассматривают отдельно: он сильнее обычной специфичности selector. `!important` тоже не является частью
+специфичности: он меняет приоритет declaration в cascade, после чего сравниваются origin, layer, specificity и порядок.
 
 </details>
 

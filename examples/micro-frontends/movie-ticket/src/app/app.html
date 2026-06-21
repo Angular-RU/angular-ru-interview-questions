@@ -38,4 +38,13 @@
             </div>
         </aside>
     </div>
+
+    @if (bookingMessage(); as message) {
+        <p
+            class="booking-message"
+            aria-live="polite"
+        >
+            {{ message }}
+        </p>
+    }
 </div>

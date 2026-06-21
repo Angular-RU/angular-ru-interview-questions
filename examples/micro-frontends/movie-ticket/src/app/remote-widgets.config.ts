@@ -4,13 +4,13 @@ export const REMOTE_WIDGETS = {
     movies: {
         id: 'movies',
         remoteName: 'movies',
-        exposedModule: './MoviesWidget',
-        exportName: 'MoviesComponent',
+        exposedModule: './Widget',
+        exportName: 'MoviesWidgetComponent',
     },
     ticketAvailability: {
         id: 'ticketAvailability',
         remoteName: 'ticket-availability',
-        exposedModule: './Component',
-        exportName: 'App',
+        exposedModule: './Widget',
+        exportName: 'TicketAvailabilityWidgetComponent',
     },
 } satisfies Record<string, RemoteWidgetConfig>;

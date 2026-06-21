@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 
 import {Movie} from './movie.model';
 
+const remoteAssetBaseUrl = new URL('.', import.meta.url);
+
 @Injectable({
     providedIn: 'root',
 })
@@ -13,7 +15,7 @@ export class MoviesService {
             year: 2014,
             genre: 'Sci-Fi',
             rating: 8.7,
-            preview: 'http://localhost:4201/img/interstellar.png',
+            preview: new URL('img/interstellar.png', remoteAssetBaseUrl).href,
         },
         {
             id: 2,
@@ -21,7 +23,7 @@ export class MoviesService {
             year: 1999,
             genre: 'Action',
             rating: 8.7,
-            preview: 'http://localhost:4201/img/matrix.png',
+            preview: new URL('img/matrix.png', remoteAssetBaseUrl).href,
         },
         {
             id: 3,
@@ -29,7 +31,7 @@ export class MoviesService {
             year: 2010,
             genre: 'Sci-Fi',
             rating: 8.8,
-            preview: 'http://localhost:4201/img/inception.png',
+            preview: new URL('img/inception.png', remoteAssetBaseUrl).href,
         },
     ];
 

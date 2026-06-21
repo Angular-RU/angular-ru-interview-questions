@@ -82,6 +82,12 @@ http://localhost:4202/remoteEntry.json
 http://localhost:4200/federation.manifest.json
 ```
 
+## Remote assets
+
+Локальное демо разрешает относительные URL изображений через `import.meta.url`, поэтому assets загружаются с origin
+remote, а не host. В production assets должны отдаваться с того же remote origin/CDN или через явно настроенный asset
+base URL. Host не должен содержать hardcoded локальные URL assets remote-приложения.
+
 ## Communication flow
 
 ```text

@@ -20,3 +20,5 @@ export class MoviesComponent {
         this.movieSelected.emit(movie);
     }
 }
+
+export {MoviesComponent as MoviesWidgetComponent};

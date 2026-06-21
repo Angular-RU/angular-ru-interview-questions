@@ -4,7 +4,7 @@ export default withNativeFederation({
     name: 'ticket-availability',
 
     exposes: {
-        './Component': './src/app/app.ts',
+        './Widget': './src/app/app.ts',
     },
 
     shared: {

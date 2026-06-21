@@ -39,3 +39,5 @@ export class App {
         this.bookingContinued.emit(movie);
     }
 }
+
+export {App as TicketAvailabilityWidgetComponent};

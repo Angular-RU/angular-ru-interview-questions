@@ -3,6 +3,7 @@ import {
     ChangeDetectionStrategy,
     Component,
     inject,
+    signal,
     viewChild,
     ViewContainerRef,
 } from '@angular/core';
@@ -38,6 +39,7 @@ export class App {
 
     protected readonly moviesState = this.remoteWidgetLoader.createState();
     protected readonly ticketAvailabilityState = this.remoteWidgetLoader.createState();
+    protected readonly bookingMessage = signal<string | null>(null);
 
     constructor() {
         afterNextRender(() => {
@@ -96,9 +98,9 @@ export class App {
     private connectBookingFlow({ticketAvailabilityRef}: RemoteWidgetRefs): void {
         const subscription = ticketAvailabilityRef.instance.bookingContinued.subscribe(
             (movie) => {
-                console.log('Continue booking:', movie);
-
-                alert('Демо, можно открыть checkout widget...');
+                this.bookingMessage.set(
+                    `Продолжаем бронирование фильма «${movie.title}»`,
+                );
             },
         );
 
