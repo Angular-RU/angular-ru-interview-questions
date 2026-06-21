@@ -4,7 +4,7 @@ export default withNativeFederation({
     name: 'movies',
 
     exposes: {
-        './Component': './src/app/app.ts',
+        './MoviesWidget': './src/app/movies/movies.component.ts',
     },
 
     shared: {

@@ -1,7 +1,29 @@
-<h1>Ticket Availability</h1>
+<section class="ticket">
+  <p class="ticket__eyebrow">Booking status</p>
 
-@if (movieId() === null) {
-    <p>Please select movie</p>
-} @else {
-    <p>Available tickets: {{ availableTickets() }}</p>
-}
+  <h2 class="ticket__title">Ticket Availability</h2>
+
+  @if (movie(); as selectedMovie) {
+    <div class="ticket__movie">
+      <p class="ticket__label">Selected movie</p>
+      <h3 class="ticket__movie-title">{{ selectedMovie.title }}</h3>
+    </div>
+
+    <div class="ticket__counter">
+      <span class="ticket__counter-value">{{ availableTickets() }}</span>
+      <span class="ticket__counter-label">tickets available</span>
+    </div>
+
+    <button
+      class="ticket__button"
+      type="button"
+      (click)="continueBooking()"
+    >
+      Continue booking
+    </button>
+  } @else {
+    <div class="ticket__empty">
+      Select a movie to see ticket availability.
+    </div>
+  }
+</section>

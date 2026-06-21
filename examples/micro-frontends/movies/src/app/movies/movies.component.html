@@ -1,23 +1,40 @@
 <section class="movies">
-    <h1>Movies</h1>
+  <header class="movies__header">
+    <h2 class="movies__title">Movies</h2>
+    <p class="movies__description">
+      Choose a movie to check ticket availability in the booking widget.
+    </p>
+  </header>
 
-    <div class="movies__list">
-        @for (movie of movies; track movie.id) {
-            <article class="movie-card">
-                <h2>{{ movie.title }}</h2>
+  <div class="movies__list">
+    @for (movie of movies; track movie.id) {
+      <article class="movie-card">
+        <img
+          class="movie-card__preview"
+          [src]="movie.preview"
+          [alt]="movie.title"
+        />
 
-                <img
-                    [src]="movie.preview"
-                    alt=""
-                />
-                <p>Year: {{ movie.year }}</p>
-                <p>Genre: {{ movie.genre }}</p>
-                <p>Rating: {{ movie.rating }}</p>
+        <div class="movie-card__content">
+          <h3 class="movie-card__title">{{ movie.title }}</h3>
 
-                <button (click)="checkAvailability(movie)">Check availability</button>
-            </article>
-        } @empty {
-            <p>No movies found.</p>
-        }
-    </div>
+          <p class="movie-card__meta">
+            {{ movie.year }} · {{ movie.genre }}
+          </p>
+
+          <p class="movie-card__rating">
+            ★ {{ movie.rating }}
+          </p>
+
+          <button
+            class="movie-card__button"
+            type="button"
+            (click)="selectMovie(movie)"
+          >
+            Check availability
+          </button>
+        </div>
+      </article>
+    }
+  </div>
 </section>

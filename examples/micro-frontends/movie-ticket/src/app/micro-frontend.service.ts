@@ -1,29 +1,26 @@
-import {Injectable, Type} from '@angular/core';
+import {Injectable, type Type} from '@angular/core';
 import {loadRemoteModule} from '@angular-architects/native-federation';
 
 interface LoadRemoteComponentOptions {
-    port: number;
     remoteName: string;
-    exposedModule?: string;
-    exportName?: string;
+    exposedModule: string;
+    exportName: string;
 }
 
 @Injectable({
     providedIn: 'root',
 })
 export class MicroFrontendService {
-    public async loadRemoteComponent<TComponent>({
-        port,
+    public async loadRemoteComponent<T = unknown>({
         remoteName,
-        exposedModule = './Component',
-        exportName = 'App',
-    }: LoadRemoteComponentOptions): Promise<Type<TComponent> | null> {
+        exposedModule,
+        exportName,
+    }: LoadRemoteComponentOptions): Promise<Type<T> | null> {
         try {
-            const remoteModule = (await loadRemoteModule({
+            const remoteModule = (await loadRemoteModule(
                 remoteName,
                 exposedModule,
-                remoteEntry: `http://localhost:${port}/remoteEntry.json`,
-            })) as Record<string, Type<TComponent> | undefined>;
+            )) as Record<string, Type<T> | undefined>;
 
             const component = remoteModule[exportName];
 
@@ -38,7 +35,7 @@ export class MicroFrontendService {
 
             return component;
         } catch (error) {
-            console.error('Cannot load remote component', error);
+            console.error(`Cannot load remote component "${remoteName}"`, error);
 
             return null;
         }

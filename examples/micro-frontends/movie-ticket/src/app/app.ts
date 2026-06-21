@@ -1,31 +1,29 @@
 import {
+    afterNextRender,
+    ChangeDetectionStrategy,
     Component,
-    ComponentRef,
     inject,
-    OnDestroy,
-    OnInit,
     viewChild,
     ViewContainerRef,
 } from '@angular/core';
-
-import {MicroFrontendService} from './micro-frontend.service';
-
-interface LoadRemoteOptions {
-    port: number;
-    remoteName: string;
-    getContainer: () => ViewContainerRef;
-    exposedModule?: string;
-    exportName?: string;
-}
+import {REMOTE_WIDGETS} from './remote-widgets.config';
+import {RemoteWidgetLoaderService} from './remote-widget-loader.service';
+import {
+    type MoviesRemoteComponent,
+    type RemoteWidgetRefs,
+    type TicketAvailabilityRemoteComponent,
+} from './remote-widget.types';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.html',
     styleUrl: './app.css',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [RemoteWidgetLoaderService],
 })
-export class App implements OnInit, OnDestroy {
-    private readonly service = inject(MicroFrontendService);
+export class App {
+    private readonly remoteWidgetLoader = inject(RemoteWidgetLoaderService);
 
     private readonly moviesContainer = viewChild.required('movies', {
         read: ViewContainerRef,
@@ -38,54 +36,74 @@ export class App implements OnInit, OnDestroy {
         },
     );
 
-    private readonly componentRefs: ComponentRef<unknown>[] = [];
+    protected readonly moviesState = this.remoteWidgetLoader.createState();
+    protected readonly ticketAvailabilityState = this.remoteWidgetLoader.createState();
 
-    public async ngOnInit(): Promise<void> {
-        await this.load({
-            port: 4201,
-            remoteName: 'movies',
-            getContainer: () => this.moviesContainer(),
-        });
-
-        await this.load({
-            port: 4202,
-            remoteName: 'ticket-availability',
-            getContainer: () => this.ticketAvailabilityContainer(),
+    constructor() {
+        afterNextRender(() => {
+            void this.initRemoteWidgets();
         });
     }
 
-    public ngOnDestroy(): void {
-        for (const componentRef of this.componentRefs) {
-            componentRef.destroy();
-        }
-    }
+    public async initRemoteWidgets(): Promise<void> {
+        const refs = await this.mountRemoteWidgets();
 
-    private async load({
-        port,
-        remoteName,
-        getContainer,
-        exposedModule = './Component',
-        exportName = 'App',
-    }: LoadRemoteOptions): Promise<void> {
-        const component = await this.service.loadRemoteComponent({
-            port,
-            remoteName,
-            exposedModule,
-            exportName,
-        });
-
-        if (!component) {
+        if (!refs) {
             return;
         }
 
-        const container = getContainer();
+        this.connectMovieSelection(refs);
+        this.connectBookingFlow(refs);
+    }
 
-        container.clear();
+    private async mountRemoteWidgets(): Promise<RemoteWidgetRefs | null> {
+        const [moviesRef, ticketAvailabilityRef] = await Promise.all([
+            this.remoteWidgetLoader.mount<MoviesRemoteComponent>({
+                config: REMOTE_WIDGETS.movies,
+                getContainer: () => this.moviesContainer(),
+                state: this.moviesState,
+            }),
+            this.remoteWidgetLoader.mount<TicketAvailabilityRemoteComponent>({
+                config: REMOTE_WIDGETS.ticketAvailability,
+                getContainer: () => this.ticketAvailabilityContainer(),
+                state: this.ticketAvailabilityState,
+            }),
+        ]);
 
-        const componentRef = container.createComponent(component);
+        if (!moviesRef || !ticketAvailabilityRef) {
+            return null;
+        }
 
-        componentRef.changeDetectorRef.detectChanges();
+        return {
+            moviesRef,
+            ticketAvailabilityRef,
+        };
+    }
 
-        this.componentRefs.push(componentRef);
+    private connectMovieSelection({
+        moviesRef,
+        ticketAvailabilityRef,
+    }: RemoteWidgetRefs): void {
+        const subscription = moviesRef.instance.movieSelected.subscribe((movie) => {
+            ticketAvailabilityRef.setInput('movie', movie);
+        });
+
+        moviesRef.onDestroy(() => {
+            subscription.unsubscribe();
+        });
+    }
+
+    private connectBookingFlow({ticketAvailabilityRef}: RemoteWidgetRefs): void {
+        const subscription = ticketAvailabilityRef.instance.bookingContinued.subscribe(
+            (movie) => {
+                console.log('Continue booking:', movie);
+
+                alert('Демо, можно открыть checkout widget...');
+            },
+        );
+
+        ticketAvailabilityRef.onDestroy(() => {
+            subscription.unsubscribe();
+        });
     }
 }

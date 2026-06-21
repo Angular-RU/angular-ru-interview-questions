@@ -1,7 +1,6 @@
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-
+import {ChangeDetectionStrategy, Component, inject, output} from '@angular/core';
+import {type Movie} from './movie.model';
 import {MoviesService} from './movies.service';
-import {Movie} from './movie.model';
 
 @Component({
     selector: 'app-movies',
@@ -13,13 +12,11 @@ import {Movie} from './movie.model';
 export class MoviesComponent {
     private readonly moviesService = inject(MoviesService);
 
+    public readonly movieSelected = output<Movie>();
+
     protected readonly movies = this.moviesService.getMovies();
 
-    checkAvailability(movie: Movie) {
-        window.dispatchEvent(
-            new CustomEvent('movieSelected', {
-                detail: movie,
-            }),
-        );
+    protected selectMovie(movie: Movie): void {
+        this.movieSelected.emit(movie);
     }
 }

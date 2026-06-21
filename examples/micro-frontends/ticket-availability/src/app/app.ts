@@ -1,31 +1,41 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, input, output} from '@angular/core';
+
+interface Movie {
+    id: number;
+    title: string;
+}
 
 @Component({
     selector: 'app-root',
+    standalone: true,
     templateUrl: './app.html',
+    styleUrl: './app.css',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App implements OnInit, OnDestroy {
-    availability: number[] = [43, 212, 9, 119, 20, 98];
-    movieId = signal<number | null>(null);
-    availableTickets = signal(0);
+export class App {
+    private readonly availabilityByMovieId: Record<number, number> = {
+        1: 43,
+        2: 212,
+        3: 9,
+    };
 
-    ngOnInit() {
-        window.addEventListener('movieSelected', (event) => {
-            const customEvent = event as CustomEvent;
+    public readonly movie = input<Movie | null>(null);
 
-            console.log(customEvent);
+    public readonly bookingContinued = output<Movie>();
 
-            this.movieId.set(customEvent?.detail?.id ?? null);
+    protected readonly availableTickets = computed(() => {
+        const movie = this.movie();
 
-            this.checkAvailability();
-        });
-    }
+        return movie ? (this.availabilityByMovieId[movie.id] ?? 0) : 0;
+    });
 
-    ngOnDestroy() {
-        window.removeEventListener('movieSelected', () => {});
-    }
+    protected continueBooking(): void {
+        const movie = this.movie();
 
-    checkAvailability() {
-        this.availableTickets.set(this.availability[this.movieId()!]);
+        if (!movie) {
+            return;
+        }
+
+        this.bookingContinued.emit(movie);
     }
 }
