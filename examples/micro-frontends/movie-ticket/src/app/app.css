@@ -1,10 +1,17 @@
 .wrapper-container {
     display: flex;
+    width: 100%;
 }
 
 .wrapper {
     outline: 1px solid red;
-    flex-grow: 1;
-    flex-basis: 0;
     min-width: 0;
+}
+
+.wrapper.left {
+    flex: 0 1 80%;
+}
+
+.wrapper.right {
+    flex: 0 0 20%;
 }

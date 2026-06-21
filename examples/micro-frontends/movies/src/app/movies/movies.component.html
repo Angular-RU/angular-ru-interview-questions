@@ -6,9 +6,15 @@
             <article class="movie-card">
                 <h2>{{ movie.title }}</h2>
 
+                <img
+                    [src]="movie.preview"
+                    alt=""
+                />
                 <p>Year: {{ movie.year }}</p>
                 <p>Genre: {{ movie.genre }}</p>
                 <p>Rating: {{ movie.rating }}</p>
+
+                <button (click)="checkAvailability(movie)">Check availability</button>
             </article>
         } @empty {
             <p>No movies found.</p>
