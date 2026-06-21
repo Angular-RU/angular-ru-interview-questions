@@ -1,37 +1,41 @@
 <div class="container">
-  <h1>Movie Ticket Booking</h1>
+    <h1>Movie Ticket Booking</h1>
 
-  <div class="wrapper-container">
-    <section class="wrapper left" aria-label="Movies">
-      <div class="widget">
-        @if (moviesState().status === 'loading') {
-          <p class="widget-state">Loading movies widget...</p>
-        }
+    <div class="wrapper-container">
+        <section
+            class="wrapper left"
+            aria-label="Movies"
+        >
+            <div class="widget">
+                @if (moviesState().status === 'loading') {
+                    <p class="widget-state">Loading movies widget...</p>
+                }
 
-        @if (moviesState().status === 'error') {
-          <p class="widget-state widget-state_error">
-            Movies widget is temporarily unavailable.
-          </p>
-        }
+                @if (moviesState().status === 'error') {
+                    <p class="widget-state widget-state_error">Movies widget is temporarily unavailable.</p>
+                }
 
-        <ng-container #movies></ng-container>
-      </div>
-    </section>
+                <ng-container #movies></ng-container>
+            </div>
+        </section>
 
-    <aside class="wrapper right" aria-label="Ticket availability">
-      <div class="widget">
-        @if (ticketAvailabilityState().status === 'loading') {
-          <p class="widget-state">Loading ticket widget...</p>
-        }
+        <aside
+            class="wrapper right"
+            aria-label="Ticket availability"
+        >
+            <div class="widget">
+                @if (ticketAvailabilityState().status === 'loading') {
+                    <p class="widget-state">Loading ticket widget...</p>
+                }
 
-        @if (ticketAvailabilityState().status === 'error') {
-          <p class="widget-state widget-state_error">
-            Ticket availability widget is temporarily unavailable.
-          </p>
-        }
+                @if (ticketAvailabilityState().status === 'error') {
+                    <p class="widget-state widget-state_error">
+                        Ticket availability widget is temporarily unavailable.
+                    </p>
+                }
 
-        <ng-container #ticketAvailability></ng-container>
-      </div>
-    </aside>
-  </div>
+                <ng-container #ticketAvailability></ng-container>
+            </div>
+        </aside>
+    </div>
 </div>

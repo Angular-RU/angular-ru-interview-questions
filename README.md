@@ -43,15 +43,28 @@ providers; поддерживаемые старые API помечены как
 - [Рабочее окружение frontend-разработчика](#рабочее-окружение-frontend-разработчика)
   - [Методологии и процессы](#методологии-и-процессы)
 - [Soft skills и интервью](#soft-skills-и-интервью)
-- [Angular Core](#angular-core)
-- [Angular Change Detection](#angular-change-detection)
-- [Angular Signals](#angular-signals)
-- [RxJS](#rxjs)
-- [Angular Forms](#angular-forms)
-- [Angular Router](#angular-router)
-- [Angular HTTP](#angular-http)
-- [Testing](#testing)
-- [Tooling](#tooling)
+- [Angular](#angular)
+  - [Angular Core](#angular-core)
+  - [Angular PWA и Service Worker](#angular-pwa-и-service-worker)
+  - [Основные концепции](#основные-концепции)
+  - [Templates](#templates)
+  - [Компоненты, директивы, сервисы и pipes](#компоненты-директивы-сервисы-и-pipes)
+  - [Lifecycle и rendering](#lifecycle-и-rendering)
+  - [Angular Change Detection](#angular-change-detection)
+  - [Angular Signals](#angular-signals)
+  - [RxJS](#rxjs)
+  - [Dependency Injection](#dependency-injection)
+  - [Управление состоянием](#управление-состоянием)
+  - [Angular HTTP](#angular-http)
+  - [Security](#security)
+  - [Angular Router](#angular-router)
+  - [Angular Forms](#angular-forms)
+  - [Performance](#performance)
+  - [SSR, hydration и SEO](#ssr-hydration-и-seo)
+  - [Testing](#testing)
+  - [Angular libraries и design systems](#angular-libraries-и-design-systems)
+  - [Micro Frontends](#micro-frontends)
+  - [Tooling](#tooling)
 
 ## Web Platform
 
@@ -3507,9 +3520,11 @@ compensation package.
 
 </details>
 
-## Angular Core
+## Angular
 
-### DI + providers
+### Angular Core
+
+#### DI + providers
 
 <details>
 <summary>Что такое provider и чем отличаются useClass, useValue, useFactory и useExisting?</summary>
@@ -7052,6 +7067,940 @@ selectors, imports или конфигурацию.
 
 Тестируют behavior, harness API, forms integration, overlays, SSR и visual states. Demo/documentation app одновременно
 служит integration consumer, но не заменяет automated tests.
+
+</details>
+
+### Micro Frontends
+
+Практический пример: [`examples/micro-frontends`](./examples/micro-frontends).
+
+В примере [`movie-ticket`](./examples/micro-frontends/movie-ticket) host загружает remote widgets во время выполнения.
+Remote [`movies`](./examples/micro-frontends/movies) сообщает host о выбранном фильме через Angular `output()`, а
+[`ticket-availability`](./examples/micro-frontends/ticket-availability) принимает фильм через input и сообщает о
+продолжении бронирования. Инструкции по запуску находятся в
+[`examples/micro-frontends/README.md`](./examples/micro-frontends/README.md).
+
+#### Базовые понятия
+
+<details>
+<summary>Что такое микрофронтенды и какую проблему они решают?</summary>
+
+Микрофронтенды разделяют frontend на автономные части, за которые могут отвечать разные команды. Они помогают независимо
+разрабатывать и выпускать крупные продуктовые области, но добавляют распределенные контракты, инфраструктуру и риски
+времени выполнения.
+
+</details>
+
+<details>
+<summary>Чем микрофронтенд отличается от обычного lazy-loaded Angular route?</summary>
+
+Lazy route остается частью одной сборки и одного release-процесса. Микрофронтенд может собираться, размещаться и
+загружаться отдельно, поэтому его версия и доступность не обязательно совпадают с host.
+
+</details>
+
+<details>
+<summary>Что такое shell/host application?</summary>
+
+Host — приложение-контейнер. Оно задает общий layout, навигацию, интеграционные контракты и загружает remote-модули или
+виджеты, а также обрабатывает их loading и error states.
+
+</details>
+
+<details>
+<summary>Что такое remote application?</summary>
+
+Remote — отдельно собираемое приложение, которое публикует доступные host части через federation metadata. Оно должно
+иметь явный публичный контракт и по возможности не зависеть от внутренних деталей host.
+
+</details>
+
+<details>
+<summary>Когда микрофронтенды оправданы, а когда это лишнее усложнение?</summary>
+
+Они оправданы при нескольких автономных командах, независимых release cycles и устойчивых domain boundaries. Для
+небольшой команды, единого продукта и общего деплоя modular monolith обычно дешевле и надежнее.
+
+</details>
+
+<details>
+<summary>Какие минусы есть у микрофронтенд-архитектуры?</summary>
+
+Основные минусы: сложнее локальная разработка, тестирование, наблюдаемость, versioning, shared state, согласование UX,
+SSR и rollback. Также возможны дубли dependencies и дополнительная задержка runtime-загрузки.
+
+</details>
+
+<details>
+<summary>Почему микрофронтенды часто сложнее монолита?</summary>
+
+В монолите компилятор и единая сборка проверяют большую часть связей заранее. В микрофронтендах часть ошибок проявляется
+только при интеграции конкретных независимо развернутых версий через сеть.
+
+</details>
+
+<details>
+<summary>Что такое independent deployment?</summary>
+
+Это возможность выпустить remote без обязательной пересборки и публикации host или других remote. Для этого нужны
+совместимые контракты, отдельные pipelines, контролируемые URL и стратегия rollback.
+
+</details>
+
+<details>
+<summary>Какие границы микрофронтендов бывают: route-level, widget-level, domain-level?</summary>
+
+Route-level делит приложение по страницам, widget-level встраивает независимые блоки в одну страницу, domain-level
+следует бизнес-областям. Domain boundary описывает ответственность, а route и widget — способ композиции UI.
+
+</details>
+
+<details>
+<summary>Чем route-level federation отличается от widget-level federation?</summary>
+
+Route-level загружает крупный экран при навигации и обычно проще изолирует команды. Widget-level компонует несколько
+remote на одной странице, поэтому требует более точной оркестрации, layout-контрактов и независимых состояний ошибки.
+
+</details>
+
+#### Native Federation и runtime loading
+
+<details>
+<summary>Что такое Native Federation?</summary>
+
+Native Federation — подход к runtime-композиции приложений на основе стандартных ES modules и import maps. Инструменты
+генерируют metadata и согласуют shared dependencies, а браузер загружает модули без webpack runtime.
+
+</details>
+
+<details>
+<summary>Что такое `remoteEntry.json`?</summary>
+
+Это сгенерированный entry-файл remote с описанием exposed modules, shared packages и связанных chunks. Host читает его,
+чтобы понять, откуда загрузить запрошенный export.
+
+</details>
+
+<details>
+<summary>Что такое federation manifest?</summary>
+
+Manifest — карта логических имен remote на URL их `remoteEntry.json`. Она отделяет код host от адресов окружения и
+позволяет менять расположение remote без пересборки host, если manifest поставляется отдельно.
+
+</details>
+
+<details>
+<summary>Зачем host-приложению нужен manifest remote-приложений?</summary>
+
+Host использует manifest для разрешения имени remote в конкретный URL. Один и тот же build host может получать разные
+адреса для local, stage, production или canary окружений.
+
+</details>
+
+<details>
+<summary>Чем runtime-загрузка remote отличается от обычного static import?</summary>
+
+Static import известен во время сборки и попадает в dependency graph общего bundle. Runtime-загрузка разрешает модуль
+после запуска приложения, поэтому требует сетевой обработки ошибок и runtime-проверки контракта.
+
+</details>
+
+<details>
+<summary>Что делает `initFederation()`?</summary>
+
+`initFederation()` загружает federation metadata, подготавливает shared dependencies и import maps до bootstrap
+приложения. После инициализации host может обращаться к remote по логическому имени.
+
+</details>
+
+<details>
+<summary>Что делает `loadRemoteModule()`?</summary>
+
+`loadRemoteModule()` находит remote через ранее загруженную конфигурацию, загружает его entry и exposed module, затем
+возвращает namespace ES module. Наличие ожидаемого export приложение проверяет отдельно.
+
+</details>
+
+<details>
+<summary>Что такое shared dependencies?</summary>
+
+Это packages, которые host и remotes договариваются использовать совместно вместо загрузки отдельных копий. Sharing
+уменьшает bundle, но требует совместимых версий и корректной настройки singleton-пакетов.
+
+</details>
+
+<details>
+<summary>Зачем нужны `singleton`, `strictVersion` и `requiredVersion`?</summary>
+
+`singleton` требует один runtime instance package, `requiredVersion` задает допустимую версию, а `strictVersion`
+запрещает несовместимый fallback. Вместе они делают конфликт версий явной ошибкой вместо скрытого повреждения runtime.
+
+</details>
+
+<details>
+<summary>Что может пойти не так, если host и remote используют разные версии Angular?</summary>
+
+Возможны несовместимые runtime contracts, несколько Angular instances, ошибки DI, rendering и signals. Допустимость
+версий должна проверяться federation-конфигурацией, CI и integration tests.
+
+</details>
+
+<details>
+<summary>Почему Angular и RxJS обычно шарят как singleton?</summary>
+
+Angular ожидает согласованный framework runtime и injector graph, а разделяемые RxJS-контракты проще поддерживать с
+одной совместимой копией. Несколько версий увеличивают bundle и риск несовместимости типов и поведения.
+
+</details>
+
+<details>
+<summary>Что такое import map?</summary>
+
+Import map сопоставляет bare module specifiers с URL ES modules в браузере. Native Federation может формировать такую
+карту для shared packages и remote-зависимостей.
+
+</details>
+
+<details>
+<summary>Почему браузер может не зарезолвить bare specifier вроде `@softarc/native-federation-orchestrator`?</summary>
+
+Браузер не знает npm resolution. Для bare specifier должен существовать import map или bundler-преобразование; иначе
+возникает ошибка разрешения модуля. Также import map должна быть загружена до первого import.
+
+</details>
+
+<details>
+<summary>Почему deprecated API не всегда означает, что код немедленно сломан?</summary>
+
+Deprecated API пока может оставаться совместимым, но больше не рекомендуется и может быть удален позже. Нужно проверить
+версию, migration path и фактическое поведение, а не заменять API вслепую.
+
+</details>
+
+#### Dynamic components
+
+<details>
+<summary>Как динамически создать Angular-компонент через `ViewContainerRef.createComponent()`?</summary>
+
+Нужно получить `ViewContainerRef`, загрузить `Type<T>` компонента и вызвать `container.createComponent(componentType)`.
+Метод вставит host view в контейнер и вернет `ComponentRef<T>` для дальнейшей настройки.
+
+</details>
+
+<details>
+<summary>Что такое `ComponentRef`?</summary>
+
+`ComponentRef` — ссылка на созданный экземпляр компонента и его host view. Через нее доступны `instance`, `setInput()`,
+`changeDetectorRef`, lifecycle callback `onDestroy()` и метод `destroy()`.
+
+</details>
+
+<details>
+<summary>Как передать input в динамически созданный компонент?</summary>
+
+После создания вызывают `componentRef.setInput('inputName', value)`. Имя должно совпадать с публичным input или его
+alias, а передаваемое значение — с интеграционным контрактом remote.
+
+</details>
+
+<details>
+<summary>Почему `ComponentRef.setInput()` лучше прямого присваивания свойства?</summary>
+
+`setInput()` проходит через Angular input pipeline, корректно обновляет signal inputs, учитывает transforms и помечает
+view для проверки. Прямое присваивание обходит этот контракт и может не запустить ожидаемое обновление.
+
+</details>
+
+<details>
+<summary>Как подписаться на output динамически созданного компонента?</summary>
+
+Нужно получить публичный output с `componentRef.instance` и вызвать `subscribe()`. Подписку следует связать с lifecycle
+компонента или host, например отписаться в callback `componentRef.onDestroy()`.
+
+</details>
+
+<details>
+<summary>Как правильно уничтожать динамически созданные компоненты?</summary>
+
+Компонент уничтожают через `ComponentRef.destroy()` или очистку владеющего `ViewContainerRef`. Одновременно нужно
+освободить внешние subscriptions, listeners и другие ресурсы, которые Angular не контролирует.
+
+</details>
+
+<details>
+<summary>Зачем хранить `ComponentRef` и вызывать `destroy()`?</summary>
+
+Ссылка нужна для последующих inputs, подписки на outputs и явного lifecycle management. Без уничтожения могут остаться
+view, subscriptions и ссылки на данные, что приводит к утечкам и повторной обработке событий.
+
+</details>
+
+<details>
+<summary>Почему `viewChild.required()` нельзя вызывать слишком рано?</summary>
+
+Query signal получает значение только после создания соответствующего элемента view. Чтение до завершения render
+приведет к ошибке required query, поэтому DOM-зависимую работу откладывают до подходящей render phase.
+
+</details>
+
+<details>
+<summary>Зачем иногда передают `getContainer: () => ViewContainerRef`, а не сам `ViewContainerRef`?</summary>
+
+Функция откладывает чтение query до момента фактического монтирования. Это полезно, когда loader настраивается раньше,
+чем Angular создал template container.
+
+</details>
+
+#### Коммуникация между remote-приложениями
+
+<details>
+<summary>Как remote-приложения могут общаться между собой?</summary>
+
+Через host orchestration, URL, backend, shared event bus или browser events. Выбор зависит от lifetime состояния,
+необходимости deep link, надежности и допустимой связанности между командами.
+
+</details>
+
+<details>
+<summary>Почему прямое общение remote-to-remote может быть проблемой?</summary>
+
+Один remote начинает знать API и lifecycle другого, из-за чего их нельзя независимо заменить или загрузить. Такая связь
+также усложняет versioning, тестирование и обработку частичной недоступности.
+
+</details>
+
+<details>
+<summary>Что такое host orchestration?</summary>
+
+Host принимает события remote, применяет общую бизнес-навигацию и передает данные другим remote через их публичные
+контракты. Remote при этом не импортируют и не ищут друг друга напрямую.
+
+</details>
+
+<details>
+<summary>Как host может связать output одного remote с input другого remote?</summary>
+
+Host подписывается на output первого `ComponentRef`, а в обработчике вызывает `setInput()` второго. В демо
+`movieSelected` передает выбранный фильм в input `movie` виджета доступности билетов.
+
+</details>
+
+<details>
+<summary>Чем `CustomEvent` отличается от Angular `output()` / `input()` через host?</summary>
+
+Angular inputs/outputs типизированы и привязаны к component lifecycle. `CustomEvent` распространяется через DOM или
+`window`, доступен вне Angular, но использует строковые имена и требует ручного listener management.
+
+</details>
+
+<details>
+<summary>Какие плюсы и минусы у коммуникации через `window.dispatchEvent()`?</summary>
+
+Плюсы — слабая технологическая связанность и простой межфреймворковый transport. Минусы — глобальное пространство имен,
+слабая типизация, неявный поток данных, ручная очистка listeners и отсутствие browser globals при SSR.
+
+</details>
+
+<details>
+<summary>Почему `window.addEventListener()` может быть проблемой при SSR?</summary>
+
+На сервере `window` отсутствует, поэтому регистрация listener во время server render завершится ошибкой. Ее выполняют
+только в browser phase и обязательно снимают при уничтожении владельца.
+
+</details>
+
+<details>
+<summary>Когда стоит использовать shared event bus?</summary>
+
+Когда нескольким независимо загружаемым частям нужен ограниченный набор асинхронных domain events. Bus должен иметь
+версионированные типы, владельца и правила lifecycle, иначе он быстро превращается в неявное глобальное состояние.
+
+</details>
+
+<details>
+<summary>Когда лучше использовать URL/query params для состояния?</summary>
+
+Для состояния навигации, фильтров и выбранных сущностей, которое должно поддерживать deep link, back/forward и
+перезагрузку страницы. Секретные или большие данные в URL помещать не следует.
+
+</details>
+
+<details>
+<summary>Когда состояние лучше хранить на backend?</summary>
+
+Когда оно должно переживать сессии, быть общим для устройств или пользователей, участвовать в транзакциях и иметь
+серверную авторизацию. Frontend тогда хранит только идентификатор и локальное представление.
+
+</details>
+
+<details>
+<summary>Почему для микрофронтендов важны явные контракты?</summary>
+
+Remote выпускаются независимо, поэтому inputs, outputs, exposed modules и payload schemas заменяют compile-time связь.
+Явные контракты можно версионировать, тестировать и сохранять совместимыми.
+
+</details>
+
+#### Loading, error states и fallback
+
+<details>
+<summary>Что произойдет, если один remote недоступен?</summary>
+
+Его entry или chunks не загрузятся, и операция вернет ошибку. Host должен локализовать сбой в соответствующем slot,
+показать fallback и не блокировать независимые части страницы.
+
+</details>
+
+<details>
+<summary>Чем required remote отличается от optional remote?</summary>
+
+Без required remote основной сценарий не имеет смысла, поэтому host может показать page-level error. Optional remote
+дополняет сценарий: при сбое его slot скрывают или заменяют fallback, сохраняя остальную страницу.
+
+</details>
+
+<details>
+<summary>Почему `Promise.all()` может быть опасен при загрузке нескольких независимых remote?</summary>
+
+Он отклоняется после первой ошибки и не возвращает успешные результаты остальных promises. Если виджеты независимы,
+общая операция может ошибочно превратить частичный сбой в отказ всей композиции.
+
+</details>
+
+<details>
+<summary>Когда лучше использовать `Promise.allSettled()`?</summary>
+
+Когда каждый remote имеет собственный loading/error state и успешные виджеты должны продолжить работу. Результаты
+`fulfilled` и `rejected` обрабатывают по отдельности.
+
+</details>
+
+<details>
+<summary>Как host должен показывать loading/error state для каждого remote slot?</summary>
+
+Каждый slot имеет стабильный контейнер, собственный индикатор загрузки, доступное сообщение об ошибке и при
+необходимости retry. Ошибка одного slot не должна визуально маскировать состояние другого.
+
+</details>
+
+<details>
+<summary>Почему у каждого remote widget должен быть свой status: `idle`, `loading`, `ready`, `error`?</summary>
+
+Явная state machine исключает неоднозначные комбинации boolean flags и упрощает template control flow. Она также
+позволяет отдельно измерять время загрузки, ошибки и повторные попытки каждого remote.
+
+</details>
+
+<details>
+<summary>Что должен делать host, если `movies` загрузился, а `ticket-availability` нет?</summary>
+
+Показать список фильмов и fallback в slot доступности. Выбор фильма можно сохранить, но действие, зависящее от второго
+remote, нужно отключить или объяснить пользователю.
+
+</details>
+
+<details>
+<summary>Что должен делать host, если `ticket-availability` загрузился, а `movies` нет?</summary>
+
+Показать fallback списка фильмов. Виджет доступности может остаться в empty state, если без выбранного фильма он не
+имеет самостоятельного сценария.
+
+</details>
+
+<details>
+<summary>Как добавить retry для недоступного remote?</summary>
+
+Host повторно переводит конкретный slot в `loading` и запускает его mount после действия пользователя или ограниченного
+backoff. Перед retry нужно очистить прежний `ComponentRef`, error и незавершенные subscriptions.
+
+</details>
+
+<details>
+<summary>Где лучше хранить статусы remote-виджетов: в компоненте, сервисе или store?</summary>
+
+Локальный slot state удобно хранить в host component или scoped loader service. Общий store нужен только если статус
+используют удаленные части приложения, аналитика или централизованная recovery-логика.
+
+</details>
+
+<details>
+<summary>Почему сервис загрузки remote не должен знать бизнес-логику приложения?</summary>
+
+Loader отвечает за разрешение модуля, создание компонента и технический lifecycle. Решения о фильмах, бронировании и
+доступности принадлежат host orchestration или domain services, иначе loader нельзя переиспользовать.
+
+</details>
+
+#### SSR и hydration
+
+<details>
+<summary>Могут ли remote-приложения быть SSR?</summary>
+
+Да, но server renderer должен уметь разрешить remote, загрузить совместимый server bundle и согласовать HTML с
+последующей hydration. Это заметно сложнее browser-only композиции.
+
+</details>
+
+<details>
+<summary>Какие дополнительные сложности появляются при SSR и micro frontends?</summary>
+
+Нужно согласовать server и browser entries, сетевую доступность remote с сервера, shared dependencies, latency,
+кеширование, ошибки частичного render и детерминированный HTML для hydration.
+
+</details>
+
+<details>
+<summary>Почему при SSR возникает ошибка `window is not defined`?</summary>
+
+Server runtime не предоставляет browser global `window`. Ошибка возникает, если код обращается к нему при import,
+создании компонента или server render до проверки платформы.
+
+</details>
+
+<details>
+<summary>Почему при SSR возникает ошибка `document is not defined`?</summary>
+
+Node server не имеет browser DOM `document`. Прямой DOM-код и browser-only libraries нужно изолировать от server path
+или запускать после перехода в browser render phase.
+
+</details>
+
+<details>
+<summary>Почему `ngOnInit` не всегда подходит для загрузки remote widgets?</summary>
+
+`ngOnInit` выполняется и при SSR, а view containers могут быть еще не готовы. Browser-only remote лучше монтировать
+после первого client render, когда доступны DOM и view queries.
+
+</details>
+
+<details>
+<summary>Когда использовать `afterNextRender()`?</summary>
+
+Когда интеграция требует созданного DOM, browser APIs или доступного `ViewContainerRef` после следующего render. Render
+callbacks не выполняются на сервере, поэтому подходят для browser-only монтирования.
+
+</details>
+
+<details>
+<summary>Почему remote widgets часто монтируют только на клиенте, даже если shell поддерживает SSR?</summary>
+
+Так shell сохраняет SEO и быстрый initial HTML, а remote integration избегает server federation, browser globals и
+hydration mismatch. Цена — placeholder до client mount и более поздняя готовность виджета.
+
+</details>
+
+<details>
+<summary>Как сделать SSR-safe код в Angular?</summary>
+
+Не обращаться к browser globals на уровне модуля, использовать platform-neutral APIs, изолировать browser services и
+выполнять DOM-интеграции в render callbacks или после явной проверки платформы.
+
+</details>
+
+<details>
+<summary>Что такое `BootstrapContext` в server bootstrap?</summary>
+
+`BootstrapContext` передает Angular server bootstrap контекст конкретного запроса, включая platform injector. Он нужен
+для корректной изоляции и настройки server-rendered приложения.
+
+</details>
+
+<details>
+<summary>Почему `bootstrapApplication()` на сервере должен получать `BootstrapContext`?</summary>
+
+Server renderer создает контекст для запроса и ожидает, что bootstrap использует его. Без контекста приложение может
+создать неподходящую platform instance или потерять request-scoped providers.
+
+</details>
+
+<details>
+<summary>Почему server entry `main.server.ts` отличается от browser entry `main.ts`?</summary>
+
+Browser entry инициализирует приложение в DOM и может настраивать client federation. Server entry экспортирует bootstrap
+для renderer, принимает `BootstrapContext` и не должен выполнять browser-only код.
+
+</details>
+
+<details>
+<summary>Почему manifest может открываться в браузере, но не загружаться во время SSR?</summary>
+
+URL `localhost` с точки зрения server process, container или cloud runtime может указывать не туда, куда в браузере.
+Также мешают DNS, CORS-подобные gateway rules, TLS, network policy и отсутствие запущенного remote.
+
+</details>
+
+<details>
+<summary>Что такое hydration mismatch и как микрофронтенды могут его спровоцировать?</summary>
+
+Mismatch возникает, когда client ожидает DOM, отличный от server HTML. Remote может изменить разметку до hydration,
+отрендерить разные данные или создать browser-only элементы в server-rendered области.
+
+</details>
+
+#### Deployment, versioning и rollback
+
+<details>
+<summary>Как деплоить host и remote-приложения независимо?</summary>
+
+У каждого приложения должен быть отдельный build и release pipeline. Remote сначала публикует versioned assets, затем
+контролируемо обновляется manifest; host выпускается отдельно и сохраняет совместимость с доступными версиями remote.
+
+</details>
+
+<details>
+<summary>Какие артефакты обычно деплоит remote-приложение?</summary>
+
+`remoteEntry.json`, JavaScript chunks, styles, assets и при необходимости server bundle. Все ссылки из entry должны
+оставаться доступными как единый согласованный release.
+
+</details>
+
+<details>
+<summary>Где должен лежать `remoteEntry.json` после деплоя?</summary>
+
+По стабильному HTTPS URL, доступному host и разрешенному security policy. Часто это CDN path, связанный с приложением
+или версией, например `/movies/1.4.2/remoteEntry.json`.
+
+</details>
+
+<details>
+<summary>Где хранить federation manifest для dev, stage и prod окружений?</summary>
+
+В environment-specific конфигурации или config service, управляемом deployment pipeline. Не следует вручную менять
+production manifest без истории, валидации и возможности быстрого rollback.
+
+</details>
+
+<details>
+<summary>Как host узнает URL нового remote-приложения?</summary>
+
+Из manifest, который загружается при старте или встраивается для конкретного окружения. Обновление mapping переключает
+host на новый remote без изменения его application code.
+
+</details>
+
+<details>
+<summary>Что будет, если host задеплоен старый, а remote уже новый?</summary>
+
+Все продолжит работать только при backward-compatible remote contract. Удаленный export, переименованный input или
+измененная payload schema приведут к runtime-ошибке старого host.
+
+</details>
+
+<details>
+<summary>Что будет, если remote задеплоен старый, а host уже новый?</summary>
+
+Новый host может запросить отсутствующий export или передать неподдерживаемые данные. Поэтому host должен либо
+поддерживать старый контракт, либо проверять capability/version до использования новой функции.
+
+</details>
+
+<details>
+<summary>Как версионировать контракты между host и remote?</summary>
+
+Версионируют exposed modules, TypeScript/schema package или capability metadata по SemVer. Breaking change получает
+новую major-версию или новый параллельный contract identifier.
+
+</details>
+
+<details>
+<summary>Как организовать backward compatibility между host и remote?</summary>
+
+Сначала remote добавляет новый API, сохраняя старый, затем обновляются consumers, и только после измеренного перехода
+удаляется legacy contract. Полезны defaults, optional fields и tolerant readers.
+
+</details>
+
+<details>
+<summary>Как безопасно изменить `exposedModule` или `exportName`?</summary>
+
+Временно публиковать старое и новое имя, обновить host, проверить production usage и только затем удалить alias.
+Изменение должно проходить contract и integration tests.
+
+</details>
+
+<details>
+<summary>Почему нельзя бездумно переименовывать exposed module?</summary>
+
+Его имя — часть runtime API, записанная в host configuration. В отличие от внутреннего refactoring, компилятор remote не
+найдет внешних consumers и не предупредит об их поломке.
+
+</details>
+
+<details>
+<summary>Как организовать rollback remote-приложения?</summary>
+
+Хранить предыдущие immutable releases и атомарно вернуть manifest mapping на проверенный `remoteEntry.json`. Старые
+entry и chunks нельзя удалять до завершения cache TTL и активных сессий.
+
+</details>
+
+<details>
+<summary>Как организовать rollback host-приложения?</summary>
+
+Повторно активировать предыдущий host release и соответствующую конфигурацию manifest. Rollback должен учитывать, что
+remote уже могли перейти вперед, поэтому их контракты обязаны быть backward-compatible.
+
+</details>
+
+<details>
+<summary>Какие риски есть у кеширования `remoteEntry.json`?</summary>
+
+Устаревший entry может ссылаться на удаленные chunks или старый контракт. Смешивание entry одного release с assets
+другого вызывает ошибки импорта, которые трудно воспроизвести локально.
+
+</details>
+
+<details>
+<summary>Нужно ли кешировать federation manifest?</summary>
+
+Да, но обычно с коротким TTL, revalidation или управляемым versioned URL. Стратегия зависит от того, насколько быстро
+нужно переключать remote и отключать аварийный release.
+
+</details>
+
+<details>
+<summary>Почему `remoteEntry.json` часто кешируют осторожнее, чем JS chunks?</summary>
+
+Entry является изменяемой картой текущего release, а content-hashed chunks immutable. Chunks можно кешировать надолго,
+тогда как entry должен достаточно быстро указывать на актуальный набор файлов.
+
+</details>
+
+<details>
+<summary>Как CDN влияет на деплой микрофронтендов?</summary>
+
+CDN снижает latency и распределяет assets, но добавляет cache keys, propagation delay, CORS/CSP настройки и
+invalidation. Release должен учитывать согласованность entry и chunks во всех edge locations.
+
+</details>
+
+<details>
+<summary>Как invalidation CDN cache может сломать или починить remote loading?</summary>
+
+Очистка устаревшего entry может быстро переключить клиентов на исправление. Но удаление старых chunks или
+несогласованная invalidation оставит открытые сессии с entry, ссылки которого больше не работают.
+
+</details>
+
+<details>
+<summary>Что такое canary deployment для remote-приложения?</summary>
+
+Это направление небольшой доли пользователей или внутренних сотрудников на новую версию remote. Manifest или edge
+routing выбирает версию, а метрики сравниваются до полного rollout.
+
+</details>
+
+<details>
+<summary>Как feature flags помогают деплоить микрофронтенды?</summary>
+
+Flag может включить новый remote, contract path или функцию для выбранной аудитории без повторной сборки. Нужны
+предсказуемый fallback, владелец flag и удаление завершенных флагов.
+
+</details>
+
+<details>
+<summary>Как отключить сломанный remote без деплоя host?</summary>
+
+Изменить управляемый manifest/config или remote feature flag так, чтобы host не монтировал виджет либо использовал
+резервную версию. Host должен заранее поддерживать отсутствие optional remote.
+
+</details>
+
+<details>
+<summary>Что должен показывать host, если remote не загрузился после деплоя?</summary>
+
+Локальный доступный fallback с понятным сообщением и retry, если повтор может помочь. Критический remote может
+переводить весь сценарий в error state, но не должен оставлять пустой экран без объяснения.
+
+</details>
+
+<details>
+<summary>Какие метрики и алерты нужны для микрофронтендов в production?</summary>
+
+Успешность и latency загрузки entry/chunks, mount time, ошибки по remote/version, fallback rate, contract errors и
+влияние на Core Web Vitals. Алерт должен указывать конкретный remote и release.
+
+</details>
+
+<details>
+<summary>Как логировать ошибки загрузки remote-приложений?</summary>
+
+Добавлять remote name, entry URL, exposed module, host/remote versions, environment, этап загрузки и correlation ID.
+Секреты и персональные payloads в client logs отправлять нельзя.
+
+</details>
+
+<details>
+<summary>Как проверять совместимость host и remote в CI?</summary>
+
+Собирать каждый remote, поднимать его artifacts и запускать contract/integration tests поддерживаемых host versions.
+Также проверять shared dependency ranges и наличие всех exposed exports.
+
+</details>
+
+<details>
+<summary>Что такое contract testing для микрофронтендов?</summary>
+
+Это автоматическая проверка публичного соглашения между producer remote и consumer host: имен exports, inputs, outputs,
+payload schemas и обязательного поведения без полного E2E всех реализаций.
+
+</details>
+
+<details>
+<summary>Какие e2e-сценарии нужны перед выкладкой host и remotes?</summary>
+
+Загрузка каждого remote, основной cross-remote flow, partial failure, retry, старая/новая совместимая версия,
+navigation, auth и rollback configuration. Проверяют также отсутствие блокировки host при optional remote failure.
+
+</details>
+
+#### CSS, UI и Design System
+
+<details>
+<summary>Кто должен отвечать за layout: host или remote?</summary>
+
+Host отвечает за page layout, размеры и расположение slots. Remote отвечает за содержимое внутри выделенной области и
+должен корректно работать в явно документированных responsive constraints.
+
+</details>
+
+<details>
+<summary>Кто должен отвечать за внутренние стили виджета: host или remote?</summary>
+
+Remote владеет своей внутренней разметкой и component styles. Host может передавать semantic design tokens и параметры
+контейнера, но не должен зависеть от внутренних selectors remote.
+
+</details>
+
+<details>
+<summary>Почему host не должен глубоко стилизовать внутренности remote?</summary>
+
+Внутренний DOM не является публичным контрактом и может измениться при независимом release. Deep selectors создают
+скрытую связанность и ломают encapsulation, тестирование и безопасный rollout.
+
+</details>
+
+<details>
+<summary>Какие проблемы со стилями бывают в микрофронтендах?</summary>
+
+Конфликты global selectors, разный reset, несовместимые tokens, дубли fonts/styles, различия responsive behavior и
+z-index систем. Виджеты также могут менять layout после поздней загрузки.
+
+</details>
+
+<details>
+<summary>Как избежать конфликта глобальных CSS-стилей между remote-приложениями?</summary>
+
+Минимизировать globals, использовать Angular style encapsulation, scoped naming и согласованный reset в host. Общие
+tokens публиковать через CSS custom properties, а не через selectors внутренних элементов.
+
+</details>
+
+<details>
+<summary>Как микрофронтенды могут использовать общую design system?</summary>
+
+Через versioned package компонентов и semantic tokens с документированным compatibility range. Angular package часто
+настраивают как shared dependency, если все remote способны использовать совместимую runtime-версию.
+
+</details>
+
+<details>
+<summary>Какие риски есть у разных версий design system в разных remote?</summary>
+
+Визуальная несогласованность, разные accessibility fixes, duplicated code и конфликт global assets. При singleton
+sharing несовместимые версии могут также привести к runtime-ошибке вместо изолированной копии.
+
+</details>
+
+#### Testing и security
+
+<details>
+<summary>Как тестировать remote-приложение отдельно?</summary>
+
+Проверять компоненты и domain logic unit/integration-тестами, а exposed contract — через standalone harness или test
+host. Remote также должен собираться и запускаться независимо от production host.
+
+</details>
+
+<details>
+<summary>Как тестировать host без реальных remote?</summary>
+
+Подменить abstraction загрузчика и вернуть локальные test components с теми же inputs/outputs. Так host orchestration и
+fallback states тестируются детерминированно без сети и federation runtime.
+
+</details>
+
+<details>
+<summary>Как мокать remote widgets в тестах host-приложения?</summary>
+
+Создать минимальные standalone components, реализующие нужный публичный контракт, и настроить loader stub возвращать их
+`Type`. Не нужно копировать внутренний UI настоящего remote.
+
+</details>
+
+<details>
+<summary>Как проверить fallback UI, если remote недоступен?</summary>
+
+Настроить loader mock на rejected promise или `null`, запустить mount и проверить доступное сообщение, status `error`,
+наличие retry и сохранение работоспособности независимых slots.
+
+</details>
+
+<details>
+<summary>Как тестировать контракты между host и remote?</summary>
+
+Проверять наличие exposed export, совместимость input/output payloads и ожидаемую реакцию на события. Эти тесты
+запускают как в producer pipeline, так и на матрице поддерживаемых consumer versions.
+
+</details>
+
+<details>
+<summary>Какие security-риски появляются при runtime-загрузке remote-кода?</summary>
+
+Host исполняет JavaScript с правами своего origin: remote может читать доступные данные, менять DOM и выполнять запросы.
+Компрометация remote pipeline или CDN становится компрометацией host session.
+
+</details>
+
+<details>
+<summary>Почему host должен доверять только известным remoteEntry URL?</summary>
+
+URL определяет исполняемый код. Разрешение произвольного адреса из query params или пользовательского ввода превращает
+federation loader в механизм удаленного выполнения недоверенного JavaScript.
+
+</details>
+
+<details>
+<summary>Что может пойти не так, если manifest можно изменить без контроля?</summary>
+
+Злоумышленник или ошибочная автоматизация может перенаправить host на вредоносный или несовместимый remote. Нужны
+ограниченный доступ, audit log, validation, approvals и rollback.
+
+</details>
+
+<details>
+<summary>Как CSP влияет на загрузку remote-приложений?</summary>
+
+`script-src`, `connect-src` и связанные directives должны разрешать доверенные CDN и способы загрузки модулей. Слишком
+широкая CSP ослабляет защиту, а слишком узкая блокирует entry, chunks или source maps.
+
+</details>
+
+<details>
+<summary>Что такое supply chain risk в микрофронтендах?</summary>
+
+Это риск компрометации dependency, build pipeline, registry, artifact storage или CDN одного remote. Из-за композиции во
+время выполнения вредоносный release попадает в host без изменения его репозитория.
+
+</details>
+
+<details>
+<summary>Как ограничить влияние сломанного или небезопасного remote?</summary>
+
+Использовать allowlist URL, CSP, независимые permissions, минимальные публичные данные, мониторинг и аварийное
+отключение. Для недоверенного кода нужна более сильная изоляция, например iframe с sandbox, а не обычный Angular
+component.
 
 </details>
 

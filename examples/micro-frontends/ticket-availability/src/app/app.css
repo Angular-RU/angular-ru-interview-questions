@@ -1,97 +1,97 @@
 :host {
-  display: block;
+    display: block;
 }
 
 .ticket {
-  display: grid;
-  gap: 20px;
+    display: grid;
+    gap: 20px;
 }
 
 .ticket__eyebrow {
-  width: fit-content;
-  margin: 0;
-  padding: 6px 10px;
-  border-radius: 999px;
-  color: #4338ca;
-  background: #eef2ff;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+    width: fit-content;
+    margin: 0;
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: #4338ca;
+    background: #eef2ff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .ticket__title {
-  margin: 0;
-  font-size: 34px;
-  line-height: 0.95;
-  letter-spacing: -0.06em;
+    margin: 0;
+    font-size: 34px;
+    line-height: 0.95;
+    letter-spacing: -0.06em;
 }
 
 .ticket__movie {
-  display: grid;
-  gap: 6px;
-  padding-top: 10px;
+    display: grid;
+    gap: 6px;
+    padding-top: 10px;
 }
 
 .ticket__label {
-  margin: 0;
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 700;
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .ticket__movie-title {
-  margin: 0;
-  font-size: 22px;
-  line-height: 1.15;
-  letter-spacing: -0.04em;
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
 }
 
 .ticket__counter {
-  display: grid;
-  gap: 4px;
-  padding: 22px;
-  border-radius: 22px;
-  color: #ffffff;
-  background:
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.24), transparent 10rem),
-    linear-gradient(135deg, #111827, #4f46e5);
+    display: grid;
+    gap: 4px;
+    padding: 22px;
+    border-radius: 22px;
+    color: #ffffff;
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.24), transparent 10rem),
+        linear-gradient(135deg, #111827, #4f46e5);
 }
 
 .ticket__counter-value {
-  font-size: 56px;
-  line-height: 1;
-  font-weight: 900;
-  letter-spacing: -0.08em;
+    font-size: 56px;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.08em;
 }
 
 .ticket__counter-label {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 14px;
-  font-weight: 700;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .ticket__button {
-  border: 0;
-  border-radius: 16px;
-  padding: 13px 16px;
-  color: #ffffff;
-  background: #111827;
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
+    border: 0;
+    border-radius: 16px;
+    padding: 13px 16px;
+    color: #ffffff;
+    background: #111827;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
 }
 
 .ticket__button:hover {
-  background: #4f46e5;
+    background: #4f46e5;
 }
 
 .ticket__empty {
-  padding: 18px;
-  border: 1px dashed #cbd5e1;
-  border-radius: 18px;
-  color: #64748b;
-  background: #f8fafc;
-  font-size: 15px;
-  line-height: 1.5;
+    padding: 18px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 18px;
+    color: #64748b;
+    background: #f8fafc;
+    font-size: 15px;
+    line-height: 1.5;
 }
