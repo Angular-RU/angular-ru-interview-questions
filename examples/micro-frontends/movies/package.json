@@ -7,7 +7,7 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "serve:ssr:movies": "node dist/movies/server/server.mjs"
+        "serve:ssr:movies": "node --import @angular-architects/native-federation/node-preload dist/movies/server/server.mjs"
     },
     "private": true,
     "packageManager": "npm@11.13.0",
@@ -21,6 +21,9 @@
         "@angular/platform-server": "^22.0.0",
         "@angular/router": "^22.0.0",
         "@angular/ssr": "^22.0.3",
+        "@softarc/native-federation-orchestrator": "^4.2.2",
+        "cors": "^2.8.5",
+        "es-module-shims": "^2.8.0",
         "express": "^5.1.0",
         "rxjs": "~7.8.0",
         "tslib": "^2.3.0"
