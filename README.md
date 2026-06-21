@@ -128,7 +128,7 @@ button {
 
 <details>
 <summary>Для чего нужен атрибут lang?</summary><br>
-<table><tr><td>
+<table><tr><td><br>
 
 Атрибут `lang` задает язык документа или отдельного фрагмента текста.
 
@@ -152,7 +152,9 @@ button {
 ```
 
 `lang` не меняет внешний вид напрямую, но помогает браузеру и assistive technologies правильно интерпретировать контент.
+
 </td></tr></table>
+
 </details>
 
 <details>
