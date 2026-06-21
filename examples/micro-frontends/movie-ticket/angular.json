@@ -6,7 +6,7 @@
     },
     "newProjectRoot": "projects",
     "projects": {
-        "movies": {
+        "movies-ticket": {
             "projectType": "application",
             "schematics": {},
             "root": "",
@@ -62,10 +62,10 @@
                     "builder": "@angular/build:dev-server",
                     "configurations": {
                         "production": {
-                            "buildTarget": "movies:build:production"
+                            "buildTarget": "movies-ticket:build:production"
                         },
                         "development": {
-                            "buildTarget": "movies:build:development"
+                            "buildTarget": "movies-ticket:build:development"
                         }
                     },
                     "defaultConfiguration": "development"

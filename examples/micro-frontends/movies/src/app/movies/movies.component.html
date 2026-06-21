@@ -1,17 +1,17 @@
 <section class="movies">
-  <h1>Movies</h1>
+    <h1>Movies</h1>
 
-  <div class="movies__list">
-    @for (movie of movies; track movie.id) {
-      <article class="movie-card">
-        <h2>{{ movie.title }}</h2>
+    <div class="movies__list">
+        @for (movie of movies; track movie.id) {
+            <article class="movie-card">
+                <h2>{{ movie.title }}</h2>
 
-        <p>Year: {{ movie.year }}</p>
-        <p>Genre: {{ movie.genre }}</p>
-        <p>Rating: {{ movie.rating }}</p>
-      </article>
-    } @empty {
-      <p>No movies found.</p>
-    }
-  </div>
+                <p>Year: {{ movie.year }}</p>
+                <p>Genre: {{ movie.genre }}</p>
+                <p>Rating: {{ movie.rating }}</p>
+            </article>
+        } @empty {
+            <p>No movies found.</p>
+        }
+    </div>
 </section>

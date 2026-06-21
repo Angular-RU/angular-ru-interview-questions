@@ -12,6 +12,7 @@
         "type": "git",
         "url": "git+https://github.com/Angular-RU/angular-ru-interview-questions.git"
     },
+    "type": "module",
     "license": "MIT",
     "author": "angular-ru@yandex.ru",
     "scripts": {
@@ -19,6 +20,6 @@
     },
     "dependencies": {
         "prettier": "3.8.4",
-        "@types/node": "26.0.0"
+        "@types/node": "^20.17.19"
     }
 }

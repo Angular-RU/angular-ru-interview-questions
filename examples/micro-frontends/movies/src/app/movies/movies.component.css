@@ -1,20 +1,20 @@
 .movies {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 24px;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px;
 }
 
 .movies__list {
-  display: grid;
-  gap: 16px;
+    display: grid;
+    gap: 16px;
 }
 
 .movie-card {
-  padding: 16px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
 }
 
 .movie-card h2 {
-  margin-top: 0;
+    margin-top: 0;
 }
