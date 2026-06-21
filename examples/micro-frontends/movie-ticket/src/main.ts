@@ -1,5 +1,6 @@
-import {bootstrapApplication} from '@angular/platform-browser';
-import {appConfig} from './app/app.config';
-import {App} from './app/app';
+import {initFederation} from '@angular-architects/native-federation';
 
-bootstrapApplication(App, appConfig).catch((err) => console.error(err));
+initFederation({'movies-ticket': './remoteEntry.json'})
+    .catch((err) => console.error(err))
+    .then((_) => import('./bootstrap'))
+    .catch((err) => console.error(err));
