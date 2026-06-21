@@ -1,3 +1,6 @@
+import {createRequire} from 'node:module';
+const require = createRequire(import.meta.url);
+const cors = require('cors');
 import {
     AngularNodeAppEngine,
     createNodeRequestHandler,
@@ -10,6 +13,7 @@ import {join} from 'node:path';
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
+app.use(cors());
 const angularApp = new AngularNodeAppEngine();
 
 /**
@@ -52,7 +56,7 @@ app.use((req, res, next) => {
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
-    const port = process.env['PORT'] || 4000;
+    const port = process.env['PORT'] || 4202;
     app.listen(port, (error) => {
         if (error) {
             throw error;

@@ -14,6 +14,37 @@
             "prefix": "app",
             "architect": {
                 "build": {
+                    "builder": "@angular-architects/native-federation:build",
+                    "options": {
+                        "cacheExternalArtifacts": true,
+                        "ssr": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "target": "ticket-availability:esbuild:production"
+                        },
+                        "development": {
+                            "target": "ticket-availability:esbuild:development",
+                            "dev": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular-architects/native-federation:build",
+                    "options": {
+                        "target": "ticket-availability:serve-original:development",
+                        "rebuildDelay": 500,
+                        "cacheExternalArtifacts": true,
+                        "dev": true,
+                        "devServer": true,
+                        "port": 0
+                    }
+                },
+                "test": {
+                    "builder": "@angular/build:unit-test"
+                },
+                "esbuild": {
                     "builder": "@angular/build:application",
                     "options": {
                         "browser": "src/main.ts",
@@ -28,11 +59,12 @@
                         "server": "src/main.server.ts",
                         "outputMode": "server",
                         "security": {
-                            "allowedHosts": []
+                            "allowedHosts": ["localhost"]
                         },
                         "ssr": {
                             "entry": "src/server.ts"
-                        }
+                        },
+                        "polyfills": ["es-module-shims"]
                     },
                     "configurations": {
                         "production": {
@@ -58,20 +90,20 @@
                     },
                     "defaultConfiguration": "production"
                 },
-                "serve": {
+                "serve-original": {
                     "builder": "@angular/build:dev-server",
                     "configurations": {
                         "production": {
-                            "buildTarget": "ticket-availability:build:production"
+                            "buildTarget": "ticket-availability:esbuild:production"
                         },
                         "development": {
-                            "buildTarget": "ticket-availability:build:development"
+                            "buildTarget": "ticket-availability:esbuild:development"
                         }
                     },
-                    "defaultConfiguration": "development"
-                },
-                "test": {
-                    "builder": "@angular/build:unit-test"
+                    "defaultConfiguration": "development",
+                    "options": {
+                        "port": 4202
+                    }
                 }
             }
         }
