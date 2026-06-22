@@ -49,6 +49,7 @@ providers; поддерживаемые старые API помечены как
   - [HTML и CSS](#html-и-css)
   - [CSS layout](#css-layout)
   - [CSS rendering и performance](#css-rendering-и-performance)
+  - [SVG и иконки](#svg-и-иконки)
   - [Browser rendering и performance](#browser-rendering-и-performance)
   - [HTTP, HTTPS и curl](#http-https-и-curl)
 - [Computer Science basics](#computer-science-basics)
@@ -70,6 +71,7 @@ providers; поддерживаемые старые API помечены как
   - [Node.js basics](#nodejs-basics)
   - [npm и package scripts](#npm-и-package-scripts)
   - [Node.js для frontend tooling](#nodejs-для-frontend-tooling)
+  - [Node.js observability и RPS monitoring](#nodejs-observability-и-rps-monitoring)
 - [Infrastructure](#infrastructure)
   - [Docker](#docker)
   - [Docker Compose](#docker-compose)
@@ -861,6 +863,175 @@ paint и compositing. На дисплеях 120Hz бюджет еще меньш
 
 Callback вызывается перед следующим paint и синхронизирует обновление с refresh cycle. Браузер может приостанавливать
 его в фоновой вкладке. Тяжелая работа внутри callback все равно блокирует кадр.
+
+</td></tr></table>
+
+</details>
+
+### SVG и иконки
+
+<details>
+<summary>Что такое SVG?</summary><br>
+<table><tr><td>
+
+SVG — векторный формат изображения, который описывает картинку через XML-разметку: линии, пути, фигуры, градиенты и
+текст. В отличие от PNG и JPEG, SVG масштабируется без потери качества: браузер пересчитывает геометрию, а не
+растягивает пиксели.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему SVG подходит для scalable icons?</summary><br>
+<table><tr><td>
+
+SVG-иконка остается четкой при разных размерах и плотностях экрана. Один файл можно использовать в размерах `16px`,
+`24px`, `48px` и на Retina-дисплеях без отдельного набора изображений.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как сделать SVG-иконку масштабируемой?</summary><br>
+<table><tr><td>
+
+Нужно задать `viewBox` и управлять внешними `width` и `height` атрибутами или через CSS:
+
+```html
+<svg
+  viewBox="0 0 24 24"
+  width="24"
+  height="24"
+  aria-hidden="true"
+>
+  <path d="M12 2L2 22h20L12 2z" />
+</svg>
+```
+
+```css
+.icon {
+  width: 32px;
+  height: 32px;
+}
+```
+
+`viewBox` сохраняет внутреннюю систему координат, поэтому браузер корректно пересчитывает геометрию под новый размер.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое <code>viewBox</code> в SVG?</summary><br>
+<table><tr><td>
+
+`viewBox` задает координатную область SVG. Например, `viewBox="0 0 24 24"` означает виртуальную область шириной и
+высотой 24 единицы. По ней браузер масштабирует содержимое SVG под внешний размер.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем <code>width</code>/<code>height</code> отличаются от <code>viewBox</code>?</summary><br>
+<table><tr><td>
+
+`width` и `height` задают внешний размер SVG на странице, а `viewBox` — внутреннюю координатную систему. При наличии
+`viewBox` внешний размер можно менять через CSS, сохраняя пропорции изображения.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как менять цвет SVG-иконки через CSS?</summary><br>
+<table><tr><td>
+
+Значение `currentColor` позволяет иконке наследовать CSS-свойство `color` родителя:
+
+```html
+<button class="button">
+  <svg
+    viewBox="0 0 24 24"
+    class="icon"
+    aria-hidden="true"
+  >
+    <path
+      fill="currentColor"
+      d="M12 2L2 22h20L12 2z"
+    />
+  </svg>
+  Отправить
+</button>
+```
+
+```css
+.button {
+  color: #4f46e5;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что лучше для иконок: inline SVG, SVG sprite или <code>img</code>?</summary><br>
+<table><tr><td>
+
+Inline SVG удобен для управления цветом, состояниями и доступностью через CSS. SVG sprite подходит для переиспользования
+большого набора символов. `<img src="icon.svg">` проще и хорошо кешируется, но не позволяет странице напрямую менять
+стили внутренних элементов SVG.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как сделать SVG-иконку доступной?</summary><br>
+<table><tr><td>
+
+Декоративную иконку нужно скрыть от accessibility tree:
+
+```html
+<svg
+  aria-hidden="true"
+  focusable="false"
+></svg>
+```
+
+Если иконка передает смысл, ей нужен доступный текст, например видимая подпись рядом или имя изображения:
+
+```html
+<svg
+  role="img"
+  aria-label="Поиск"
+></svg>
+```
+
+Для кнопки только с иконкой доступное имя обычно задают самой кнопке.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие ошибки часто делают при работе с SVG-иконками?</summary><br>
+<table><tr><td>
+
+- Забывают `viewBox`.
+- Жестко задают размеры и затрудняют масштабирование.
+- Не используют `currentColor`, когда цвет должен наследоваться.
+- Подключают тяжелые SVG без оптимизации.
+- Не учитывают accessibility.
+- Оставляют лишние metadata из Figma и других редакторов.
 
 </td></tr></table>
 
@@ -5619,6 +5790,170 @@ sandbox. Bundler polyfills не следует считать автоматич
 
 В Node обычно нет `window`, `document`, DOM, layout и browser storage. SSR-код должен изолировать browser-only API.
 Некоторые Web APIs появляются в новых Node versions, но их поддержку нужно проверять.
+
+</td></tr></table>
+
+</details>
+
+### Node.js observability и RPS monitoring
+
+<details>
+<summary>Что такое RPS?</summary><br>
+<table><tr><td>
+
+RPS, или Requests Per Second, — количество запросов, которое сервер обрабатывает за секунду. Например, `120 RPS`
+означает, что сервер в среднем обрабатывает 120 HTTP-запросов в секунду.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое RPS monitor?</summary><br>
+<table><tr><td>
+
+RPS monitor измеряет количество запросов за единицу времени. Он помогает увидеть текущую нагрузку, всплески трафика и
+связать их с деградацией производительности или доступности.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Зачем frontend-разработчику понимать RPS?</summary><br>
+<table><tr><td>
+
+Frontend-разработчик может работать с SSR, BFF, dev server, Node.js tooling и API-интеграциями. RPS помогает оценивать
+нагрузку на SSR, rate limits, кеширование, retry-логику и влияние frontend-кода на backend.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как может выглядеть простой RPS monitor в Node.js?</summary><br>
+<table><tr><td>
+
+Этот учебный HTTP-сервер считает запросы за последнюю секунду и выводит результат в консоль:
+
+```js
+import http from 'node:http';
+
+let requests = 0;
+
+setInterval(() => {
+  console.log(`RPS: ${requests}`);
+  requests = 0;
+}, 1000);
+
+const server = http.createServer((request, response) => {
+  requests += 1;
+
+  response.writeHead(200, {'Content-Type': 'application/json'});
+  response.end(JSON.stringify({ok: true}));
+});
+
+server.listen(3000, () => {
+  console.log('Server started on http://localhost:3000');
+});
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как проверить RPS monitor через curl?</summary><br>
+<table><tr><td>
+
+После запуска сервера можно отправить несколько запросов вручную:
+
+```bash
+curl http://localhost:3000
+curl http://localhost:3000
+curl http://localhost:3000
+```
+
+В следующем секундном интервале сервер выведет количество полученных запросов.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему такой RPS monitor не production-ready?</summary><br>
+<table><tr><td>
+
+Он хранит счетчик только в памяти одного процесса и теряет данные при перезапуске. Несколько процессов или containers
+будут считать RPS независимо. В production метрики агрегируют через Prometheus, OpenTelemetry, APM или другую систему
+observability и визуализируют, например, в Grafana.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие метрики кроме RPS важны для Node.js сервера?</summary><br>
+<table><tr><td>
+
+- Latency и p95/p99 response time.
+- Error rate и количество ответов 4xx/5xx.
+- CPU и memory usage.
+- Event loop delay.
+- Active connections.
+- Throughput.
+
+Метрики полезно связывать между собой: один RPS не объясняет состояние системы.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем RPS отличается от latency?</summary><br>
+<table><tr><td>
+
+RPS показывает количество обработанных запросов в секунду, а latency — время обработки отдельного запроса. Высокий RPS
+сам по себе не является проблемой, но рост latency и error rate вместе с ним может указывать на перегрузку.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое p95 и p99 latency?</summary><br>
+<table><tr><td>
+
+`p95` — значение, быстрее которого завершились 95% запросов; `p99` аналогично описывает 99% запросов. Перцентили лучше
+среднего показывают медленный хвост распределения, хотя для полной картины также нужны размер выборки и временное окно.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как event loop delay связан с производительностью Node.js?</summary><br>
+<table><tr><td>
+
+JavaScript выполняется в основном потоке Node.js. CPU-bound работа и долгие синхронные операции блокируют event loop,
+из-за чего callbacks и обработчики запросов запускаются позже. Event loop delay измеряет эту задержку и помогает найти
+такие блокировки.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что может увеличить RPS capacity Node.js приложения?</summary><br>
+<table><tr><td>
+
+- Кеширование и использование reverse proxy или CDN.
+- Уменьшение CPU-bound работы в request handler.
+- Горизонтальное масштабирование и несколько процессов.
+- Оптимизация запросов к базе и connection pooling.
+- Уменьшение лишнего logging на горячем пути.
+
+Изменения нужно подтверждать нагрузочными тестами: увеличение RPS не должно ухудшать latency и error rate сверх SLO.
 
 </td></tr></table>
 
