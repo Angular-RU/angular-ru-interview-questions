@@ -1,0 +1,27 @@
+.container {
+    min-height: 800px;
+    display: flex;
+    border: 8px solid #000;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    background: #0071ff;
+    font-size: 40px;
+}
+
+#box-1 {
+    /**
+      Во Flexbox свойство margin: auto работает не так, как в классической блочной модели.
+      Оно автоматически поглощает всё свободное пространство в flex-контейнере,
+      превращаясь в мощный инструмент для распределения и идеального центрирования элементов.
+     */
+    margin-right: auto;
+}

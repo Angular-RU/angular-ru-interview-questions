@@ -1,0 +1,27 @@
+.container {
+    min-height: 800px;
+    display: flex;
+    border: 8px solid #000;
+    row-gap: 20px;
+    column-gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.box {
+    /**
+      Чтобы дочерние элементы стали гибкими (флекс-элементами),
+      у их общего родительского контейнера задается свойство display: flex.
+      После этого вы управляете поведением потомков с помощью специальных
+       CSS-свойств, которые применяются именно к дочерним элементам
+   */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    background: #0071ff;
+    font-size: 40px;
+}

@@ -1,0 +1,17 @@
+.container {
+    min-height: 800px;
+    display: flex;
+    border: 8px solid #000;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center; /* main axis */
+    align-items: center; /* для выравнивания элементов по вертикальной оси внутри строки, cross axis */
+    align-content: center; /* для выравнивания элементов по вертикальной оси между строками, cross axis */
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    background: #0071ff;
+    font-size: 40px;
+}

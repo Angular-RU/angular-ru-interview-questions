@@ -1,0 +1,23 @@
+.container {
+    min-height: 800px;
+    display: flex;
+    border: 8px solid #000;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    background: #0071ff;
+    font-size: 40px;
+    /* flex-grow - которое задает коэффициент расширения флекс-элемента */
+    flex-grow: 1;
+}
+
+#box-1 {
+    align-self: center;
+}

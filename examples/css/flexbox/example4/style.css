@@ -1,0 +1,18 @@
+.container {
+    min-height: 800px;
+    display: flex;
+    border: 8px solid #000;
+    row-gap: 20px;
+    column-gap: 10px;
+    flex-wrap: wrap; /* должны ли элементы располагаться строго в одну строку или их можно переносить на следующую */
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    background: #0071ff;
+    font-size: 40px;
+}
