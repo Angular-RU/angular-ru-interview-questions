@@ -140,7 +140,7 @@ technologies).
 <button>Buy</button>
 ```
 
-![img.png](assets/webplatform/html-and-css-difference.png)
+![img.png](assets/webplatform/html/html-and-css-difference.png)
 
 </td></tr></table>
 
@@ -150,7 +150,7 @@ technologies).
 <summary>Чем tag отличается от HTML element?</summary><br>
 <table><tr><td>
 
-![img.png](assets/webplatform/what-the-difference-between-tag-and-element.png)
+![img.png](assets/webplatform/html/what-the-difference-between-tag-and-element.png)
 
 Tag — синтаксическая часть разметки, например `<p>` или `</p>`. Element — целый узел: открывающий tag, attributes,
 content и закрывающий tag. Void elements вроде `<img>` не имеют closing tag и содержимого.
@@ -162,6 +162,8 @@ content и закрывающий tag. Void elements вроде `<img>` не и�
 <details>
 <summary>Что такое HTML attribute?</summary><br>
 <table><tr><td>
+
+![img.png](assets/webplatform/html/what-is-html-attribute.png)
 
 Attribute задает дополнительную информацию или поведение element: `href`, `type`, `disabled`, `lang`. Global attributes
 вроде `id`, `class`, `hidden` и `data-*` доступны большинству элементов, а часть attributes имеет смысл только для
@@ -1107,7 +1109,7 @@ button {
 Inline style рассматривают отдельно: он сильнее обычной специфичности selector. `!important` тоже не является частью
 специфичности: он меняет приоритет declaration в cascade, после чего сравниваются origin, layer, specificity и порядок.
 
-![img.png](assets/webplatform/css-specificity.png)
+![img.png](assets/webplatform/css/css-specificity.png)
 
 </td></tr></table>
 
