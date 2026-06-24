@@ -9836,6 +9836,138 @@ interaction.
 </details>
 
 <details>
+<summary>Зачем использовать queueMicrotask внутри Angular host listener?</summary><br>
+<table><tr><td>
+
+`queueMicrotask()` ставит callback в очередь microtasks. Он выполнится после текущего call stack, но до следующего
+`setTimeout(..., 0)` и других tasks. В Angular это иногда полезно, когда на один DOM event подписано несколько директив
+или компонентов через host listeners, а код должен прочитать итоговое состояние после завершения всех синхронных
+обработчиков текущего события.
+
+Это не универсальное решение и не способ чинить плохую архитектуру. Если порядок действий важен для бизнес-логики, лучше
+сделать явную orchestration-логику через сервис, store, output/input или отдельный event coordinator.
+
+Пример неявной зависимости от порядка host listeners:
+
+```ts
+@Directive({
+  selector: '[appSelectOption]',
+  host: {
+    '(click)': 'onClick()',
+  },
+})
+export class SelectOptionDirective {
+  private readonly selectState = inject(SelectState);
+
+  protected onClick(): void {
+    this.selectState.selectOption('first');
+  }
+}
+
+@Directive({
+  selector: '[appCloseDropdown]',
+  host: {
+    '(click)': 'onClick()',
+  },
+})
+export class CloseDropdownDirective {
+  private readonly selectState = inject(SelectState);
+
+  protected onClick(): void {
+    this.selectState.closeIfSelected();
+  }
+}
+```
+
+Если `closeIfSelected()` должен прочитать состояние после всех синхронных обработчиков текущего `click`, можно отложить
+чтение в microtask:
+
+```ts
+@Directive({
+  selector: '[appCloseDropdown]',
+  host: {
+    '(click)': 'onClick()',
+  },
+})
+export class CloseDropdownDirective {
+  private readonly selectState = inject(SelectState);
+
+  protected onClick(): void {
+    queueMicrotask(() => {
+      this.selectState.closeIfSelected();
+    });
+  }
+}
+```
+
+Разница с `setTimeout(..., 0)`:
+
+```ts
+console.log('start');
+
+queueMicrotask(() => {
+  console.log('microtask');
+});
+
+setTimeout(() => {
+  console.log('timeout');
+}, 0);
+
+console.log('end');
+
+// start
+// end
+// microtask
+// timeout
+```
+
+Когда может быть полезно:
+
+- дождаться завершения всех синхронных обработчиков текущего event;
+- прочитать итоговое состояние после серии синхронных изменений;
+- не зависеть от порядка нескольких host listeners на одном событии;
+- выполнить легкую post-processing логику до следующего task.
+
+Проблемы и риски:
+
+- появляется скрытая асинхронность;
+- сложнее читать и тестировать порядок выполнения;
+- можно скрыть архитектурную проблему вместо явной orchestration-логики;
+- длинная очередь microtasks может задержать render;
+- ошибка внутри callback произойдет уже не в исходном синхронном месте;
+- microtask не ждет `setTimeout`, HTTP, animation frame и другие tasks;
+- для ожидания DOM render лучше использовать `afterNextRender()`, lifecycle hooks или `requestAnimationFrame()` по
+  задаче.
+
+Тестировать можно обычным async-тестом:
+
+```ts
+it('closes dropdown after click microtask', async () => {
+  directive.onClick();
+
+  await Promise.resolve();
+
+  expect(selectState.isOpen()).toBe(false);
+});
+```
+
+Или через Angular `fakeAsync`:
+
+```ts
+it('closes dropdown after click microtask', fakeAsync(() => {
+  directive.onClick();
+
+  flushMicrotasks();
+
+  expect(selectState.isOpen()).toBe(false);
+}));
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Для чего нужен Renderer2?</summary><br>
 <table><tr><td>
 
