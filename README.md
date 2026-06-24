@@ -16483,7 +16483,7 @@ TypeScript, Angular, browser APIs, performance, accessibility, testing и fronte
 - вопросы будущей команде;
 - готовность обсуждать trade-offs, конфликты и ошибки.
 
-### Time management и приоритизация
+### Тайм-менеджмент и приоритизация
 
 <details>
 <summary>Что такое матрица Эйзенхауэра?</summary><br>
