@@ -29,7 +29,7 @@
 ## Project structure
 
 ```text
-examples/micro-frontends/
+angular/examples/micro-frontends/
   movie-ticket/         # host/shell
   movies/               # remote со списком фильмов
   ticket-availability/  # remote с доступностью билетов

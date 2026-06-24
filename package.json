@@ -7,7 +7,7 @@
     "bugs": {
         "url": "https://github.com/Angular-RU/angular-ru-interview-questions/issues"
     },
-    "workspaces": ["examples/*", "examples/**/*"],
+    "workspaces": ["angular/examples/*", "angular/examples/**/*"],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Angular-RU/angular-ru-interview-questions.git"
