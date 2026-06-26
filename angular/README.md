@@ -1702,6 +1702,65 @@ it('closes dropdown after click microtask', fakeAsync(() => {
 </details>
 
 <details>
+<summary>Зачем нужен Renderer2 и чем он помогает в отличие от ElementRef.nativeElement или declarative binding в host?</summary><br>
+<table><tr><td>
+
+В большинстве host-взаимодействий лучше начинать с declarative bindings в `host`: они читаются как часть контракта
+директивы, обновляются Angular и хорошо подходят для class, style, attributes, properties и событий host-элемента.
+
+```ts
+@Directive({
+  selector: '[appInvalidControl]',
+  host: {
+    '[attr.aria-invalid]': 'invalid()',
+    '[class.invalid]': 'invalid()',
+    '(blur)': 'markAsTouched()',
+  },
+})
+export class InvalidControlDirective {
+  readonly invalid = input(false);
+
+  protected markAsTouched(): void {
+    // ...
+  }
+}
+```
+
+`Renderer2` нужен, когда изменение DOM должно быть императивным: подписка на динамическую цель, создание или удаление
+элементов, установка стилей по результатам измерений, интеграция с API, где binding неудобен. Он не делает код полностью
+декларативным, но дает Angular renderer abstraction вместо прямой работы с DOM.
+
+```ts
+@Directive({
+  selector: '[appAutofocus]',
+})
+export class AutofocusDirective {
+  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly renderer = inject(Renderer2);
+
+  ngAfterViewInit(): void {
+    this.renderer.setAttribute(this.host.nativeElement, 'tabindex', '-1');
+    this.host.nativeElement.focus();
+  }
+}
+```
+
+Отличия:
+
+- `host` bindings — первый выбор для host attributes, classes, styles, properties и listeners.
+- `Renderer2` — fallback для императивных DOM-операций, когда binding, directive composition или CDK API не подходят.
+- `ElementRef.nativeElement` — raw DOM node; его стоит оставлять для browser API, focus, measurements и сторонних
+  библиотек.
+
+Прямой `nativeElement` сильнее привязывает код к browser DOM, хуже переносится на SSR, сложнее тестируется и легче
+приводит к небезопасным операциям вроде записи пользовательских данных в `innerHTML`. `Renderer2` уменьшает эти риски за
+счет renderer abstraction, но не отменяет необходимость думать о XSS, cleanup и platform-specific поведении.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Для чего нужен Renderer2?</summary><br>
 <table><tr><td>
 

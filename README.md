@@ -39,20 +39,6 @@ providers; поддерживаемые старые API помечены как
 - **Если есть 3 дня**: изучите основные разделы по порядку, запустите примеры и отдельно повторите архитектурные
   trade-offs, production и вопросы уровня Middle+/Senior.
 
-### Рекомендуемый порядок изучения
-
-1. Computer Science basics.
-2. Web Platform.
-3. JavaScript.
-4. TypeScript.
-5. Основы программирования и проектирования.
-6. State Management.
-7. Node.js и Infrastructure.
-8. Angular Core.
-9. Angular production topics: SSR, performance, security, testing.
-10. Angular platform topics: libraries, design systems, micro frontends, tooling.
-11. Soft skills и интервью.
-
 ## Содержание
 
 - [Как пользоваться](#как-пользоваться)
