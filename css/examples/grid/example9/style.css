@@ -1,0 +1,25 @@
+/*
+    Пример показывает наложение элементов в одной grid-сетке.
+    child-1 и child-2 частично занимают одни и те же колонки, поэтому второй блок перекрывает первый.
+*/
+.grid-container {
+    display: grid;
+    width: 500px;
+    height: 500px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    color: #fff;
+}
+
+.child-1 {
+    background: #006eff;
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+}
+
+.child-2 {
+    background: #c800ff;
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+    opacity: 0.5;
+}

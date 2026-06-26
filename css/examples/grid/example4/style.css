@@ -1,0 +1,24 @@
+/*
+    Пример показывает выравнивание внутри grid-контейнера.
+    justify-items и align-items двигают элементы внутри ячеек,
+    а justify-content и align-content выравнивают всю сетку внутри контейнера.
+*/
+.grid-container {
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    grid-template-rows: 300px 300px 300px;
+    gap: 1em;
+
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.item {
+    width: 100px;
+    height: 100px;
+    background: #0071ff;
+    padding: 2em;
+    font-size: 1.5rem;
+}

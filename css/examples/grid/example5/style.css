@@ -1,0 +1,19 @@
+/*
+    Пример показывает неявную сетку и автоматическое размещение по колонкам.
+    grid-auto-flow: column заставляет новые элементы добавляться вправо,
+    а grid-auto-columns и grid-auto-rows задают размер автоматически созданных треков.
+*/
+.grid-container {
+    display: grid;
+    grid-auto-columns: 300px;
+    grid-auto-flow: column;
+    grid-auto-rows: 300px;
+}
+
+.item {
+    width: 200px;
+    height: 200px;
+    background: #0071ff;
+    padding: 2em;
+    font-size: 1.5rem;
+}

@@ -1,0 +1,18 @@
+/*
+    Пример показывает базовую явную сетку 3 на 3.
+    grid-template-columns и grid-template-rows задают фиксированные размеры колонок и строк,
+    а gap добавляет одинаковые отступы между ячейками.
+*/
+.grid-container {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 200px 200px 200px;
+    gap: 1em;
+}
+
+.item {
+    width: 200px;
+    height: 200px;
+    background: #0071ff;
+    font-size: 40px;
+}

@@ -1,0 +1,143 @@
+/*
+    Пример показывает адаптивную сетку карточек товаров.
+    repeat(auto-fit, minmax(300px, 1fr)) создаёт столько колонок, сколько помещается в строку,
+    а карточки растягиваются в пределах доступной ширины и переносятся на новую строку.
+*/
+.shop-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    padding: 1.5em 3em;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.shop-header span {
+    font-weight: 600;
+}
+
+.shop-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 1.5em;
+}
+
+.shop-header a {
+    color: inherit;
+    text-decoration: none;
+}
+
+main {
+    padding: 2em 3em;
+}
+
+.products-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    justify-content: center;
+    gap: 1em;
+}
+
+.product {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.product-image {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 0.5em;
+    background: #f3f4f4;
+}
+
+.product-image::before,
+.product-image::after {
+    position: absolute;
+    content: '';
+}
+
+.product-image::before {
+    left: 13%;
+    right: 13%;
+    bottom: 30%;
+    height: 26%;
+    border-radius: 62% 38% 36% 24% / 54% 44% 26% 30%;
+    background: var(--shoe-main);
+    transform: skewX(-16deg);
+}
+
+.product-image::after {
+    left: 10%;
+    right: 12%;
+    bottom: 24%;
+    height: 8%;
+    border-radius: 999px;
+    background: var(--shoe-sole);
+    box-shadow: 0 18px 24px rgba(0, 0, 0, 0.12);
+}
+
+.product-image-blue {
+    --shoe-main: #283e82;
+    --shoe-sole: #f4f4ef;
+}
+
+.product-image-white,
+.product-image-vertical {
+    --shoe-main: #ffffff;
+    --shoe-sole: #e6e6e2;
+}
+
+.product-image-black,
+.product-image-dark {
+    --shoe-main: #171819;
+    --shoe-sole: #2c2d2f;
+}
+
+.product-image-silver {
+    --shoe-main: #f7f7f3;
+    --shoe-sole: #d7d8d4;
+}
+
+.product-image-vertical::before {
+    left: 39%;
+    right: 39%;
+    bottom: 18%;
+    height: 62%;
+    border-radius: 45% 45% 54% 54%;
+    transform: none;
+}
+
+.product-image-vertical::after {
+    left: 36%;
+    right: 36%;
+    bottom: 14%;
+}
+
+.product h2 {
+    margin: 1em 0 0.35em;
+    font-size: 1rem;
+}
+
+.product p {
+    margin: 0;
+    font-weight: 600;
+}
+
+@media (max-width: 700px) {
+    .shop-header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1em;
+    }
+
+    .shop-header nav {
+        justify-content: flex-start;
+    }
+
+    main {
+        padding: 1em;
+    }
+}

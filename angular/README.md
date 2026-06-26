@@ -4641,10 +4641,12 @@ SSR подходит динамическим SEO-страницам, SSG — с
 </details>
 
 <details>
-<summary>Что такое hydration и какие проблемы она решает?</summary><br>
+<summary>Что такое hydration в Angular и какие проблемы она решает?</summary><br>
 <table><tr><td>
 
-Hydration подключает Angular к уже существующему server-rendered DOM вместо полного пересоздания.
+Hydration подключает Angular к уже существующему server-rendered DOM вместо полного пересоздания. Сервер отдает HTML,
+пользователь видит содержимое до полной загрузки JavaScript, а Angular на клиенте сопоставляет этот DOM со своими
+компонентами, восстанавливает bindings и подключает обработчики событий.
 
 Плюсы:
 
@@ -4653,8 +4655,39 @@ Hydration подключает Angular к уже существующему serv
 - улучшение LCP/CLS;
 - event replay до завершения hydration.
 
-Incremental hydration позволяет активировать deferred части позже. HTML сервера и клиента должен быть детерминированным,
-иначе возникает hydration mismatch.
+Пример настройки:
+
+```ts
+// app.config.ts
+import {ApplicationConfig} from '@angular/core';
+import {provideClientHydration, withEventReplay} from '@angular/platform-browser';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideClientHydration(withEventReplay())],
+};
+```
+
+```ts
+// app.config.server.ts
+import {ApplicationConfig, mergeApplicationConfig} from '@angular/core';
+import {provideServerRendering} from '@angular/ssr';
+
+import {appConfig} from './app.config';
+
+const serverConfig: ApplicationConfig = {
+  providers: [provideServerRendering()],
+};
+
+export const config = mergeApplicationConfig(appConfig, serverConfig);
+```
+
+В Angular 22 `provideClientHydration()` включает базовую DOM hydration, HTTP transfer cache и incremental hydration по
+умолчанию. `withEventReplay()` дополнительно сохраняет пользовательские события, произошедшие до окончания hydration, и
+переигрывает их после подключения приложения.
+
+HTML сервера и клиента должен быть детерминированным, иначе возникает hydration mismatch. Типичные причины: прямой
+доступ к `window` во время render, случайные значения в шаблоне, разные даты/timezone, разные данные на сервере и
+клиенте или ручное изменение DOM до завершения hydration.
 
 </td></tr></table>
 

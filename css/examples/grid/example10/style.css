@@ -1,0 +1,29 @@
+/*
+    Пример показывает наложение текста поверх изображения без absolute-позиционирования.
+    Картинка и текст помещаются в одну grid-ячейку, а place-items прижимает текстовый слой к низу.
+*/
+.wrapper {
+    border-radius: 1em;
+    width: 30em;
+    display: grid;
+    place-items: end;
+}
+
+img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 1em;
+    grid-column: 1/2;
+    grid-row: 1/2;
+}
+
+.text-container {
+    grid-column: 1/2;
+    grid-row: 1/2;
+
+    height: max-content;
+    width: 100%;
+    background: rgba(8, 5, 30, 0.75);
+    color: white;
+}

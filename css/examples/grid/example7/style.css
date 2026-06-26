@@ -1,0 +1,58 @@
+/*
+    Пример показывает grid-template-areas вместе с неявными размерами строк и колонок.
+    Размер треков задаётся через grid-auto-rows и grid-auto-columns,
+    поэтому в медиазапросах достаточно менять только карту областей.
+*/
+.grid-container {
+    display: grid;
+    grid-auto-rows: 200px;
+    grid-auto-columns: 200px;
+    gap: 1em;
+
+    grid-template-areas:
+        'box-1 box-2 box-2 box-3'
+        'box-1 box-4 box-5 box-5';
+}
+
+@media (max-width: 56em) {
+    .grid-container {
+        grid-template-areas:
+            'box-1 box-1 box-2'
+            'box-1 box-1 box-3'
+            'box-4 box-5 box-5';
+    }
+}
+
+@media (max-width: 42em) {
+    .grid-container {
+        grid-template-areas:
+            'box-1 box-2'
+            'box-3 box-2'
+            'box-3 box-4'
+            'box-5 box-4';
+    }
+}
+
+.box {
+    background: #0071ff;
+}
+
+.box-1 {
+    grid-area: box-1;
+}
+
+.box-2 {
+    grid-area: box-2;
+}
+
+.box-3 {
+    grid-area: box-3;
+}
+
+.box-4 {
+    grid-area: box-4;
+}
+
+.box-5 {
+    grid-area: box-5;
+}

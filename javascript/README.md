@@ -1229,6 +1229,46 @@ service UserService {
 
 </details>
 
+### DOM, SSR и hydration
+
+<details>
+<summary>Что такое hydration в JavaScript?</summary><br>
+<table><tr><td>
+
+Hydration — это процесс, при котором JavaScript подключает интерактивное поведение к уже существующей HTML-разметке,
+обычно полученной с сервера через SSR или prerender. Браузер сначала показывает готовый HTML, а затем клиентский код
+находит нужные DOM-узлы, восстанавливает состояние и навешивает обработчики событий.
+
+Упрощенный пример:
+
+```html
+<button id="counter" data-count="0">0</button>
+
+<script type="module">
+  const button = document.querySelector('#counter');
+
+  if (button instanceof HTMLButtonElement) {
+    let count = Number(button.dataset.count ?? 0);
+
+    button.addEventListener('click', () => {
+      count += 1;
+      button.dataset.count = String(count);
+      button.textContent = String(count);
+    });
+  }
+</script>
+```
+
+До выполнения скрипта кнопка уже видна пользователю, но еще не интерактивна. После hydration обработчик `click`
+подключается к существующей кнопке, а не создает ее заново.
+
+Главное требование — клиентский код должен ожидать такую же начальную разметку, какую отдал сервер. Если сервер
+отрендерил `0`, а клиент при старте ожидает `1`, framework может получить hydration mismatch и пересоздать часть DOM.
+
+</td></tr></table>
+
+</details>
+
 ### Event Loop
 
 <details>

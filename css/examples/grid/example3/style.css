@@ -1,0 +1,17 @@
+/*
+    Пример показывает типичный двухколоночный layout.
+    Первая колонка фиксированная и подходит для сайдбара, вторая занимает всё оставшееся место.
+*/
+.grid-container {
+    display: grid;
+    height: 800px;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 100vh;
+    gap: 1em;
+}
+
+.item {
+    background: #0071ff;
+    padding: 2em;
+    font-size: 1.5rem;
+}
