@@ -65,10 +65,11 @@ commits получают новые parent links и hashes.
 <summary>Что такое package.json?</summary><br>
 <table><tr><td>
 
-`package.json` описывает Node.js-проект: metadata, scripts, dependencies, devDependencies, engines и настройки
-инструментов.
+`package.json` — manifest Node.js-проекта. В рабочем окружении важно понимать, какие scripts запускать, какой package
+manager закреплен в проекте и какой lock-файл должен быть единственным источником воспроизводимой установки.
 
-Версии в нем часто задаются диапазонами. Точный набор установленных пакетов фиксирует lock-файл.
+Подробности про manifest, зависимости, lock-файлы и npm-команды см. в разделе
+[npm и package scripts](../nodejs/README.md#npm-и-package-scripts).
 
 </td></tr></table>
 
@@ -108,10 +109,9 @@ lock-файл. Отличаются скоростью, моделью `node_mod
 <summary>Зачем нужен package-lock.json?</summary><br>
 <table><tr><td>
 
-`package-lock.json` фиксирует точное дерево npm-зависимостей, их версии и integrity hashes. Его коммитят, чтобы
-локальная разработка и CI получали воспроизводимую установку.
+`package-lock.json` нужен для воспроизводимой установки npm-зависимостей в локальной разработке и CI.
 
-Lock-файл обновляют вместе с изменениями зависимостей и не редактируют вручную.
+Canonical-ответ: [Что такое package-lock.json?](../nodejs/README.md#npm-и-package-scripts)
 
 </td></tr></table>
 
@@ -121,10 +121,11 @@ Lock-файл обновляют вместе с изменениями зави
 <summary>Чем npm install отличается от npm ci?</summary><br>
 <table><tr><td>
 
-`npm install` устанавливает зависимости и может обновить `package-lock.json`, если он расходится с `package.json`.
+В рабочем процессе важно правило: локально чаще используют установку по правилам проекта, а в CI предпочитают
+воспроизводимую установку по lock-файлу.
 
-`npm ci` требует существующий согласованный lock-файл, удаляет текущую `node_modules` и устанавливает зависимости строго
-по lock-файлу. Поэтому его обычно используют в CI.
+Подробное сравнение см. в Node.js-разделе: [Что делает npm install?](../nodejs/README.md#npm-и-package-scripts) и
+[Что делает npm ci?](../nodejs/README.md#npm-и-package-scripts).
 
 </td></tr></table>
 
@@ -194,10 +195,11 @@ Vite в development использует native ES modules и преобразу
 <summary>Что такое CI/CD?</summary><br>
 <table><tr><td>
 
-CI автоматически проверяет изменения: устанавливает зависимости, запускает type check, lint, tests и production build.
+На уровне командного процесса CI/CD отвечает за правило: каждое изменение должно проходить одинаковые автоматические
+проверки, а доставка в окружения должна быть понятной и воспроизводимой.
 
-CD доставляет проверенную версию в staging или production автоматически либо после ручного подтверждения. Pipeline
-должен быть воспроизводимым, быстрым и сохранять artifacts и диагностику ошибок.
+Разницу CI и CD как процесса см. в [Методологиях](../methodologies/README.md#чем-ci-отличается-от-cd), а deployment,
+artifacts, CDN cache и rollback — в [Infrastructure](../infrastructure/README.md#frontend-deployment).
 
 </td></tr></table>
 
@@ -207,10 +209,9 @@ CD доставляет проверенную версию в staging или pr
 <summary>Что нужно знать frontend-разработчику о Docker?</summary><br>
 <table><tr><td>
 
-Docker image содержит приложение и его runtime-зависимости, а container является запущенным экземпляром image.
-
-Для frontend Docker часто используют для одинакового Node.js-окружения в CI и multi-stage сборки: на первом этапе
-собирают static assets, на втором отдают их через web server. В image не добавляют secrets и лишние build dependencies.
+На уровне рабочего окружения достаточно понимать, что Docker фиксирует одинаковую среду для локального запуска, CI или
+integration tests. Глубокие вопросы про image, container, Dockerfile, Compose и frontend multi-stage build живут в
+[Infrastructure](../infrastructure/README.md#docker).
 
 </td></tr></table>
 

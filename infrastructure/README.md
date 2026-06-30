@@ -348,6 +348,36 @@ services:
 
 </details>
 
+### CI/CD для frontend delivery
+
+<details>
+<summary>Что проверяет frontend CI pipeline?</summary><br>
+<table><tr><td>
+
+Обычно pipeline устанавливает зависимости по lock-файлу, запускает type check, lint, unit/integration tests и production
+build. Для критичных пользовательских flows добавляют E2E или component tests в браузере.
+
+Важно сохранять artifacts диагностики: test reports, coverage, traces, screenshots и build logs. Процессное отличие CI
+и CD см. в [Методологиях](../methodologies/README.md#чем-ci-отличается-от-cd).
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что делает CD pipeline для frontend?</summary><br>
+<table><tr><td>
+
+CD берет уже проверенный build artifact и доставляет его в окружение: preview, staging или production. Хороший pipeline
+не пересобирает произвольный другой код на этапе выкладки, а продвигает понятный artifact между окружениями.
+
+Для static frontend важно настроить cache headers: hashed chunks можно кешировать долго, а `index.html` и runtime config
+обычно обновляют осторожнее. Rollback должен возвращать совместимую версию `index.html`, assets и config.
+
+</td></tr></table>
+
+</details>
+
 ### Frontend deployment
 
 <details>
