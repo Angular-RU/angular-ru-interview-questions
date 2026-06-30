@@ -1,22 +1,15 @@
-import {useState} from 'react';
 import './App.css';
 
-function App() {
-    const [count, setCount] = useState(0);
+function Greeting({name}: {name: string}) {
+    return <h1>Hello, {name}</h1>;
+}
 
+export default function App() {
     return (
         <>
-            <section id="center">
-                <button
-                    type="button"
-                    className="counter"
-                    onClick={() => setCount((count) => count + 1)}
-                >
-                    Count is {count}
-                </button>
-            </section>
+            <div className="main">
+                <Greeting name="world" />
+            </div>
         </>
     );
 }
-
-export default App;
