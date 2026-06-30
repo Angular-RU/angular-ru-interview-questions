@@ -21,28 +21,7 @@ providers; поддерживаемые старые API помечены как
 - [Frontend Guidelines Questionnaire](https://github.com/bradfrost/frontend-guidelines-questionnaire)
 - [Подготовка к интервью на Front-end разработчика](https://proglib.io/p/frontend-interview/)
 
-## Как пользоваться
-
-- **Junior**: Web Platform, основы JavaScript и TypeScript, базовые вопросы Angular, templates, DI и forms.
-- **Middle**: дополнительно Engineering principles, Change Detection, Signals, RxJS, Router, HTTP, performance и
-  testing.
-- **Middle+/Senior**: архитектурные компромиссы, управление состоянием, SSR и hydration, security, libraries, design
-  systems и tooling.
-
-## Маршруты подготовки
-
-- **Если есть 1 час**: Angular Core — components, DI, providers и lifecycle; Change Detection, OnPush и Signals; RxJS —
-  Observable, Subject, `switchMap` и `mergeMap`; Forms, HTTP и Router; основы performance; Micro Frontends demo — host,
-  remote, manifest, `remoteEntry.json` и fallback UI.
-- **Если есть 1 день**: пройдите маршрут на 1 час, затем добавьте JavaScript, TypeScript, browser rendering, testing,
-  security и SSR.
-- **Если есть 3 дня**: изучите основные разделы по порядку, запустите примеры и отдельно повторите архитектурные
-  trade-offs, production и вопросы уровня Middle+/Senior.
-
 ## Содержание
-
-- [Как пользоваться](#как-пользоваться)
-- [Маршруты подготовки](#маршруты-подготовки)
 
 ### 1. База frontend-разработчика
 
@@ -51,14 +30,18 @@ providers; поддерживаемые старые API помечены как
 - [JavaScript](javascript/README.md)
 - [TypeScript](typescript/README.md)
 
-### 2. Engineering fundamentals
+### 2. React для Angular-разработчика
+
+- [React для Angular-разработчика](react/README.md)
+
+### 3. Engineering fundamentals
 
 - [Основы программирования и проектирования](programming/README.md)
 - [State Management](state-management/README.md)
 - [Node.js](nodejs/README.md)
 - [Infrastructure](infrastructure/README.md)
 
-### 3. Angular Core
+### 4. Angular Core
 
 - [Angular Core](angular/README.md#angular-core)
 - [Templates](angular/README.md#templates)
@@ -72,7 +55,7 @@ providers; поддерживаемые старые API помечены как
 - [Angular HTTP](angular/README.md#angular-http)
 - [Angular Router](angular/README.md#angular-router)
 
-### 4. Angular Production
+### 5. Angular Production
 
 - [Управление состоянием в Angular](angular/README.md#управление-состоянием)
 - [Security](angular/README.md#security)
@@ -81,13 +64,13 @@ providers; поддерживаемые старые API помечены как
 - [Angular PWA и Service Worker](angular/README.md#angular-pwa-и-service-worker)
 - [Testing](angular/README.md#testing)
 
-### 5. Angular Architecture & Ecosystem
+### 6. Angular Architecture & Ecosystem
 
 - [Angular libraries и design systems](angular/README.md#angular-libraries-и-design-systems)
 - [Micro Frontends](angular/README.md#micro-frontends)
 - [Tooling](angular/README.md#tooling)
 
-### 6. Работа, процессы и интервью
+### 7. Работа, процессы и интервью
 
 - [Рабочее окружение frontend-разработчика](work-environment/README.md)
 - [Методологии и процессы](methodologies/README.md)
