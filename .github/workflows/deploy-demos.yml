@@ -48,10 +48,6 @@ jobs:
 
       - name: Prepare dist
         run: |
-          npm run build -w movies -- --configuration pages
-          npm run build -w ticket-availability -- --configuration pages
-          npm run build -w movie-ticket -- --configuration pages
-
           cat > dist/index.html <<'EOF'
           <!doctype html>
           <html lang="ru">
@@ -85,6 +81,6 @@ jobs:
           git add .
           git commit -m "deploy: demos from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
 
-          git branch -M ${{ env.DEMOS_BRANCH }}
-          git remote add origin "https://x-access-token:${TOKEN}@github.com/${{ env.DEMOS_REPOSITORY }}.git"
-          git push --force origin ${{ env.DEMOS_BRANCH }}
+          git branch -M main
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/Angular-RU/demos.git"
+          git push --force origin main
