@@ -73,7 +73,6 @@ jobs:
           TOKEN: ${{ secrets.ANGULAR_RU_BOT_PAT }}
         run: |
           cd dist
-
           git init
           git config user.name "angular-ru-bot"
           git config user.email "angular-ru@yandex.ru"
