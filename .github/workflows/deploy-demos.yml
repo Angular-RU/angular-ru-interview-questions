@@ -93,13 +93,13 @@ jobs:
 
       - name: Deploy dist to Angular-RU/demos main branch
         env:
-          TOKEN: ${{ secrets.DEMOS_DEPLOY_TOKEN }}
+          TOKEN: ${{ secrets.ANGULAR_RU_BOT_PAT }}
         run: |
           cd dist
 
           git init
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "angular-ru-bot"
+          git config user.email "angular-ru@yandex.ru"
 
           git add .
           git commit -m "deploy: demos from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
