@@ -75,7 +75,7 @@ providers; поддерживаемые старые API помечены как
 - [Micro Frontends](angular/README.md#micro-frontends)
 - [Tooling](angular/README.md#tooling)
 
-### 7. Adjacent Stacks
+### 7. React для Angular-разработчика
 
 - [React для Angular-разработчика](react/README.md)
 - [Зачем Angular-разработчику знать React](react/README.md#зачем-angular-разработчику-знать-react)
