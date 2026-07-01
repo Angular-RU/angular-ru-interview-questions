@@ -38,38 +38,19 @@ jobs:
         run: npm ci
 
       - name: Build movies remote
-        run: |
-          npm run build -w movies -- \
-            --base-href=${{ env.DEMOS_BASE_PATH }}/mfe/movies/
+        run: npm run build -w movies -- --configuration pages
 
       - name: Build ticket availability remote
-        run: |
-          npm run build -w ticket-availability -- \
-            --base-href=${{ env.DEMOS_BASE_PATH }}/mfe/ticket-availability/
+        run: npm run build -w ticket-availability -- --configuration pages
 
       - name: Build movie ticket host
-        run: |
-          npm run build -w movie-ticket -- \
-            --base-href=${{ env.DEMOS_BASE_PATH }}/mfe/movie-ticket/
+        run: npm run build -w movie-ticket -- --configuration pages
 
       - name: Prepare dist
         run: |
-          rm -rf dist
-
-          mkdir -p dist/mfe/movie-ticket
-          mkdir -p dist/mfe/movies
-          mkdir -p dist/mfe/ticket-availability
-
-          cp -R angular/examples/micro-frontends/movie-ticket/dist/movies-ticket/browser/* dist/mfe/movie-ticket/
-          cp -R angular/examples/micro-frontends/movies/dist/movies/browser/* dist/mfe/movies/
-          cp -R angular/examples/micro-frontends/ticket-availability/dist/ticket-availability/browser/* dist/mfe/ticket-availability/
-
-          cat > dist/mfe/movie-ticket/federation.manifest.json <<EOF
-          {
-            "movies": "${{ env.DEMOS_BASE_PATH }}/mfe/movies/remoteEntry.json",
-            "ticket-availability": "${{ env.DEMOS_BASE_PATH }}/mfe/ticket-availability/remoteEntry.json"
-          }
-          EOF
+          npm run build -w movies -- --configuration pages
+          npm run build -w ticket-availability -- --configuration pages
+          npm run build -w movie-ticket -- --configuration pages
 
           cat > dist/index.html <<'EOF'
           <!doctype html>

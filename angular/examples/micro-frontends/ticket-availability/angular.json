@@ -16,16 +16,20 @@
                 "build": {
                     "builder": "@angular-architects/native-federation:build",
                     "options": {
-                        "cacheExternalArtifacts": true,
-                        "ssr": true
+                        "cacheExternalArtifacts": true
                     },
                     "configurations": {
                         "production": {
-                            "target": "ticket-availability:esbuild:production"
+                            "target": "ticket-availability:esbuild:production",
+                            "ssr": true
                         },
                         "development": {
                             "target": "ticket-availability:esbuild:development",
                             "dev": true
+                        },
+                        "pages": {
+                            "target": "ticket-availability:esbuild:pages",
+                            "ssr": false
                         }
                     },
                     "defaultConfiguration": "production"
@@ -47,6 +51,8 @@
                 "esbuild": {
                     "builder": "@angular/build:application",
                     "options": {
+                        "outputPath": "dist/ticket-availability",
+                        "index": "src/index.html",
                         "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
                         "assets": [
@@ -56,18 +62,18 @@
                             }
                         ],
                         "styles": ["src/styles.css"],
-                        "server": "src/main.server.ts",
-                        "outputMode": "server",
                         "security": {
                             "allowedHosts": ["localhost"]
-                        },
-                        "ssr": {
-                            "entry": "src/server.ts"
                         },
                         "polyfills": ["es-module-shims"]
                     },
                     "configurations": {
                         "production": {
+                            "server": "src/main.server.ts",
+                            "outputMode": "server",
+                            "ssr": {
+                                "entry": "src/server.ts"
+                            },
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -86,6 +92,15 @@
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
+                        },
+                        "pages": {
+                            "baseHref": "/demos/mfe/ticket-availability/",
+                            "outputPath": {
+                                "base": "../../../../dist/mfe/ticket-availability",
+                                "browser": ""
+                            },
+                            "optimization": true,
+                            "outputHashing": "all"
                         }
                     },
                     "defaultConfiguration": "production"

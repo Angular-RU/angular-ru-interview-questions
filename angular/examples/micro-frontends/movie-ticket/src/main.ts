@@ -1,8 +1,8 @@
 import {initFederation} from '@angular-architects/native-federation';
 
-const manifestUrl = new URL('federation.manifest.json', document.baseURI).toString();
+import {environment} from './environments/environment';
 
-initFederation(manifestUrl)
+initFederation(environment.federationManifest)
     .catch((error) => console.error(error))
     .then(() => import('./bootstrap'))
     .catch((error) => console.error(error));

@@ -16,16 +16,20 @@
                 "build": {
                     "builder": "@angular-architects/native-federation:build",
                     "options": {
-                        "cacheExternalArtifacts": true,
-                        "ssr": true
+                        "cacheExternalArtifacts": true
                     },
                     "configurations": {
                         "production": {
-                            "target": "movies-ticket:esbuild:production"
+                            "target": "movies-ticket:esbuild:production",
+                            "ssr": true
                         },
                         "development": {
                             "target": "movies-ticket:esbuild:development",
                             "dev": true
+                        },
+                        "pages": {
+                            "target": "movies-ticket:esbuild:pages",
+                            "ssr": false
                         }
                     },
                     "defaultConfiguration": "production"
@@ -47,6 +51,8 @@
                 "esbuild": {
                     "builder": "@angular/build:application",
                     "options": {
+                        "outputPath": "dist/movies-ticket",
+                        "index": "src/index.html",
                         "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
                         "assets": [
@@ -56,18 +62,18 @@
                             }
                         ],
                         "styles": ["src/styles.css"],
-                        "server": "src/main.server.ts",
-                        "outputMode": "server",
                         "security": {
                             "allowedHosts": ["localhost"]
-                        },
-                        "ssr": {
-                            "entry": "src/server.ts"
                         },
                         "polyfills": ["es-module-shims"]
                     },
                     "configurations": {
                         "production": {
+                            "server": "src/main.server.ts",
+                            "outputMode": "server",
+                            "ssr": {
+                                "entry": "src/server.ts"
+                            },
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -86,6 +92,21 @@
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
+                        },
+                        "pages": {
+                            "baseHref": "/demos/mfe/movie-ticket/",
+                            "outputPath": {
+                                "base": "../../../../dist/mfe/movie-ticket",
+                                "browser": ""
+                            },
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.pages.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all"
                         }
                     },
                     "defaultConfiguration": "production"

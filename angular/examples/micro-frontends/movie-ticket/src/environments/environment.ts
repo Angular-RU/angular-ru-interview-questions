@@ -1,0 +1,6 @@
+export const environment = {
+    federationManifest: {
+        movies: 'http://localhost:4201/remoteEntry.json',
+        'ticket-availability': 'http://localhost:4202/remoteEntry.json',
+    },
+} as const;
