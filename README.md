@@ -155,6 +155,7 @@ providers; поддерживаемые старые API помечены как
 
 - [Git и командная разработка](work-environment/README.md#git-и-командная-разработка)
 - [Agile, Scrum, Kanban, Waterfall](methodologies/README.md)
+- [Организационные модели и бирюзовые компании](methodologies/README.md#организационные-модели-и-бирюзовые-компании)
 - [Работа с задачами](soft-skills/README.md#работа-с-задачами-в-команде)
 - [Оценка задач](soft-skills/README.md#работа-с-задачами-в-команде)
 - [Definition of Ready / Definition of Done](soft-skills/README.md#работа-с-задачами-в-команде)

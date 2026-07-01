@@ -459,6 +459,8 @@ window.removeEventListener('resize', handler);
 Узел удален из документа, но JavaScript-ссылка или listener продолжает удерживать его и дочернее дерево. Он не виден
 пользователю, но занимает память. DevTools показывает такие узлы как detached elements и помогает найти retaining path.
 
+![img.png](assets/detached-example.png)
+
 </td></tr></table>
 
 </details>
@@ -469,6 +471,8 @@ window.removeEventListener('resize', handler);
 
 Они не удерживают объект-ключ от сборки мусора. Это удобно для metadata и кеша, lifetime которого должен совпадать с
 lifetime объекта. Их содержимое нельзя надежно перечислять, потому что GC работает недетерминированно.
+
+![img.png](assets/weak-map-vs-weak-set.png)
 
 </td></tr></table>
 
