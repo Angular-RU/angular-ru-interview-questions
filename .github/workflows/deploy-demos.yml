@@ -1,0 +1,109 @@
+name: Deploy demos
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-demos
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DEMOS_BASE_PATH: /demos
+  DEMOS_REPOSITORY: Angular-RU/demos
+  DEMOS_BRANCH: main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build movies remote
+        run: |
+          npm run build -w movies -- \
+            --base-href=${{ env.DEMOS_BASE_PATH }}/mfe/movies/
+
+      - name: Build ticket availability remote
+        run: |
+          npm run build -w ticket-availability -- \
+            --base-href=${{ env.DEMOS_BASE_PATH }}/mfe/ticket-availability/
+
+      - name: Build movie ticket host
+        run: |
+          npm run build -w movie-ticket -- \
+            --base-href=${{ env.DEMOS_BASE_PATH }}/mfe/movie-ticket/
+
+      - name: Prepare dist
+        run: |
+          rm -rf dist
+
+          mkdir -p dist/mfe/movie-ticket
+          mkdir -p dist/mfe/movies
+          mkdir -p dist/mfe/ticket-availability
+
+          cp -R angular/examples/micro-frontends/movie-ticket/dist/movies-ticket/browser/* dist/mfe/movie-ticket/
+          cp -R angular/examples/micro-frontends/movies/dist/movies/browser/* dist/mfe/movies/
+          cp -R angular/examples/micro-frontends/ticket-availability/dist/ticket-availability/browser/* dist/mfe/ticket-availability/
+
+          cat > dist/mfe/movie-ticket/federation.manifest.json <<EOF
+          {
+            "movies": "${{ env.DEMOS_BASE_PATH }}/mfe/movies/remoteEntry.json",
+            "ticket-availability": "${{ env.DEMOS_BASE_PATH }}/mfe/ticket-availability/remoteEntry.json"
+          }
+          EOF
+
+          cat > dist/index.html <<'EOF'
+          <!doctype html>
+          <html lang="ru">
+            <head>
+              <meta charset="utf-8">
+              <title>Angular RU demos</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+            </head>
+            <body>
+              <h1>Angular RU demos</h1>
+
+              <ul>
+                <li>
+                  <a href="./mfe/movie-ticket/">Micro Frontends: Movie Ticket</a>
+                </li>
+              </ul>
+            </body>
+          </html>
+          EOF
+
+      - name: Deploy dist to Angular-RU/demos main branch
+        env:
+          TOKEN: ${{ secrets.DEMOS_DEPLOY_TOKEN }}
+        run: |
+          cd dist
+
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add .
+          git commit -m "deploy: demos from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+
+          git branch -M ${{ env.DEMOS_BRANCH }}
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${{ env.DEMOS_REPOSITORY }}.git"
+          git push --force origin ${{ env.DEMOS_BRANCH }}
