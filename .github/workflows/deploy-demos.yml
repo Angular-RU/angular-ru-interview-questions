@@ -77,10 +77,8 @@ jobs:
           git init
           git config user.name "angular-ru-bot"
           git config user.email "angular-ru@yandex.ru"
-
           git add .
           git commit -m "deploy: demos from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
-
           git branch -M main
           git remote add origin "https://x-access-token:${TOKEN}@github.com/Angular-RU/demos.git"
           git push --force origin main
