@@ -1,0 +1,10 @@
+[
+    {
+        "title": "Micro Frontends: Movie Ticket",
+        "description": "Host-приложение загружает два remote-приложения через Native Federation.",
+        "href": "./mfe/movie-ticket/",
+        "category": "Angular",
+        "tags": ["Micro Frontends", "Native Federation", "Angular"],
+        "status": "Ready"
+    }
+]

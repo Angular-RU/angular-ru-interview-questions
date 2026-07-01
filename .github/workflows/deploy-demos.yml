@@ -37,6 +37,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prepare demos root
+        run: |
+          cp -R tools/demos-showcase/. dist/
+          touch dist/.nojekyll
+
       - name: Build movies remote
         run: npm run build -w movies -- --configuration pages
 
@@ -45,28 +50,6 @@ jobs:
 
       - name: Build movie ticket host
         run: npm run build -w movie-ticket -- --configuration pages
-
-      - name: Prepare dist
-        run: |
-          cat > dist/index.html <<'EOF'
-          <!doctype html>
-          <html lang="ru">
-            <head>
-              <meta charset="utf-8">
-              <title>Angular RU demos</title>
-              <meta name="viewport" content="width=device-width, initial-scale=1">
-            </head>
-            <body>
-              <h1>Angular RU demos</h1>
-
-              <ul>
-                <li>
-                  <a href="./mfe/movie-ticket/">Micro Frontends: Movie Ticket</a>
-                </li>
-              </ul>
-            </body>
-          </html>
-          EOF
 
       - name: Deploy dist to Angular-RU/demos main branch
         env:
