@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>setInterval memory leak demo</title>
+
+        <style>
+            body {
+                font-family: system-ui, sans-serif;
+                padding: 24px;
+            }
+
+            button {
+                margin: 4px;
+                padding: 8px 12px;
+                cursor: pointer;
+            }
+
+            #app {
+                margin-top: 24px;
+                display: grid;
+                gap: 8px;
+            }
+
+            .card {
+                padding: 12px 16px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: #f8f8f8;
+                transition:
+                    opacity 300ms ease,
+                    transform 300ms ease;
+            }
+
+            .card.removing {
+                opacity: 0;
+                transform: translateX(24px);
+            }
+
+            .leaky {
+                border-color: #e53935;
+                background: #fff5f5;
+            }
+
+            .clean {
+                border-color: #43a047;
+                background: #f4fff4;
+            }
+
+            .counter {
+                margin-top: 16px;
+                font-weight: 600;
+            }
+
+            .info {
+                margin-top: 16px;
+                color: #555;
+                line-height: 1.5;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>setInterval memory leak demo</h1>
+
+        <button onclick="createLeakyCard()">Create leaky interval card</button>
+        <button onclick="createManyLeakyCards()">Create 20 leaky interval cards</button>
+
+        <button onclick="createCleanCard()">Create clean interval card</button>
+        <button onclick="createManyCleanCards()">Create 20 clean interval cards</button>
+
+        <button onclick="clearAllIntervals()">Clear intervals</button>
+
+        <div class="counter">
+            Active intervals:
+            <span id="intervals-count">0</span>
+        </div>
+
+        <div class="info">
+            Красные карточки удаляются из DOM, но interval продолжает держать instance класса.
+            <br />
+            Зеленые карточки вызывают
+            <code>destroy()</code>
+            и очищают interval.
+        </div>
+
+        <div id="app"></div>
+
+        <script>
+            const app = document.querySelector('#app');
+            const intervalsCount = document.querySelector('#intervals-count');
+
+            window.__intervalIds = [];
+
+            let counter = 0;
+
+            function updateCounter() {
+                intervalsCount.textContent = String(window.__intervalIds.length);
+            }
+
+            function createBigPayload(id) {
+                return Array.from({length: 1000}, (_, index) => ({
+                    id,
+                    index,
+                    marker: 'LEAKY_INTERVAL_PAYLOAD',
+                    text: `payload-${id}-${index}-${'x'.repeat(200)}`,
+                }));
+            }
+
+            class LeakyIntervalCard {
+                constructor(id) {
+                    this.id = id;
+                    this.payload = createBigPayload(id);
+
+                    this.node = document.createElement('div');
+                    this.node.className = 'card leaky';
+                    this.node.textContent = `LeakyIntervalCard #${id}`;
+
+                    app.append(this.node);
+
+                    /**
+                     * Важно:
+                     * callback использует this.
+                     * Значит interval держит instance LeakyIntervalCard.
+                     */
+                    this.intervalId = setInterval(() => {
+                        this.tick();
+                    }, 1000);
+
+                    window.__intervalIds.push(this.intervalId);
+                    updateCounter();
+
+                    this.removeFromDomLater();
+                }
+
+                tick() {
+                    /**
+                     * Без console.log объектов.
+                     * Просто меняем dataset, чтобы callback реально использовал this.node и this.payload.
+                     */
+                    this.node.dataset.tick = String(Date.now());
+                    this.node.dataset.first = this.payload[0].marker;
+                }
+
+                removeFromDomLater() {
+                    setTimeout(() => {
+                        this.node.classList.add('removing');
+
+                        setTimeout(() => {
+                            this.node.remove();
+
+                            /**
+                             * Плохой вариант:
+                             * DOM node удалили,
+                             * но clearInterval не вызвали.
+                             */
+                        }, 300);
+                    }, 1000);
+                }
+            }
+
+            class CleanIntervalCard {
+                constructor(id) {
+                    this.id = id;
+                    this.payload = createBigPayload(id);
+
+                    this.node = document.createElement('div');
+                    this.node.className = 'card clean';
+                    this.node.textContent = `CleanIntervalCard #${id}`;
+
+                    app.append(this.node);
+
+                    this.intervalId = setInterval(() => {
+                        this.tick();
+                    }, 1000);
+
+                    this.removeFromDomLater();
+                }
+
+                tick() {
+                    this.node.dataset.tick = String(Date.now());
+                    this.node.dataset.first = this.payload[0].marker;
+                }
+
+                removeFromDomLater() {
+                    setTimeout(() => {
+                        this.node.classList.add('removing');
+
+                        setTimeout(() => {
+                            this.destroy();
+                        }, 300);
+                    }, 1000);
+                }
+
+                destroy() {
+                    clearInterval(this.intervalId);
+                    this.node.remove();
+
+                    /**
+                     * Дополнительно рвем ссылки.
+                     * В реальном коде не всегда обязательно,
+                     * но для демо полезно.
+                     */
+                    this.payload = null;
+                    this.node = null;
+                }
+            }
+
+            function createLeakyCard() {
+                counter++;
+                new LeakyIntervalCard(counter);
+            }
+
+            function createManyLeakyCards() {
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(createLeakyCard, i * 150);
+                }
+            }
+
+            function createCleanCard() {
+                counter++;
+                new CleanIntervalCard(counter);
+            }
+
+            function createManyCleanCards() {
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(createCleanCard, i * 150);
+                }
+            }
+
+            function clearAllIntervals() {
+                for (const intervalId of window.__intervalIds) {
+                    clearInterval(intervalId);
+                }
+
+                window.__intervalIds.length = 0;
+                updateCounter();
+            }
+        </script>
+    </body>
+</html>

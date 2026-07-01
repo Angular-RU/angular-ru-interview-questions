@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Memory leak demo with setTimeout</title>
+
+        <style>
+            body {
+                font-family: system-ui, sans-serif;
+                padding: 24px;
+            }
+
+            button {
+                margin: 4px;
+                padding: 8px 12px;
+                cursor: pointer;
+            }
+
+            #app {
+                margin-top: 24px;
+                display: grid;
+                gap: 8px;
+            }
+
+            .card {
+                padding: 12px 16px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: #f8f8f8;
+                transition:
+                    opacity 300ms ease,
+                    transform 300ms ease;
+            }
+
+            .card.removing {
+                opacity: 0;
+                transform: translateX(24px);
+            }
+
+            .leaky {
+                border-color: #e53935;
+                background: #fff5f5;
+            }
+
+            .clean {
+                border-color: #43a047;
+                background: #f4fff4;
+            }
+
+            .info {
+                margin-top: 16px;
+                color: #555;
+                line-height: 1.5;
+            }
+
+            .counter {
+                margin-top: 16px;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Memory leak demo</h1>
+
+        <button onclick="createLeakyCard()">Create leaky card</button>
+        <button onclick="createManyLeakyCards()">Create 20 leaky cards</button>
+        <button onclick="createCleanCard()">Create clean card</button>
+        <button onclick="createManyCleanCards()">Create 20 clean cards</button>
+        <button onclick="clearLeaks()">Clear leaks</button>
+
+        <div class="counter">
+            Leaks count:
+            <span id="leaks-count">0</span>
+        </div>
+
+        <div class="info">
+            Красные карточки удаляются из DOM, но остаются в памяти из-за ссылки в
+            <code>window.__leaks</code>
+            .
+            <br />
+            Зеленые карточки удаляются из DOM и могут быть очищены GC.
+        </div>
+
+        <div id="app"></div>
+
+        <script>
+            window.__leaks = [];
+
+            let counter = 0;
+
+            const app = document.querySelector('#app');
+            const leaksCount = document.querySelector('#leaks-count');
+
+            function updateLeaksCount() {
+                leaksCount.textContent = String(window.__leaks.length);
+            }
+
+            function createBigPayload(id) {
+                return Array.from({length: 1000}, (_, index) => ({
+                    id,
+                    index,
+                    text: `large-payload-${id}-${index}-${'x'.repeat(200)}`,
+                }));
+            }
+
+            function removeWithAnimation(node, afterRemove) {
+                setTimeout(() => {
+                    node.classList.add('removing');
+
+                    setTimeout(() => {
+                        node.remove();
+
+                        if (afterRemove) {
+                            afterRemove();
+                        }
+                    }, 300);
+                }, 1000);
+            }
+
+            function createLeakyCard() {
+                counter++;
+
+                const id = counter;
+                const node = document.createElement('div');
+                const payload = createBigPayload(id);
+
+                node.className = 'card leaky';
+                node.textContent = `Leaky card #${id}: I will disappear from DOM, but stay in memory`;
+
+                function handleClick() {
+                    console.log('Leaky payload is still alive:', payload[0]);
+                }
+
+                node.addEventListener('click', handleClick);
+
+                app.append(node);
+
+                removeWithAnimation(node, () => {
+                    /**
+                     * Вот здесь создается утечка.
+                     *
+                     * Карточка уже удалена из DOM,
+                     * но ссылка на нее сохраняется в глобальном массиве.
+                     */
+                    window.__leaks.push({
+                        node,
+                        payload,
+                        handleClick,
+                    });
+
+                    updateLeaksCount();
+
+                    console.log('Leaky card removed from DOM, but saved in memory:', id);
+                });
+            }
+
+            function createCleanCard() {
+                counter++;
+
+                const id = counter;
+                const node = document.createElement('div');
+                const payload = createBigPayload(id);
+
+                node.className = 'card clean';
+                node.textContent = `Clean card #${id}: I will disappear and can be cleaned by GC`;
+
+                function handleClick() {
+                    console.log('Clean payload:', payload[0]);
+                }
+
+                node.addEventListener('click', handleClick);
+
+                app.append(node);
+
+                removeWithAnimation(node, () => {
+                    /**
+                     * Правильная очистка.
+                     *
+                     * 1. Удалили listener.
+                     * 2. Удалили DOM node.
+                     * 3. Не сохранили ссылку глобально.
+                     */
+                    node.removeEventListener('click', handleClick);
+
+                    console.log('Clean card removed from DOM:', id);
+                });
+            }
+
+            function createManyLeakyCards() {
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(createLeakyCard, i * 150);
+                }
+            }
+
+            function createManyCleanCards() {
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(createCleanCard, i * 150);
+                }
+            }
+
+            function clearLeaks() {
+                /**
+                 * После этого старые leaky-объекты смогут быть очищены GC.
+                 */
+                window.__leaks.length = 0;
+
+                updateLeaksCount();
+
+                console.log('Leaks cleared');
+            }
+        </script>
+    </body>
+</html>
