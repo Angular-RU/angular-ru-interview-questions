@@ -304,7 +304,7 @@ export class UserComponent {
 
 Angular сам найдет UserApiService, создаст экземпляр и передаст его в компонент.
 
-**Зачем это нужно?**
+Зачем это нужно:
 
 Представь компонент:
 
@@ -5936,6 +5936,7 @@ suite.
 
 </details>
 
+<details>
 <summary>Что такое Karma, Jasmine (зачем их используют совместно при разработке на Angular)?</summary><br>
 <table><tr><td>
 

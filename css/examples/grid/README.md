@@ -28,28 +28,28 @@ open example1/index.html
 
 ## Карта примеров
 
-| Пример      | Что показывает                                          | Связанные вопросы                                                                                                                                                  |
-| ----------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `example1`  | явная сетка 3 на 3, фиксированные tracks, `gap`         | [Что такое CSS Grid?](../../README.md#grid-what), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                           |
-| `example2`  | распределение ширины через `fr`                         | [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks), [когда выбирать Grid](../../README.md#grid-when)                           |
-| `example3`  | двухколоночный layout: фиксированный sidebar и content  | [Когда лучше использовать Grid вместо Flexbox?](../../README.md#grid-when), [Grid vs Flexbox](../../README.md#grid-vs-flexbox)                                     |
-| `example4`  | `justify-items`, `align-items`, `justify-content`       | [Что такое CSS Grid?](../../README.md#grid-what), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                           |
-| `example5`  | неявные tracks и `grid-auto-flow: column`               | [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                                                                             |
-| `example6`  | `grid-template-areas` и разные layouts в media queries  | [Когда лучше использовать Grid вместо Flexbox?](../../README.md#grid-when), [Grid vs Flexbox](../../README.md#grid-vs-flexbox)                                     |
-| `example7`  | `grid-template-areas` с `grid-auto-rows` и fixed tracks | [Когда лучше использовать Grid вместо Flexbox?](../../README.md#grid-when), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks) |
-| `example8`  | `grid-template-areas` с гибкими колонками `1fr`         | [Когда лучше использовать Grid вместо Flexbox?](../../README.md#grid-when), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks) |
-| `example9`  | наложение grid items через пересекающиеся линии         | [Grid stacking](../../README.md#grid-stacking), [Что такое CSS Grid?](../../README.md#grid-what)                                                                   |
-| `example10` | наложение текста поверх изображения в одной grid-ячейке | [Grid stacking](../../README.md#grid-stacking), [Что такое CSS Grid?](../../README.md#grid-what)                                                                   |
-| `example11` | responsive product grid через `auto-fit` и `minmax()`   | [Grid wrapping](../../README.md#grid-wrapping), [`minmax()`](../../README.md#grid-minmax), [`auto-fit` и `auto-fill`](../../README.md#grid-auto-fit-fill)          |
+| Пример      | Что показывает                                          | Связанные вопросы                                                                                                                                         |
+| ----------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `example1`  | явная сетка 3 на 3, фиксированные tracks, `gap`         | [CSS Grid basics](../../README.md#grid-what), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                      |
+| `example2`  | распределение ширины через `fr`                         | [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks), [когда выбирать Grid](../../README.md#grid-when)                  |
+| `example3`  | двухколоночный layout: фиксированный sidebar и content  | [Grid вместо Flexbox](../../README.md#grid-when), [Grid vs Flexbox](../../README.md#grid-vs-flexbox)                                                      |
+| `example4`  | `justify-items`, `align-items`, `justify-content`       | [CSS Grid basics](../../README.md#grid-what), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                      |
+| `example5`  | неявные tracks и `grid-auto-flow: column`               | [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                                                                    |
+| `example6`  | `grid-template-areas` и разные layouts в media queries  | [Grid вместо Flexbox](../../README.md#grid-when), [Grid vs Flexbox](../../README.md#grid-vs-flexbox)                                                      |
+| `example7`  | `grid-template-areas` с `grid-auto-rows` и fixed tracks | [Grid вместо Flexbox](../../README.md#grid-when), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                  |
+| `example8`  | `grid-template-areas` с гибкими колонками `1fr`         | [Grid вместо Flexbox](../../README.md#grid-when), [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)                  |
+| `example9`  | наложение grid items через пересекающиеся линии         | [Grid stacking](../../README.md#grid-stacking), [CSS Grid basics](../../README.md#grid-what)                                                              |
+| `example10` | наложение текста поверх изображения в одной grid-ячейке | [Grid stacking](../../README.md#grid-stacking), [CSS Grid basics](../../README.md#grid-what)                                                              |
+| `example11` | responsive product grid через `auto-fit` и `minmax()`   | [Grid wrapping](../../README.md#grid-wrapping), [`minmax()`](../../README.md#grid-minmax), [`auto-fit` и `auto-fill`](../../README.md#grid-auto-fit-fill) |
 
 ## Связанные вопросы
 
-- [Когда лучше использовать Flexbox, а когда CSS Grid?](../../README.md#flexbox-vs-grid-when)
-- [Что такое CSS Grid?](../../README.md#grid-what)
-- [Чем Grid отличается от Flexbox?](../../README.md#grid-vs-flexbox)
-- [Когда лучше использовать Grid вместо Flexbox?](../../README.md#grid-when)
-- [Что делают `grid-template-columns` и `grid-template-rows`?](../../README.md#grid-template-tracks)
-- [Что такое `minmax()`?](../../README.md#grid-minmax)
-- [Что такое `auto-fit` и `auto-fill`?](../../README.md#grid-auto-fit-fill)
-- [Что такое Grid stacking?](../../README.md#grid-stacking)
-- [Как сделать Grid wrapping?](../../README.md#grid-wrapping)
+- [Flexbox и CSS Grid](../../README.md#flexbox-vs-grid-when)
+- [CSS Grid basics](../../README.md#grid-what)
+- [Grid vs Flexbox](../../README.md#grid-vs-flexbox)
+- [Grid вместо Flexbox](../../README.md#grid-when)
+- [`grid-template-columns` и `grid-template-rows`](../../README.md#grid-template-tracks)
+- [`minmax()`](../../README.md#grid-minmax)
+- [`auto-fit` и `auto-fill`](../../README.md#grid-auto-fit-fill)
+- [Grid stacking](../../README.md#grid-stacking)
+- [Grid wrapping](../../README.md#grid-wrapping)

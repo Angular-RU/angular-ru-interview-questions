@@ -13,7 +13,7 @@
 - [Context и state management](#context-и-state-management)
 - [Отличия React от Angular](#отличия-react-от-angular)
 - [Разные React-стеки](#разные-react-стеки)
-  - [Почему в React так много выбора?](#почему-в-react-так-много-выбора)
+  - [Выбор React-стека](#выбор-react-стека)
   - [Старт проекта](#старт-проекта)
   - [Package manager и monorepo](#package-manager-и-monorepo)
   - [Routing и fullstack frameworks](#routing-и-fullstack-frameworks)
@@ -27,7 +27,7 @@
   - [Hosting](#hosting)
   - [i18n, rich text, upload и drag and drop](#i18n-rich-text-upload-и-drag-and-drop)
   - [Mobile и desktop](#mobile-и-desktop)
-  - [Как выбирать стек на интервью?](#как-выбирать-стек-на-интервью)
+  - [Выбор стека на интервью](#выбор-стека-на-интервью)
 - [Вопросы по уровням](#вопросы-по-уровням)
 - [Практические задачки](#практические-задачки)
 - [Мини-проект: Travel Planner](#мини-проект-travel-planner)
@@ -684,7 +684,7 @@ testing, auth, hosting и иногда fullstack framework. Это не спис
 
 </details>
 
-### Почему в React так много выбора?
+### Выбор React-стека
 
 <details>
 <summary>Почему в React нужно выбирать больше библиотек, чем в Angular?</summary><br>
@@ -1729,7 +1729,7 @@ contracts разные.
 
 </details>
 
-### Как выбирать стек на интервью?
+### Выбор стека на интервью
 
 <details>
 <summary>Какие требования продукта влияют на выбор React-стека?</summary><br>

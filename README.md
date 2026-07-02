@@ -104,7 +104,7 @@ providers; поддерживаемые старые API помечены как
 - [Hosting](react/README.md#hosting)
 - [i18n, rich text, upload и drag and drop](react/README.md#i18n-rich-text-upload-и-drag-and-drop)
 - [Mobile и desktop](react/README.md#mobile-и-desktop)
-- [Как выбирать стек на интервью?](react/README.md#как-выбирать-стек-на-интервью)
+- [Выбор стека на интервью](react/README.md#выбор-стека-на-интервью)
 
 #### 4.5 Практика и интервью по React
 
