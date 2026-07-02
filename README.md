@@ -151,18 +151,24 @@ providers; поддерживаемые старые API помечены как
 ### Практика
 
 - [Задачи по Angular](angular/README.md#angular-coding-questions)
+- [Практика по Angular frontend tasks](angular/README.md#практика-по-angular-frontend-tasks)
 - [CSS examples](css/README.md#практика-по-css)
+- [CSS layout и component tasks](css/README.md#css-layout-и-component-tasks)
 - [CSS Flexbox examples](css/examples/flexbox/README.md)
 - [CSS Grid examples](css/examples/grid/README.md)
 - [Задачи по JavaScript](javascript/README.md)
+- [Практика по JavaScript из Frontend Master Prep Series](javascript/README.md#практика-по-javascript-из-frontend-master-prep-series)
 - [Задачи по TypeScript](typescript/README.md)
 - [React examples](react/README.md#практические-задачки)
+- [Практика по React из Frontend Master Prep Series](react/README.md#практика-по-react-из-frontend-master-prep-series)
 - [React practice app](react/README.md#мини-проект-travel-planner)
+- [Frontend system design tasks](infrastructure/README.md#frontend-system-design)
+- [Практические задачи по алгоритмам и design primitives](programming/README.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [Мини-проекты для интервью](angular/examples/micro-frontends/README.md)
 
 ---
 
-### Дополнительные материалы:
+### Дополнительные материалы
 
 - [<mark>Angular Interview Questions by Google Developer Expert</mark>](https://github.com/Yonet/Angular-Interview-Questions)
 - [<mark>Coding Interview University</mark>](https://github.com/jwasham/coding-interview-university)
@@ -170,4 +176,4 @@ providers; поддерживаемые старые API помечены как
 - [<mark>Angular Interview Questions</mark>](https://github.com/sudheerj/angular-interview-questions)
 - [<mark>Front-end Job Interview Questions</mark>](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
 - [<mark>Frontend Guidelines Questionnaire</mark>](https://github.com/bradfrost/frontend-guidelines-questionnaire)
-- [Frontend-Master-Prep-Series](https://github.com/maurya-sachin/Frontend-Master-Prep-Series)
+- [<mark>Frontend-Master-Prep-Series</mark>](https://github.com/maurya-sachin/Frontend-Master-Prep-Series)

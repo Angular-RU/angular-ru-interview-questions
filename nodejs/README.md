@@ -594,3 +594,71 @@ JavaScript выполняется в основном потоке Node.js. CPU-
 </td></tr></table>
 
 </details>
+
+### Frontend tooling
+
+Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Чем Babel, SWC, esbuild и TypeScript compiler отличаются в frontend toolchain?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+TypeScript compiler умеет type checking и emit, но в современных frontend-сборках часто разделяют type checking и
+transpile. Babel трансформирует syntax через plugins, SWC и esbuild делают быстрые transforms на native-реализациях.
+
+Важно различать:
+
+- transpilation - преобразование syntax;
+- type checking - проверка типов;
+- bundling - построение graph и output chunks;
+- minification - уменьшение output.
+
+Angular CLI скрывает большую часть деталей, но разработчик должен понимать, где искать проблему: в `tsconfig`, bundler,
+polyfills, browserslist или plugin pipeline.
+
+```json
+{
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "vite build"
+  }
+}
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как объяснить Vite, Webpack и Rollup на интервью?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Webpack - универсальный bundler с большим plugin ecosystem и исторически богатой настройкой. Rollup силен для libraries
+и tree shaking ES modules. Vite использует быстрый dev server на native ESM и собирает production через Rollup-пайплайн
+или framework-specific integration.
+
+Хороший ответ не сводится к "Vite быстрее". Нужно объяснить dev server, HMR, module graph, code splitting, CSS/assets
+pipeline, source maps и то, как framework CLI ограничивает или расширяет доступ к настройкам.
+
+```ts
+export default {
+  build: {
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
+};
+```
+
+</td></tr></table>
+
+</details>

@@ -1168,8 +1168,8 @@ Layout определяет отображаемую ширину, а `sizes` с
 <table><tr><td>
 
 CSS principles фиксируют подход к именованию, композиции, специфичности, layout, responsive design и переиспользованию.
-Без таких правил CSS быстро превращается в набор случайных overrides. Хороший ответ должен упомянуть локальность
-стилей, короткие selectors, осторожность с `!important`, общий base layer и понятные исключения.
+Без таких правил CSS быстро превращается в набор случайных overrides. Хороший ответ должен упомянуть локальность стилей,
+короткие selectors, осторожность с `!important`, общий base layer и понятные исключения.
 
 </td></tr></table>
 
@@ -1766,6 +1766,98 @@ Logical properties описывают flow-relative стороны: `margin-inli
 `overscroll-behavior` управляет scroll chaining и browser overscroll actions на границах container. `scrollbar-gutter`
 может заранее резервировать место под scrollbar, предотвращая layout shift. Оба свойства применяют точечно, не ломая
 ожидаемую прокрутку страницы.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда использовать subgrid?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+`subgrid` позволяет вложенному grid наследовать tracks родителя по строкам или колонкам. Это полезно для карточек,
+табличных layouts и форм, где внутренние элементы разных карточек должны выровняться по общей сетке.
+
+```css
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.card {
+  display: grid;
+  grid-template-rows: subgrid;
+}
+```
+
+Перед применением нужно проверить поддержку целевых браузеров и fallback. Если выравнивание локальное, обычный grid
+проще и понятнее.
+
+</td></tr></table>
+
+</details>
+
+### CSS layout и component tasks
+
+Часть задач адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Практическая задача: сверстайте responsive card grid без JavaScript.</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+**Что проверяет:** Grid, responsive layout, минимальные размеры, отсутствие layout shift.
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+}
+
+.card {
+  min-width: 0;
+}
+```
+
+На интервью важно объяснить, почему `minmax(min(100%, 18rem), 1fr)` не переполняет узкий viewport, чем `auto-fit`
+отличается от `auto-fill`, и как заранее задать размеры media через `aspect-ratio`.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Практическая задача: сделайте CSS-only star rating display.</summary><br>
+<table><tr><td>
+
+**Уровень:** Junior
+
+Если нужен только display, можно использовать custom property и overlay. Для интерактивного rating нужны настоящие
+controls, keyboard support и доступное имя.
+
+```css
+.rating {
+  --rating: 3.5;
+  --percent: calc(var(--rating) / 5 * 100%);
+  display: inline-block;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.rating::before {
+  content: '★★★★★';
+  background: linear-gradient(90deg, currentColor var(--percent), #c8c8c8 var(--percent));
+  background-clip: text;
+  color: transparent;
+}
+```
+
+Частая ошибка - сделать красивый виджет, но потерять accessibility. Для ввода рейтинга лучше использовать radio group
+или button group, а не только pseudo-elements.
 
 </td></tr></table>
 

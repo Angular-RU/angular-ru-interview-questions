@@ -2894,3 +2894,179 @@ type Trip = {
 </td></tr></table>
 
 </details>
+
+## React и Next.js из Frontend Master Prep Series
+
+Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Чем <code>useTransition</code> отличается от <code>useDeferredValue</code>?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+`useTransition` помечает state update как некритичный: React может отложить дорогой render, чтобы input, click и другие
+срочные реакции оставались отзывчивыми. `useDeferredValue` откладывает потребление уже изменившегося значения, например
+поисковую строку для тяжелого списка.
+
+Для Angular-разработчика полезная аналогия: это не то же самое, что `debounceTime` в RxJS. Debounce меняет поток событий
+и timing данных, а concurrent rendering управляет приоритетом rendering work внутри React.
+
+```tsx
+const [isPending, startTransition] = useTransition();
+const deferredQuery = useDeferredValue(query);
+
+function onChange(value: string): void {
+  setQuery(value);
+  startTransition(() => {
+    setVisibleItems(filterItems(value));
+  });
+}
+```
+
+**Follow-up вопросы:**
+
+- Почему эти hooks не ускоряют саму дорогую функцию?
+- Как понять, что проблема именно в render, а не в network?
+- Где лучше оставить обычную оптимизацию данных или virtualization?
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как сравнить Context, Redux и Zustand на интервью?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Context удобен для редко меняющихся сквозных значений: theme, locale, current user. Он не является полноценным store:
+при изменении value все consumers могут получить render work, если не разделить context или не мемоизировать value.
+
+Redux уместен, когда важны предсказуемые transitions, devtools, middleware, time travel, строгие правила обновления и
+большая команда. Zustand проще и легче для локальных client stores без большого boilerplate.
+
+Angular-разработчику важно сравнить это не с DI, а с управлением состоянием: Angular service с signals или RxJS может
+занимать ту же нишу, что store, а DI только доставляет зависимость.
+
+```tsx
+const ThemeContext = createContext<'light' | 'dark'>('light');
+
+function Toolbar(): ReactNode {
+  const theme = useContext(ThemeContext);
+
+  return <button className={theme}>Save</button>;
+}
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что важно знать про Next.js App Router?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+App Router строится вокруг `app/`, nested layouts, Server Components, route handlers, loading/error states и cache
+модели Next.js. Server Component выполняется на сервере и не попадает в client bundle, а Client Component нужен для
+state, effects, browser APIs и event handlers.
+
+С Angular SSR это похоже только верхнеуровнево: оба подхода могут отдавать HTML с сервера, но Next.js сильнее связывает
+routing, data fetching, server/client boundary и deployment runtime с framework conventions.
+
+```tsx
+// app/users/[id]/page.tsx
+export default async function UserPage({params}: {params: Promise<{id: string}>}) {
+  const {id} = await params;
+  const user = await loadUser(id);
+
+  return <h1>{user.name}</h1>;
+}
+```
+
+**Частые ошибки:**
+
+- добавлять `'use client'` слишком высоко и раздувать client bundle;
+- ожидать browser API в Server Component;
+- путать route handler с client-side API layer;
+- не понимать cache и revalidation.
+
+</td></tr></table>
+
+</details>
+
+## Практика по React из Frontend Master Prep Series
+
+<details>
+<summary>Практическая задача: напишите <code>useWindowSize</code> с SSR-safe поведением.</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+**Что проверяет:** custom hooks, cleanup, SSR, browser APIs.
+
+```ts
+import {useEffect, useState} from 'react';
+
+interface WindowSize {
+  readonly width: number;
+  readonly height: number;
+}
+
+const initialSize: WindowSize = {
+  width: 0,
+  height: 0,
+};
+
+export function useWindowSize(): WindowSize {
+  const [size, setSize] = useState(initialSize);
+
+  useEffect(() => {
+    const updateSize = () => {
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+
+    return () => {
+      window.removeEventListener('resize', updateSize);
+    };
+  }, []);
+
+  return size;
+}
+```
+
+На интервью стоит обсудить initial value для SSR, throttle/debounce для частых resize events и то, почему доступ к
+`window` находится внутри `useEffect`.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Практическая задача: реализуйте autocomplete в React.</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Кандидат должен показать controlled input, loading/error/empty states, отмену устаревших запросов, keyboard navigation и
+доступную разметку combobox/listbox. Минимальная production-форма:
+
+- хранить `query`, `items`, `activeIndex`, `status`;
+- отменять предыдущий `fetch` через `AbortController`;
+- не показывать результат старого запроса после более нового;
+- поддержать Arrow Up, Arrow Down, Enter и Escape;
+- задать roles и доступное имя.
+
+Angular-разработчику можно предложить сравнить решение с Angular Signals + `HttpClient` + CDK a11y primitives.
+
+</td></tr></table>
+
+</details>

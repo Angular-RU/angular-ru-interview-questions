@@ -96,8 +96,8 @@ experience, в других — базовая функциональность,
 <table><tr><td>
 
 Отдельная policy нужна, если компонент использует API с разной поддержкой: camera, clipboard, drag and drop, сложную
-графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире,
-а конкретный advanced component — уже, если fallback честно описан.
+графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире, а
+конкретный advanced component — уже, если fallback честно описан.
 
 </td></tr></table>
 
@@ -121,8 +121,8 @@ FOUC, Flash of Unstyled Content, возникает, когда HTML уже от
 <table><tr><td>
 
 Custom fonts могут задерживать отображение текста, влиять на LCP и вызывать FOUT или FOIT. Нужно выбирать WOFF2,
-`font-display`, preload только критичных начертаний, subset и fallback stack с близкими метриками. Чем больше font
-files и weights, тем выше риск медленного first render.
+`font-display`, preload только критичных начертаний, subset и fallback stack с близкими метриками. Чем больше font files
+и weights, тем выше риск медленного first render.
 
 </td></tr></table>
 
@@ -255,9 +255,9 @@ splitting, lazy routes, уменьшение polyfills/dependencies, SSR/SSG и 
 <summary>Что такое performance budget?</summary><br>
 <table><tr><td>
 
-Performance budget — заранее заданный лимит на важные показатели: bundle size, LCP, CLS, INP, TTFB, количество
-запросов, вес изображений или размер CSS. Он помогает не ухудшать продукт незаметно от релиза к релизу. Хороший budget
-проверяется в CI, monitoring или регулярных performance reviews, а не только вручную перед релизом.
+Performance budget — заранее заданный лимит на важные показатели: bundle size, LCP, CLS, INP, TTFB, количество запросов,
+вес изображений или размер CSS. Он помогает не ухудшать продукт незаметно от релиза к релизу. Хороший budget проверяется
+в CI, monitoring или регулярных performance reviews, а не только вручную перед релизом.
 
 </td></tr></table>
 
@@ -591,6 +591,96 @@ Hero image часто становится LCP element, поэтому его do
 Lighthouse выполняет воспроизводимый лабораторный запуск с заданным устройством и сетью. RUM показывает реальных
 пользователей, устройства, кеши и взаимодействия, включая распределение Core Web Vitals. Для диагностики нужны оба
 источника.
+
+</td></tr></table>
+
+</details>
+
+### Browser performance
+
+Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Что такое compositing layer и почему не стоит бездумно добавлять <code>will-change</code>?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Compositing layer - слой, который браузер может отдельно composit-ить на GPU без полного repaint соседних элементов.
+Transforms и opacity часто дешевле анимации `top`, `left`, `width`, потому что меньше затрагивают layout и paint.
+
+`will-change` заранее просит браузер подготовить оптимизацию, но каждый слой стоит памяти. Если расставить `will-change`
+на множество элементов, можно ухудшить performance. Его применяют точечно и обычно только перед реальной анимацией.
+
+```css
+.panel {
+  transform: translateY(0);
+  transition: transform 180ms ease;
+}
+
+.panel[data-opening='true'] {
+  will-change: transform;
+}
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как искать memory leak в frontend-приложении?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Сначала воспроизводят сценарий роста памяти: навигация туда-обратно, открытие и закрытие modal, длинный список, polling.
+Затем сравнивают heap snapshots, смотрят retained objects и allocation timeline.
+
+Частые причины:
+
+- забытые event listeners;
+- timers и subscriptions без cleanup;
+- closures, удерживающие большие объекты;
+- кеши без eviction;
+- `URL.createObjectURL()` без `URL.revokeObjectURL()`;
+- detached DOM nodes.
+
+```ts
+const controller = new AbortController();
+window.addEventListener('resize', onResize, {signal: controller.signal});
+
+controller.abort();
+```
+
+В Angular дополнительно проверяют RxJS subscriptions, long-lived services и effects. В React - cleanup в `useEffect` и
+устаревшие async callbacks.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как построить performance budget для frontend?</summary><br>
+<table><tr><td>
+
+**Уровень:** Senior
+
+Performance budget фиксирует допустимые границы до релиза: размер initial JS/CSS, количество requests, LCP, INP, CLS,
+время hydration, memory на ключевом flow. Бюджет должен быть связан с реальными устройствами и рынком продукта, а не
+только с локальной машиной разработчика.
+
+Хорошая практика - проверять budget в CI для bundle size и в production через RUM для Core Web Vitals. Если бюджет
+нарушен, команда принимает явный trade-off: оптимизация, lazy loading, перенос feature, split chunk или изменение UX.
+
+```json
+{
+  "budgets": {
+    "initialJsKb": 180,
+    "lcpMsP75": 2500,
+    "clsP75": 0.1
+  }
+}
+```
 
 </td></tr></table>
 

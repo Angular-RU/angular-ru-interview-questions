@@ -634,9 +634,9 @@ Eventual consistency означает, что система не обещает
 <summary>Почему <code>index.html</code> и hashed assets кешируют по-разному?</summary><br>
 <table><tr><td>
 
-Content-hashed assets не меняются под тем же URL, поэтому их безопасно кешировать долго: `Cache-Control: public,
-max-age=31536000, immutable`. Новый release создает новые filenames, а старые assets можно держать до окончания
-активных сессий.
+Content-hashed assets не меняются под тем же URL, поэтому их безопасно кешировать долго:
+`Cache-Control: public, max-age=31536000, immutable`. Новый release создает новые filenames, а старые assets можно
+держать до окончания активных сессий.
 
 `index.html` содержит ссылки на chunks текущего release и должен быстро переключаться на новую версию. Его обычно
 кешируют с коротким TTL или revalidation (`no-cache`), иначе пользователь может получить старый HTML со ссылками на уже
@@ -985,6 +985,93 @@ validation и явные fallback-значения.
 Выбор зависит от риска. Для некритичной UI-фичи подойдет безопасное default value. Для оплаты, прав доступа и других
 критичных сценариев используют loading state или conservative fallback: новая функциональность остается выключенной,
 пока конфигурация не подтверждена.
+
+</td></tr></table>
+
+</details>
+
+### Frontend system design
+
+Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Как спроектировать infinite scroll?</summary><br>
+<table><tr><td>
+
+**Уровень:** Senior
+
+Нужно описать API pagination contract, loading states, error retry, deduplication, scroll position, accessibility и
+observability. На клиенте часто используют `IntersectionObserver` для sentinel-элемента, но API должен поддерживать
+cursor pagination, иначе при изменении данных возможны пропуски и дубли.
+
+```ts
+const observer = new IntersectionObserver(([entry]) => {
+  if (entry?.isIntersecting) {
+    loadNextPage();
+  }
+});
+
+observer.observe(sentinelElement);
+```
+
+Важные trade-offs:
+
+- infinite scroll удобен для ленты, но хуже для поиска конкретной позиции;
+- нужна возможность восстановить позицию при возврате назад;
+- для больших списков может понадобиться virtualization;
+- keyboard и screen reader users должны иметь понятную навигацию;
+- analytics должны различать load more, error и abandon.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как спроектировать modal/dialog на уровне системы?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Dialog - не только overlay. Нужны focus trap, restore focus, Escape, click outside policy, scroll lock, aria attributes,
+stacking, portal/root strategy, animation with reduced motion и cleanup. Для design system важно определить API:
+controlled/uncontrolled open state, sizes, destructive actions, async submit, nested dialogs policy.
+
+В Angular это часто решают CDK Overlay/Dialog или UI-kit. Самописный dialog оправдан только если команда готова
+поддерживать accessibility contract и edge cases.
+
+```html
+<div role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+  <h2 id="dialog-title">Удалить проект?</h2>
+  <button type="button">Отмена</button>
+  <button type="button">Удалить</button>
+</div>
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как выбрать CSR, SSR, SSG или ISR для frontend-продукта?</summary><br>
+<table><tr><td>
+
+**Уровень:** Senior
+
+CSR проще для authenticated dashboards и internal tools, где SEO почти не важен. SSR помогает first paint, SEO и preview
+metadata, но добавляет server runtime, cache invalidation и hydration complexity. SSG хорош для стабильного content,
+ISR - для контента, который должен обновляться без полного rebuild.
+
+Решение принимают по типу страниц, freshness данных, SEO, personalization, hosting model, Core Web Vitals, стоимости
+операций и ownership команды. На интервью важно не продавать один rendering mode как универсальный.
+
+```ts
+export const renderingByPageType = {
+  dashboard: 'CSR',
+  article: 'SSG',
+  productPage: 'SSR',
+  catalog: 'ISR',
+} as const;
+```
 
 </td></tr></table>
 

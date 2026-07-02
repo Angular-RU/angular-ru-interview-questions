@@ -941,3 +941,88 @@ ESLint, Prettier и тесты автоматизируют проверки, н
 </td></tr></table>
 
 </details>
+
+### Практические задачи по алгоритмам и design primitives
+
+Часть задач адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Реализуйте LRU cache.</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+**Что проверяет:** `Map`, порядок доступа, сложность `O(1)`.
+
+В JavaScript `Map` хранит порядок вставки, поэтому простую LRU cache можно реализовать через удаление и повторную
+вставку ключа при чтении.
+
+```ts
+class LruCache<TKey, TValue> {
+  private readonly values = new Map<TKey, TValue>();
+
+  constructor(private readonly capacity: number) {}
+
+  get(key: TKey): TValue | undefined {
+    if (!this.values.has(key)) {
+      return undefined;
+    }
+
+    const value = this.values.get(key);
+
+    if (value === undefined) {
+      return undefined;
+    }
+
+    this.values.delete(key);
+    this.values.set(key, value);
+
+    return value;
+  }
+
+  set(key: TKey, value: TValue): void {
+    if (this.values.has(key)) {
+      this.values.delete(key);
+    }
+
+    this.values.set(key, value);
+
+    if (this.values.size > this.capacity) {
+      const oldestKey = this.values.keys().next().value;
+
+      if (oldestKey !== undefined) {
+        this.values.delete(oldestKey);
+      }
+    }
+  }
+}
+```
+
+На интервью стоит обсудить, почему `undefined` как значение усложняет `get`, как обработать `capacity <= 0`, и когда
+нужен doubly linked list вместо reliance on `Map` order.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как спроектировать debounce и throttle как reusable utility?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Debounce откладывает вызов до паузы в событиях, throttle ограничивает частоту вызовов. Для reusable utility важно
+заранее определить API: leading/trailing вызовы, `cancel`, `flush`, сохранение `this`, аргументы последнего вызова и тип
+возвращаемого значения.
+
+На frontend-интервью полезно привести примеры:
+
+- debounce - search input, autosave, resize после остановки;
+- throttle - scroll/drag metrics, pointer move, progress updates.
+
+Частая ошибка - использовать одну технику для всех сценариев. Для network search debounce обычно лучше, а для scroll
+position чаще нужен throttle или `requestAnimationFrame`.
+
+</td></tr></table>
+
+</details>

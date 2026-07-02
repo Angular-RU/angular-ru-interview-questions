@@ -5448,8 +5448,8 @@ Angular предоставляет i18n-инструменты для извле
 <table><tr><td>
 
 RTL меняет направление текста и часто влияет на icons, arrows, spacing, alignment, keyboard navigation и animations.
-Нельзя просто перевести строки и считать интерфейс готовым. Компоненты design system должны явно поддерживать LTR/RTL,
-а CSS должен использовать logical properties там, где это упрощает поддержку.
+Нельзя просто перевести строки и считать интерфейс готовым. Компоненты design system должны явно поддерживать LTR/RTL, а
+CSS должен использовать logical properties там, где это упрощает поддержку.
 
 </td></tr></table>
 
@@ -6088,8 +6088,8 @@ export class PanelComponent {
 <table><tr><td>
 
 Guidelines связывают компоненты design system с реальным использованием в продуктах: naming, inputs/outputs,
-accessibility, theming, tokens, layout patterns и правила расширения. Это снижает количество кастомных fork-like
-решений и помогает разным командам использовать UI kit одинаково.
+accessibility, theming, tokens, layout patterns и правила расширения. Это снижает количество кастомных fork-like решений
+и помогает разным командам использовать UI kit одинаково.
 
 </td></tr></table>
 
@@ -8057,9 +8057,9 @@ Feature toggles в Angular часто реализуют через service, gua
 <summary>Какие frontend guidelines особенно важны для Angular-проекта?</summary><br>
 <table><tr><td>
 
-Для Angular-проекта важны соглашения о структуре standalone components, signals и RxJS, smart/presentational
-components, forms, HTTP services, error handling, lazy loading, testing и naming. Без таких правил разные части
-приложения начинают выглядеть как разные frameworks внутри одного репозитория.
+Для Angular-проекта важны соглашения о структуре standalone components, signals и RxJS, smart/presentational components,
+forms, HTTP services, error handling, lazy loading, testing и naming. Без таких правил разные части приложения начинают
+выглядеть как разные frameworks внутри одного репозитория.
 
 </td></tr></table>
 
@@ -8156,6 +8156,78 @@ Builder — реализация target вроде `build`, `serve` или `test
 
 </details>
 
+### Frontend topics в Angular
+
+Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Как тестировать Angular-компонент с async data fetching?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Проверяют не внутренний вызов метода, а observable behavior: loading state, успешный render, empty state, error state и
+отмену устаревшего запроса, если она является частью контракта.
+
+Подходы:
+
+- pure logic вынести и покрыть unit tests;
+- компонент проверить через TestBed или Angular Testing Library;
+- HTTP boundary подменить fake service или `HttpTestingController`;
+- для reusable UI components использовать Component Harness;
+- critical user flow проверить Playwright/Cypress.
+
+```ts
+TestBed.configureTestingModule({
+  providers: [{provide: UserApi, useValue: userApiStub}],
+});
+
+const fixture = TestBed.createComponent(UserCardComponent);
+fixture.componentRef.setInput('userId', '42');
+fixture.detectChanges();
+
+expect(fixture.nativeElement.textContent).toContain('Загрузка');
+```
+
+Тест должен управлять временем и данными явно, а не ждать произвольные delays.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как объяснить Angular PWA cache strategies на интервью?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Нужно разделить app shell, static assets и data requests. App shell и versioned assets можно кешировать агрессивнее,
+потому что их имена меняются при build. API data требует отдельной стратегии: freshness, performance, timeout, maxAge,
+fallback и правила инвалидирования.
+
+В Angular Service Worker конфигурация описывает asset groups и data groups. Хороший ответ упоминает update flow, offline
+fallback, риски stale data и то, что Service Worker не заменяет backend authorization.
+
+```json
+{
+  "dataGroups": [
+    {
+      "name": "api",
+      "urls": ["/api/**"],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxAge": "5m",
+        "timeout": "3s"
+      }
+    }
+  ]
+}
+```
+
+</td></tr></table>
+
+</details>
+
 <details>
 <summary>Что такое esbuild?</summary><br>
 <table><tr><td>
@@ -8236,6 +8308,44 @@ export class MyImp implements My {
 
 Цель инструментов — быстрый автоматический feedback и единый стиль, а не максимальное количество строгих правил. Правило
 должно предотвращать реальную проблему или поддерживать договоренность команды.
+
+</td></tr></table>
+
+</details>
+
+### Практика по Angular frontend tasks
+
+Часть задач адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Практическая задача: перенесите autocomplete в Angular.</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+**Что проверяет:** typed forms, RxJS cancellation, состояния загрузки, accessibility.
+
+В Angular autocomplete обычно раскладывают на typed form/control state, поток поиска, отмену запросов и доступный UI.
+Для async query хорошо подходят RxJS operators: `debounceTime`, `distinctUntilChanged`, `switchMap`, `catchError`.
+`switchMap` отменяет подписку на предыдущий request, а `HttpClient` умеет отменять underlying request при unsubscribe.
+
+```ts
+readonly query = new FormControl('', {nonNullable: true});
+
+readonly items$ = this.query.valueChanges.pipe(
+  debounceTime(250),
+  distinctUntilChanged(),
+  switchMap((query) =>
+    this.searchApi.search(query).pipe(
+      catchError(() => of([])),
+    ),
+  ),
+);
+```
+
+Компонент должен явно иметь состояния `idle`, `loading`, `success`, `empty`, `error`, поддерживать keyboard navigation и
+не смешивать API DTO с view model. Для accessibility можно использовать CDK a11y primitives или готовый UI-kit с
+combobox/listbox contract.
 
 </td></tr></table>
 

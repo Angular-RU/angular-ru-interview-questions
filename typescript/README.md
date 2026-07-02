@@ -598,3 +598,108 @@ const nextRows = state.rows.toSorted((first, second) => first.name.localeCompare
 </td></tr></table>
 
 </details>
+
+### TypeScript и runtime-контракты
+
+Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
+
+<details>
+<summary>Почему generic type parameter не дает runtime safety?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Generic существует только на этапе компиляции и стирается в JavaScript. Если данные приходят из API, `T` не проверяет
+форму ответа в runtime.
+
+```ts
+async function loadJson<T>(url: string): Promise<T> {
+  const response = await fetch(url);
+
+  return response.json() as Promise<T>;
+}
+```
+
+Такой helper удобен, но он доверяет внешним данным. Для важных контрактов нужна runtime validation: schema, hand-written
+guard или adapter на границе API. Хороший ответ разделяет compile-time типы и проверку данных, которые пришли извне.
+
+**Follow-up вопросы:**
+
+- Что происходит с generic после компиляции?
+- Когда достаточно generic, а когда нужна schema validation?
+- Почему `as T` может создать ложное чувство безопасности?
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем generic constraints отличаются от intersection types?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+`T extends Constraint` ограничивает допустимые типы для generic и разрешает обращаться к полям constraint внутри
+функции. `T & Constraint` создает новый intersection type, который требует свойства обеих частей у итогового значения.
+
+```ts
+function byId<T extends {readonly id: string}>(items: ReadonlyArray<T>): ReadonlyMap<string, T> {
+  return new Map(items.map((item) => [item.id, item]));
+}
+```
+
+Constraint говорит: "принимаю любой тип, но у него должен быть `id`". Intersection чаще используют, когда нужно описать
+комбинированную форму данных. На интервью важно не заменять constraint на широкое assertion.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как типизировать тестовые double без <code>any</code>?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Для stub обычно достаточно `Pick` или `satisfies`, чтобы описать только используемую часть зависимости.
+
+```ts
+interface UserApi {
+  loadUser(id: string): Promise<User>;
+  saveUser(user: User): Promise<void>;
+}
+
+const userApiStub = {
+  loadUser: async () => ({id: '1', name: 'Ada'}),
+} satisfies Pick<UserApi, 'loadUser'>;
+```
+
+Так тест не зависит от лишних методов и не теряет типовую проверку. Если mock framework возвращает широкие типы, лучше
+изолировать unsafe interop в маленьком helper и не распространять `any` по тестам.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда нужны declaration files <code>.d.ts</code>?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+`.d.ts` описывает типы для JavaScript-кода, внешнего global API, CSS modules, assets или пакета без собственных типов.
+Файл не содержит runtime-кода и не должен обещать то, чего нет в реализации.
+
+```ts
+declare module '*.module.css' {
+  const classes: Readonly<Record<string, string>>;
+  export default classes;
+}
+```
+
+В библиотеке declaration files являются частью публичного API. Их нужно проверять вместе с build и не использовать для
+скрытия реальных несовпадений между TypeScript и runtime.
+
+</td></tr></table>
+
+</details>
