@@ -2037,6 +2037,26 @@ legacy-приложений, но не является подходом по у
 </details>
 
 <details>
+<summary>Что происходит после загрузки Angular bundle?</summary><br>
+<table><tr><td>
+
+Браузер загружает, парсит и выполняет JavaScript bundle. Entry point вызывает `bootstrapApplication()` или legacy
+`bootstrapModule()`, после чего Angular создает root injector (`EnvironmentInjector`), регистрирует root providers,
+инициализирует platform services и создает root component.
+
+Дальше запускается initial rendering: Angular строит component tree, выполняет bindings, создает DOM nodes и подключает
+event listeners. Если подключен Router, стартовая навигация выбирает route, может загрузить lazy bundle, выполнить
+guards/resolvers и отрендерить routed component.
+
+При SSR/SSG пользователь может увидеть HTML до client bundle. После загрузки bundle Angular выполняет hydration:
+связывает существующий DOM с component tree, providers и обработчиками событий. Large bundle, тяжелые initializers,
+blocking guards или hydration mismatch задерживают интерактивность.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Как происходит взаимодействие компонентов в Angular (опишите components view)?</summary><br>
 <table><tr><td>
 

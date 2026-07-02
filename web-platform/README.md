@@ -76,23 +76,43 @@ const url = URL.createObjectURL(file);
 </details>
 
 <details>
-<summary>Какие Unicode-проблемы встречаются в input, forms и URLs?</summary><br>
+<summary>Какие Unicode-проблемы могут быть в URL?</summary><br>
 <table><tr><td>
 
-Пользовательский ввод может содержать emoji, combining marks, разные формы нормализации Unicode и символы из разных
-алфавитов, которые визуально похожи. Поэтому ограничение длины, validation, search и сравнение строк должны учитывать
-продуктовый контекст.
+URL может содержать Unicode в hostname, path и query, но разные части кодируются по-разному. Hostname с не-ASCII
+символами преобразуется через IDNA/Punycode, а path и query используют percent-encoding. Визуально похожие символы из
+разных алфавитов могут создавать phishing и homograph risks.
 
-Для URLs значения нужно кодировать через `encodeURIComponent` или API вроде `URLSearchParams`, а не склеивать строку
-вручную.
+Также встречаются разные формы нормализации Unicode, combining marks и emoji. Поэтому validation, search, canonical URL
+и сравнение ссылок должны учитывать продуктовый контекст, а не простое побайтовое равенство строк.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему нельзя собирать URL простой конкатенацией строк?</summary><br>
+<table><tr><td>
+
+Конкатенация легко ломает encoding, `?`, `&`, `#`, пробелы, slash boundaries и значения вроде `a&role=admin`.
+Ошибочный URL может отправить неправильный query, сломать cache key, открыть redirect bug или привести к CORS-запросу
+не на тот origin.
+
+Для query используйте `URLSearchParams`, а для абсолютных адресов — `URL`:
 
 ```ts
-const params = new URLSearchParams({query: searchQuery});
-const url = `/api/search?${params.toString()}`;
+const params = new URLSearchParams({
+  page: String(page),
+  query: searchQuery,
+});
+
+const url = new URL('/api/search', location.origin);
+url.search = params.toString();
+
+await fetch(url);
 ```
 
-Для форм важно не обрезать строку посередине surrogate pair или grapheme cluster, если интерфейс поддерживает emoji и
-многоязычный ввод.
+`URLSearchParams` сам закодирует пробелы, амперсанды, Unicode и другие специальные символы в значениях параметров.
 
 </td></tr></table>
 

@@ -3,20 +3,64 @@
 ### Browser rendering и performance
 
 <details>
-<summary>Как браузер рендерит HTML-страницу?</summary><br>
+<summary>Что происходит после получения HTML-документа?</summary><br>
 <table><tr><td>
 
-Браузер строит DOM из HTML и CSSOM из CSS, объединяет их в render tree, вычисляет layout, выполняет paint и compositing.
+Браузер начинает streaming parse HTML еще до полной загрузки документа. Он строит DOM, заранее обнаруживает ресурсы
+через preload scanner, загружает CSS, JavaScript, изображения, fonts и другие зависимости.
 
-JavaScript, стили, шрифты и изображения могут задерживать отдельные этапы. Производительность оценивают по реальному
-critical rendering path, а не только по размеру файлов.
+Для первого render нужны DOM, CSSOM и render tree. Затем browser выполняет layout, paint и compositing. JavaScript,
+stylesheets, fonts и большие изображения могут задержать отдельные этапы, поэтому производительность оценивают по
+реальному Critical Rendering Path.
 
 </td></tr></table>
 
 </details>
 
 <details>
-<summary>Что такое DOM, CSSOM и render tree?</summary><br>
+<summary>Почему HTML-парсер не падает на невалидной разметке?</summary><br>
+<table><tr><td>
+
+HTML parsing designed to be forgiving: браузеры десятилетиями должны были показывать страницы с ошибками разметки.
+Спецификация описывает tokenization, tree construction и error recovery, поэтому parser исправляет многие случаи сам.
+
+Например, браузер может автоматически закрыть тег, вставить пропущенный `<tbody>` или перестроить некорректную
+вложенность. Поэтому DOM может отличаться от исходного HTML source.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем DOM отличается от HTML source?</summary><br>
+<table><tr><td>
+
+HTML source — это текст, который пришел от сервера или был записан в документ. DOM — live object model, которую браузер
+построил после parsing и error recovery, а затем может изменять JavaScript.
+
+DOM может содержать автоматически добавленные узлы, нормализованную структуру, элементы из templates после runtime
+rendering и изменения, которых не было в исходном HTML. На интервью важно не смешивать view-source и Elements panel.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое CSSOM и почему CSS может блокировать рендеринг?</summary><br>
+<table><tr><td>
+
+CSSOM — object model разобранных CSS rules. Браузеру нужен CSSOM, чтобы вычислить стили и построить render tree, поэтому
+внешний stylesheet обычно является render-blocking resource для первого render.
+
+Большой CSS, медленный CDN или `@import` могут задержать LCP. Помогают critical CSS, удаление unused CSS, разделение
+styles по routes и аккуратная загрузка fonts.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое render tree?</summary><br>
 <table><tr><td>
 
 - DOM представляет структуру HTML.
@@ -30,14 +74,45 @@ critical rendering path, а не только по размеру файлов.
 </details>
 
 <details>
-<summary>Что такое layout и repaint?</summary><br>
+<summary>Чем layout, paint и compositing отличаются друг от друга?</summary><br>
 <table><tr><td>
 
-Layout, или reflow, пересчитывает размеры и положение элементов. Repaint перерисовывает пиксели без обязательного
-изменения геометрии.
+Layout, или reflow, вычисляет размеры и положение элементов. Paint превращает styled boxes, text, borders и shadows в
+пиксели или paint commands. Compositing собирает слои в итоговый кадр и часто может выполняться без нового layout и
+paint.
 
 Чередование чтения layout-свойств и записи стилей в цикле может вызвать layout thrashing. Операции лучше группировать и
 измерять через browser Performance panel.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как JavaScript может замедлить первый render?</summary><br>
+<table><tr><td>
+
+Синхронный `<script>` останавливает HTML parsing, потому что может изменить документ. Большой bundle также требует
+download, parse, compile и execute на main thread, конкурируя со style calculation, layout и user input.
+
+В Angular это проявляется как поздний initial rendering и длинные tasks до интерактивности. Помогают `defer`, code
+splitting, lazy routes, уменьшение polyfills/dependencies, SSR/SSG и перенос тяжелой работы из startup path.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит после загрузки Angular bundle?</summary><br>
+<table><tr><td>
+
+Browser выполняет JavaScript bundle, Angular запускает bootstrap, создает root injector, регистрирует providers,
+создает root component и выполняет initial rendering. Если настроен Router, стартовая навигация выбирает route,
+загружает lazy chunks и активирует guards/resolvers по конфигурации.
+
+При SSR браузер получает готовый HTML раньше, а после загрузки bundle Angular выполняет hydration: связывает существующий
+DOM с компонентами и обработчиками событий. Ошибки hydration, большой bundle или медленные initializers могут задержать
+интерактивность.
 
 </td></tr></table>
 
@@ -78,20 +153,6 @@ Layout, или reflow, пересчитывает размеры и положе
 </details>
 
 <details>
-<summary>Блокирует ли CSS рендеринг?</summary><br>
-<table><tr><td>
-
-Внешний stylesheet обычно является render-blocking resource: браузеру нужен CSSOM, чтобы корректно выполнить первый
-render.
-
-CSS не обязательно останавливает загрузку всего документа, но может задержать отображение и выполнение scripts,
-зависящих от стилей. Помогают небольшой critical CSS, удаление неиспользуемых стилей и корректное разделение bundles.
-
-</td></tr></table>
-
-</details>
-
-<details>
 <summary>Что такое Web Vitals?</summary><br>
 <table><tr><td>
 
@@ -103,30 +164,6 @@ Web Vitals - пользовательские метрики качества с
 
 Метрики анализируют по полевым данным реальных пользователей и дополняют лабораторными измерениями Lighthouse и
 DevTools.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Как браузер обрабатывает index.html?</summary><br>
-<table><tr><td>
-
-Основные этапы Critical Rendering Path:
-
-1. Браузер получает HTML и постепенно строит DOM.
-2. При обнаружении CSS загружает его и строит CSSOM. CSS блокирует первый рендер.
-3. Обычный синхронный `<script>` может остановить разбор HTML до загрузки и выполнения JavaScript.
-4. DOM и CSSOM объединяются в render tree.
-5. Layout вычисляет размеры и положение видимых элементов.
-6. Paint рисует пиксели.
-7. Compositing объединяет слои и выводит кадр на экран.
-
-`defer` загружает скрипт параллельно и выполняет после разбора HTML с сохранением порядка. `async` выполняет скрипт
-сразу после загрузки, поэтому порядок не гарантирован.
-
-Для ускорения первого рендера уменьшают блокирующие CSS/JS, используют code splitting, оптимизируют шрифты и
-изображения, кеширование и SSR/SSG там, где это оправдано.
 
 </td></tr></table>
 
@@ -150,17 +187,6 @@ render, а не только число запросов.
 
 Это ресурсы, без обработки которых браузер откладывает первый render. К ним обычно относятся stylesheets и часть
 синхронных scripts. Critical CSS, code splitting и корректные `defer`/`async` уменьшают блокировку.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Почему CSS может блокировать первый render?</summary><br>
-<table><tr><td>
-
-Браузеру нужен CSSOM, чтобы вычислить стили и избежать отображения страницы с неверным оформлением. Большой или медленно
-загружаемый stylesheet задерживает render tree. Следует удалять неиспользуемый CSS и делить стили по реальным границам.
 
 </td></tr></table>
 

@@ -439,20 +439,185 @@ TCP устанавливает соединение, гарантирует по
 </details>
 
 <details>
-<summary>Что происходит после ввода URL в браузере?</summary><br>
+<summary>Что происходит после ввода URL в адресную строку браузера?</summary><br>
 <table><tr><td>
 
 Упрощенная последовательность:
 
-1. Браузер разбирает URL и проверяет cache.
-2. DNS находит IP-адрес.
-3. Устанавливается транспортное и для HTTPS TLS-соединение.
-4. Отправляется HTTP-запрос.
-5. Браузер обрабатывает redirect и ответ.
-6. HTML парсится, загружаются CSS, JavaScript и другие ресурсы.
-7. Строятся DOM/CSSOM, layout, paint и compositing.
+1. Браузер разбирает текст адресной строки и решает, это URL или поисковый запрос.
+2. Проверяются HSTS policy, Service Worker, HTTP cache и возможность reuse существующего соединения.
+3. DNS lookup находит IP-адрес.
+4. Устанавливается транспортное соединение и для HTTPS выполняется TLS handshake.
+5. Отправляется HTTP-запрос.
+6. Браузер обрабатывает redirect и ответ.
+7. HTML парсится, загружаются CSS, JavaScript и другие ресурсы.
+8. Строятся DOM/CSSOM, layout, paint и compositing.
 
 Service worker, HTTP cache, CDN и connection reuse могут изменить отдельные шаги.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как браузер понимает, URL это или поисковый запрос?</summary><br>
+<table><tr><td>
+
+Браузер разбирает введенный текст: ищет явную схему (`https://`), валидный hostname, IP address, localhost, port, path и
+другие URL-признаки. Если строка не выглядит как URL, она отправляется в поисковую систему по умолчанию.
+
+Пограничные случаи зависят от браузера и настроек: `example`, `example.test`, пробелы, Unicode-домены и символы,
+которые нужно percent-encode. Поэтому frontend-код не должен угадывать URL вручную там, где можно использовать `URL`.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое HSTS и зачем браузер проверяет HSTS list?</summary><br>
+<table><tr><td>
+
+HSTS (HTTP Strict Transport Security) говорит браузеру обращаться к сайту только по HTTPS. Если domain есть в
+preloaded HSTS list или браузер уже получил `Strict-Transport-Security`, попытка `http://` будет локально повышена до
+`https://` до сетевого запроса.
+
+Это защищает от downgrade attack и случайной отправки cookies по незащищенному соединению. Для frontend это важно при
+диагностике "почему HTTP redirect не виден в Network" и при настройке production-доменов.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как работает DNS lookup?</summary><br>
+<table><tr><td>
+
+DNS lookup преобразует hostname в IP-адрес. Браузер и ОС сначала проверяют свои кеши, затем resolver обращается к
+настроенному DNS-серверу, который может вернуть ответ из кеша или выполнить recursive lookup через DNS hierarchy.
+
+Ответы имеют TTL, поэтому смена IP, CDN или DNS-записей может доходить до пользователей не мгновенно. В DevTools это
+видно как DNS timing, если соединение не было переиспользовано.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Зачем frontend-разработчику понимать DNS?</summary><br>
+<table><tr><td>
+
+DNS влияет на latency первого запроса к origin, API, CDN, fonts и analytics. Много разных domains увеличивает число
+DNS lookup, TCP/TLS setup и риск частичных сбоев.
+
+Практически это помогает объяснять медленный first visit, выбирать `preconnect` только для действительно критичных
+origins, диагностировать проблемы после смены CDN, CNAME или окружения API.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит перед отправкой HTTP-запроса по HTTPS?</summary><br>
+<table><tr><td>
+
+Браузер открывает или переиспользует соединение с origin. Если нового соединения избежать нельзя, сначала устанавливается
+transport connection, затем выполняется TLS handshake: выбирается версия TLS и cipher suite, проверяется certificate
+chain, согласуются ключи шифрования и имя сервера через SNI.
+
+Только после успешного TLS handshake отправляется HTTP-запрос. Поэтому медленный HTTPS может быть связан не с API
+handler, а с network latency, certificate проблемами, отсутствием connection reuse или слишком большим числом origins.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем TCP отличается от UDP в контексте HTTP?</summary><br>
+<table><tr><td>
+
+TCP дает надежный упорядоченный byte stream: потерянные данные повторно передаются, а приложение получает их в порядке.
+HTTP/1.1 и HTTP/2 обычно работают поверх TCP.
+
+UDP не гарантирует доставку и порядок datagrams. HTTP/3 использует QUIC поверх UDP, добавляя надежность, шифрование и
+мультиплексирование на своем уровне. Для frontend это проявляется в timing, connection setup и поведении при packet
+loss.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит, если сетевой пакет потерялся?</summary><br>
+<table><tr><td>
+
+Для TCP потеря приводит к повторной передаче и увеличению latency; данные выше по стеку будут ждать недостающий кусок.
+В HTTP/2 поверх TCP потеря может задержать несколько streams на одном соединении.
+
+В QUIC/HTTP/3 потеря одного stream меньше блокирует остальные streams, но пользователь все равно видит задержку,
+timeout или retry на уровне приложения. Frontend должен проектировать loading, timeout и idempotent retry с учетом этой
+неопределенности.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как выглядит минимальный HTTP request?</summary><br>
+<table><tr><td>
+
+Минимально важны method, request target, HTTP version и `Host` для HTTP/1.1:
+
+```http
+GET /products?limit=10 HTTP/1.1
+Host: example.com
+Accept: text/html
+```
+
+Реальный browser request добавит headers вроде `User-Agent`, `Accept-Encoding`, `Cookie`, `Sec-Fetch-*`,
+`If-None-Match` или `Origin`. В HTTP/2 и HTTP/3 формат передачи другой, но семантика method, path, headers и body
+сохраняется.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое 304 Not Modified и как он связан с кешем?</summary><br>
+<table><tr><td>
+
+`304 Not Modified` означает, что cached response в browser HTTP cache еще можно использовать. Браузер отправляет
+conditional request с `If-None-Match` или `If-Modified-Since`, а сервер отвечает `304` без полного body.
+
+Это экономит bandwidth, но не убирает network round trip. Для hashed assets часто лучше долгий `Cache-Control:
+immutable`, а для `index.html` — revalidation, чтобы быстрее получать новую версию приложения.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит, если HTML ссылается на ресурсы с других доменов?</summary><br>
+<table><tr><td>
+
+Для каждого нового origin браузеру могут понадобиться отдельные DNS lookup, connection setup и TLS handshake. CSS,
+scripts, images, fonts и API-запросы также подчиняются mixed content, CORS, CORP/CORB, CSP и cookie rules.
+
+Практические проблемы: медленные third-party scripts задерживают render, fonts могут блокировать текст, API может
+упасть из-за CORS, а cookies не отправятся без правильных `SameSite`, `Secure` и credentials settings.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что делает сервер после получения HTTP request?</summary><br>
+<table><tr><td>
+
+Server или edge layer принимает request, разбирает method, path, headers и body, применяет routing, authentication,
+authorization, validation, business logic и обращение к данным. Затем формирует status code, response headers и body.
+
+До application code запрос могут обработать CDN, reverse proxy, WAF, cache или load balancer. Поэтому frontend
+диагностика должна смотреть status, headers, timing, trace id и то, на каком слое возникла ошибка.
 
 </td></tr></table>
 
