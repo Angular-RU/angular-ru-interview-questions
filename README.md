@@ -3,24 +3,6 @@
 Вопросы помогают определить уровень Angular-разработчика: насколько глубоко он понимает Web-платформу, JavaScript,
 TypeScript и устройство Angular-приложений.
 
-Angular-ответы ориентированы на версии 19–22. Для нового кода используются standalone APIs, signals и functional
-providers; поддерживаемые старые API помечены как legacy.
-
-Дополнительные материалы:
-
-**Fundamentals**:
-
-- [Coding Interview University](https://github.com/jwasham/coding-interview-university)
-- [Awesome Interviews](https://github.com/alex/what-happens-when)
-- [Angular Interview Questions](https://github.com/sudheerj/angular-interview-questions)
-
-**Frontend**:
-
-- [Front-end Job Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
-- [The Best Frontend JavaScript Interview Questions](<https://performancejs.com/post/hde6d32/The-Best-Frontend-JavaScript-Interview-Questions-(Written-by-a-Frontend-Engineer)>)
-- [Frontend Guidelines Questionnaire](https://github.com/bradfrost/frontend-guidelines-questionnaire)
-- [Подготовка к интервью на Front-end разработчика](https://proglib.io/p/frontend-interview/)
-
 ## Содержание
 
 ### 1. Основы frontend-разработки
@@ -44,6 +26,9 @@ providers; поддерживаемые старые API помечены как
 - [Общее управление состоянием (State Management)](state-management/README.md)
 
 ### 3. Angular
+
+Текущие Angular-ответы ориентированы на версии 19–22. Для нового кода используются standalone APIs, signals и functional
+providers; поддерживаемые старые API помечены как legacy.
 
 #### 3.1 Основы Angular
 
@@ -142,7 +127,28 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](infrastructure/README.md#frontend-deployment)
 - [Feature toggles](infrastructure/README.md#feature-toggles)
 
-### 6. Практика
+### 6. Командная работа
+
+- [Git и командная разработка](work-environment/README.md#git-и-командная-разработка)
+- [Agile, Scrum, Kanban, Waterfall](methodologies/README.md)
+- [Организационные модели и бирюзовые компании](methodologies/README.md#организационные-модели-и-бирюзовые-компании)
+- [Работа с задачами](soft-skills/README.md#работа-с-задачами-в-команде)
+- [Оценка задач](soft-skills/README.md#работа-с-задачами-в-команде)
+- [Definition of Ready / Definition of Done](soft-skills/README.md#работа-с-задачами-в-команде)
+- [ADR и принятие технических решений](soft-skills/README.md#принятие-решений-список-вопросов)
+- [Ownership и эскалация рисков](soft-skills/README.md#ownership-и-ответственность)
+
+### 7. Поиск работы и интервью
+
+- [Поиск работы и стратегия интервью](job-search/README.md)
+- [Самопрезентация](soft-skills/README.md#самопрезентация)
+- [Team fit](soft-skills/README.md#знакомство-с-командой)
+- [Soft skills](soft-skills/README.md)
+- [People management basics для senior/lead](soft-skills/README.md#people-management-basics)
+
+---
+
+### Практика
 
 - [Задачи по Angular](angular/README.md#angular-coding-questions)
 - [CSS examples](css/README.md#практика-по-css)
@@ -154,21 +160,14 @@ providers; поддерживаемые старые API помечены как
 - [React practice app](react/README.md#мини-проект-travel-planner)
 - [Мини-проекты для интервью](angular/examples/micro-frontends/README.md)
 
-### 7. Командная работа
+---
 
-- [Git и командная разработка](work-environment/README.md#git-и-командная-разработка)
-- [Agile, Scrum, Kanban, Waterfall](methodologies/README.md)
-- [Организационные модели и бирюзовые компании](methodologies/README.md#организационные-модели-и-бирюзовые-компании)
-- [Работа с задачами](soft-skills/README.md#работа-с-задачами-в-команде)
-- [Оценка задач](soft-skills/README.md#работа-с-задачами-в-команде)
-- [Definition of Ready / Definition of Done](soft-skills/README.md#работа-с-задачами-в-команде)
-- [ADR и принятие технических решений](soft-skills/README.md#принятие-решений-список-вопросов)
-- [Ownership и эскалация рисков](soft-skills/README.md#ownership-и-ответственность)
+### Дополнительные материалы:
 
-### 8. Поиск работы и интервью
-
-- [Поиск работы и стратегия интервью](job-search/README.md)
-- [Самопрезентация](soft-skills/README.md#самопрезентация)
-- [Team fit](soft-skills/README.md#знакомство-с-командой)
-- [Soft skills](soft-skills/README.md)
-- [People management basics для senior/lead](soft-skills/README.md#people-management-basics)
+- [Coding Interview University](https://github.com/jwasham/coding-interview-university)
+- [Awesome Interviews](https://github.com/alex/what-happens-when)
+- [Angular Interview Questions](https://github.com/sudheerj/angular-interview-questions)
+- [Front-end Job Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
+- [The Best Frontend JavaScript Interview Questions](<https://performancejs.com/post/hde6d32/The-Best-Frontend-JavaScript-Interview-Questions-(Written-by-a-Frontend-Engineer)>)
+- [Frontend Guidelines Questionnaire](https://github.com/bradfrost/frontend-guidelines-questionnaire)
+- [Подготовка к интервью на Front-end разработчика](https://proglib.io/p/frontend-interview/)
