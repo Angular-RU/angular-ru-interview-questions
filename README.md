@@ -26,7 +26,9 @@ providers; поддерживаемые старые API помечены как
 ### 1. Основы frontend-разработки
 
 - [Основы Computer Science](computer-science/README.md)
+- [Алгоритмы и структуры данных для frontend](computer-science/README.md#алгоритмы-и-структуры-данных-для-frontend)
 - [Web Platform](web-platform/README.md)
+- [Большие данные, сеть и browser APIs](web-platform/README.md#большие-данные-сеть-и-browser-apis)
 - [HTML, формы, доступность (accessibility), SEO и media](web-platform/html/README.md)
 - [CSS](css/README.md)
 - [Рендеринг браузера и производительность (performance)](web-platform/browser/README.md)
@@ -136,6 +138,7 @@ providers; поддерживаемые старые API помечены как
 - [Docker и Docker Compose](infrastructure/README.md#docker)
 - [CI/CD](infrastructure/README.md#cicd-для-frontend-delivery)
 - [Frontend deployment](infrastructure/README.md#frontend-deployment)
+- [System design basics для frontend](infrastructure/README.md#что-такое-load-balancing)
 - [CDN/cache/rollback](infrastructure/README.md#frontend-deployment)
 - [Feature toggles](infrastructure/README.md#feature-toggles)
 

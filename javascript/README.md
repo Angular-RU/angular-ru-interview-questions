@@ -1242,7 +1242,12 @@ Hydration — это процесс, при котором JavaScript подкл
 Упрощенный пример:
 
 ```html
-<button id="counter" data-count="0">0</button>
+<button
+  id="counter"
+  data-count="0"
+>
+  0
+</button>
 
 <script type="module">
   const button = document.querySelector('#counter');
@@ -1597,6 +1602,161 @@ class User {
 В Angular конструктор класса не является lifecycle hook. Для компонентов он должен оставаться простым: DI и базовая
 инициализация выполняются в конструкторе, а логика, зависящая от входных данных, размещается в соответствующем lifecycle
 hook или реактивной модели.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему <code>Set.has</code> часто лучше <code>Array.includes</code> для частых проверок?</summary><br>
+<table><tr><td>
+
+`Array.includes()` проходит массив линейно, поэтому одна проверка стоит `O(n)`. Если проверять принадлежность внутри
+`filter()` или `map()` для большого списка, легко получить лишний вложенный перебор.
+
+`Set.has()` в среднем работает за `O(1)`, но сначала нужно построить `Set`. Поэтому замена полезна, когда набор
+проверяется много раз или достаточно большой.
+
+```ts
+const visibleIds = new Set(filters.visibleIds);
+
+const visibleRows = rows.filter((row) => visibleIds.has(row.id));
+```
+
+Для одного короткого списка `includes()` часто читабельнее и быстрее за счет меньшего overhead. Решение стоит
+подтверждать профилем, если это hot path.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда <code>Map</code> лучше обычного объекта?</summary><br>
+<table><tr><td>
+
+`Map` полезен, когда ключи не только строки, когда важны частые `set/get/delete`, когда нужно сохранять порядок вставки
+или явно хранить коллекцию пар ключ-значение.
+
+Обычный объект удобен для JSON-like данных и фиксированной формы:
+
+```ts
+const user = {
+  id: '42',
+  name: 'Ann',
+};
+```
+
+`Map` лучше подходит для индекса:
+
+```ts
+const usersById = new Map(users.map((user) => [user.id, user]));
+const currentUser = usersById.get(currentUserId);
+```
+
+В Angular-состоянии часто хранят и `ids: string[]` для порядка, и `entities: Map<string, User>` или plain object для
+быстрого доступа по id.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие ошибки часто бывают в comparator для <code>sort</code>?</summary><br>
+<table><tr><td>
+
+Comparator должен возвращать отрицательное число, ноль или положительное число и быть согласованным. Частые ошибки:
+возвращать boolean, мутировать элементы, зависеть от внешнего меняющегося состояния, забывать числовой comparator или не
+обрабатывать равенство.
+
+```ts
+const wrong = prices.toSorted((first, second) => (first.price > second.price ? 1 : -1));
+
+const correct = prices.toSorted((first, second) => first.price - second.price);
+```
+
+Для строк лучше использовать `localeCompare()` или `Intl.Collator`, особенно если важны язык, регистр и числа внутри
+строк. Для больших таблиц сортировку иногда переносят на сервер или делают в Web Worker, чтобы не блокировать main
+thread.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему <code>string.length</code> в JavaScript не всегда равен количеству видимых символов?</summary><br>
+<table><tr><td>
+
+`string.length` считает UTF-16 code units, а не пользовательские символы. Emoji, некоторые редкие символы и символы с
+combining marks могут занимать несколько code units.
+
+```ts
+'😄'.length; // 2
+Array.from('😄').length; // 1 code point
+```
+
+Даже code point не всегда равен видимому символу: один grapheme cluster может состоять из нескольких code points.
+Поэтому обрезка пользовательского имени, textarea limit или preview текста должны учитывать Unicode, если продукт
+работает с emoji и разными языками. Для пользовательских символов можно использовать `Intl.Segmenter`, когда он
+доступен.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему <code>0.1 + 0.2 !== 0.3</code>?</summary><br>
+<table><tr><td>
+
+JavaScript `number` использует IEEE 754 double precision floating point. Многие десятичные дроби нельзя представить
+точно в двоичной форме, поэтому результат вычисления содержит маленькую погрешность.
+
+```ts
+0.1 + 0.2; // 0.30000000000000004
+```
+
+Для отображения используют округление, например `Intl.NumberFormat`. Для денег лучше хранить minor units, например
+копейки или центы целым числом, либо использовать decimal-библиотеку на границе расчетов.
+
+```ts
+const totalCents = 10 + 20;
+const formatted = new Intl.NumberFormat('ru-RU', {
+  style: 'currency',
+  currency: 'RUB',
+}).format(totalCents / 100);
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие ограничения есть у bitwise operators в JavaScript?</summary><br>
+<table><tr><td>
+
+Bitwise operators приводят значения к 32-bit signed integer, кроме `>>>`, который возвращает unsigned 32-bit результат.
+Из-за этого они могут неожиданно обрезать большие числа и дробную часть.
+
+```ts
+Math.pow(2, 40) | 0; // 0
+```
+
+Битовые операции уместны для flags, binary protocols, canvas/image processing и TypedArray. Для обычного UI-кода
+читаемая структура вроде `Set<Permission>` часто лучше битовой маски.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему event loop не спасает от плохой алгоритмической сложности?</summary><br>
+<table><tr><td>
+
+Event loop умеет чередовать задачи, но синхронный JavaScript все равно выполняется на main thread до завершения текущей
+task. Если обработчик клика сортирует, фильтрует и рендерит огромный список за сотни миллисекунд, браузер не сможет
+обработать input и paint посередине этой работы.
+
+Решения зависят от причины: улучшить алгоритм, заранее построить индекс через `Map`, добавить pagination/virtual scroll,
+разбить работу на chunks, перенести CPU-bound часть в Web Worker или выполнить тяжелую агрегацию на сервере.
 
 </td></tr></table>
 

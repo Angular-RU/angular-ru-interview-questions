@@ -492,3 +492,109 @@ readonly user = input.required<Pick<User, "id" | "name">>();
 </td></tr></table>
 
 </details>
+
+<details>
+<summary>Как типами описать дерево в TypeScript?</summary><br>
+<table><tr><td>
+
+Для дерева обычно описывают узел с payload и дочерними узлами. Если структура readonly для потребителей, это стоит
+отразить в типе:
+
+```ts
+interface TreeNode<T> {
+  readonly value: T;
+  readonly children: ReadonlyArray<TreeNode<T>>;
+}
+```
+
+Такой тип подходит для меню, router-like конфигурации, дерева категорий или результата парсинга. Если у узлов бывают
+разные виды, лучше использовать discriminated union.
+
+```ts
+type FormNode =
+  | {readonly kind: 'group'; readonly controls: ReadonlyArray<FormNode>}
+  | {readonly kind: 'field'; readonly name: string; readonly value: string};
+```
+
+Discriminant `kind` делает обход безопаснее: TypeScript сузит тип в `switch` и подскажет доступные поля.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как типизировать граф или dependency graph?</summary><br>
+<table><tr><td>
+
+Для adjacency list удобно использовать `ReadonlyMap` или `Record`, если ключи строковые и данные приходят из JSON.
+
+```ts
+type ProjectName = string;
+
+type DependencyGraph = ReadonlyMap<ProjectName, ReadonlyArray<ProjectName>>;
+```
+
+Если нужно хранить дополнительные данные о ребре, вводят отдельный тип:
+
+```ts
+interface DependencyEdge {
+  readonly from: ProjectName;
+  readonly to: ProjectName;
+  readonly type: 'static' | 'dynamic';
+}
+```
+
+В frontend такие типы встречаются в визуализации зависимостей, build tooling, state machines и flows навигации. Типы
+фиксируют форму данных, но cycle detection и валидация внешнего JSON все равно остаются runtime-логикой.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда generic data structure оправдана?</summary><br>
+<table><tr><td>
+
+Generic-структура оправдана, когда один алгоритм действительно работает с разными типами значений и сохраняет связь
+между входом и выходом.
+
+```ts
+interface Queue<T> {
+  enqueue(value: T): void;
+  dequeue(): T | undefined;
+  readonly size: number;
+}
+```
+
+Если структура нужна только для одного доменного типа, отдельный generic может быть лишним. Например,
+`NotificationQueue` с явными полями и правилами приоритета часто понятнее универсальной `Queue<T>` плюс набор внешних
+условий.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Зачем использовать readonly-типы для структур данных?</summary><br>
+<table><tr><td>
+
+`readonly` и `ReadonlyArray<T>` показывают, что вызывающий код не должен менять структуру напрямую. Это особенно полезно
+для Angular inputs, signals, store state и derived data.
+
+```ts
+interface TableState {
+  readonly rows: ReadonlyArray<Row>;
+  readonly selectedIds: ReadonlySet<string>;
+}
+```
+
+Readonly-тип не делает данные глубоко immutable в runtime, но улучшает контракт и снижает риск случайной мутации.
+Обновление состояния лучше выражать созданием новой структуры:
+
+```ts
+const nextRows = state.rows.toSorted((first, second) => first.name.localeCompare(second.name));
+```
+
+</td></tr></table>
+
+</details>
