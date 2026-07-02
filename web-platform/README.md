@@ -7,40 +7,7 @@
 
 ### Большие данные, сеть и browser APIs
 
-<details>
-<summary>Почему network latency не описывают через Big O?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle+
-
-Big O описывает рост вычислительной сложности относительно размера входа. Network latency зависит от расстояния,
-маршрута, TLS, состояния соединения, сервера, CDN и качества сети пользователя.
-
-Frontend-разработчику важно разделять CPU-bound и I/O-bound проблемы. `O(n)` фильтрация может лагать из-за main thread,
-а медленный API-запрос — из-за latency, throughput, backend queue или cache miss. Для первого помогают профилировщик,
-алгоритм, virtual scroll и Web Worker; для второго — caching, batching, prefetch, pagination, timeout и retry policy.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Когда нужны pagination, streaming или virtual scroll?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle+
-
-Если данных много, проблема обычно не только в загрузке, но и в памяти, вычислениях и DOM rendering. Pagination
-ограничивает размер страницы данных, streaming позволяет начать обработку до полного ответа, virtual scroll рендерит
-только видимую часть списка.
-
-В Angular large table часто начинают с server-side pagination/filtering/sorting. Если UX требует плавного просмотра
-большого локального списка, добавляют virtual scroll и стабильный `track` в `@for`, чтобы не пересоздавать DOM без
-необходимости.
-
-</td></tr></table>
-
-</details>
+#### Middle
 
 <details>
 <summary>Почему стоимость <code>JSON.parse</code> и <code>JSON.stringify</code> важна?</summary><br>
@@ -54,30 +21,6 @@ Frontend-разработчику важно разделять CPU-bound и I/O
 Практические решения: уменьшать payload, использовать pagination, отдавать только нужные поля, переносить тяжелую
 обработку в Web Worker, кешировать уже нормализованные данные или выбирать streaming/binary format там, где это
 действительно оправдано.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Для чего нужны <code>ArrayBuffer</code>, <code>TypedArray</code> и <code>Blob</code>?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle+
-
-`ArrayBuffer` представляет участок бинарной памяти, `TypedArray` дает типизированный view поверх него, а `Blob` хранит
-immutable file-like binary data. Эти API нужны для файлов, изображений, audio/video, WebSocket binary messages,
-WebAssembly, canvas и stream processing.
-
-```ts
-const response = await fetch('/assets/report.pdf');
-const file = await response.blob();
-
-const url = URL.createObjectURL(file);
-```
-
-После `URL.createObjectURL()` важно вызвать `URL.revokeObjectURL(url)`, когда ссылка больше не нужна, чтобы не держать
-память.
 
 </td></tr></table>
 
@@ -130,7 +73,70 @@ await fetch(url);
 
 </details>
 
+#### Middle+ / Senior
+
+<details>
+<summary>Почему network latency не описывают через Big O?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Big O описывает рост вычислительной сложности относительно размера входа. Network latency зависит от расстояния,
+маршрута, TLS, состояния соединения, сервера, CDN и качества сети пользователя.
+
+Frontend-разработчику важно разделять CPU-bound и I/O-bound проблемы. `O(n)` фильтрация может лагать из-за main thread,
+а медленный API-запрос — из-за latency, throughput, backend queue или cache miss. Для первого помогают профилировщик,
+алгоритм, virtual scroll и Web Worker; для второго — caching, batching, prefetch, pagination, timeout и retry policy.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда нужны pagination, streaming или virtual scroll?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Если данных много, проблема обычно не только в загрузке, но и в памяти, вычислениях и DOM rendering. Pagination
+ограничивает размер страницы данных, streaming позволяет начать обработку до полного ответа, virtual scroll рендерит
+только видимую часть списка.
+
+В Angular large table часто начинают с server-side pagination/filtering/sorting. Если UX требует плавного просмотра
+большого локального списка, добавляют virtual scroll и стабильный `track` в `@for`, чтобы не пересоздавать DOM без
+необходимости.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Для чего нужны <code>ArrayBuffer</code>, <code>TypedArray</code> и <code>Blob</code>?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+`ArrayBuffer` представляет участок бинарной памяти, `TypedArray` дает типизированный view поверх него, а `Blob` хранит
+immutable file-like binary data. Эти API нужны для файлов, изображений, audio/video, WebSocket binary messages,
+WebAssembly, canvas и stream processing.
+
+```ts
+const response = await fetch('/assets/report.pdf');
+const file = await response.blob();
+
+const url = URL.createObjectURL(file);
+```
+
+После `URL.createObjectURL()` важно вызвать `URL.revokeObjectURL(url)`, когда ссылка больше не нужна, чтобы не держать
+память.
+
+</td></tr></table>
+
+</details>
+
 ### i18n и platform details
+
+#### Middle
 
 <details>
 <summary>Как использовать Intl API в frontend-приложении?</summary><br>

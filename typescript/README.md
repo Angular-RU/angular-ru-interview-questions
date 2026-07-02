@@ -1,27 +1,6 @@
 ## TypeScript
 
-<details>
-<summary>Зачем нам нужны определения типов, где есть JavaScript c динамической типизацией?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle
-
-Динамическая типизация удобна во время выполнения, но многие ошибки можно обнаружить раньше:
-
-- неправильное имя свойства;
-- передача аргумента неверного типа;
-- забытая обработка `null`;
-- несовместимое изменение публичного API.
-
-TypeScript добавляет статический анализ, автодополнение, безопасный рефакторинг и явные контракты между частями
-приложения. Типы не заменяют runtime-валидацию: данные от API, пользователя и внешних систем все равно считаются
-недоверенными и должны проверяться.
-
-После компиляции большинство типов удаляется, а браузер выполняет обычный JavaScript.
-
-</td></tr></table>
-
-</details>
+### Junior
 
 <details>
 <summary>Что такое пользовательский тип данных</summary><br>
@@ -69,79 +48,6 @@ discriminant-поля или type guard.
 
 Discriminated union часто лучше набора независимых boolean-флагов: он не позволяет одновременно представить
 несовместимые состояния, например `loading` и `success`.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Поддерживает ли TypeScript перегрузку методов?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle
-
-Да. TypeScript поддерживает несколько сигнатур перегрузки и одну общую реализацию.
-
-```ts
-function format(value: number): string;
-function format(value: Date): string;
-function format(value: number | Date): string {
-  return value instanceof Date ? value.toISOString() : value.toFixed(2);
-}
-```
-
-Сигнатура реализации не видна вызывающему коду и должна быть совместима со всеми перегрузками. В runtime существует
-только одна JavaScript-функция, поэтому различение вариантов выполняет сама реализация.
-
-Если union-параметр дает такой же понятный API, обычно он проще перегрузок.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Возможна ли перегрузка конструктора в TypeScript?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle
-
-Да, с тем же ограничением: можно описать несколько сигнатур, но реализация конструктора остается одна.
-
-```ts
-class Point {
-  readonly x: number;
-  readonly y: number;
-
-  constructor();
-  constructor(x: number, y: number);
-  constructor(x = 0, y = 0) {
-    this.x = x;
-    this.y = y;
-  }
-}
-```
-
-Нельзя написать несколько тел `constructor`, как в некоторых языках. При большом числе вариантов часто понятнее
-использовать именованные фабричные методы.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Поддерживает ли TypeScript перегрузку методов (конструкторов)?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle
-
-TypeScript поддерживает перегрузку функций, методов и конструкторов на уровне типов. Сначала объявляются доступные
-вызывающему коду сигнатуры, затем одна совместимая реализация.
-
-В скомпилированном JavaScript остается одна функция или один конструктор. Поэтому перегрузка не выбирает разные
-реализации автоматически: код должен сам сузить аргументы.
-
-Перегрузки нужны, когда разные наборы аргументов дают разные, точно связанные возвращаемые типы. Для простых случаев
-предпочтительнее union types, optional-параметры или объект параметров.
 
 </td></tr></table>
 
@@ -350,7 +256,107 @@ emp.greet('world');
 
 </details>
 
+### Middle
+
+<details>
+<summary>Зачем нам нужны определения типов, где есть JavaScript c динамической типизацией?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Динамическая типизация удобна во время выполнения, но многие ошибки можно обнаружить раньше:
+
+- неправильное имя свойства;
+- передача аргумента неверного типа;
+- забытая обработка `null`;
+- несовместимое изменение публичного API.
+
+TypeScript добавляет статический анализ, автодополнение, безопасный рефакторинг и явные контракты между частями
+приложения. Типы не заменяют runtime-валидацию: данные от API, пользователя и внешних систем все равно считаются
+недоверенными и должны проверяться.
+
+После компиляции большинство типов удаляется, а браузер выполняет обычный JavaScript.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Поддерживает ли TypeScript перегрузку методов?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Да. TypeScript поддерживает несколько сигнатур перегрузки и одну общую реализацию.
+
+```ts
+function format(value: number): string;
+function format(value: Date): string;
+function format(value: number | Date): string {
+  return value instanceof Date ? value.toISOString() : value.toFixed(2);
+}
+```
+
+Сигнатура реализации не видна вызывающему коду и должна быть совместима со всеми перегрузками. В runtime существует
+только одна JavaScript-функция, поэтому различение вариантов выполняет сама реализация.
+
+Если union-параметр дает такой же понятный API, обычно он проще перегрузок.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Возможна ли перегрузка конструктора в TypeScript?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Да, с тем же ограничением: можно описать несколько сигнатур, но реализация конструктора остается одна.
+
+```ts
+class Point {
+  readonly x: number;
+  readonly y: number;
+
+  constructor();
+  constructor(x: number, y: number);
+  constructor(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
+  }
+}
+```
+
+Нельзя написать несколько тел `constructor`, как в некоторых языках. При большом числе вариантов часто понятнее
+использовать именованные фабричные методы.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Поддерживает ли TypeScript перегрузку методов (конструкторов)?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+TypeScript поддерживает перегрузку функций, методов и конструкторов на уровне типов. Сначала объявляются доступные
+вызывающему коду сигнатуры, затем одна совместимая реализация.
+
+В скомпилированном JavaScript остается одна функция или один конструктор. Поэтому перегрузка не выбирает разные
+реализации автоматически: код должен сам сузить аргументы.
+
+Перегрузки нужны, когда разные наборы аргументов дают разные, точно связанные возвращаемые типы. Для простых случаев
+предпочтительнее union types, optional-параметры или объект параметров.
+
+</td></tr></table>
+
+</details>
+
 ### Продвинутый TypeScript
+
+#### Middle
 
 <details>
 <summary>Чем type отличается от interface и что такое intersection type?</summary><br>
@@ -379,6 +385,95 @@ Intersection `A & B` требует одновременно выполнить 
 </td></tr></table>
 
 </details>
+
+<details>
+<summary>Как типизировать состояние, API response и конфигурацию Angular-компонента?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Для состояний удобен discriminated union:
+
+```ts
+type LoadState<T> =
+  | {status: 'idle'}
+  | {status: 'loading'}
+  | {status: 'success'; data: T}
+  | {status: 'error'; error: string};
+```
+
+API DTO отделяют от доменной модели и преобразуют на data-access границе. Inputs типизируют максимально узко:
+
+```ts
+readonly user = input.required<Pick<User, "id" | "name">>();
+```
+
+Конфигурации проверяют через `satisfies`, readonly properties и explicit defaults. Generic-компонент оправдан, когда тип
+элемента должен проходить через inputs, templates и outputs без потери связи.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как типами описать дерево в TypeScript?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+Для дерева обычно описывают узел с payload и дочерними узлами. Если структура readonly для потребителей, это стоит
+отразить в типе:
+
+```ts
+interface TreeNode<T> {
+  readonly value: T;
+  readonly children: ReadonlyArray<TreeNode<T>>;
+}
+```
+
+Такой тип подходит для меню, router-like конфигурации, дерева категорий или результата парсинга. Если у узлов бывают
+разные виды, лучше использовать discriminated union.
+
+```ts
+type FormNode =
+  | {readonly kind: 'group'; readonly controls: ReadonlyArray<FormNode>}
+  | {readonly kind: 'field'; readonly name: string; readonly value: string};
+```
+
+Discriminant `kind` делает обход безопаснее: TypeScript сузит тип в `switch` и подскажет доступные поля.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Зачем использовать readonly-типы для структур данных?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle
+
+`readonly` и `ReadonlyArray<T>` показывают, что вызывающий код не должен менять структуру напрямую. Это особенно полезно
+для Angular inputs, signals, store state и derived data.
+
+```ts
+interface TableState {
+  readonly rows: ReadonlyArray<Row>;
+  readonly selectedIds: ReadonlySet<string>;
+}
+```
+
+Readonly-тип не делает данные глубоко immutable в runtime, но улучшает контракт и снижает риск случайной мутации.
+Обновление состояния лучше выражать созданием новой структуры:
+
+```ts
+const nextRows = state.rows.toSorted((first, second) => first.name.localeCompare(second.name));
+```
+
+</td></tr></table>
+
+</details>
+
+#### Middle+ / Senior
 
 <details>
 <summary>Что такое generics, generic constraints и keyof?</summary><br>
@@ -491,66 +586,6 @@ JSON после загрузки.
 </details>
 
 <details>
-<summary>Как типизировать состояние, API response и конфигурацию Angular-компонента?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle
-
-Для состояний удобен discriminated union:
-
-```ts
-type LoadState<T> =
-  | {status: 'idle'}
-  | {status: 'loading'}
-  | {status: 'success'; data: T}
-  | {status: 'error'; error: string};
-```
-
-API DTO отделяют от доменной модели и преобразуют на data-access границе. Inputs типизируют максимально узко:
-
-```ts
-readonly user = input.required<Pick<User, "id" | "name">>();
-```
-
-Конфигурации проверяют через `satisfies`, readonly properties и explicit defaults. Generic-компонент оправдан, когда тип
-элемента должен проходить через inputs, templates и outputs без потери связи.
-
-</td></tr></table>
-
-</details>
-
-<details>
-<summary>Как типами описать дерево в TypeScript?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle
-
-Для дерева обычно описывают узел с payload и дочерними узлами. Если структура readonly для потребителей, это стоит
-отразить в типе:
-
-```ts
-interface TreeNode<T> {
-  readonly value: T;
-  readonly children: ReadonlyArray<TreeNode<T>>;
-}
-```
-
-Такой тип подходит для меню, router-like конфигурации, дерева категорий или результата парсинга. Если у узлов бывают
-разные виды, лучше использовать discriminated union.
-
-```ts
-type FormNode =
-  | {readonly kind: 'group'; readonly controls: ReadonlyArray<FormNode>}
-  | {readonly kind: 'field'; readonly name: string; readonly value: string};
-```
-
-Discriminant `kind` делает обход безопаснее: TypeScript сузит тип в `switch` и подскажет доступные поля.
-
-</td></tr></table>
-
-</details>
-
-<details>
 <summary>Как типизировать граф или dependency graph?</summary><br>
 <table><tr><td>
 
@@ -606,64 +641,9 @@ interface Queue<T> {
 
 </details>
 
-<details>
-<summary>Зачем использовать readonly-типы для структур данных?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle
-
-`readonly` и `ReadonlyArray<T>` показывают, что вызывающий код не должен менять структуру напрямую. Это особенно полезно
-для Angular inputs, signals, store state и derived data.
-
-```ts
-interface TableState {
-  readonly rows: ReadonlyArray<Row>;
-  readonly selectedIds: ReadonlySet<string>;
-}
-```
-
-Readonly-тип не делает данные глубоко immutable в runtime, но улучшает контракт и снижает риск случайной мутации.
-Обновление состояния лучше выражать созданием новой структуры:
-
-```ts
-const nextRows = state.rows.toSorted((first, second) => first.name.localeCompare(second.name));
-```
-
-</td></tr></table>
-
-</details>
-
 ### TypeScript и runtime-контракты
 
-<details>
-<summary>Почему generic type parameter не дает runtime safety?</summary><br>
-<table><tr><td>
-
-**Уровень:** Middle+
-
-Generic существует только на этапе компиляции и стирается в JavaScript. Если данные приходят из API, `T` не проверяет
-форму ответа в runtime.
-
-```ts
-async function loadJson<T>(url: string): Promise<T> {
-  const response = await fetch(url);
-
-  return response.json() as Promise<T>;
-}
-```
-
-Такой helper удобен, но он доверяет внешним данным. Для важных контрактов нужна runtime validation: schema, hand-written
-guard или adapter на границе API. Хороший ответ разделяет compile-time типы и проверку данных, которые пришли извне.
-
-**Follow-up вопросы:**
-
-- Что происходит с generic после компиляции?
-- Когда достаточно generic, а когда нужна schema validation?
-- Почему `as T` может создать ложное чувство безопасности?
-
-</td></tr></table>
-
-</details>
+#### Middle
 
 <details>
 <summary>Чем generic constraints отличаются от intersection types?</summary><br>
@@ -731,6 +711,38 @@ declare module '*.module.css' {
 
 В библиотеке declaration files являются частью публичного API. Их нужно проверять вместе с build и не использовать для
 скрытия реальных несовпадений между TypeScript и runtime.
+
+</td></tr></table>
+
+</details>
+
+#### Middle+ / Senior
+
+<details>
+<summary>Почему generic type parameter не дает runtime safety?</summary><br>
+<table><tr><td>
+
+**Уровень:** Middle+
+
+Generic существует только на этапе компиляции и стирается в JavaScript. Если данные приходят из API, `T` не проверяет
+форму ответа в runtime.
+
+```ts
+async function loadJson<T>(url: string): Promise<T> {
+  const response = await fetch(url);
+
+  return response.json() as Promise<T>;
+}
+```
+
+Такой helper удобен, но он доверяет внешним данным. Для важных контрактов нужна runtime validation: schema, hand-written
+guard или adapter на границе API. Хороший ответ разделяет compile-time типы и проверку данных, которые пришли извне.
+
+**Follow-up вопросы:**
+
+- Что происходит с generic после компиляции?
+- Когда достаточно generic, а когда нужна schema validation?
+- Почему `as T` может создать ложное чувство безопасности?
 
 </td></tr></table>
 
