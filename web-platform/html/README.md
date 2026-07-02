@@ -151,6 +151,43 @@ sectioning elements.
 </details>
 
 <details>
+<summary>Из каких частей состоит HTML5 как open web platform?</summary><br>
+<table><tr><td>
+
+HTML5 в широком смысле часто называют набором Web Platform API: semantic HTML, forms, media, canvas, SVG, storage,
+offline capabilities, history, drag and drop и messaging. На интервью важно не смешивать сам язык разметки с браузерными
+API вокруг него. Для Angular-разработчика это база, на которую опираются компоненты, forms, routing и интеграции с
+browser APIs.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем cookie отличается от <code>sessionStorage</code> и <code>localStorage</code>?</summary><br>
+<table><tr><td>
+
+Cookie может автоматически отправляться с HTTP-запросами и иметь флаги `HttpOnly`, `Secure`, `SameSite`. `localStorage`
+и `sessionStorage` доступны JavaScript, привязаны к origin и не отправляются автоматически; `sessionStorage` живет в
+рамках вкладки, `localStorage` сохраняется дольше. Секретные tokens опасно хранить в Web Storage из-за XSS.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем <code>script</code>, <code>script async</code> и <code>script defer</code> отличаются?</summary><br>
+<table><tr><td>
+
+Обычный `script` блокирует HTML parsing до загрузки и выполнения. `async` загружается параллельно и выполняется сразу
+после загрузки, поэтому порядок между async scripts не гарантирован. `defer` загружается параллельно, выполняется после
+parsing в порядке объявления и обычно лучше подходит для application bundle.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Что такое custom elements?</summary><br>
 <table><tr><td>
 
@@ -390,6 +427,30 @@ ARIA добавляет roles, states и relationships в accessibility tree, н
 </details>
 
 <details>
+<summary>Как ARIA и screen reader связаны с accessibility?</summary><br>
+<table><tr><td>
+
+Screen reader читает accessibility tree, который строится из HTML-семантики, текста, attributes и ARIA. ARIA может
+добавить role, state или связь между элементами, но не добавляет поведение клавиатуры и не исправляет неверный элемент.
+Поэтому сначала выбирают native HTML, а ARIA используют для сложных widgets и динамических состояний.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как сделать страницу доступнее без JavaScript?</summary><br>
+<table><tr><td>
+
+Использовать semantic landmarks, правильную иерархию заголовков, `label`, `fieldset`, `legend`, понятные ссылки,
+доступные изображения и native form validation. Контент и основные действия должны быть доступны как HTML, а JavaScript
+добавляет улучшения. Такой подход помогает progressive enhancement и снижает риск пустого интерфейса при ошибке bundle.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Что такое accessible name и как кнопка его получает?</summary><br>
 <table><tr><td>
 
@@ -600,6 +661,19 @@ SSR или prerender отдает содержательный HTML раньше
 
 Важны содержательные `title`, headings, links с понятным текстом, semantic landmarks, `img alt`, canonical и metadata.
 Семантика помогает понять структуру, но не компенсирует слабый content, закрытую индексацию или плохую доступность.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие SEO-практики важны для frontend-разработчика?</summary><br>
+<table><tr><td>
+
+Frontend-разработчик отвечает за содержательный HTML, корректные `title` и metadata, canonical URL, semantic headings,
+понятные links, `alt` у значимых изображений, robots rules и скорость first render. Для SPA важно, чтобы crawler получил
+контент через SSR, prerender или другой поддерживаемый rendering strategy. SEO не заменяет качество контента и не должно
+ломать accessibility.
 
 </td></tr></table>
 

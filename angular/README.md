@@ -5111,6 +5111,45 @@ Virtual scroll нужен, когда DOM и rendering, а не загрузка
 </details>
 
 <details>
+<summary>Как Angular-приложение может создавать лишние render и change detection cycles?</summary><br>
+<table><tr><td>
+
+Частые причины: частые events без ограничения, timers, подписки без фильтрации, template methods с тяжелой логикой,
+изменение global state и обновления сигналов слишком высоко в дереве. В zone-based приложении async tasks могут
+провоцировать широкую синхронизацию, а в zoneless код должен явно обновлять реактивные источники. Диагностируют это
+через Angular DevTools Profiler и Chrome Performance, затем локализуют state, добавляют `track`, memoization, virtual
+scroll или меняют архитектуру потока данных.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как lazy loading влияет на performance Angular-приложения?</summary><br>
+<table><tr><td>
+
+Lazy routes и `@defer` уменьшают initial bundle, parse/compile time и работу на startup path. Цена — дополнительные
+chunks, network latency при первом переходе и необходимость хороших loading/error states. Хороший результат проверяют по
+LCP, INP, route transition timing и production bundle stats, а не только по числу файлов.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как virtual scroll помогает большим спискам в Angular?</summary><br>
+<table><tr><td>
+
+Virtual scroll держит в DOM только видимую часть списка и небольшой buffer, поэтому уменьшаются layout, paint, memory
+usage и change detection work. Он полезен для сотен или тысяч однотипных строк, но усложняет variable height, focus,
+keyboard navigation и screen reader experience. Если bottleneck в API или фильтрации данных, virtual scroll не решит
+корневую проблему.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Почему в performance-аудите проверяют <code>sideEffects</code> библиотек?</summary><br>
 <table><tr><td>
 
@@ -5260,6 +5299,44 @@ SSR может не окупиться для:
 
 SSR улучшает delivery HTML, но не уменьшает автоматически client JavaScript. Решение принимают по SEO, Core Web Vitals,
 инфраструктуре и пользовательскому сценарию.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как SSR, hydration и prerender помогают Angular-приложению?</summary><br>
+<table><tr><td>
+
+SSR отдает HTML на каждый запрос и помогает динамическим SEO-страницам, previews и first paint. Prerender генерирует
+статические routes заранее и хорошо подходит для документации, landing pages и публичного контента. Hydration сохраняет
+server-rendered DOM и подключает к нему Angular на клиенте, уменьшая flicker и риск лишней перерисовки.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие проблемы могут возникать при hydration в Angular?</summary><br>
+<table><tr><td>
+
+Основная проблема — hydration mismatch, когда server HTML не совпадает с первым client render. Причины: browser-only
+globals во время render, случайные значения, даты и timezone, разные данные на сервере и клиенте, direct DOM mutation
+или third-party widget до завершения hydration. Такие места изолируют, делают rendering детерминированным или переносят
+browser-only работу в безопасную client-only фазу.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как Angular-приложение может избежать FOUC или плохого first render?</summary><br>
+<table><tr><td>
+
+Нужны server-rendered или prerendered HTML, critical CSS, стабильные fallback fonts, корректные размеры media, ранняя
+загрузка LCP resource и отсутствие базовых стилей, которые приезжают только после JavaScript. Для Angular также важно,
+чтобы global styles и component styles были доступны при первом render, а placeholders для `@defer` имели стабильные
+размеры.
 
 </td></tr></table>
 
@@ -5492,6 +5569,128 @@ harness. E2E выполняют Playwright или Cypress.
 
 Основу набора составляют быстрые unit и integration-тесты. E2E оставляют для критических сквозных сценариев: вход,
 checkout, создание сущности. Тестируют наблюдаемое поведение, а не приватные методы и внутреннюю структуру компонента.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие плюсы у тестирования frontend-кода?</summary><br>
+<table><tr><td>
+
+Тесты быстро ловят regressions, фиксируют ожидания компонента или сервиса и помогают безопасно менять код. В Angular они
+особенно полезны для forms, routing, DI, HTTP mapping, guards, pipes и сложных states. Хорошие тесты уменьшают страх
+перед refactoring, но не заменяют ручную проверку UX и accessibility.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие минусы и trade-offs у тестов?</summary><br>
+<table><tr><td>
+
+Тесты требуют времени на написание и поддержку, могут быть хрупкими и иногда закрепляют плохую архитектуру. Избыточные
+mocks проверяют реализацию вместо поведения, а слишком много E2E замедляет feedback. Зрелый подход выбирает уровень
+теста по риску: чистую функцию проверять unit-тестом, пользовательский сценарий — integration или E2E.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие инструменты использовать для тестирования Angular-кода?</summary><br>
+<table><tr><td>
+
+Для Angular обычно используют TestBed, Angular testing utilities, `provideHttpClientTesting()`, `HttpTestingController`,
+Router testing harness, Component Harnesses и spies/fakes тестового раннера. Для пользовательских сценариев подходят
+Playwright или Cypress, а Angular Testing Library удобна, когда команда предпочитает DOM-first проверки. Инструмент
+выбирают по контракту, который нужно проверить.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем unit test отличается от integration test?</summary><br>
+<table><tr><td>
+
+Unit test проверяет небольшую единицу с изолированными зависимостями: функцию, pipe, mapping или сервис. Integration
+test проверяет совместную работу нескольких частей: компонент с template, DI, Router, forms или HTTP testing layer. В
+Angular многие полезные component tests фактически являются integration tests, и это нормально.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем integration test отличается от e2e test?</summary><br>
+<table><tr><td>
+
+Integration test запускает часть приложения в тестовой среде и контролирует зависимости. E2E test открывает приложение в
+реальном браузере и проверяет пользовательский путь через UI, часто с network layer, auth и routing. E2E дает больше
+уверенности в сценарии, но медленнее и дороже в поддержке.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие testing best practices важны во frontend?</summary><br>
+<table><tr><td>
+
+Проверять observable behavior, использовать role/label/test id selectors, избегать sleeps, стабилизировать данные и
+тестировать loading/error/empty states. Не стоит проверять private methods, случайные CSS classes и внутреннее число
+signals. Тест должен падать по понятной причине и помогать найти regression.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда тестировать компонент через DOM, а когда тестировать чистую функцию?</summary><br>
+<table><tr><td>
+
+Если контракт виден пользователю или другому компоненту через template, events, forms или accessibility, лучше проверять
+через DOM. Если логика является чистым преобразованием данных, ее проще и быстрее тестировать как функцию. Хороший
+дизайн часто выносит сложные вычисления из компонента, оставляя DOM-тесту только интеграцию.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что лучше тестировать в Angular service?</summary><br>
+<table><tr><td>
+
+В service тестируют mapping DTO в domain model, обработку ошибок, cache/invalidation, retries, guards against invalid
+input и взаимодействие с HTTP или storage через контролируемые fakes. Не нужно тестировать сам `HttpClient`; достаточно
+проверить URL, method, body, headers и реакцию на response.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда использовать Angular Testing Library, TestBed, Component Harness, Cypress или Playwright?</summary><br>
+<table><tr><td>
+
+TestBed — базовый инструмент Angular для DI, components и services. Angular Testing Library удобна для behavior-first
+component tests через DOM queries. Component Harness нужен для стабильного тестового API reusable UI components. Cypress
+и Playwright используют для browser-level сценариев; Playwright особенно силен в multi-browser, tracing и parallel
+execution.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие тесты чаще всего получаются хрупкими?</summary><br>
+<table><tr><td>
+
+Хрупкими становятся тесты на CSS classes, внутреннюю структуру DOM, private methods, точные timers, реальные внешние
+API, порядок независимых async events и snapshots больших компонентов. Их чинят через стабильные locators, ожидание
+видимого состояния, deterministic data, fakes и перенос логики в тестируемые чистые функции.
 
 </td></tr></table>
 

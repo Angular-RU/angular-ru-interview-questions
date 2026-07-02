@@ -145,6 +145,30 @@ Stylelint выполняет похожую проверку для CSS, SCSS и
 </details>
 
 <details>
+<summary>Как вы поддерживаете единый стиль кода в команде?</summary><br>
+<table><tr><td>
+
+Команда фиксирует правила в formatter, linting, editor config, pull request checklist и CI. Важно автоматизировать
+механические споры, а в review обсуждать читаемость, архитектуру и поведение. Если правило не проверяется автоматически,
+его стоит описать в локальных соглашениях или пересмотреть.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Для чего нужен linting tool?</summary><br>
+<table><tr><td>
+
+Linting tool находит ошибки и risky patterns до runtime: неиспользуемый код, неправильные imports, нарушение
+accessibility, небезопасные конструкции и несогласованный стиль. Он не заменяет тесты и review, но дает быстрый feedback
+и делает качество менее зависимым от памяти конкретного разработчика.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Для чего нужен Husky?</summary><br>
 <table><tr><td>
 
@@ -212,6 +236,56 @@ artifacts, CDN cache и rollback — в [Infrastructure](../infrastructure/READM
 На уровне рабочего окружения достаточно понимать, что Docker фиксирует одинаковую среду для локального запуска, CI или
 integration tests. Глубокие вопросы про image, container, Dockerfile, Compose и frontend multi-stage build живут в
 [Infrastructure](../infrastructure/README.md#docker).
+
+</td></tr></table>
+
+</details>
+
+### Workflow и рабочее окружение
+
+<details>
+<summary>Как выглядит обычный workflow при разработке страницы или фичи?</summary><br>
+<table><tr><td>
+
+Сначала уточняют цель, состояния UI, acceptance criteria, API-контракт, accessibility и способ проверки. Затем делают
+минимальный инкремент, запускают локальные проверки, добавляют нужные тесты и отправляют маленький pull request. Хороший
+workflow оставляет следы: описание решения, известные ограничения и понятные шаги проверки.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какое рабочее окружение вы предпочитаете?</summary><br>
+<table><tr><td>
+
+Хороший ответ описывает не любимую IDE как самоцель, а условия продуктивности: быстрый запуск проекта, стабильный
+Node.js version, корректные extensions, formatter on save, debugger, терминал и доступ к DevTools. Важно уметь
+подстроиться под командные стандарты, чтобы локальная среда не расходилась с CI.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что вы делаете, если проект использует tabs, а вы привыкли к spaces?</summary><br>
+<table><tr><td>
+
+Нужно следовать проектным настройкам, а не личной привычке. Форматирование должны задавать `.editorconfig`, Prettier или
+другой formatter, чтобы файлы не менялись случайно из-за IDE. Если правила мешают, их обсуждают отдельно, а не меняют
+попутно в feature pull request.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие version control systems вы использовали?</summary><br>
+<table><tr><td>
+
+Ожидается не только название Git, но и понимание ежедневных операций: branch, commit, merge, rebase, revert, conflict
+resolution, pull request и code review. Если был опыт SVN, Mercurial или monorepo tooling, полезно объяснить, чем
+отличались процессы и какие ограничения это создавало.
 
 </td></tr></table>
 
