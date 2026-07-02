@@ -1,5 +1,5 @@
-import {copyFile, mkdir, readFile, stat, writeFile} from 'node:fs/promises';
-import {relative, resolve} from 'node:path';
+import {copyFile, mkdir, readFile, readdir, stat, writeFile} from 'node:fs/promises';
+import {dirname, relative, resolve} from 'node:path';
 import hljs from 'highlight.js';
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
@@ -18,6 +18,18 @@ const root = resolve(import.meta.dirname, '../..');
 const siteRoot = resolve(root, 'site');
 const dist = resolve(root, 'dist');
 const repositoryUrl = 'https://github.com/Angular-RU/angular-ru-interview-questions';
+const assetDirectoryNames = new Set(['assets', 'images', 'img']);
+const imageExtensions = new Set([
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.webp',
+    '.gif',
+    '.svg',
+    '.avif',
+]);
+const preserveHrefPattern = /^(?:https?:\/\/|mailto:|tel:|#)/i;
+const preserveImageSrcPattern = /^(?:https?:\/\/|data:)/i;
 
 const readTemplate = async (name: string): Promise<string> =>
     readFile(resolve(siteRoot, 'templates', name), 'utf8');
@@ -60,6 +72,9 @@ const escapeHtml = (value: string): string =>
 const escapeTemplateDelimiters = (value: string): string =>
     value.replaceAll('{{', '&#123;&#123;').replaceAll('}}', '&#125;&#125;');
 
+const stripMarkdownFileExtensions = (value: string): string =>
+    value.replaceAll('/README.md', '/').replace(/\.md\b/g, '');
+
 const pathExists = async (path: string): Promise<boolean> => {
     try {
         await stat(path);
@@ -92,6 +107,45 @@ const assertQuestionSourcesExist = async (): Promise<void> => {
 
 const toPosixPath = (path: string): string => path.replaceAll('\\', '/');
 
+const isParentRelativePath = (path: string): boolean =>
+    path === '..' || path.startsWith('../');
+
+const hasHiddenPathSegment = (path: string): boolean =>
+    toPosixPath(path)
+        .split('/')
+        .some((segment) => segment.startsWith('.'));
+
+const getPathExtension = (path: string): string => {
+    const name = path.split('/').at(-1) ?? '';
+    const dotIndex = name.lastIndexOf('.');
+
+    return dotIndex >= 0 ? name.slice(dotIndex).toLowerCase() : '';
+};
+
+const isSupportedImagePath = (path: string): boolean =>
+    imageExtensions.has(getPathExtension(path));
+
+const splitResourceReference = (
+    reference: string,
+): {readonly path: string; readonly suffix: string} => {
+    const separatorIndex = reference.search(/[?#]/);
+
+    if (separatorIndex < 0) {
+        return {path: reference, suffix: ''};
+    }
+
+    return {
+        path: reference.slice(0, separatorIndex),
+        suffix: reference.slice(separatorIndex),
+    };
+};
+
+const getSectionSourceDir = (section: QuestionSection): string =>
+    resolve(root, dirname(section.source));
+
+const getSectionOutputDir = (section: QuestionSection): string =>
+    resolve(dist, dirname(section.output));
+
 const getRelativeHref = (fromOutput: string, targetOutput: string): string => {
     const fromDirectory = resolve(dist, fromOutput, '..');
     const target = resolve(dist, targetOutput);
@@ -109,7 +163,7 @@ const getDirectoryHref = (fromOutput: string, targetOutput: string): string => {
 const getAssetHref = (fromOutput: string, assetOutput: string): string =>
     getRelativeHref(fromOutput, assetOutput);
 
-const createMarkdown = (fromOutput: string): MarkdownIt => {
+const createMarkdown = (section: QuestionSection): MarkdownIt => {
     const md = new MarkdownIt({
         html: true,
         linkify: true,
@@ -126,8 +180,8 @@ const createMarkdown = (fromOutput: string): MarkdownIt => {
         permalink: anchor.permalink.linkInsideHeader({
             symbol: '#',
             placement: 'after',
-            class: 'heading-anchor',
-            ariaHidden: true,
+            class: 'header-anchor',
+            ariaHidden: false,
         }),
     });
 
@@ -144,37 +198,120 @@ const createMarkdown = (fromOutput: string): MarkdownIt => {
             const hrefAttribute = token.attrs?.[hrefIndex];
 
             if (hrefAttribute) {
-                hrefAttribute[1] = normalizeMarkdownHref(hrefAttribute[1], fromOutput);
+                hrefAttribute[1] = normalizeMarkdownHref(hrefAttribute[1], section);
             }
         }
 
         return defaultRender(tokens, index, options, environment, renderer);
     };
 
+    const defaultImageRender =
+        md.renderer.rules.image ??
+        ((tokens, index, options, _environment, renderer) =>
+            renderer.renderToken(tokens, index, options));
+
+    md.renderer.rules.image = (tokens, index, options, environment, renderer) => {
+        const token = tokens[index];
+        const srcIndex = token.attrIndex('src');
+
+        if (srcIndex >= 0) {
+            const srcAttribute = token.attrs?.[srcIndex];
+
+            if (srcAttribute) {
+                srcAttribute[1] = normalizeMarkdownImageSrc(srcAttribute[1], section);
+            }
+        }
+
+        return defaultImageRender(tokens, index, options, environment, renderer);
+    };
+
     return md;
 };
 
-const normalizeMarkdownHref = (href: string, fromOutput: string): string => {
-    if (/^(?:[a-z]+:|#|\/)/i.test(href)) {
+const resolveMarkdownPath = (path: string, source: string): string =>
+    toPosixPath(relative(root, resolve(root, dirname(source), path)));
+
+const getRepositoryMarkdownHref = (
+    path: string,
+    source: string,
+    hash: string,
+): string => {
+    const resolvedPath = resolveMarkdownPath(path, source);
+    const pathWithoutParentSegments = toPosixPath(path).replace(/^(\.\.\/)+/, '');
+    const repositoryPath = pathWithoutParentSegments.startsWith('examples/')
+        ? pathWithoutParentSegments
+        : resolvedPath;
+    const normalizedRepositoryPath = stripMarkdownFileExtensions(repositoryPath);
+    const repositoryPage = path.endsWith('README.md') ? 'tree' : 'blob';
+
+    return `${repositoryUrl}/${repositoryPage}/main/${normalizedRepositoryPath}${hash ? `#${hash}` : ''}`;
+};
+
+const findQuestionSectionByReadmePath = (
+    path: string,
+    source: string,
+): QuestionSection | undefined => {
+    const resolvedPath = resolveMarkdownPath(path, source);
+    const sourceMatch = questionSections.find(
+        (section) => section.source === resolvedPath || section.source === path,
+    );
+
+    if (sourceMatch) {
+        return sourceMatch;
+    }
+
+    const normalizedPath = toPosixPath(path);
+    const pathWithoutParentSegments = normalizedPath.replace(/^(\.\.\/)+/, '');
+    const readmeSectionId =
+        pathWithoutParentSegments.match(/^([^/]+)\/README\.md$/)?.[1] ??
+        normalizedPath.match(/(?:^|\/)questions\/([^/]+)\/README\.md$/)?.[1];
+
+    return questionSections.find((section) => section.id === readmeSectionId);
+};
+
+const normalizeMarkdownHref = (href: string, section: QuestionSection): string => {
+    if (preserveHrefPattern.test(href)) {
         return href;
     }
 
     const [path, hash = ''] = href.split('#');
-    const manifestSection = questionSections.find((section) => section.source === path);
+    const manifestSection = path.endsWith('README.md')
+        ? findQuestionSectionByReadmePath(path, section.source)
+        : undefined;
 
     if (manifestSection) {
-        return `${getDirectoryHref(fromOutput, manifestSection.output)}${hash ? `#${hash}` : ''}`;
-    }
-
-    if (path.startsWith('questions/') && path.endsWith('/README.md')) {
-        return `${repositoryUrl}/blob/main/${path}${hash ? `#${hash}` : ''}`;
+        return `${getDirectoryHref(section.output, manifestSection.output)}${hash ? `#${hash}` : ''}`;
     }
 
     if (path.endsWith('.md')) {
-        return `${repositoryUrl}/blob/main/${path}${hash ? `#${hash}` : ''}`;
+        return getRepositoryMarkdownHref(path, section.source, hash);
     }
 
     return href;
+};
+
+const normalizeMarkdownImageSrc = (src: string, section: QuestionSection): string => {
+    if (preserveImageSrcPattern.test(src)) {
+        return src;
+    }
+
+    const {path, suffix} = splitResourceReference(src);
+
+    if (!path || path.startsWith('/')) {
+        return src;
+    }
+
+    const sourceDir = getSectionSourceDir(section);
+    const resolvedPath = resolve(sourceDir, path);
+    const sectionRelativePath = toPosixPath(relative(sourceDir, resolvedPath));
+
+    if (isParentRelativePath(sectionRelativePath)) {
+        throw new Error(
+            `Unsupported image outside section folder:\n${section.source} references ${src}\nPlease move the asset into ${dirname(section.source)}/assets/`,
+        );
+    }
+
+    return `./${sectionRelativePath.replace(/^\.\//, '')}${suffix}`;
 };
 
 const extractPlainText = (markdown: string): string => {
@@ -199,8 +336,150 @@ const extractPlainText = (markdown: string): string => {
         .replace(/<[^>]*>/g, ' ')
         .replaceAll('{{', '{ {')
         .replaceAll('}}', '} }')
+        .replace(/\.md\b/g, '')
         .replace(/\s+/g, ' ')
         .trim();
+};
+
+const shouldCopyAsset = (relativePath: string): boolean => {
+    if (hasHiddenPathSegment(relativePath) || !isSupportedImagePath(relativePath)) {
+        return false;
+    }
+
+    const segments = toPosixPath(relativePath).split('/');
+
+    return segments.length === 1 || assetDirectoryNames.has(segments[0]);
+};
+
+const collectSectionAssetPaths = async (
+    directory: string,
+    baseDirectory: string,
+): Promise<string[]> => {
+    const entries = await readdir(directory, {withFileTypes: true});
+    const assetPaths: string[] = [];
+
+    for (const entry of entries) {
+        const path = resolve(directory, entry.name);
+        const relativePath = toPosixPath(relative(baseDirectory, path));
+
+        if (entry.name.startsWith('.')) {
+            continue;
+        }
+
+        if (entry.isDirectory()) {
+            assetPaths.push(...(await collectSectionAssetPaths(path, baseDirectory)));
+
+            continue;
+        }
+
+        if (entry.isFile() && shouldCopyAsset(relativePath)) {
+            assetPaths.push(relativePath);
+        }
+    }
+
+    return assetPaths;
+};
+
+const copySectionAssets = async (section: QuestionSection): Promise<void> => {
+    const sourceDir = getSectionSourceDir(section);
+    const outputDir = getSectionOutputDir(section);
+    const assetPaths = await collectSectionAssetPaths(sourceDir, sourceDir);
+
+    for (const assetPath of assetPaths) {
+        const source = resolve(sourceDir, assetPath);
+        const target = resolve(outputDir, assetPath);
+
+        await mkdir(dirname(target), {recursive: true});
+        await copyFile(source, target);
+    }
+};
+
+const isExternalResource = (reference: string): boolean =>
+    /^(?:https?:\/\/|mailto:|tel:|data:)/i.test(reference);
+
+const isLocalSiteHref = (href: string): boolean =>
+    !isExternalResource(href) && !href.startsWith('#') && href.trim() !== '';
+
+const getLocalTargetPath = (htmlPath: string, reference: string): string => {
+    const {path} = splitResourceReference(reference);
+
+    return path.endsWith('/')
+        ? resolve(dirname(htmlPath), path, 'index.html')
+        : resolve(dirname(htmlPath), path);
+};
+
+const extractAttributeValues = (html: string, attribute: string): string[] => {
+    const pattern = new RegExp(
+        `<[^>]+\\s${attribute}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`,
+        'gi',
+    );
+
+    return Array.from(
+        html.matchAll(pattern),
+        (match) => match[1] ?? match[2] ?? match[3],
+    );
+};
+
+const assertGeneratedHtmlIsValid = async (outputs: readonly string[]): Promise<void> => {
+    const errors: string[] = [];
+
+    for (const output of outputs) {
+        const htmlPath = resolve(dist, output);
+        const html = await readFile(htmlPath, 'utf8');
+        const displayPath = toPosixPath(relative(root, htmlPath));
+
+        const unresolvedPlaceholders = Array.from(
+            html.matchAll(placeholderPattern),
+            ([placeholder]) => placeholder,
+        );
+
+        if (unresolvedPlaceholders.length > 0) {
+            errors.push(
+                `Unresolved template placeholders in ${displayPath}: ${Array.from(new Set(unresolvedPlaceholders)).join(', ')}`,
+            );
+        }
+
+        if (html.includes('.md')) {
+            errors.push(`Markdown source reference remains in ${displayPath}`);
+        }
+
+        for (const src of extractAttributeValues(html, 'src')) {
+            if (isExternalResource(src) || src.startsWith('#')) {
+                continue;
+            }
+
+            const target = getLocalTargetPath(htmlPath, src);
+
+            if (!(await pathExists(target))) {
+                errors.push(
+                    `Broken image in ${displayPath}:\n${src} -> ${toPosixPath(relative(root, target))} does not exist`,
+                );
+            }
+        }
+
+        for (const href of extractAttributeValues(html, 'href')) {
+            if (!isLocalSiteHref(href) || href.includes('/examples/')) {
+                continue;
+            }
+
+            if (href.includes('.md')) {
+                errors.push(`Markdown link remains in ${displayPath}: ${href}`);
+                continue;
+            }
+
+            const target = getLocalTargetPath(htmlPath, href);
+
+            if (!(await pathExists(target))) {
+                errors.push(
+                    `Broken link in ${displayPath}:\n${href} -> ${toPosixPath(relative(root, target))} does not exist`,
+                );
+            }
+        }
+    }
+
+    if (errors.length > 0) {
+        throw new Error(errors.join('\n\n'));
+    }
 };
 
 const writeHtml = async (output: string, content: string): Promise<void> => {
@@ -215,8 +494,8 @@ const renderQuestionPage = async (
     section: QuestionSection,
     markdown: string,
 ): Promise<SearchIndexItem> => {
-    const html = escapeTemplateDelimiters(
-        createMarkdown(section.output).render(markdown),
+    const html = stripMarkdownFileExtensions(
+        escapeTemplateDelimiters(createMarkdown(section).render(markdown)),
     );
     const content = renderTemplate(template, {
         title: escapeHtml(`${section.title} | Angular RU Interview Questions`),
@@ -286,11 +565,14 @@ const buildSite = async (): Promise<void> => {
     ]);
 
     const searchIndex: SearchIndexItem[] = [];
+    const generatedHtmlOutputs = ['index.html', 'questions/index.html'];
 
     for (const section of questionSections) {
         const markdown = await readFile(resolve(root, section.source), 'utf8');
         const item = await renderQuestionPage(pageTemplate, section, markdown);
 
+        await copySectionAssets(section);
+        generatedHtmlOutputs.push(section.output);
         searchIndex.push(item);
     }
 
@@ -321,6 +603,7 @@ const buildSite = async (): Promise<void> => {
         `${JSON.stringify(searchIndex, null, 4)}\n`,
     );
     await copyFile(resolve(siteRoot, 'styles.css'), resolve(dist, 'styles.css'));
+    await assertGeneratedHtmlIsValid(generatedHtmlOutputs);
 };
 
 buildSite().catch((error: unknown) => {

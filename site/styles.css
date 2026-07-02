@@ -254,6 +254,20 @@ h1 {
     font-size: 19px;
 }
 
+.markdown .header-anchor {
+    margin-left: 0.35em;
+    color: var(--accent);
+    opacity: 0;
+    text-decoration: none;
+    transition: opacity 120ms ease;
+}
+
+.markdown :is(h1, h2, h3, h4, h5, h6):hover .header-anchor,
+.markdown :is(h1, h2, h3, h4, h5, h6):focus-within .header-anchor,
+.markdown .header-anchor:focus-visible {
+    opacity: 1;
+}
+
 .markdown p,
 .markdown ul,
 .markdown ol {
