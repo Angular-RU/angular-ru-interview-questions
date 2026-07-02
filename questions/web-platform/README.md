@@ -73,7 +73,7 @@ await fetch(url);
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Почему network latency не описывают через Big O?</summary><br>

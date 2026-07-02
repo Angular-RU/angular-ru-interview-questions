@@ -147,7 +147,7 @@ testing и способность рассуждать над задачей.
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Чем live coding отличается от architecture interview?</summary><br>

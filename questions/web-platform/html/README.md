@@ -282,7 +282,7 @@ parsing в порядке объявления и обычно лучше под
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Почему clickable <code>div</code> — плохая практика?</summary><br>
@@ -299,7 +299,7 @@ parsing в порядке объявления и обычно лучше под
 
 ### Forms
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как работает HTML form?</summary><br>
@@ -497,7 +497,7 @@ Radio buttons одной группы получают одинаковый `nam
 
 ### Accessibility
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое accessibility и WCAG?</summary><br>
@@ -893,7 +893,7 @@ Frontend-разработчик отвечает за содержательны
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое Open Graph?</summary><br>
@@ -924,7 +924,7 @@ SSR или prerender отдает содержательный HTML раньше
 
 ### SVG и media
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Чем JPEG, PNG, WebP, AVIF и SVG отличаются друг от друга?</summary><br>

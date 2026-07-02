@@ -130,8 +130,8 @@ providers; поддерживаемые старые API помечены как
 ### 6. Командная работа
 
 - [Git и командная разработка](questions/work-environment/README.md#git-и-командная-разработка)
-- [Agile, Scrum, Kanban, Waterfall](methodologies/README.md)
-- [Организационные модели и бирюзовые компании](methodologies/README.md#организационные-модели-и-бирюзовые-компании)
+- [Agile, Scrum, Kanban, Waterfall](questions/methodologies/README.md)
+- [Организационные модели и бирюзовые компании](questions/methodologies/README.md#организационные-модели-и-бирюзовые-компании)
 - [Работа с задачами](questions/soft-skills/README.md#работа-с-задачами-в-команде)
 - [Оценка задач](questions/soft-skills/README.md#работа-с-задачами-в-команде)
 - [Definition of Ready / Definition of Done](questions/soft-skills/README.md#работа-с-задачами-в-команде)
@@ -154,8 +154,8 @@ providers; поддерживаемые старые API помечены как
 - [Практика по Angular frontend tasks](questions/angular/README.md#практика-по-angular-frontend-tasks)
 - [CSS examples](questions/css/README.md#практика-по-css)
 - [CSS layout и component tasks](questions/css/README.md#css-layout-и-component-tasks)
-- [CSS Flexbox examples](examples/css/flexbox/README.md)
-- [CSS Grid examples](examples/css/grid/README.md)
+- [CSS Flexbox examples](examples/css/flexbox/)
+- [CSS Grid examples](examples/css/grid/)
 - [Задачи по JavaScript](questions/javascript/README.md)
 - [Практика по JavaScript](questions/javascript/README.md#практика-по-javascript)
 - [Задачи по TypeScript](questions/typescript/README.md)
@@ -165,7 +165,7 @@ providers; поддерживаемые старые API помечены как
 - [Computer Science examples](examples/computer-science/)
 - [Frontend system design tasks](questions/infrastructure/README.md#frontend-system-design)
 - [Практические задачи по алгоритмам и design primitives](questions/programming/README.md#практические-задачи-по-алгоритмам-и-design-primitives)
-- [Мини-проекты для интервью](examples/angular/mfe/README.md)
+- [Мини-проекты для интервью](examples/angular/mfe/)
 
 ---
 

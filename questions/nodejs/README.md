@@ -98,7 +98,7 @@ loop.
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое V8?</summary><br>
@@ -507,7 +507,7 @@ sandbox. Bundler polyfills не следует считать автоматич
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Когда scaffolding tools полезны, а когда вредят?</summary><br>
@@ -525,7 +525,7 @@ Scaffolding tools полезны, когда создают повторяему
 
 ### Node.js observability и RPS monitoring
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое RPS?</summary><br>

@@ -991,7 +991,7 @@ const successful = results.filter((result): result is PromiseFulfilledResult<unk
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Чем Promise.any отличается от Promise.race?</summary><br>
@@ -1359,7 +1359,7 @@ service UserService {
 
 ### DOM, SSR и hydration
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое hydration в JavaScript?</summary><br>
@@ -1408,7 +1408,7 @@ Hydration — это процесс, при котором JavaScript подкл
 
 ### Event Loop
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Чем отличается queueMicrotask от setTimeout?</summary><br>
@@ -1870,7 +1870,7 @@ Math.pow(2, 40) | 0; // 0
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как устроена память в JavaScript (memory heap, memory stack)?</summary><br>
@@ -2547,7 +2547,7 @@ condition, чтобы цикл не стал бесконечным.
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как выбирать JavaScript framework или library для проекта?</summary><br>
@@ -2579,7 +2579,7 @@ timers, events, network callbacks. Promise callbacks попадают в microta
 
 ### JavaScript coding questions
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что вернет <code>10 + '20'</code> и почему?</summary><br>
@@ -3030,7 +3030,7 @@ getByPath({user: {name: 'Ada'}}, 'user.name', ''); // 'Ada'
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как реализовать polyfill для <code>Promise.all</code>?</summary><br>

@@ -378,7 +378,7 @@ sequenceDiagram
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое sequence diagram и для чего она нужна?</summary><br>
@@ -648,7 +648,7 @@ flowchart TD
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Чем flowchart отличается от sequence diagram?</summary><br>
@@ -747,7 +747,7 @@ Entity - сущность предметной области, например 
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое ER diagram и для чего она нужна?</summary><br>
@@ -904,7 +904,7 @@ diff, ревьюить, менять вместе с кодом и поддер�
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Какие инструменты можно использовать для описания диаграмм в документации: Mermaid, PlantUML, draw.io / diagrams.net?</summary><br>
@@ -1035,7 +1035,7 @@ ESLint, Prettier и тесты автоматизируют проверки, н
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое сложность алгоритмов?</summary><br>
@@ -1118,7 +1118,7 @@ position чаще нужен throttle или `requestAnimationFrame`.
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Реализуйте LRU cache.</summary><br>

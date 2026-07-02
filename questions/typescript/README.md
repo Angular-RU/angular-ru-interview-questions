@@ -473,7 +473,7 @@ const nextRows = state.rows.toSorted((first, second) => first.name.localeCompare
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое generics, generic constraints и keyof?</summary><br>
@@ -716,7 +716,7 @@ declare module '*.module.css' {
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Почему generic type parameter не дает runtime safety?</summary><br>

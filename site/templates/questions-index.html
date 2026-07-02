@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <title>Вопросы для собеседований</title>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+        />
+        <meta
+            name="description"
+            content="Разделы с вопросами и ответами для подготовки к frontend-собеседованиям."
+        />
+        <link
+            rel="stylesheet"
+            href="{{ stylesHref }}"
+        />
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="container header-layout">
+                <a
+                    class="brand"
+                    href="{{ homeHref }}"
+                >
+                    Angular RU Interview Questions
+                </a>
+                <nav
+                    class="nav"
+                    aria-label="Основная навигация"
+                >
+                    <a href="./">Вопросы</a>
+                    <a href="{{ examplesHref }}">Примеры</a>
+                    <a href="https://github.com/Angular-RU/angular-ru-interview-questions">GitHub</a>
+                </nav>
+            </div>
+        </header>
+        <main class="container">
+            <section class="hero">
+                <p class="eyebrow">Interview questions</p>
+                <h1>Вопросы и ответы по frontend-разработке</h1>
+                <p class="lead">Секции сгруппированы по темам, чтобы быстро перейти к нужной области подготовки.</p>
+            </section>
+            {{ content }}
+        </main>
+    </body>
+</html>

@@ -859,7 +859,7 @@ authorization, validation, business logic и обращение к данным.
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое CORS?</summary><br>
@@ -1056,7 +1056,7 @@ Access-Control-Max-Age: 600
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как проектировать retry и timeout для frontend-запросов?</summary><br>

@@ -335,7 +335,7 @@ Continuous delivery оставляет production release под ручным п
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как бирюзовый подход связан с ownership?</summary><br>

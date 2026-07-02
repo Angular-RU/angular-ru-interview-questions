@@ -301,7 +301,7 @@ Vite в development использует native ES modules и преобразу
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как код попадает в отдельный chunk?</summary><br>
@@ -428,7 +428,7 @@ resolution, pull request и code review. Если был опыт SVN, Mercurial
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Какие инструменты должны быть описаны в onboarding документации?</summary><br>

@@ -2,7 +2,7 @@
 
 ### Redux
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое Redux?</summary><br>
@@ -286,7 +286,7 @@ lifecycle или чрезмерно mutable shared model. Нужны согла�
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Чем MobX отличается от Redux?</summary><br>

@@ -693,7 +693,7 @@ Flexbox, Grid и container queries.
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Чем <code>display: block</code>, <code>inline</code>, <code>inline-block</code>, <code>flex</code>, <code>grid</code> отличаются друг от друга?</summary><br>
@@ -1297,7 +1297,7 @@ Layout определяет отображаемую ширину, а `sizes` с
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое media query?</summary><br>
@@ -1588,7 +1588,7 @@ Legacy `@import` глобально объединяет файлы, может 
 
 </details>
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Какие плюсы и минусы готового UI Kit?</summary><br>
@@ -1607,7 +1607,7 @@ Legacy `@import` глобально объединяет файлы, может 
 
 ### CSS Rendering и Performance
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое critical CSS?</summary><br>

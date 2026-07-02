@@ -2,7 +2,7 @@
 
 ### Docker
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое Docker?</summary><br>
@@ -254,7 +254,7 @@ docker exec -it <container_id> sh
 
 ### Docker Compose
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что такое Docker Compose?</summary><br>
@@ -404,7 +404,7 @@ services:
 
 ### CI/CD для frontend delivery
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что проверяет frontend CI pipeline?</summary><br>
@@ -440,7 +440,7 @@ CD берет уже проверенный build artifact и доставляе
 
 ### Frontend deployment
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Что значит интегрировать frontend code в production environment?</summary><br>
@@ -1144,7 +1144,7 @@ validation и явные fallback-значения.
 
 ### Frontend system design
 
-#### Middle+ / Senior
+#### Middle+ or Senior
 
 <details>
 <summary>Как спроектировать modal/dialog на уровне системы?</summary><br>

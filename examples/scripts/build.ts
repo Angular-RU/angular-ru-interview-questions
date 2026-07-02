@@ -21,6 +21,7 @@ interface PublicDemo {
 
 const root = resolve(import.meta.dirname, '../..');
 const dist = resolve(root, 'dist');
+const examplesDist = resolve(dist, 'examples');
 
 const internalStaticFiles = new Set(['README.md']);
 
@@ -170,6 +171,9 @@ const buildDemo = async (demo: Demo): Promise<void> => {
     }
 };
 
+const toShowcaseHref = (href: string): string =>
+    href.startsWith('./') ? `../${href.slice(2)}` : href;
+
 const toPublicDemo = (demo: Demo): PublicDemo => ({
     id: demo.id,
     title: demo.title,
@@ -177,14 +181,13 @@ const toPublicDemo = (demo: Demo): PublicDemo => ({
     category: demo.category,
     tags: demo.tags,
     status: demo.status,
-    href: demo.href,
+    href: toShowcaseHref(demo.href),
 });
 
 const buildExamples = async (): Promise<void> => {
-    await rm(dist, {recursive: true, force: true});
     await mkdir(dist, {recursive: true});
-    await cp(resolve(root, 'examples/index.html'), resolve(dist, 'index.html'));
-    await writeFile(resolve(dist, '.nojekyll'), '');
+    await mkdir(examplesDist, {recursive: true});
+    await cp(resolve(root, 'examples/index.html'), resolve(examplesDist, 'index.html'));
 
     for (const demo of demos) {
         await buildDemo(demo);
@@ -193,11 +196,11 @@ const buildExamples = async (): Promise<void> => {
     const publicDemos = demos.map(toPublicDemo);
 
     await writeFile(
-        resolve(dist, 'demos.json'),
+        resolve(examplesDist, 'demos.json'),
         `${JSON.stringify(publicDemos, null, 4)}\n`,
     );
 
-    const entries = await readdir(dist);
+    const entries = await readdir(examplesDist);
 
     if (!entries.includes('index.html') || !entries.includes('demos.json')) {
         throw new Error('Examples build finished without required showcase files.');
