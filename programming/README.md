@@ -944,8 +944,6 @@ ESLint, Prettier и тесты автоматизируют проверки, н
 
 ### Практические задачи по алгоритмам и design primitives
 
-Часть задач адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Реализуйте LRU cache.</summary><br>
 <table><tr><td>

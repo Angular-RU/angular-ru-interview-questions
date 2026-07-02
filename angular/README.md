@@ -8158,8 +8158,6 @@ Builder — реализация target вроде `build`, `serve` или `test
 
 ### Frontend topics в Angular
 
-Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Как тестировать Angular-компонент с async data fetching?</summary><br>
 <table><tr><td>
@@ -8314,8 +8312,6 @@ export class MyImp implements My {
 </details>
 
 ### Практика по Angular frontend tasks
-
-Часть задач адаптирована по мотивам Frontend-Master-Prep-Series.
 
 <details>
 <summary>Практическая задача: перенесите autocomplete в Angular.</summary><br>

@@ -1038,8 +1038,6 @@ accessibility, цвет, размер и не зависит от font loading.
 
 ### Accessibility и SEO
 
-Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Как рассчитывается accessible name?</summary><br>
 <table><tr><td>

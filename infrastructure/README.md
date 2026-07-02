@@ -992,8 +992,6 @@ validation и явные fallback-значения.
 
 ### Frontend system design
 
-Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Как спроектировать infinite scroll?</summary><br>
 <table><tr><td>
@@ -1040,7 +1038,11 @@ controlled/uncontrolled open state, sizes, destructive actions, async submit, ne
 поддерживать accessibility contract и edge cases.
 
 ```html
-<div role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+<div
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="dialog-title"
+>
   <h2 id="dialog-title">Удалить проект?</h2>
   <button type="button">Отмена</button>
   <button type="button">Удалить</button>

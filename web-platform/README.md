@@ -120,8 +120,6 @@ await fetch(url);
 
 ### i18n и platform details
 
-Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Как использовать Intl API в frontend-приложении?</summary><br>
 <table><tr><td>

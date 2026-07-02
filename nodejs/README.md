@@ -597,8 +597,6 @@ JavaScript выполняется в основном потоке Node.js. CPU-
 
 ### Frontend tooling
 
-Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Чем Babel, SWC, esbuild и TypeScript compiler отличаются в frontend toolchain?</summary><br>
 <table><tr><td>

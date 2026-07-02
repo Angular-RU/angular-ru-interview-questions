@@ -2565,9 +2565,7 @@ IIFE выполняется сразу и создает отдельную scop
 
 </details>
 
-### Практика по JavaScript из Frontend Master Prep Series
-
-Часть задач адаптирована по мотивам Frontend-Master-Prep-Series.
+### Практика по JavaScript
 
 <details>
 <summary>Реализуйте <code>chunk(array, size)</code>.</summary><br>

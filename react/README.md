@@ -2895,9 +2895,7 @@ type Trip = {
 
 </details>
 
-## React и Next.js из Frontend Master Prep Series
-
-Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
+## React и Next.js
 
 <details>
 <summary>Чем <code>useTransition</code> отличается от <code>useDeferredValue</code>?</summary><br>
@@ -2997,7 +2995,7 @@ export default async function UserPage({params}: {params: Promise<{id: string}>}
 
 </details>
 
-## Практика по React из Frontend Master Prep Series
+## Практика по React
 
 <details>
 <summary>Практическая задача: напишите <code>useWindowSize</code> с SSR-safe поведением.</summary><br>
@@ -3064,6 +3062,30 @@ export function useWindowSize(): WindowSize {
 - не показывать результат старого запроса после более нового;
 - поддержать Arrow Up, Arrow Down, Enter и Escape;
 - задать roles и доступное имя.
+
+```tsx
+const [query, setQuery] = useState('');
+const [items, setItems] = useState<ReadonlyArray<Suggestion>>([]);
+
+useEffect(() => {
+  const controller = new AbortController();
+
+  fetch(`/api/suggest?q=${encodeURIComponent(query)}`, {
+    signal: controller.signal,
+  })
+    .then((response) => response.json())
+    .then(setItems)
+    .catch((error: unknown) => {
+      if (!isAbortError(error)) {
+        setItems([]);
+      }
+    });
+
+  return () => {
+    controller.abort();
+  };
+}, [query]);
+```
 
 Angular-разработчику можно предложить сравнить решение с Angular Signals + `HttpClient` + CDK a11y primitives.
 

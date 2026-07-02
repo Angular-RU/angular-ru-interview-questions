@@ -601,8 +601,6 @@ const nextRows = state.rows.toSorted((first, second) => first.name.localeCompare
 
 ### TypeScript и runtime-контракты
 
-Часть вопросов адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Почему generic type parameter не дает runtime safety?</summary><br>
 <table><tr><td>

@@ -1801,8 +1801,6 @@ Logical properties описывают flow-relative стороны: `margin-inli
 
 ### CSS layout и component tasks
 
-Часть задач адаптирована по мотивам Frontend-Master-Prep-Series.
-
 <details>
 <summary>Практическая задача: сверстайте responsive card grid без JavaScript.</summary><br>
 <table><tr><td>
