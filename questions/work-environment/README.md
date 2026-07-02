@@ -139,7 +139,7 @@ commits получают новые parent links и hashes.
 manager закреплен в проекте и какой lock-файл должен быть единственным источником воспроизводимой установки.
 
 Подробности про manifest, зависимости, lock-файлы и npm-команды см. в разделе
-[npm и package scripts](../nodejs/README.md#npm-и-package-scripts).
+[npm и package scripts](../../nodejs/README.md#npm-и-package-scripts).
 
 </td></tr></table>
 
@@ -216,7 +216,7 @@ lock-файл. Отличаются скоростью, моделью `node_mod
 
 `package-lock.json` нужен для воспроизводимой установки npm-зависимостей в локальной разработке и CI.
 
-Canonical-ответ: [Что такое package-lock.json?](../nodejs/README.md#npm-и-package-scripts)
+Canonical-ответ: [Что такое package-lock.json?](../../nodejs/README.md#npm-и-package-scripts)
 
 </td></tr></table>
 
@@ -231,8 +231,8 @@ Canonical-ответ: [Что такое package-lock.json?](../nodejs/README.md
 В рабочем процессе важно правило: локально чаще используют установку по правилам проекта, а в CI предпочитают
 воспроизводимую установку по lock-файлу.
 
-Подробное сравнение см. в Node.js-разделе: [Что делает npm install?](../nodejs/README.md#npm-и-package-scripts) и
-[Что делает npm ci?](../nodejs/README.md#npm-и-package-scripts).
+Подробное сравнение см. в Node.js-разделе: [Что делает npm install?](../../nodejs/README.md#npm-и-package-scripts) и
+[Что делает npm ci?](../../nodejs/README.md#npm-и-package-scripts).
 
 </td></tr></table>
 
@@ -333,8 +333,8 @@ Vite в development использует native ES modules и преобразу
 На уровне командного процесса CI/CD отвечает за правило: каждое изменение должно проходить одинаковые автоматические
 проверки, а доставка в окружения должна быть понятной и воспроизводимой.
 
-Разницу CI и CD как процесса см. в [Методологиях](../methodologies/README.md#чем-ci-отличается-от-cd), а deployment,
-artifacts, CDN cache и rollback — в [Infrastructure](../infrastructure/README.md#frontend-deployment).
+Разницу CI и CD как процесса см. в [Методологиях](../../methodologies/README.md#чем-ci-отличается-от-cd), а deployment,
+artifacts, CDN cache и rollback — в [Infrastructure](../../infrastructure/README.md#frontend-deployment).
 
 </td></tr></table>
 
@@ -348,7 +348,7 @@ artifacts, CDN cache и rollback — в [Infrastructure](../infrastructure/READM
 
 На уровне рабочего окружения достаточно понимать, что Docker фиксирует одинаковую среду для локального запуска, CI или
 integration tests. Глубокие вопросы про image, container, Dockerfile, Compose и frontend multi-stage build живут в
-[Infrastructure](../infrastructure/README.md#docker).
+[Infrastructure](../../infrastructure/README.md#docker).
 
 </td></tr></table>
 

@@ -18,7 +18,7 @@ technologies).
 <button>Buy</button>
 ```
 
-![img.png](./assets/html-and-css-difference.png)
+![img.png](assets/html-and-css-difference.png)
 
 </td></tr></table>
 
@@ -30,7 +30,7 @@ technologies).
 
 **Уровень:** Junior
 
-![img.png](./assets/what-is-html-attribute.png)
+![img.png](assets/what-is-html-attribute.png)
 
 Attribute задает дополнительную информацию или поведение element: `href`, `type`, `disabled`, `lang`. Global attributes
 вроде `id`, `class`, `hidden` и `data-*` доступны большинству элементов, а часть attributes имеет смысл только для
@@ -105,7 +105,7 @@ Custom Elements API позволяет регистрировать собств
 
 **Уровень:** Middle
 
-![img.png](./assets/what-the-difference-between-tag-and-element.png)
+![img.png](assets/what-the-difference-between-tag-and-element.png)
 
 Tag — синтаксическая часть разметки, например `<p>` или `</p>`. Element — целый узел: открывающий tag, attributes,
 content и закрывающий tag. Void elements вроде `<img>` не имеют closing tag и содержимого.

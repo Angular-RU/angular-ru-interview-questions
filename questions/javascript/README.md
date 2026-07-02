@@ -277,7 +277,7 @@ typeof function () {}; // "function"
 typeof Symbol('id'); // "symbol"
 ```
 
-![img.png](./assets/data-types.png)
+![img.png](assets/data-types.png)
 
 </td></tr></table>
 
