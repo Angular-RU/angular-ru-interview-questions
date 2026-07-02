@@ -7,21 +7,21 @@ TypeScript и устройство Angular-приложений.
 
 ### 1. Основы frontend-разработки
 
-- [Основы Computer Science](computer-science/README.md)
-- [Алгоритмы и структуры данных для frontend](computer-science/README.md#алгоритмы-и-структуры-данных-для-frontend)
+- [Основы Computer Science](questions/computer-science/README.md)
+- [Алгоритмы и структуры данных для frontend](questions/computer-science/README.md#алгоритмы-и-структуры-данных-для-frontend)
 - [Web Platform](questions/web-platform/README.md)
 - [Большие данные, сеть и browser APIs](questions/web-platform/README.md#большие-данные-сеть-и-browser-apis)
 - [HTML, формы, доступность (accessibility), SEO и media](questions/web-platform/html/README.md)
-- [CSS](css/README.md)
+- [CSS](questions/css/README.md)
 - [Рендеринг браузера и производительность (performance)](questions/web-platform/browser/README.md)
 - [HTTP, HTTPS и curl](questions/web-platform/http/README.md)
-- [JavaScript](javascript/README.md)
+- [JavaScript](questions/javascript/README.md)
 - [TypeScript](questions/typescript/README.md)
 
 ### 2. Инженерные основы
 
-- [Основы программирования и проектирования](programming/README.md)
-- [SOLID, DRY, KISS, YAGNI](programming/README.md)
+- [Основы программирования и проектирования](questions/programming/README.md)
+- [SOLID, DRY, KISS, YAGNI](questions/programming/README.md)
 - [Архитектурные компромиссы (trade-offs)](questions/soft-skills/README.md#принятие-решений-список-вопросов)
 - [Общее управление состоянием (State Management)](questions/state-management/README.md)
 
@@ -32,37 +32,37 @@ providers; поддерживаемые старые API помечены как
 
 #### 3.1 Основы Angular
 
-- [Angular Core](angular/README.md#angular-core)
-- [Обзор Angular](angular/README.md#основные-концепции)
-- [Компоненты, директивы, сервисы и pipes](angular/README.md#компоненты-директивы-сервисы-и-pipes)
-- [Templates](angular/README.md#templates)
-- [Lifecycle и rendering](angular/README.md#lifecycle-и-rendering)
-- [Dependency Injection](angular/README.md#dependency-injection)
-- [Angular Change Detection](angular/README.md#angular-change-detection)
-- [Angular Signals](angular/README.md#angular-signals)
+- [Angular Core](questions/angular/README.md#angular-core)
+- [Обзор Angular](questions/angular/README.md#основные-концепции)
+- [Компоненты, директивы, сервисы и pipes](questions/angular/README.md#компоненты-директивы-сервисы-и-pipes)
+- [Templates](questions/angular/README.md#templates)
+- [Lifecycle и rendering](questions/angular/README.md#lifecycle-и-rendering)
+- [Dependency Injection](questions/angular/README.md#dependency-injection)
+- [Angular Change Detection](questions/angular/README.md#angular-change-detection)
+- [Angular Signals](questions/angular/README.md#angular-signals)
 
 #### 3.2 Поток данных в Angular
 
-- [RxJS](angular/README.md#rxjs)
-- [Angular Forms](angular/README.md#angular-forms)
-- [Angular HTTP](angular/README.md#angular-http)
-- [Angular Router](angular/README.md#angular-router)
-- [Управление состоянием (State Management) в Angular](angular/README.md#управление-состоянием)
+- [RxJS](questions/angular/README.md#rxjs)
+- [Angular Forms](questions/angular/README.md#angular-forms)
+- [Angular HTTP](questions/angular/README.md#angular-http)
+- [Angular Router](questions/angular/README.md#angular-router)
+- [Управление состоянием (State Management) в Angular](questions/angular/README.md#управление-состоянием)
 
 #### 3.3 Продакшен в Angular
 
-- [Безопасность (Security)](angular/README.md#security)
-- [Производительность (Performance)](angular/README.md#performance)
-- [SSR, hydration и SEO](angular/README.md#ssr-hydration-и-seo)
-- [Angular PWA и Service Worker](angular/README.md#angular-pwa-и-service-worker)
-- [Testing](angular/README.md#testing)
+- [Безопасность (Security)](questions/angular/README.md#security)
+- [Производительность (Performance)](questions/angular/README.md#performance)
+- [SSR, hydration и SEO](questions/angular/README.md#ssr-hydration-и-seo)
+- [Angular PWA и Service Worker](questions/angular/README.md#angular-pwa-и-service-worker)
+- [Testing](questions/angular/README.md#testing)
 
 #### 3.4 Архитектура и экосистема Angular
 
-- [Angular libraries и design systems](angular/README.md#angular-libraries-и-design-systems)
-- [Dynamic components](angular/README.md#компоненты-директивы-сервисы-и-pipes)
-- [Micro Frontends](angular/README.md#micro-frontends)
-- [Tooling](angular/README.md#tooling)
+- [Angular libraries и design systems](questions/angular/README.md#angular-libraries-и-design-systems)
+- [Dynamic components](questions/angular/README.md#компоненты-директивы-сервисы-и-pipes)
+- [Micro Frontends](questions/angular/README.md#micro-frontends)
+- [Tooling](questions/angular/README.md#tooling)
 
 ### 4. React для Angular-разработчика
 
@@ -115,17 +115,17 @@ providers; поддерживаемые старые API помечены как
 
 ### 5. Инфраструктура и доставка изменений
 
-- [Node.js](nodejs/README.md)
-- [Node.js для frontend tooling](nodejs/README.md#nodejs-для-frontend-tooling)
-- [npm/package managers/workspaces](nodejs/README.md#npm-и-package-scripts)
+- [Node.js](questions/nodejs/README.md)
+- [Node.js для frontend tooling](questions/nodejs/README.md#nodejs-для-frontend-tooling)
+- [npm/package managers/workspaces](questions/nodejs/README.md#npm-и-package-scripts)
 - [Рабочее окружение frontend-разработчика](questions/work-environment/README.md)
-- [Инфраструктура](infrastructure/README.md)
-- [Docker и Docker Compose](infrastructure/README.md#docker)
-- [CI/CD](infrastructure/README.md#cicd-для-frontend-delivery)
-- [Frontend deployment](infrastructure/README.md#frontend-deployment)
-- [System design basics для frontend](infrastructure/README.md#что-такое-load-balancing)
-- [CDN/cache/rollback](infrastructure/README.md#frontend-deployment)
-- [Feature toggles](infrastructure/README.md#feature-toggles)
+- [Инфраструктура](questions/infrastructure/README.md)
+- [Docker и Docker Compose](questions/infrastructure/README.md#docker)
+- [CI/CD](questions/infrastructure/README.md#cicd-для-frontend-delivery)
+- [Frontend deployment](questions/infrastructure/README.md#frontend-deployment)
+- [System design basics для frontend](questions/infrastructure/README.md#что-такое-load-balancing)
+- [CDN/cache/rollback](questions/infrastructure/README.md#frontend-deployment)
+- [Feature toggles](questions/infrastructure/README.md#feature-toggles)
 
 ### 6. Командная работа
 
@@ -140,7 +140,7 @@ providers; поддерживаемые старые API помечены как
 
 ### 7. Поиск работы и интервью
 
-- [Поиск работы и стратегия интервью](job-search/README.md)
+- [Поиск работы и стратегия интервью](questions/job-search/README.md)
 - [Самопрезентация](questions/soft-skills/README.md#самопрезентация)
 - [Team fit](questions/soft-skills/README.md#знакомство-с-командой)
 - [Soft skills](questions/soft-skills/README.md)
@@ -150,21 +150,21 @@ providers; поддерживаемые старые API помечены как
 
 ### Практика
 
-- [Задачи по Angular](angular/README.md#angular-coding-questions)
-- [Практика по Angular frontend tasks](angular/README.md#практика-по-angular-frontend-tasks)
-- [CSS examples](css/README.md#практика-по-css)
-- [CSS layout и component tasks](css/README.md#css-layout-и-component-tasks)
+- [Задачи по Angular](questions/angular/README.md#angular-coding-questions)
+- [Практика по Angular frontend tasks](questions/angular/README.md#практика-по-angular-frontend-tasks)
+- [CSS examples](questions/css/README.md#практика-по-css)
+- [CSS layout и component tasks](questions/css/README.md#css-layout-и-component-tasks)
 - [CSS Flexbox examples](examples/css/flexbox/README.md)
 - [CSS Grid examples](examples/css/grid/README.md)
-- [Задачи по JavaScript](javascript/README.md)
-- [Практика по JavaScript](javascript/README.md#практика-по-javascript)
+- [Задачи по JavaScript](questions/javascript/README.md)
+- [Практика по JavaScript](questions/javascript/README.md#практика-по-javascript)
 - [Задачи по TypeScript](questions/typescript/README.md)
 - [React examples](questions/react/README.md#практические-задачки)
 - [Практика по React](questions/react/README.md#практика-по-react)
 - [React practice app](questions/react/README.md#мини-проект-travel-planner)
 - [Computer Science examples](examples/computer-science/)
-- [Frontend system design tasks](infrastructure/README.md#frontend-system-design)
-- [Практические задачи по алгоритмам и design primitives](programming/README.md#практические-задачи-по-алгоритмам-и-design-primitives)
+- [Frontend system design tasks](questions/infrastructure/README.md#frontend-system-design)
+- [Практические задачи по алгоритмам и design primitives](questions/programming/README.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [Мини-проекты для интервью](examples/angular/mfe/README.md)
 
 ---
