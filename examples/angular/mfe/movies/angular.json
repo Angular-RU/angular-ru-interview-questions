@@ -1,12 +1,12 @@
 {
-    "$schema": "../../../node_modules/@angular/cli/lib/config/schema.json",
+    "$schema": "../../../../node_modules/@angular/cli/lib/config/schema.json",
     "version": 1,
     "cli": {
         "packageManager": "npm"
     },
     "newProjectRoot": "projects",
     "projects": {
-        "movies-ticket": {
+        "movies": {
             "projectType": "application",
             "schematics": {},
             "root": "",
@@ -20,15 +20,15 @@
                     },
                     "configurations": {
                         "production": {
-                            "target": "movies-ticket:esbuild:production",
+                            "target": "movies:esbuild:production",
                             "ssr": true
                         },
                         "development": {
-                            "target": "movies-ticket:esbuild:development",
+                            "target": "movies:esbuild:development",
                             "dev": true
                         },
                         "pages": {
-                            "target": "movies-ticket:esbuild:pages",
+                            "target": "movies:esbuild:pages",
                             "ssr": false
                         }
                     },
@@ -37,7 +37,7 @@
                 "serve": {
                     "builder": "@angular-architects/native-federation:build",
                     "options": {
-                        "target": "movies-ticket:serve-original:development",
+                        "target": "movies:serve-original:development",
                         "rebuildDelay": 500,
                         "cacheExternalArtifacts": true,
                         "dev": true,
@@ -51,7 +51,7 @@
                 "esbuild": {
                     "builder": "@angular/build:application",
                     "options": {
-                        "outputPath": "dist/movies-ticket",
+                        "outputPath": "dist/movies",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
@@ -94,17 +94,11 @@
                             "sourceMap": true
                         },
                         "pages": {
-                            "baseHref": "/demos/mfe/movie-ticket/",
+                            "baseHref": "/demos/mfe/movies/",
                             "outputPath": {
-                                "base": "../../../../dist/mfe/movie-ticket",
+                                "base": "dist/pages",
                                 "browser": ""
                             },
-                            "fileReplacements": [
-                                {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.pages.ts"
-                                }
-                            ],
                             "optimization": true,
                             "outputHashing": "all"
                         }
@@ -115,15 +109,15 @@
                     "builder": "@angular/build:dev-server",
                     "configurations": {
                         "production": {
-                            "buildTarget": "movies-ticket:esbuild:production"
+                            "buildTarget": "movies:esbuild:production"
                         },
                         "development": {
-                            "buildTarget": "movies-ticket:esbuild:development"
+                            "buildTarget": "movies:esbuild:development"
                         }
                     },
                     "defaultConfiguration": "development",
                     "options": {
-                        "port": 4200
+                        "port": 4201
                     }
                 }
             }

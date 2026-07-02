@@ -7,7 +7,7 @@
     "bugs": {
         "url": "https://github.com/Angular-RU/angular-ru-interview-questions/issues"
     },
-    "workspaces": ["*/examples/*", "*/examples/*/*"],
+    "workspaces": ["examples/*/*", "examples/*/*/*"],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Angular-RU/angular-ru-interview-questions.git"
@@ -16,10 +16,12 @@
     "license": "MIT",
     "author": "angular-ru@yandex.ru",
     "scripts": {
+        "build:examples": "tsx examples/scripts/build.ts",
         "format": "prettier !package-lock.json . --ignore-path .gitignore --write"
     },
     "dependencies": {
+        "@types/node": "26.1.0",
         "prettier": "3.8.4",
-        "@types/node": "^20.17.19"
+        "tsx": "4.20.6"
     }
 }

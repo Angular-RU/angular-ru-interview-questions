@@ -29,7 +29,7 @@
 ## Project structure
 
 ```text
-angular/examples/micro-frontends/
+examples/angular/mfe/
   movie-ticket/         # host/shell
   movies/               # remote со списком фильмов
   ticket-availability/  # remote с доступностью билетов
@@ -155,4 +155,4 @@ contract tests.
 
 Вопросы по этому демо находятся в основном README:
 
-- [Angular / Micro Frontends](../../README.md#micro-frontends)
+- [Angular / Micro Frontends](../../../angular/README.md#micro-frontends)

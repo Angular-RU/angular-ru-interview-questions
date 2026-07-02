@@ -154,17 +154,18 @@ providers; поддерживаемые старые API помечены как
 - [Практика по Angular frontend tasks](angular/README.md#практика-по-angular-frontend-tasks)
 - [CSS examples](css/README.md#практика-по-css)
 - [CSS layout и component tasks](css/README.md#css-layout-и-component-tasks)
-- [CSS Flexbox examples](css/examples/flexbox/README.md)
-- [CSS Grid examples](css/examples/grid/README.md)
+- [CSS Flexbox examples](examples/css/flexbox/README.md)
+- [CSS Grid examples](examples/css/grid/README.md)
 - [Задачи по JavaScript](javascript/README.md)
 - [Практика по JavaScript](javascript/README.md#практика-по-javascript)
 - [Задачи по TypeScript](typescript/README.md)
 - [React examples](react/README.md#практические-задачки)
 - [Практика по React](react/README.md#практика-по-react)
 - [React practice app](react/README.md#мини-проект-travel-planner)
+- [Computer Science examples](examples/computer-science/)
 - [Frontend system design tasks](infrastructure/README.md#frontend-system-design)
 - [Практические задачи по алгоритмам и design primitives](programming/README.md#практические-задачи-по-алгоритмам-и-design-primitives)
-- [Мини-проекты для интервью](angular/examples/micro-frontends/README.md)
+- [Мини-проекты для интервью](examples/angular/mfe/README.md)
 
 ---
 

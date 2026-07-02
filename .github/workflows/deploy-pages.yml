@@ -1,4 +1,4 @@
-name: Deploy demos
+name: Deploy to Github Pages
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-demos
+  group: deploy-pages
   cancel-in-progress: true
 
 permissions:
@@ -37,19 +37,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Prepare demos root
-        run: |
-          cp -R tools/demos-showcase/. dist/
-          touch dist/.nojekyll
-
-      - name: Build movies remote
-        run: npm run build -w movies -- --configuration pages
-
-      - name: Build ticket availability remote
-        run: npm run build -w ticket-availability -- --configuration pages
-
-      - name: Build movie ticket host
-        run: npm run build -w movie-ticket -- --configuration pages
+      - name: Build examples
+        run: npm run build:examples
 
       - name: Deploy dist to Angular-RU/demos main branch
         env:
