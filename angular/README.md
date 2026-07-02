@@ -5024,6 +5024,32 @@ Frontend-разработчику важно понимать, где закан
 ### Performance
 
 <details>
+<summary>Как performance budget применяется в Angular-проекте?</summary><br>
+<table><tr><td>
+
+В Angular performance budget обычно включает размер initial bundle, lazy chunks, CSS, LCP, CLS, INP и время до
+интерактивности. Angular CLI поддерживает budgets для build artifacts, но этого недостаточно: нужно также измерять Web
+Vitals на реальных страницах, следить за lazy routes, standalone imports, third-party dependencies и SSR/hydration
+поведением.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как уменьшать размер frontend assets в Angular?</summary><br>
+<table><tr><td>
+
+Основные способы: lazy routes, `@defer`, tree shaking, удаление неиспользуемых dependencies, аккуратные standalone
+imports, image optimization, font subsetting, compression и перенос необязательных scripts из startup path. Изменение
+нужно измерять до и после, потому что новый chunk или library могут ухудшить не только bundle size, но и parse/execute
+time.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Как искать проблему производительности в Angular-приложении?</summary><br>
 <table><tr><td>
 
@@ -5186,6 +5212,18 @@ production bundle stats.
 </details>
 
 ### SSR, hydration и SEO
+
+<details>
+<summary>Как frontend guidelines помогают SSR, hydration и SEO в Angular?</summary><br>
+<table><tr><td>
+
+Guidelines фиксируют, какие страницы рендерятся через SSR или prerender, как подключаются critical CSS, fonts и media,
+какие browser-only API нельзя вызывать во время server rendering и как проверяется hydration. Это снижает риск пустого
+first render, layout shifts, hydration mismatch и случайного ухудшения SEO.
+
+</td></tr></table>
+
+</details>
 
 <details>
 <summary>Чем CSR, SSR и SSG отличаются?</summary><br>
@@ -5394,6 +5432,30 @@ tooling или legacy-конфигураций. Для обычной разра
 ### Angular PWA и Service Worker
 
 <details>
+<summary>Как Angular помогает с localization?</summary><br>
+<table><tr><td>
+
+Angular предоставляет i18n-инструменты для извлечения и подстановки переводов, а также pipes для дат, чисел и валют с
+учетом locale. Но команда все равно должна решить, где хранятся переводы, нужен ли runtime или build-time localization,
+как тестируются языки и как компоненты переживают длинные строки, pluralization и RTL.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему RTL нужно учитывать в layout и компонентах?</summary><br>
+<table><tr><td>
+
+RTL меняет направление текста и часто влияет на icons, arrows, spacing, alignment, keyboard navigation и animations.
+Нельзя просто перевести строки и считать интерфейс готовым. Компоненты design system должны явно поддерживать LTR/RTL,
+а CSS должен использовать logical properties там, где это упрощает поддержку.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Для чего нужны service worker?</summary><br>
 <table><tr><td>
 
@@ -5552,6 +5614,19 @@ push-уведомления.
 </details>
 
 ### Testing
+
+<details>
+<summary>Какие вопросы задать про тестирование Angular-кода в команде?</summary><br>
+<table><tr><td>
+
+Нужно понять, какие уровни тестов используются: unit, integration, component, e2e и visual regression. Также важно
+выяснить, какие инструменты приняты: TestBed, Angular Testing Library, Component Harness, Cypress, Playwright, Jest,
+Vitest или Karma. Хороший ответ объясняет не только инструменты, но и что именно ими проверяют и где проходит граница
+между тестом, lint и ручной проверкой.
+
+</td></tr></table>
+
+</details>
 
 <details>
 <summary>Какие виды тестирования используют в Angular?</summary><br>
@@ -6007,6 +6082,42 @@ export class PanelComponent {
 </details>
 
 ### Angular libraries и design systems
+
+<details>
+<summary>Как guidelines помогают design system в Angular?</summary><br>
+<table><tr><td>
+
+Guidelines связывают компоненты design system с реальным использованием в продуктах: naming, inputs/outputs,
+accessibility, theming, tokens, layout patterns и правила расширения. Это снижает количество кастомных fork-like
+решений и помогает разным командам использовать UI kit одинаково.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему Angular-команде важно документировать отклонения от UI kit или framework?</summary><br>
+<table><tr><td>
+
+Отклонения появляются из-за нестандартных требований, legacy-кода или ограничений продукта. Если их не документировать,
+новые разработчики будут копировать workaround как норму. Хорошая документация объясняет причину, область применения и
+условия, при которых workaround можно удалить.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое pattern library и зачем она нужна?</summary><br>
+<table><tr><td>
+
+Pattern library описывает повторяемые UI patterns, компоненты, states, accessibility rules и примеры использования. В
+Angular-мире эту роль часто выполняют Storybook, Docusaurus, documentation site design system или собственные examples.
+Она помогает продуктовым командам не изобретать один и тот же интерфейс заново.
+
+</td></tr></table>
+
+</details>
 
 <details>
 <summary>Чем library code отличается от application code?</summary><br>
@@ -7941,6 +8052,30 @@ component.
 
 Feature toggles в Angular часто реализуют через service, guard, directive или provider. Общие типы флагов, lifecycle,
 риски и fallback-стратегии описаны в разделе [Feature toggles](../infrastructure/README.md#feature-toggles).
+
+<details>
+<summary>Какие frontend guidelines особенно важны для Angular-проекта?</summary><br>
+<table><tr><td>
+
+Для Angular-проекта важны соглашения о структуре standalone components, signals и RxJS, smart/presentational
+components, forms, HTTP services, error handling, lazy loading, testing и naming. Без таких правил разные части
+приложения начинают выглядеть как разные frameworks внутри одного репозитория.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что стоит фиксировать в Angular coding guidelines?</summary><br>
+<table><tr><td>
+
+Стоит фиксировать структуру feature folders, правила для components, services, directives и pipes, подход к state
+management, forms, error handling, loading states и тестированию. Также полезно описать, когда использовать signals,
+когда RxJS, а когда обычные class fields или pure functions.
+
+</td></tr></table>
+
+</details>
 
 <details>
 <summary>Что такое TypeScript program?</summary><br>

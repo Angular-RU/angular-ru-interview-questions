@@ -305,6 +305,18 @@ compatible ranges могут установить разные transitive versio
 </details>
 
 <details>
+<summary>Чем task runner отличается от package scripts?</summary><br>
+<table><tr><td>
+
+Task runner вроде Gulp или Grunt описывает pipeline через отдельный инструмент и плагины. Package scripts запускают
+команды напрямую через npm, pnpm, Yarn или Bun. В современных frontend-проектах многие задачи закрываются framework CLI,
+bundler и package scripts, но legacy-проекты могут все еще использовать task runners для сборки assets или интеграции.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Что такое semantic versioning?</summary><br>
 <table><tr><td>
 
@@ -335,6 +347,18 @@ Exact устанавливает только указанную version. `~1.2.
 
 Node запускает package manager, compiler, linter, tests, dev server и production build. Результат затем выполняется в
 browser и может не зависеть от Node. SSR-приложение дополнительно использует Node во время runtime.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда scaffolding tools полезны, а когда вредят?</summary><br>
+<table><tr><td>
+
+Scaffolding tools полезны, когда создают повторяемую структуру components, features, libraries или tests по текущим
+командным conventions. Они вредят, если генерируют много непонятного boilerplate или закрепляют устаревшую архитектуру.
+Генератор должен отражать живую codebase, а не исторические привычки.
 
 </td></tr></table>
 

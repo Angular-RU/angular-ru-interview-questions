@@ -381,6 +381,30 @@ CD берет уже проверенный build artifact и доставляе
 ### Frontend deployment
 
 <details>
+<summary>Что значит интегрировать frontend code в production environment?</summary><br>
+<table><tr><td>
+
+Это значит не только собрать bundle, но и доставить его в окружение, где работают routing, API, CDN, cache, runtime
+config, security headers, monitoring и rollback. Для SPA важно настроить fallback на `index.html`, версионирование
+assets и стратегию cache invalidation, чтобы пользователь не получил несовместимые версии файлов.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие вопросы нужно задать перед production deployment frontend-приложения?</summary><br>
+<table><tr><td>
+
+Нужно понять, где собирается приложение, где хранятся artifacts, как задаются environment variables, кто отвечает за
+release, как работает rollback, какие checks обязательны и как мониторятся ошибки. Без этих ответов deployment остается
+ручной и рискованной процедурой.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Что является артефактом frontend build?</summary><br>
 <table><tr><td>
 
@@ -478,6 +502,9 @@ Cache invalidation — правила, по которым кеш переста
 
 Во frontend важно понимать, какой слой кеша отвечает за данные: browser HTTP cache, Service Worker, CDN, клиентский
 state manager или backend. Иначе можно исправить данные на сервере, но продолжать показывать stale UI из другого кеша.
+
+Для deployment особенно важно разделять `index.html` и hashed assets: HTML обычно кешируют осторожно, а JS, CSS и media
+с content hash можно кешировать дольше. Иначе браузер или CDN могут смешать старый HTML с новыми chunks или наоборот.
 
 </td></tr></table>
 

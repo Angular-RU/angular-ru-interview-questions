@@ -56,6 +56,54 @@ Progressive enhancement проектирует опыт от базового с
 </details>
 
 <details>
+<summary>Чем browser support отличается от browser optimization?</summary><br>
+<table><tr><td>
+
+Browser support означает, что пользователь может выполнить основной сценарий в браузере или на устройстве. Browser
+optimization означает, что под важные браузеры, устройства и сети интерфейс дополнительно улучшается. Не всегда нужно
+давать всем одинаковый experience, но базовый сценарий не должен ломаться без явной продуктовой причины.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как определить, какие браузеры поддерживать?</summary><br>
+<table><tr><td>
+
+Browser support должен опираться на аналитику пользователей, требования бизнеса, корпоративную среду, законодательные
+ограничения и стоимость поддержки. Решение нельзя принимать только по личным предпочтениям разработчиков. Его стоит
+записать в guidelines и регулярно пересматривать.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое graded browser support?</summary><br>
+<table><tr><td>
+
+Graded browser support делит браузеры или устройства на уровни. Например, в одних браузерах гарантируется полный
+experience, в других — базовая функциональность, а для устаревших окружений — readable content или explicit fallback.
+Это помогает управлять стоимостью поддержки и ожиданиями бизнеса.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда компоненту нужна отдельная browser support policy?</summary><br>
+<table><tr><td>
+
+Отдельная policy нужна, если компонент использует API с разной поддержкой: camera, clipboard, drag and drop, сложную
+графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире,
+а конкретный advanced component — уже, если fallback честно описан.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Что такое FOUC и как его уменьшить?</summary><br>
 <table><tr><td>
 
@@ -63,6 +111,18 @@ FOUC, Flash of Unstyled Content, возникает, когда HTML уже от
 Помогают critical CSS, корректное размещение stylesheet, preload важных fonts, стабильные fallback fonts и отказ от
 поздней загрузки базовых стилей через JavaScript. В Angular также важно, чтобы server-rendered HTML и client styles
 давали согласованный first render.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как подключение custom fonts влияет на performance?</summary><br>
+<table><tr><td>
+
+Custom fonts могут задерживать отображение текста, влиять на LCP и вызывать FOUT или FOIT. Нужно выбирать WOFF2,
+`font-display`, preload только критичных начертаний, subset и fallback stack с близкими метриками. Чем больше font
+files и weights, тем выше риск медленного first render.
 
 </td></tr></table>
 
@@ -186,6 +246,54 @@ download, parse, compile и execute на main thread, конкурируя со 
 
 В Angular это проявляется как поздний initial rendering и длинные tasks до интерактивности. Помогают `defer`, code
 splitting, lazy routes, уменьшение polyfills/dependencies, SSR/SSG и перенос тяжелой работы из startup path.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое performance budget?</summary><br>
+<table><tr><td>
+
+Performance budget — заранее заданный лимит на важные показатели: bundle size, LCP, CLS, INP, TTFB, количество
+запросов, вес изображений или размер CSS. Он помогает не ухудшать продукт незаметно от релиза к релизу. Хороший budget
+проверяется в CI, monitoring или регулярных performance reviews, а не только вручную перед релизом.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие метрики подходят для frontend performance budget?</summary><br>
+<table><tr><td>
+
+Для пользовательского опыта важны LCP, CLS, INP и TTFB. Для инженерного контроля полезны bundle size, количество
+JavaScript, размер CSS, вес изображений и число network requests. Набор метрик зависит от продукта: content site,
+dashboard, SPA, e-commerce, docs или design system.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какими инструментами измерять frontend performance?</summary><br>
+<table><tr><td>
+
+Для лабораторных проверок подходят Lighthouse, WebPageTest и Chrome DevTools Performance. Для реальных пользователей
+нужны RUM-инструменты и Web Vitals. Важно смотреть не только локальные замеры на мощном ноутбуке, но и реальные
+устройства, сеть, регионы и браузеры пользователей.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему performance tools должны быть частью workflow?</summary><br>
+<table><tr><td>
+
+Если performance проверяется только перед релизом, проблемы находят слишком поздно. Лучше встроить проверки в pull
+request, CI, monitoring или регулярные performance reviews. Тогда performance становится частью engineering process, а
+не разовой оптимизацией после жалоб пользователей.
 
 </td></tr></table>
 
