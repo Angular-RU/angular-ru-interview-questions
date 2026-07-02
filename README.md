@@ -167,7 +167,7 @@ providers; поддерживаемые старые API помечены как
 - [<mark>Angular Interview Questions by Google Developer Expert</mark>](https://github.com/Yonet/Angular-Interview-Questions)
 - [<mark>Coding Interview University</mark>](https://github.com/jwasham/coding-interview-university)
 - [<mark>Awesome Interviews</mark>](https://github.com/alex/what-happens-when)
-- [Angular Interview Questions](https://github.com/sudheerj/angular-interview-questions)
+- [<mark>Angular Interview Questions</mark>](https://github.com/sudheerj/angular-interview-questions)
 - [Front-end Job Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
 - [The Best Frontend JavaScript Interview Questions](<https://performancejs.com/post/hde6d32/The-Best-Frontend-JavaScript-Interview-Questions-(Written-by-a-Frontend-Engineer)>)
 - [Frontend Guidelines Questionnaire](https://github.com/bradfrost/frontend-guidelines-questionnaire)
