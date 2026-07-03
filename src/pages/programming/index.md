@@ -2,9 +2,9 @@
 layout: ../../layouts/Layout.astro
 title: Основы программирования и проектирования
 description: Вопросы и ответы
-category: Frontend
+category: Engineering Fundamentals
 kind: questions
-order: 20
+order: 90
 ---
 
 ## Основы программирования и проектирования

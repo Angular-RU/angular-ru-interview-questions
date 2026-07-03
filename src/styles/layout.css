@@ -1,0 +1,26 @@
+.page {
+    width: min(100% - 48px, 1120px);
+    margin: 0 auto;
+    padding: 48px 0 80px;
+}
+
+.content {
+    padding: 44px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--body);
+    background: var(--surface);
+    box-shadow: var(--shadow-page);
+}
+
+@media (max-width: 700px) {
+    .page {
+        width: min(100% - 24px, 1120px);
+        padding: 24px 0 48px;
+    }
+
+    .content {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+}

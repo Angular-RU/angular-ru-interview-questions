@@ -1,0 +1,46 @@
+.home {
+    width: min(100% - 48px, 1440px);
+    margin: 0 auto;
+    padding: 56px 0 80px;
+}
+
+.hero {
+    max-width: 900px;
+    margin-bottom: 72px;
+}
+
+.hero-eyebrow {
+    margin: 0 0 12px;
+    color: var(--accent);
+    font-size: 0.95rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.075em;
+}
+
+.hero-lead {
+    max-width: 760px;
+    margin: 28px 0 0;
+    color: var(--muted);
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+    .home {
+        width: min(100% - 28px, 1440px);
+        padding: 32px 0 56px;
+    }
+
+    .hero {
+        margin-bottom: 48px;
+    }
+}

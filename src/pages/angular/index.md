@@ -4,7 +4,7 @@ title: Angular
 description: Вопросы и ответы
 category: Frontend
 kind: questions
-order: 30
+order: 120
 ---
 
 ## Angular
@@ -8175,7 +8175,7 @@ component.
 ### Tooling
 
 Feature toggles в Angular часто реализуют через service, guard, directive или provider. Общие типы флагов, lifecycle,
-риски и fallback-стратегии описаны в разделе [Feature toggles](../infrastructure/README.md#feature-toggles).
+риски и fallback-стратегии описаны в разделе [Feature toggles](../infrastructure/index.md#feature-toggles).
 
 #### Junior
 

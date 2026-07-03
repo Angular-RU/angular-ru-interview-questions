@@ -1,0 +1,105 @@
+.content details {
+    margin: 12px 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    overflow: hidden;
+}
+
+.content summary {
+    cursor: pointer;
+    padding: 16px 18px;
+    color: var(--text);
+    font-size: 1.05rem;
+    font-weight: 750;
+    line-height: 1.35;
+    list-style-position: outside;
+}
+
+.content details[open] summary {
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+}
+
+.content details .answer {
+    padding: 20px 24px;
+    color: var(--body);
+    font-size: 1rem;
+    line-height: 1.65;
+}
+
+.content details .answer > :first-child {
+    margin-top: 0;
+}
+
+.content details .answer > :last-child {
+    margin-bottom: 0;
+}
+
+.content details .answer p {
+    margin: 0 0 14px;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.content details .answer strong {
+    color: var(--text);
+    font-weight: 800;
+}
+
+.content details .answer ul,
+.content details .answer ol {
+    margin: 12px 0 20px;
+    padding-left: 1.5rem;
+    list-style-position: outside;
+}
+
+.content details .answer ul {
+    list-style-type: disc;
+}
+
+.content details .answer ol {
+    list-style-type: decimal;
+}
+
+.content details .answer ul ul {
+    list-style-type: circle;
+}
+
+.content details .answer ul ul ul {
+    list-style-type: square;
+}
+
+.content details .answer li {
+    display: list-item;
+    margin: 4px 0;
+    padding-left: 0.25rem;
+    color: inherit;
+    font-size: inherit;
+    line-height: 1.55;
+}
+
+.content details .answer li::marker {
+    color: var(--text);
+}
+
+/* fallback: если где-то еще остались layout-tables внутри details */
+.content details > table,
+.content details > table > tbody,
+.content details > table > tbody > tr,
+.content details > table > tbody > tr > td {
+    display: block;
+}
+
+.content details > table {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-collapse: initial;
+}
+
+.content details > table td {
+    padding: 20px 24px;
+    border: 0;
+}

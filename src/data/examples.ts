@@ -3,19 +3,17 @@ export type ExampleCard = {
     description: string;
     href: string;
     category: string;
-    status: 'Ready' | 'Draft';
     tags: string[];
     order: number;
 };
 
-export const examples: ExampleCard[] = [
+export const examples = [
     {
         title: 'CSS Flexbox examples',
         description:
             'Учебные примеры по осям, выравниванию, переносам, gap и гибким колонкам во Flexbox.',
-        href: '/examples/css/flexbox/',
+        href: '/css/flexbox/index.html',
         category: 'CSS',
-        status: 'Ready',
         tags: ['Flexbox', 'Layout', 'CSS'],
         order: 10,
     },
@@ -23,9 +21,8 @@ export const examples: ExampleCard[] = [
         title: 'CSS Grid examples',
         description:
             'Учебные примеры по grid tracks, areas, stacking, wrapping, auto-fit и minmax().',
-        href: '/examples/css/grid/',
+        href: '/css/grid/index.html',
         category: 'CSS',
-        status: 'Ready',
         tags: ['Grid', 'Layout', 'CSS'],
         order: 20,
     },
@@ -33,20 +30,36 @@ export const examples: ExampleCard[] = [
         title: 'Memory leaks examples',
         description:
             'Интерактивные примеры для поиска detached DOM nodes, удержанных ссылок и setInterval leaks.',
-        href: '/examples/computer-science/memory-leaks/',
+        href: '/computer-science/index.html',
         category: 'Computer Science',
-        status: 'Ready',
         tags: ['Memory', 'Garbage Collection', 'DevTools'],
         order: 30,
+    },
+    {
+        title: 'React example 1',
+        description:
+            'Интерактивный React/Vite пример для подготовки к frontend-интервью.',
+        href: '/react/example1/index.html',
+        category: 'React',
+        tags: ['React', 'Vite', 'TypeScript'],
+        order: 40,
+    },
+    {
+        title: 'React example 2',
+        description:
+            'Интерактивный React/Vite пример с отдельной сборкой для GitHub Pages.',
+        href: '/react/example2/index.html',
+        category: 'React',
+        tags: ['React', 'Vite', 'TypeScript'],
+        order: 50,
     },
     {
         title: 'Micro Frontends: Movie Ticket',
         description:
             'Host-приложение загружает два remote-приложения через Native Federation.',
-        href: '/examples/angular/mfe/movie-ticket/',
+        href: '/angular/mfe/movie-ticket/index.html',
         category: 'Angular',
-        status: 'Ready',
         tags: ['Micro Frontends', 'Native Federation', 'Angular'],
-        order: 40,
+        order: 60,
     },
-];
+] satisfies ExampleCard[];

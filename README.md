@@ -7,23 +7,23 @@ TypeScript и устройство Angular-приложений.
 
 ### 1. Основы frontend-разработки
 
-- [Основы Computer Science](questions/computer-science/README.md)
-- [Алгоритмы и структуры данных для frontend](questions/computer-science/README.md#алгоритмы-и-структуры-данных-для-frontend)
-- [Web Platform](questions/web-platform/README.md)
-- [Большие данные, сеть и browser APIs](questions/web-platform/README.md#большие-данные-сеть-и-browser-apis)
-- [HTML, формы, доступность (accessibility), SEO и media](questions/web-platform/html/README.md)
-- [CSS](questions/css/README.md)
-- [Рендеринг браузера и производительность (performance)](questions/web-platform/browser/README.md)
-- [HTTP, HTTPS и curl](questions/web-platform/http/README.md)
-- [JavaScript](questions/javascript/README.md)
-- [TypeScript](questions/typescript/README.md)
+- [Основы Computer Science](questions/computer-science/index.md)
+- [Алгоритмы и структуры данных для frontend](questions/computer-science/index.md#алгоритмы-и-структуры-данных-для-frontend)
+- [Web Platform](questions/web-platform/index.md)
+- [Большие данные, сеть и browser APIs](questions/web-platform/index.md#большие-данные-сеть-и-browser-apis)
+- [HTML, формы, доступность (accessibility), SEO и media](questions/web-platform/html/index.md)
+- [CSS](questions/css/index.md)
+- [Рендеринг браузера и производительность (performance)](questions/web-platform/browser/index.md)
+- [HTTP, HTTPS и curl](questions/web-platform/http/index.md)
+- [JavaScript](questions/javascript/index.md)
+- [TypeScript](questions/typescript/index.md)
 
 ### 2. Инженерные основы
 
-- [Основы программирования и проектирования](questions/programming/README.md)
-- [SOLID, DRY, KISS, YAGNI](questions/programming/README.md)
-- [Архитектурные компромиссы (trade-offs)](questions/soft-skills/README.md#принятие-решений-список-вопросов)
-- [Общее управление состоянием (State Management)](questions/state-management/README.md)
+- [Основы программирования и проектирования](questions/programming/index.md)
+- [SOLID, DRY, KISS, YAGNI](questions/programming/index.md)
+- [Архитектурные компромиссы (trade-offs)](questions/soft-skills/index.md#принятие-решений-список-вопросов)
+- [Общее управление состоянием (State Management)](questions/state-management/index.md)
 
 ### 3. Angular
 
@@ -32,140 +32,140 @@ providers; поддерживаемые старые API помечены как
 
 #### 3.1 Основы Angular
 
-- [Angular Core](questions/angular/README.md#angular-core)
-- [Обзор Angular](questions/angular/README.md#основные-концепции)
-- [Компоненты, директивы, сервисы и pipes](questions/angular/README.md#компоненты-директивы-сервисы-и-pipes)
-- [Templates](questions/angular/README.md#templates)
-- [Lifecycle и rendering](questions/angular/README.md#lifecycle-и-rendering)
-- [Dependency Injection](questions/angular/README.md#dependency-injection)
-- [Angular Change Detection](questions/angular/README.md#angular-change-detection)
-- [Angular Signals](questions/angular/README.md#angular-signals)
+- [Angular Core](questions/angular/index.md#angular-core)
+- [Обзор Angular](questions/angular/index.md#основные-концепции)
+- [Компоненты, директивы, сервисы и pipes](questions/angular/index.md#компоненты-директивы-сервисы-и-pipes)
+- [Templates](questions/angular/index.md#templates)
+- [Lifecycle и rendering](questions/angular/index.md#lifecycle-и-rendering)
+- [Dependency Injection](questions/angular/index.md#dependency-injection)
+- [Angular Change Detection](questions/angular/index.md#angular-change-detection)
+- [Angular Signals](questions/angular/index.md#angular-signals)
 
 #### 3.2 Поток данных в Angular
 
-- [RxJS](questions/angular/README.md#rxjs)
-- [Angular Forms](questions/angular/README.md#angular-forms)
-- [Angular HTTP](questions/angular/README.md#angular-http)
-- [Angular Router](questions/angular/README.md#angular-router)
-- [Управление состоянием (State Management) в Angular](questions/angular/README.md#управление-состоянием)
+- [RxJS](questions/angular/index.md#rxjs)
+- [Angular Forms](questions/angular/index.md#angular-forms)
+- [Angular HTTP](questions/angular/index.md#angular-http)
+- [Angular Router](questions/angular/index.md#angular-router)
+- [Управление состоянием (State Management) в Angular](questions/angular/index.md#управление-состоянием)
 
 #### 3.3 Продакшен в Angular
 
-- [Безопасность (Security)](questions/angular/README.md#security)
-- [Производительность (Performance)](questions/angular/README.md#performance)
-- [SSR, hydration и SEO](questions/angular/README.md#ssr-hydration-и-seo)
-- [Angular PWA и Service Worker](questions/angular/README.md#angular-pwa-и-service-worker)
-- [Testing](questions/angular/README.md#testing)
+- [Безопасность (Security)](questions/angular/index.md#security)
+- [Производительность (Performance)](questions/angular/index.md#performance)
+- [SSR, hydration и SEO](questions/angular/index.md#ssr-hydration-и-seo)
+- [Angular PWA и Service Worker](questions/angular/index.md#angular-pwa-и-service-worker)
+- [Testing](questions/angular/index.md#testing)
 
 #### 3.4 Архитектура и экосистема Angular
 
-- [Angular libraries и design systems](questions/angular/README.md#angular-libraries-и-design-systems)
-- [Dynamic components](questions/angular/README.md#компоненты-директивы-сервисы-и-pipes)
-- [Micro Frontends](questions/angular/README.md#micro-frontends)
-- [Tooling](questions/angular/README.md#tooling)
+- [Angular libraries и design systems](questions/angular/index.md#angular-libraries-и-design-systems)
+- [Dynamic components](questions/angular/index.md#компоненты-директивы-сервисы-и-pipes)
+- [Micro Frontends](questions/angular/index.md#micro-frontends)
+- [Tooling](questions/angular/index.md#tooling)
 
 ### 4. React для Angular-разработчика
 
-- [React для Angular-разработчика](questions/react/README.md)
+- [React для Angular-разработчика](questions/react/index.md)
 
 #### 4.1 Основы React
 
-- [Зачем Angular-разработчику знать React](questions/react/README.md#зачем-angular-разработчику-знать-react)
-- [Короткая карта Angular -> React](questions/react/README.md#короткая-карта-angular---react)
-- [React Core](questions/react/README.md#react-core)
-- [State и rendering](questions/react/README.md#state-и-rendering)
-- [Hooks](questions/react/README.md#hooks)
+- [Зачем Angular-разработчику знать React](questions/react/index.md#зачем-angular-разработчику-знать-react)
+- [Короткая карта Angular -> React](questions/react/index.md#короткая-карта-angular---react)
+- [React Core](questions/react/index.md#react-core)
+- [State и rendering](questions/react/index.md#state-и-rendering)
+- [Hooks](questions/react/index.md#hooks)
 
 #### 4.2 Поток данных в React
 
-- [Forms](questions/react/README.md#forms)
-- [Data fetching](questions/react/README.md#data-fetching)
-- [Routing](questions/react/README.md#routing)
-- [Context и управление состоянием (State Management)](questions/react/README.md#context-и-state-management)
+- [Forms](questions/react/index.md#forms)
+- [Data fetching](questions/react/index.md#data-fetching)
+- [Routing](questions/react/index.md#routing)
+- [Context и управление состоянием (State Management)](questions/react/index.md#context-и-state-management)
 
 #### 4.3 React vs Angular
 
-- [Отличия React от Angular](questions/react/README.md#отличия-react-от-angular)
-- [Что важно не перепутать на интервью](questions/react/README.md#что-важно-не-перепутать-на-интервью)
+- [Отличия React от Angular](questions/react/index.md#отличия-react-от-angular)
+- [Что важно не перепутать на интервью](questions/react/index.md#что-важно-не-перепутать-на-интервью)
 
 #### 4.4 Экосистема React
 
-- [Разные React-стеки](questions/react/README.md#разные-react-стеки)
-- [Старт проекта](questions/react/README.md#старт-проекта)
-- [Package manager и monorepo](questions/react/README.md#package-manager-и-monorepo)
-- [Routing и fullstack frameworks](questions/react/README.md#routing-и-fullstack-frameworks)
-- [Управление состоянием (State Management)](questions/react/README.md#state-management)
-- [Data fetching в React-стеках](questions/react/README.md#data-fetching-1)
-- [Forms в React-стеках](questions/react/README.md#forms-1)
-- [Styling и UI libraries](questions/react/README.md#styling-и-ui-libraries)
-- [Animation и charts](questions/react/README.md#animation-и-charts)
-- [Testing](questions/react/README.md#testing)
-- [Auth, backend и database](questions/react/README.md#auth-backend-и-database)
-- [Hosting](questions/react/README.md#hosting)
-- [i18n, rich text, upload и drag and drop](questions/react/README.md#i18n-rich-text-upload-и-drag-and-drop)
-- [Mobile и desktop](questions/react/README.md#mobile-и-desktop)
-- [Выбор стека на интервью](questions/react/README.md#выбор-стека-на-интервью)
+- [Разные React-стеки](questions/react/index.md#разные-react-стеки)
+- [Старт проекта](questions/react/index.md#старт-проекта)
+- [Package manager и monorepo](questions/react/index.md#package-manager-и-monorepo)
+- [Routing и fullstack frameworks](questions/react/index.md#routing-и-fullstack-frameworks)
+- [Управление состоянием (State Management)](questions/react/index.md#state-management)
+- [Data fetching в React-стеках](questions/react/index.md#data-fetching-1)
+- [Forms в React-стеках](questions/react/index.md#forms-1)
+- [Styling и UI libraries](questions/react/index.md#styling-и-ui-libraries)
+- [Animation и charts](questions/react/index.md#animation-и-charts)
+- [Testing](questions/react/index.md#testing)
+- [Auth, backend и database](questions/react/index.md#auth-backend-и-database)
+- [Hosting](questions/react/index.md#hosting)
+- [i18n, rich text, upload и drag and drop](questions/react/index.md#i18n-rich-text-upload-и-drag-and-drop)
+- [Mobile и desktop](questions/react/index.md#mobile-и-desktop)
+- [Выбор стека на интервью](questions/react/index.md#выбор-стека-на-интервью)
 
 #### 4.5 Практика и интервью по React
 
-- [Вопросы по уровням](questions/react/README.md#вопросы-по-уровням)
-- [Практические задачки](questions/react/README.md#практические-задачки)
-- [Мини-проект Travel Planner](questions/react/README.md#мини-проект-travel-planner)
-- [Рекомендуемый порядок изучения](questions/react/README.md#рекомендуемый-порядок-изучения)
+- [Вопросы по уровням](questions/react/index.md#вопросы-по-уровням)
+- [Практические задачки](questions/react/index.md#практические-задачки)
+- [Мини-проект Travel Planner](questions/react/index.md#мини-проект-travel-planner)
+- [Рекомендуемый порядок изучения](questions/react/index.md#рекомендуемый-порядок-изучения)
 
 ### 5. Инфраструктура и доставка изменений
 
-- [Node.js](questions/nodejs/README.md)
-- [Node.js для frontend tooling](questions/nodejs/README.md#nodejs-для-frontend-tooling)
-- [npm/package managers/workspaces](questions/nodejs/README.md#npm-и-package-scripts)
-- [Рабочее окружение frontend-разработчика](questions/work-environment/README.md)
-- [Инфраструктура](questions/infrastructure/README.md)
-- [Docker и Docker Compose](questions/infrastructure/README.md#docker)
-- [CI/CD](questions/infrastructure/README.md#cicd-для-frontend-delivery)
-- [Frontend deployment](questions/infrastructure/README.md#frontend-deployment)
-- [System design basics для frontend](questions/infrastructure/README.md#что-такое-load-balancing)
-- [CDN/cache/rollback](questions/infrastructure/README.md#frontend-deployment)
-- [Feature toggles](questions/infrastructure/README.md#feature-toggles)
+- [Node.js](questions/nodejs/index.md)
+- [Node.js для frontend tooling](questions/nodejs/index.md#nodejs-для-frontend-tooling)
+- [npm/package managers/workspaces](questions/nodejs/index.md#npm-и-package-scripts)
+- [Рабочее окружение frontend-разработчика](questions/work-environment/index.md)
+- [Инфраструктура](questions/infrastructure/index.md)
+- [Docker и Docker Compose](questions/infrastructure/index.md#docker)
+- [CI/CD](questions/infrastructure/index.md#cicd-для-frontend-delivery)
+- [Frontend deployment](questions/infrastructure/index.md#frontend-deployment)
+- [System design basics для frontend](questions/infrastructure/index.md#что-такое-load-balancing)
+- [CDN/cache/rollback](questions/infrastructure/index.md#frontend-deployment)
+- [Feature toggles](questions/infrastructure/index.md#feature-toggles)
 
 ### 6. Командная работа
 
-- [Git и командная разработка](questions/work-environment/README.md#git-и-командная-разработка)
-- [Agile, Scrum, Kanban, Waterfall](questions/methodologies/README.md)
-- [Организационные модели и бирюзовые компании](questions/methodologies/README.md#организационные-модели-и-бирюзовые-компании)
-- [Работа с задачами](questions/soft-skills/README.md#работа-с-задачами-в-команде)
-- [Оценка задач](questions/soft-skills/README.md#работа-с-задачами-в-команде)
-- [Definition of Ready / Definition of Done](questions/soft-skills/README.md#работа-с-задачами-в-команде)
-- [ADR и принятие технических решений](questions/soft-skills/README.md#принятие-решений-список-вопросов)
-- [Ownership и эскалация рисков](questions/soft-skills/README.md#ownership-и-ответственность)
+- [Git и командная разработка](questions/work-environment/index.md#git-и-командная-разработка)
+- [Agile, Scrum, Kanban, Waterfall](questions/methodologies/index.md)
+- [Организационные модели и бирюзовые компании](questions/methodologies/index.md#организационные-модели-и-бирюзовые-компании)
+- [Работа с задачами](questions/soft-skills/index.md#работа-с-задачами-в-команде)
+- [Оценка задач](questions/soft-skills/index.md#работа-с-задачами-в-команде)
+- [Definition of Ready / Definition of Done](questions/soft-skills/index.md#работа-с-задачами-в-команде)
+- [ADR и принятие технических решений](questions/soft-skills/index.md#принятие-решений-список-вопросов)
+- [Ownership и эскалация рисков](questions/soft-skills/index.md#ownership-и-ответственность)
 
 ### 7. Поиск работы и интервью
 
-- [Поиск работы и стратегия интервью](questions/job-search/README.md)
-- [Самопрезентация](questions/soft-skills/README.md#самопрезентация)
-- [Team fit](questions/soft-skills/README.md#знакомство-с-командой)
-- [Soft skills](questions/soft-skills/README.md)
-- [People management basics для senior/lead](questions/soft-skills/README.md#people-management-basics)
+- [Поиск работы и стратегия интервью](questions/job-search/index.md)
+- [Самопрезентация](questions/soft-skills/index.md#самопрезентация)
+- [Team fit](questions/soft-skills/index.md#знакомство-с-командой)
+- [Soft skills](questions/soft-skills/index.md)
+- [People management basics для senior/lead](questions/soft-skills/index.md#people-management-basics)
 
 ---
 
 ### Практика
 
-- [Задачи по Angular](questions/angular/README.md#angular-coding-questions)
-- [Практика по Angular frontend tasks](questions/angular/README.md#практика-по-angular-frontend-tasks)
-- [CSS examples](questions/css/README.md#практика-по-css)
-- [CSS layout и component tasks](questions/css/README.md#css-layout-и-component-tasks)
-- [CSS Flexbox examples](examples/css/flexbox/)
-- [CSS Grid examples](examples/css/grid/)
-- [Задачи по JavaScript](questions/javascript/README.md)
-- [Практика по JavaScript](questions/javascript/README.md#практика-по-javascript)
-- [Задачи по TypeScript](questions/typescript/README.md)
-- [React examples](questions/react/README.md#практические-задачки)
-- [Практика по React](questions/react/README.md#практика-по-react)
-- [React practice app](questions/react/README.md#мини-проект-travel-planner)
-- [Computer Science examples](examples/computer-science/)
-- [Frontend system design tasks](questions/infrastructure/README.md#frontend-system-design)
-- [Практические задачи по алгоритмам и design primitives](questions/programming/README.md#практические-задачи-по-алгоритмам-и-design-primitives)
-- [Мини-проекты для интервью](examples/angular/mfe/)
+- [Задачи по Angular](questions/angular/index.md#angular-coding-questions)
+- [Практика по Angular frontend tasks](questions/angular/index.md#практика-по-angular-frontend-tasks)
+- [CSS examples](questions/css/index.md#практика-по-css)
+- [CSS layout и component tasks](questions/css/index.md#css-layout-и-component-tasks)
+- [CSS Flexbox examples](public/css/flexbox/)
+- [CSS Grid examples](public/css/grid/)
+- [Задачи по JavaScript](questions/javascript/index.md)
+- [Практика по JavaScript](questions/javascript/index.md#практика-по-javascript)
+- [Задачи по TypeScript](questions/typescript/index.md)
+- [React examples](questions/react/index.md#практические-задачки)
+- [Практика по React](questions/react/index.md#практика-по-react)
+- [React practice app](questions/react/index.md#мини-проект-travel-planner)
+- [Computer Science examples](public/computer-science/)
+- [Frontend system design tasks](questions/infrastructure/index.md#frontend-system-design)
+- [Практические задачи по алгоритмам и design primitives](questions/programming/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
+- [Мини-проекты для интервью](apps/angular/mfe/)
 
 ---
 

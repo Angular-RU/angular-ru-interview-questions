@@ -1,0 +1,132 @@
+{
+    "$schema": "../../../../node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "cli": {
+        "packageManager": "npm"
+    },
+    "newProjectRoot": "projects",
+    "projects": {
+        "movies-ticket": {
+            "projectType": "application",
+            "schematics": {},
+            "root": "",
+            "sourceRoot": "src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-architects/native-federation:build",
+                    "options": {
+                        "cacheExternalArtifacts": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "target": "movies-ticket:esbuild:production",
+                            "ssr": true
+                        },
+                        "development": {
+                            "target": "movies-ticket:esbuild:development",
+                            "dev": true
+                        },
+                        "public": {
+                            "target": "movies-ticket:esbuild:public",
+                            "ssr": false
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular-architects/native-federation:build",
+                    "options": {
+                        "target": "movies-ticket:serve-original:development",
+                        "rebuildDelay": 500,
+                        "cacheExternalArtifacts": true,
+                        "dev": true,
+                        "devServer": true,
+                        "port": 0
+                    }
+                },
+                "test": {
+                    "builder": "@angular/build:unit-test"
+                },
+                "esbuild": {
+                    "builder": "@angular/build:application",
+                    "options": {
+                        "outputPath": "dist/movies-ticket",
+                        "index": "src/index.html",
+                        "browser": "src/main.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "assets": [
+                            {
+                                "glob": "**/*",
+                                "input": "public"
+                            }
+                        ],
+                        "styles": ["src/styles.css"],
+                        "security": {
+                            "allowedHosts": ["localhost"]
+                        },
+                        "polyfills": ["es-module-shims"]
+                    },
+                    "configurations": {
+                        "production": {
+                            "server": "src/main.server.ts",
+                            "outputMode": "server",
+                            "ssr": {
+                                "entry": "src/server.ts"
+                            },
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kB",
+                                    "maximumError": "1MB"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "4kB",
+                                    "maximumError": "8kB"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "optimization": false,
+                            "extractLicenses": false,
+                            "sourceMap": true
+                        },
+                        "public": {
+                            "baseHref": "/demos/angular/mfe/movie-ticket/",
+                            "outputPath": {
+                                "base": "../../../../public/angular/mfe/movie-ticket/",
+                                "browser": ""
+                            },
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.public.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all"
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve-original": {
+                    "builder": "@angular/build:dev-server",
+                    "configurations": {
+                        "production": {
+                            "buildTarget": "movies-ticket:esbuild:production"
+                        },
+                        "development": {
+                            "buildTarget": "movies-ticket:esbuild:development"
+                        }
+                    },
+                    "defaultConfiguration": "development",
+                    "options": {
+                        "port": 4200
+                    }
+                }
+            }
+        }
+    }
+}

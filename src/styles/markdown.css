@@ -1,0 +1,162 @@
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content summary,
+.content strong {
+    color: var(--text);
+}
+
+.content h1 {
+    margin: 0 0 32px;
+    font-size: clamp(2.6rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+}
+
+.content h2 {
+    margin: 56px 0 24px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+}
+
+.content h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.content h3 {
+    margin: 40px 0 18px;
+    font-size: 1.65rem;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+}
+
+.content h4 {
+    display: inline-flex;
+    margin: 24px 0 14px;
+    padding: 7px 13px;
+    border: 1px solid #b9d8f7;
+    border-radius: 999px;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.content p,
+.content li,
+.content td {
+    color: var(--body);
+}
+
+.content p {
+    margin: 14px 0;
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+/* Tailwind Preflight сбрасывает списки, поэтому возвращаем их для Markdown */
+.content ul,
+.content ol {
+    margin: 12px 0 18px;
+    padding-left: 1.5rem;
+    list-style-position: outside;
+}
+
+.content ul {
+    list-style-type: disc;
+}
+
+.content ol {
+    list-style-type: decimal;
+}
+
+.content ul ul {
+    list-style-type: circle;
+}
+
+.content ul ul ul {
+    list-style-type: square;
+}
+
+.content li {
+    display: list-item;
+    margin: 4px 0;
+    padding-left: 0.25rem;
+    line-height: 1.55;
+}
+
+.content li::marker {
+    color: var(--text);
+}
+
+.content table {
+    width: 100%;
+    margin: 16px 0;
+    border-collapse: collapse;
+    font-size: 0.96rem;
+}
+
+.content th,
+.content td {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.content th {
+    background: #f8fafc;
+    text-align: left;
+}
+
+.content code {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: var(--code-bg);
+    font-size: 0.9em;
+}
+
+.content pre {
+    padding: 18px;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    color: var(--pre-text);
+    background: var(--pre-bg);
+}
+
+.content pre code {
+    padding: 0;
+    color: inherit;
+    background: transparent;
+}
+
+.content a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 24px auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    box-shadow: 0 12px 32px rgb(15 23 42 / 8%);
+}
+
+@media (max-width: 700px) {
+    .content table {
+        display: block;
+        overflow-x: auto;
+    }
+}

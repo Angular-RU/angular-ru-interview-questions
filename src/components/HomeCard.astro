@@ -10,8 +10,13 @@ type Props = {
 
 const { href, title, description, category, status, tags = [] } = Astro.props;
 
-const withBase = (path: string) =>
-    `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+const withBase = (path: string) => {
+    const base = import.meta.env.BASE_URL.endsWith('/')
+        ? import.meta.env.BASE_URL
+        : `${import.meta.env.BASE_URL}/`;
+
+    return `${base}${path.replace(/^\/+/, '')}`;
+};
 ---
 
 <a class="card" href={withBase(href)}>

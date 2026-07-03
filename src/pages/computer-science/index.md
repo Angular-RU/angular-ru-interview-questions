@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: Computer Science basics
 description: Вопросы и ответы
-category: Frontend
+category: Engineering Fundamentals
 kind: questions
 order: 10
 ---

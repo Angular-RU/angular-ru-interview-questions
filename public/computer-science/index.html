@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <title>Computer Science examples</title>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+        />
+        <style>
+            body {
+                margin: 0;
+                min-block-size: 100vh;
+                font-family:
+                    Inter,
+                    ui-sans-serif,
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    'Segoe UI',
+                    sans-serif;
+                color: #172033;
+                background: #f6f8fb;
+            }
+
+            main {
+                inline-size: min(920px, calc(100% - 32px));
+                margin-inline: auto;
+                padding-block: 48px;
+            }
+
+            h1 {
+                margin-block: 0 12px;
+                font-size: 42px;
+                line-height: 1.05;
+            }
+
+            p {
+                max-inline-size: 720px;
+                margin-block: 0 28px;
+                color: #5d687a;
+                font-size: 18px;
+                line-height: 1.6;
+            }
+
+            ul {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 12px;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            a {
+                display: block;
+                min-block-size: 100%;
+                border: 1px solid #d8dee8;
+                border-radius: 8px;
+                padding: 16px;
+                color: inherit;
+                background: #fff;
+                text-decoration: none;
+            }
+
+            a:hover,
+            a:focus-visible {
+                border-color: #2f6fec;
+                outline: none;
+            }
+
+            span {
+                display: block;
+                margin-block-start: 6px;
+                color: #5d687a;
+                font-size: 14px;
+                line-height: 1.45;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <h1>Computer Science examples</h1>
+            <p>Набор интерактивных примеров по memory leaks и диагностике памяти в браузере.</p>
+            <ul>
+                <li>
+                    <a href="example1/memory-leak.html">
+                        Detached elements memory leak
+                        <span>Карточки удаляются из DOM, но удерживаются глобальной ссылкой.</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="example2/memory-leak-set-interval.html">
+                        setInterval memory leak
+                        <span>Интервалы удерживают удалённые элементы и payload через callback.</span>
+                    </a>
+                </li>
+            </ul>
+        </main>
+    </body>
+</html>

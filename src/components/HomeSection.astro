@@ -13,12 +13,11 @@ type Card = {
 type Props = {
     eyebrow: string;
     title: string;
-    linkText: string;
     linkHref: string;
     items: Card[];
 };
 
-const { eyebrow, title, linkText, linkHref, items } = Astro.props;
+const { eyebrow, title, linkHref, items } = Astro.props;
 
 const withBase = (path: string) =>
     `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
@@ -31,7 +30,6 @@ const withBase = (path: string) =>
             <h2>{title}</h2>
         </div>
 
-        <a class="section-link" href={withBase(linkHref)}>{linkText}</a>
     </header>
 
     <div class="grid">
