@@ -92,23 +92,26 @@ const copyDirectory = async (
 
 const copyStaticDemo = async (demo: StaticDemo): Promise<void> => {
     const source = resolveRootPath(demo.source);
-    const target = resolve(dist, demo.output);
+    const targets = [resolve(dist, demo.output), resolve(examplesDist, demo.output)];
 
     await assertPathExists(
         source,
         `Static demo "${demo.id}" source does not exist: ${demo.source}`,
     );
-    await copyDirectory(
-        source,
-        target,
-        (entry) => !internalStaticFiles.has(entry.split('/').at(-1) ?? ''),
-    );
+
+    for (const target of targets) {
+        await copyDirectory(
+            source,
+            target,
+            (entry) => !internalStaticFiles.has(entry.split('/').at(-1) ?? ''),
+        );
+    }
 };
 
 const buildViteDemo = async (demo: ViteDemo): Promise<void> => {
     const source = resolveRootPath(demo.source);
     const buildOutput = resolveRootPath(demo.dist);
-    const target = resolve(dist, demo.output);
+    const targets = [resolve(dist, demo.output), resolve(examplesDist, demo.output)];
 
     await assertPathExists(
         source,
@@ -120,13 +123,16 @@ const buildViteDemo = async (demo: ViteDemo): Promise<void> => {
         buildOutput,
         `Vite demo "${demo.id}" build output does not exist: ${demo.dist}`,
     );
-    await copyDirectory(buildOutput, target);
+
+    for (const target of targets) {
+        await copyDirectory(buildOutput, target);
+    }
 };
 
 const buildAngularDemo = async (demo: AngularDemo): Promise<void> => {
     const source = resolveRootPath(demo.source);
     const buildOutput = resolveRootPath(demo.dist);
-    const target = resolve(dist, demo.output);
+    const targets = [resolve(dist, demo.output), resolve(examplesDist, demo.output)];
     const configurationArgs = demo.configuration
         ? ['--configuration', demo.configuration]
         : [];
@@ -141,7 +147,10 @@ const buildAngularDemo = async (demo: AngularDemo): Promise<void> => {
         buildOutput,
         `Angular demo "${demo.id}" build output does not exist: ${demo.dist}`,
     );
-    await copyDirectory(buildOutput, target);
+
+    for (const target of targets) {
+        await copyDirectory(buildOutput, target);
+    }
 };
 
 const buildDemo = async (demo: Demo): Promise<void> => {

@@ -3,6 +3,7 @@ import {dirname, relative, resolve} from 'node:path';
 import hljs from 'highlight.js';
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
+import {demos, type Demo} from '../../examples/manifest';
 import {questionSections, type QuestionSection} from '../manifest';
 
 interface SearchIndexItem {
@@ -520,47 +521,135 @@ const renderQuestionPage = async (
     };
 };
 
-const groupSectionsByCategory = (): Map<string, readonly QuestionSection[]> => {
-    const groups = new Map<string, QuestionSection[]>();
+const normalizeSearchText = (values: readonly string[]): string =>
+    values.join(' ').toLowerCase();
 
-    for (const section of questionSections) {
-        groups.set(section.category, [...(groups.get(section.category) ?? []), section]);
-    }
+const renderBadges = (badges: readonly string[]): string =>
+    badges.map((badge) => `<span class="badge">${escapeHtml(badge)}</span>`).join('');
 
-    return groups;
+const readmeQuestionSectionOrder = [
+    'computer-science',
+    'web-platform',
+    'css',
+    'javascript',
+    'typescript',
+    'programming',
+    'soft-skills',
+    'state-management',
+    'angular',
+    'react',
+    'nodejs',
+    'work-environment',
+    'infrastructure',
+    'methodologies',
+    'job-search',
+] satisfies readonly QuestionSection['id'][];
+
+const getHomeQuestionSections = (): readonly QuestionSection[] => {
+    const sectionOrder = new Map(
+        readmeQuestionSectionOrder.map((sectionId, index) => [sectionId, index]),
+    );
+
+    return [...questionSections].sort((leftSection, rightSection) => {
+        const leftOrder = sectionOrder.get(leftSection.id) ?? Number.MAX_SAFE_INTEGER;
+        const rightOrder = sectionOrder.get(rightSection.id) ?? Number.MAX_SAFE_INTEGER;
+
+        return leftOrder - rightOrder;
+    });
 };
 
-const renderQuestionCards = (): string =>
-    Array.from(groupSectionsByCategory())
-        .map(([category, sections]) => {
-            const cards = sections
-                .map(
-                    (section) => `
-                <a class="card" href="${escapeHtml(section.href.replace('./questions/', './'))}">
-                    <span class="card-category">${escapeHtml(section.category)}</span>
-                    <h3>${escapeHtml(section.title)}</h3>
-                    <p>${escapeHtml(section.description)}</p>
-                </a>`,
-                )
-                .join('');
+const renderHomeQuestionCards = (): string =>
+    getHomeQuestionSections()
+        .map((section) => {
+            const searchText = normalizeSearchText([
+                section.title,
+                section.category,
+                section.description,
+            ]);
 
             return `
-            <section class="category-section">
-                <h2>${escapeHtml(category)}</h2>
-                <div class="cards">
-                    ${cards}
-                </div>
-            </section>`;
+                    <a
+                        class="home-card"
+                        href="${escapeHtml(section.href)}"
+                        data-home-card
+                        data-search="${escapeHtml(searchText)}"
+                    >
+                        <span class="home-card-meta">
+                            <span class="badge">${escapeHtml(section.category)}</span>
+                        </span>
+                        <h3 class="home-card-title">${escapeHtml(section.title)}</h3>
+                        <p class="home-card-description">${escapeHtml(section.description)}</p>
+                    </a>`;
         })
         .join('');
+
+const getHomePracticeHref = (demo: Demo): string =>
+    demo.href.startsWith('./') ? `./examples/${demo.href.slice(2)}` : demo.href;
+
+const renderHomePracticeCards = (): string =>
+    demos
+        .map((demo) => {
+            const statusClass = demo.status === 'Ready' ? 'badge-ready' : 'badge-draft';
+            const searchText = normalizeSearchText([
+                demo.title,
+                demo.category,
+                demo.status,
+                demo.description,
+                ...demo.tags,
+            ]);
+
+            return `
+                    <a
+                        class="home-card"
+                        href="${escapeHtml(getHomePracticeHref(demo))}"
+                        data-home-card
+                        data-search="${escapeHtml(searchText)}"
+                    >
+                        <span class="home-card-meta">
+                            <span class="badge">${escapeHtml(demo.category)}</span>
+                            <span class="badge ${statusClass}">${escapeHtml(demo.status)}</span>
+                        </span>
+                        <h3 class="home-card-title">${escapeHtml(demo.title)}</h3>
+                        <p class="home-card-description">${escapeHtml(demo.description)}</p>
+                        <span class="home-card-tags">${renderBadges(demo.tags)}</span>
+                    </a>`;
+        })
+        .join('');
+
+const renderLegacyRedirectPage = (
+    title: string,
+    targetHref: string,
+    linkText: string,
+    description: string,
+): string => `<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <title>${escapeHtml(title)}</title>
+        <meta
+            http-equiv="refresh"
+            content="0; url=${escapeHtml(targetHref)}"
+        />
+        <link
+            rel="canonical"
+            href="${escapeHtml(targetHref)}"
+        />
+    </head>
+    <body>
+        <p>
+            ${escapeHtml(description)}
+            <a href="${escapeHtml(targetHref)}">${escapeHtml(linkText)}</a>.
+        </p>
+    </body>
+</html>
+`;
 
 const buildSite = async (): Promise<void> => {
     await assertQuestionSourcesExist();
     await mkdir(dist, {recursive: true});
 
-    const [pageTemplate, questionsIndexTemplate, homeTemplate] = await Promise.all([
+    const [pageTemplate, homeTemplate] = await Promise.all([
         readTemplate('page.html'),
-        readTemplate('questions-index.html'),
         readTemplate('home.html'),
     ]);
 
@@ -578,12 +667,12 @@ const buildSite = async (): Promise<void> => {
 
     await writeHtml(
         'questions/index.html',
-        renderTemplate(questionsIndexTemplate, {
-            content: renderQuestionCards(),
-            stylesHref: getAssetHref('questions/index.html', 'styles.css'),
-            homeHref: getDirectoryHref('questions/index.html', 'index.html'),
-            examplesHref: getDirectoryHref('questions/index.html', 'examples/index.html'),
-        }),
+        renderLegacyRedirectPage(
+            'Вопросы - Angular RU',
+            '../#questions',
+            'открыть вопросы',
+            'Раздел вопросов теперь находится на главной странице:',
+        ),
     );
     await writeHtml(
         'index.html',
@@ -596,6 +685,10 @@ const buildSite = async (): Promise<void> => {
             questionsHref: './questions/',
             examplesHref: './examples/',
             repositoryHref: repositoryUrl,
+            questionCards: renderHomeQuestionCards(),
+            practiceCards: renderHomePracticeCards(),
+            totalQuestions: String(questionSections.length),
+            totalDemos: String(demos.length),
         }),
     );
     await writeFile(

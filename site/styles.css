@@ -92,11 +92,15 @@ a:hover {
 }
 
 .hero {
-    padding-block: 56px 36px;
+    padding-block: 42px 28px;
 }
 
 .home-hero {
     max-inline-size: 860px;
+}
+
+.home-hero h1 {
+    font-size: clamp(34px, 5vw, 54px);
 }
 
 .eyebrow,
@@ -159,6 +163,161 @@ h1 {
 .button-secondary:focus-visible {
     color: var(--accent-strong);
     background: #e9f2ff;
+}
+
+.home-search {
+    display: grid;
+    gap: 8px;
+    max-inline-size: 720px;
+    margin-block: 8px 36px;
+}
+
+.home-search label {
+    font-weight: 760;
+}
+
+.home-search input {
+    inline-size: 100%;
+    min-block-size: 48px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding-inline: 14px;
+    color: var(--text);
+    background: var(--surface);
+    font: inherit;
+}
+
+.home-search input:focus-visible {
+    border-color: var(--accent);
+    outline: 3px solid #cfe6ff;
+}
+
+.home-search p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.home-section {
+    margin-block: 18px 52px;
+    scroll-margin-block-start: 24px;
+}
+
+.home-section-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 24px;
+    align-items: end;
+    justify-content: space-between;
+    margin-block-end: 18px;
+}
+
+.home-section-header h2 {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 36px);
+    line-height: 1.15;
+}
+
+.home-section-header .eyebrow {
+    margin-block-end: 8px;
+}
+
+.home-section-header > a {
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.home-section-header > a:hover,
+.home-section-header > a:focus-visible {
+    background: #e9f2ff;
+}
+
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.home-card {
+    display: flex;
+    min-inline-size: 0;
+    min-block-size: 220px;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    color: inherit;
+    background: var(--surface);
+    text-decoration: none;
+    transition:
+        border-color 140ms ease,
+        box-shadow 140ms ease,
+        transform 140ms ease;
+}
+
+.home-card:hover,
+.home-card:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
+    color: inherit;
+    transform: translateY(-2px);
+}
+
+.home-card[hidden] {
+    display: none;
+}
+
+.home-card-title {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.25;
+}
+
+.home-card-description {
+    margin: 0;
+    color: var(--muted);
+}
+
+.home-card-meta,
+.home-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.home-card-tags {
+    margin-block-start: auto;
+}
+
+.badge {
+    display: inline-flex;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    align-items: center;
+    border: 1px solid #c7dcf4;
+    border-radius: 999px;
+    padding: 3px 9px;
+    color: var(--accent-strong);
+    background: #edf6ff;
+    font-size: 12px;
+    font-weight: 760;
+    line-height: 1.4;
+}
+
+.badge-ready {
+    border-color: #b7e4cc;
+    color: #067647;
+    background: #ecfdf3;
+}
+
+.badge-draft {
+    border-color: #fedf89;
+    color: #93370d;
+    background: #fffaeb;
 }
 
 .category-section {
@@ -359,6 +518,12 @@ h1 {
     max-inline-size: 100%;
 }
 
+@media (max-width: 900px) {
+    .home-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 680px) {
     .header-layout {
         align-items: flex-start;
@@ -370,6 +535,10 @@ h1 {
 
     .hero {
         padding-block-start: 36px;
+    }
+
+    .home-grid {
+        grid-template-columns: 1fr;
     }
 
     .markdown {

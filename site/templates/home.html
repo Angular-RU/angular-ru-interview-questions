@@ -29,8 +29,8 @@
                     class="nav"
                     aria-label="Основная навигация"
                 >
-                    <a href="{{ questionsHref }}">Вопросы</a>
-                    <a href="{{ examplesHref }}">Примеры</a>
+                    <a href="#questions">Вопросы</a>
+                    <a href="#practice">Практика</a>
                     <a href="{{ repositoryHref }}">GitHub</a>
                 </nav>
             </div>
@@ -38,26 +38,115 @@
         <main class="container">
             <section class="hero home-hero">
                 <p class="eyebrow">Angular RU</p>
-                <h1>Вопросы, ответы и практические примеры для собеседований</h1>
+                <h1>Вопросы и практика для frontend-собеседований</h1>
                 <p class="lead">
-                    Статический сайт собирает Markdown-разделы из questions и runnable-демо из examples в единый GitHub
-                    Pages артефакт.
+                    Angular, React, TypeScript, JavaScript, CSS, Web Platform, Computer Science, инфраструктура и
+                    интерактивные демки в одном месте.
                 </p>
                 <div class="actions">
                     <a
                         class="button"
-                        href="{{ questionsHref }}"
+                        href="./questions/angular/"
                     >
-                        Открыть вопросы
+                        Начать с Angular
                     </a>
                     <a
                         class="button button-secondary"
-                        href="{{ examplesHref }}"
+                        href="#questions"
                     >
-                        Открыть примеры
+                        Все вопросы
+                    </a>
+                    <a
+                        class="button button-secondary"
+                        href="#practice"
+                    >
+                        Практика
+                    </a>
+                    <a
+                        class="button button-secondary"
+                        href="{{ repositoryHref }}"
+                    >
+                        GitHub
                     </a>
                 </div>
             </section>
+
+            <div class="home-search">
+                <label for="home-search-input">Поиск по материалам</label>
+                <input
+                    id="home-search-input"
+                    type="search"
+                    placeholder="Angular, memory, grid, TypeScript"
+                    autocomplete="off"
+                    data-home-search
+                />
+                <p data-home-search-status>{{ totalQuestions }} разделов вопросов и {{ totalDemos }} демо</p>
+            </div>
+
+            <section
+                id="questions"
+                class="home-section"
+                aria-labelledby="home-questions-title"
+            >
+                <div class="home-section-header">
+                    <div>
+                        <p class="eyebrow">Теория</p>
+                        <h2 id="home-questions-title">Вопросы</h2>
+                    </div>
+                    <a href="#questions">Смотреть все вопросы</a>
+                </div>
+                <div class="home-grid">
+                    {{ questionCards }}
+                </div>
+            </section>
+
+            <section
+                id="practice"
+                class="home-section"
+                aria-labelledby="home-practice-title"
+            >
+                <div class="home-section-header">
+                    <div>
+                        <p class="eyebrow">Демо</p>
+                        <h2 id="home-practice-title">Практика</h2>
+                    </div>
+                    <a href="#practice">Смотреть все примеры</a>
+                </div>
+                <div class="home-grid">
+                    {{ practiceCards }}
+                </div>
+            </section>
         </main>
+        <script>
+            const searchInput = document.querySelector('[data-home-search]');
+            const searchStatus = document.querySelector('[data-home-search-status]');
+            const homeCards = Array.from(document.querySelectorAll('[data-home-card]'));
+
+            if (searchInput instanceof HTMLInputElement && searchStatus) {
+                const totalCards = homeCards.length;
+                const updateSearch = () => {
+                    const query = searchInput.value.trim().toLowerCase();
+                    let visibleCards = 0;
+
+                    for (const card of homeCards) {
+                        const searchText = card.getAttribute('data-search') ?? '';
+                        const isVisible = query === '' || searchText.includes(query);
+
+                        card.toggleAttribute('hidden', !isVisible);
+
+                        if (isVisible) {
+                            visibleCards += 1;
+                        }
+                    }
+
+                    searchStatus.textContent =
+                        query === ''
+                            ? '{{ totalQuestions }} разделов вопросов и {{ totalDemos }} демо'
+                            : `Найдено: ${visibleCards} из ${totalCards}`;
+                };
+
+                searchInput.addEventListener('input', updateSearch);
+            }
+        </script>
     </body>
 </html>
