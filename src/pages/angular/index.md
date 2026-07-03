@@ -1,3 +1,12 @@
+---
+layout: ../../layouts/Layout.astro
+title: Angular
+description: Вопросы и ответы
+category: Frontend
+kind: questions
+order: 30
+---
+
 ## Angular
 
 ### Angular Core

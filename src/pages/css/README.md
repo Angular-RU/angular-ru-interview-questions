@@ -132,7 +132,7 @@ button {
 Inline style рассматривают отдельно: он сильнее обычной специфичности selector. `!important` тоже не является частью
 специфичности: он меняет приоритет declaration в cascade, после чего сравниваются origin, layer, specificity и порядок.
 
-![img.png](./assets/css-specificity.png)
+![img.png](assets/css-specificity.png)
 
 </td></tr></table>
 

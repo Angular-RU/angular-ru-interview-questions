@@ -1,0 +1,185 @@
+@import 'tailwindcss';
+
+:root {
+    --bg: #f6f8fb;
+    --surface: #ffffff;
+    --text: #172033;
+    --muted: #5f6b7a;
+    --border: #d7e0ea;
+    --accent: #1264c3;
+    --accent-soft: #eef7ff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--bg);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        sans-serif;
+    line-height: 1.6;
+}
+
+.page {
+    width: min(100% - 48px, 1120px);
+    margin: 0 auto;
+    padding: 48px 0 80px;
+}
+
+.content {
+    padding: 44px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    box-shadow: 0 16px 40px rgb(15 23 42 / 7%);
+}
+
+/* Markdown content */
+
+.content h1 {
+    margin: 0 0 32px;
+    font-size: clamp(2.6rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+}
+
+.content h2 {
+    margin: 56px 0 24px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+}
+
+.content h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.content h3 {
+    margin: 40px 0 18px;
+    font-size: 1.65rem;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+}
+
+.content h4 {
+    display: inline-flex;
+    margin: 24px 0 14px;
+    padding: 7px 13px;
+    border: 1px solid #b9d8f7;
+    border-radius: 999px;
+    color: #0d559a;
+    background: var(--accent-soft);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.content p {
+    margin: 14px 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+}
+
+.content details {
+    margin: 12px 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.content summary {
+    cursor: pointer;
+    padding: 16px 18px;
+    color: var(--text);
+    font-size: 1.05rem;
+    font-weight: 750;
+    list-style-position: outside;
+}
+
+.content details[open] summary {
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+}
+
+.content details > *:not(summary) {
+    margin: 16px 18px;
+}
+
+.content table {
+    width: 100%;
+    margin: 16px 0;
+    border-collapse: collapse;
+    font-size: 0.96rem;
+}
+
+.content th,
+.content td {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.content th {
+    background: #f8fafc;
+    text-align: left;
+}
+
+.content code {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: #eef2f7;
+    font-size: 0.9em;
+}
+
+.content pre {
+    padding: 18px;
+    border-radius: 14px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+.content pre code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+}
+
+.content a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+    .page {
+        width: min(100% - 24px, 1120px);
+        padding: 24px 0 48px;
+    }
+
+    .content {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
+    .content table {
+        display: block;
+        overflow-x: auto;
+    }
+}

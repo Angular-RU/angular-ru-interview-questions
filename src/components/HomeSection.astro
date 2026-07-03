@@ -1,0 +1,125 @@
+---
+import HomeCard from './HomeCard.astro';
+
+type Card = {
+    href: string;
+    title: string;
+    description: string;
+    category: string;
+    status?: string;
+    tags?: string[];
+};
+
+type Props = {
+    eyebrow: string;
+    title: string;
+    linkText: string;
+    linkHref: string;
+    items: Card[];
+};
+
+const { eyebrow, title, linkText, linkHref, items } = Astro.props;
+
+const withBase = (path: string) =>
+    `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+---
+
+<section class="section">
+    <header class="section-header">
+        <div>
+            <p class="eyebrow">{eyebrow}</p>
+            <h2>{title}</h2>
+        </div>
+
+        <a class="section-link" href={withBase(linkHref)}>{linkText}</a>
+    </header>
+
+    <div class="grid">
+        {
+            items.map((item) => (
+                <HomeCard
+                    href={item.href}
+                    title={item.title}
+                    description={item.description}
+                    category={item.category}
+                    status={item.status}
+                    tags={item.tags}
+                />
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .section {
+        margin-top: 72px;
+    }
+
+    .section:first-child {
+        margin-top: 0;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+    }
+
+    .eyebrow {
+        margin: 0 0 8px;
+        color: #1264c3;
+        font-size: 0.95rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        margin: 0;
+        color: #172033;
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        line-height: 0.95;
+        letter-spacing: -0.06em;
+    }
+
+    .section-link {
+        color: #1264c3;
+        font-size: 1.15rem;
+        font-weight: 900;
+        text-decoration: none;
+    }
+
+    .section-link:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    @media (max-width: 1000px) {
+        .grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 700px) {
+        .section {
+            margin-top: 48px;
+        }
+
+        .section-header {
+            align-items: start;
+            flex-direction: column;
+        }
+
+        .grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

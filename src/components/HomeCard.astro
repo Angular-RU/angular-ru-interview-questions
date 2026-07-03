@@ -1,0 +1,116 @@
+---
+type Props = {
+    href: string;
+    title: string;
+    description: string;
+    category: string;
+    status?: string;
+    tags?: string[];
+};
+
+const { href, title, description, category, status, tags = [] } = Astro.props;
+
+const withBase = (path: string) =>
+    `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+---
+
+<a class="card" href={withBase(href)}>
+    <div class="badges">
+        <span class="badge">{category}</span>
+        {status && <span class="badge badge-success">{status}</span>}
+    </div>
+
+    <h3>{title}</h3>
+
+    <p>{description}</p>
+
+    {
+        tags.length > 0 && (
+            <div class="tags">
+                {tags.map((tag) => (
+                    <span>{tag}</span>
+                ))}
+            </div>
+        )
+    }
+</a>
+
+<style>
+    .card {
+        display: flex;
+        min-height: 210px;
+        flex-direction: column;
+        padding: 28px;
+        border: 1px solid #d7e0ea;
+        border-radius: 12px;
+        color: #172033;
+        background: #fff;
+        text-decoration: none;
+        box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
+        transition:
+            transform 160ms ease,
+            border-color 160ms ease,
+            box-shadow 160ms ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        border-color: #9cc7f2;
+        box-shadow: 0 16px 36px rgb(15 23 42 / 10%);
+    }
+
+    .badges,
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .badge,
+    .tags span {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        border: 1px solid #b9d8f7;
+        border-radius: 999px;
+        background: #eef7ff;
+        color: #0d559a;
+        font-size: 0.9rem;
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    .badge {
+        padding: 7px 12px;
+    }
+
+    .badge-success {
+        border-color: #a9e8c7;
+        background: #ecfdf5;
+        color: #087443;
+    }
+
+    h3 {
+        margin: 22px 0 12px;
+        font-size: clamp(1.35rem, 2vw, 1.75rem);
+        line-height: 1.15;
+        letter-spacing: -0.04em;
+    }
+
+    p {
+        margin: 0;
+        color: #5f6b7a;
+        font-size: 1.12rem;
+        line-height: 1.55;
+    }
+
+    .tags {
+        margin-top: auto;
+        padding-top: 28px;
+    }
+
+    .tags span {
+        padding: 6px 11px;
+        font-size: 0.86rem;
+    }
+</style>

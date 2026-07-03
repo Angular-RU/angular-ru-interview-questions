@@ -1,3 +1,12 @@
+---
+layout: ../../layouts/Layout.astro
+title: Основы программирования и проектирования
+description: Вопросы и ответы
+category: Frontend
+kind: questions
+order: 20
+---
+
 ## Основы программирования и проектирования
 
 ### Frontend fundamentals

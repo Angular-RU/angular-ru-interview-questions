@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+
+const { frontmatter } = Astro.props;
+
+const title = frontmatter?.title ?? 'Angular RU Interview Questions';
+const description =
+    frontmatter?.description ??
+    'Вопросы и практические задания для подготовки frontend-разработчиков';
+---
+
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+</head>
+
+<body>
+<main class="page">
+    <article class="content">
+        <slot />
+    </article>
+</main>
+</body>
+</html>
