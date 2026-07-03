@@ -6877,19 +6877,19 @@ selectors, imports или конфигурацию.
 
 ### Micro Frontends
 
-Практический пример: [`examples/angular/mfe`](../examples/angular/mfe).
+Практический пример: [`examples/angular/mfe`](/angular/mfe/movie-ticket/index.html).
 
 В этом демо можно увидеть:
 
-- host/shell приложение [`movie-ticket`](../examples/angular/mfe/movie-ticket);
-- remote widgets [`movies`](../examples/angular/mfe/movies) и
-  [`ticket-availability`](../examples/angular/mfe/ticket-availability);
+- host/shell приложение [`movie-ticket`](/angular/mfe/movie-ticket/index.html);
+- remote widgets [`movies`](/angular/mfe/movies/index.html) и
+  [`ticket-availability`](/angular/mfe/ticket-availability/index.html);
 - federation manifest и `remoteEntry.json`;
 - runtime loading и host orchestration через Angular inputs/outputs;
 - независимые loading/error states и fallback UI;
 - SSR-safe browser-only mounting через `afterNextRender()`.
 
-Инструкции по запуску находятся в [`examples/angular/mfe/README.md`](../examples/angular/mfe/README.md).
+Инструкции по запуску находятся в [`examples/angular/mfe/README.md`](../../../apps/angular/mfe/README.md).
 
 **Базовые понятия**
 
