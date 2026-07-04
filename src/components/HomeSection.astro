@@ -29,7 +29,7 @@ const withBase = (path: string) =>
     <header class="section-header">
         <div>
             <p class="eyebrow">{eyebrow}</p>
-            <h2>{title}</h2>
+            {title ? <h2>{title}</h2> : ''}
         </div>
 
         {

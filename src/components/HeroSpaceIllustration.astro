@@ -40,14 +40,6 @@
 </div>
 
 <style>
-    .spinner {
-        animation: spin 2s linear infinite;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
     .space-illustration {
         position: relative;
         min-height: 540px;
@@ -235,8 +227,22 @@
 
     .orbit-dot {
         position: absolute;
-        top: 39%;
-        right: 41%;
+        z-index: 0;
+        border-radius: 100%;
+        transform: rotate(-32deg);
+        animation: 14s linear infinite orbitDot;
+        pointer-events: none;
+        top: 6%;
+        right: 9%;
+        width: min(31vw, 340px);
+        height: min(31vw, 340px);
+    }
+
+    .orbit-dot::before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: 50%;
         width: 10px;
         height: 10px;
         border-radius: 50%;
@@ -244,8 +250,7 @@
         box-shadow:
             0 0 0 5px rgb(49 92 255 / 12%),
             0 0 24px rgb(49 92 255 / 34%);
-        transform-origin: 200px 72px;
-        animation: orbitDot 14s linear infinite;
+        transform: translateX(-50%);
     }
 
     .spark {
@@ -268,11 +273,11 @@
 
     @keyframes orbitDot {
         from {
-            transform: rotate(0deg);
+            transform: rotate(-32deg);
         }
 
         to {
-            transform: rotate(360deg);
+            transform: rotate(328deg);
         }
     }
 
@@ -291,6 +296,7 @@
 
     @media (prefers-reduced-motion: reduce) {
         .orbit-dot,
+        .orbit-dot::before,
         .spark {
             animation: none;
         }
@@ -305,6 +311,13 @@
             right: 8%;
             width: 230px;
             height: 230px;
+        }
+
+        .orbit-dot {
+            top: 20%;
+            right: -6%;
+            width: 430px;
+            height: 150px;
         }
 
         .saturn {
@@ -327,6 +340,13 @@
         .planet-main {
             width: 180px;
             height: 180px;
+        }
+
+        .orbit-dot {
+            top: 18%;
+            right: -28%;
+            width: 330px;
+            height: 116px;
         }
 
         .planet-small {
