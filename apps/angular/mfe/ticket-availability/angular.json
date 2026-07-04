@@ -94,7 +94,7 @@
                             "sourceMap": true
                         },
                         "public": {
-                            "baseHref": "/demos/angular/mfe/ticket-availability/",
+                            "baseHref": "/interview/angular/mfe/ticket-availability/",
                             "outputPath": {
                                 "base": "../../../../public/angular/mfe/ticket-availability/",
                                 "browser": ""

@@ -94,7 +94,7 @@
                             "sourceMap": true
                         },
                         "public": {
-                            "baseHref": "/demos/angular/mfe/movies/",
+                            "baseHref": "/interview/angular/mfe/movies/",
                             "outputPath": {
                                 "base": "../../../../public/angular/mfe/movies/",
                                 "browser": ""

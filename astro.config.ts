@@ -9,7 +9,7 @@ import rehypeRaw from 'rehype-raw';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://angular-ru.github.io',
-    base: '/demos',
+    base: '/interview',
     vite: {
         plugins: [tailwindcss()],
     },

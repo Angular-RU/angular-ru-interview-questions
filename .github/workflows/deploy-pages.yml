@@ -13,11 +13,6 @@ concurrency:
 permissions:
   contents: read
 
-env:
-  DEMOS_BASE_PATH: /demos
-  DEMOS_REPOSITORY: Angular-RU/demos
-  DEMOS_BRANCH: main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -40,7 +35,7 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Deploy dist to Angular-RU/demos main branch
+      - name: Deploy dist
         env:
           TOKEN: ${{ secrets.ANGULAR_RU_BOT_PAT }}
         run: |
@@ -49,7 +44,7 @@ jobs:
           git config user.name "angular-ru-bot"
           git config user.email "angular-ru@yandex.ru"
           git add .
-          git commit -m "deploy: demos from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          git commit -m "deploy: from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
           git branch -M main
-          git remote add origin "https://x-access-token:${TOKEN}@github.com/Angular-RU/demos.git"
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/Angular-RU/interview.git"
           git push --force origin main

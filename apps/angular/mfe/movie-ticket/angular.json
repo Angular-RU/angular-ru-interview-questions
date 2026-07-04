@@ -94,7 +94,7 @@
                             "sourceMap": true
                         },
                         "public": {
-                            "baseHref": "/demos/angular/mfe/movie-ticket/",
+                            "baseHref": "/interview/angular/mfe/movie-ticket/",
                             "outputPath": {
                                 "base": "../../../../public/angular/mfe/movie-ticket/",
                                 "browser": ""

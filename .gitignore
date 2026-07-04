@@ -1,4 +1,3 @@
-demos/
 .astro/
 node_modules/
 npm-debug.log*

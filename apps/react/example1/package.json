@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
-        "build:public": "vite build --base=/demos/react/example1/ --outDir=../../../public/react/example1 --emptyOutDir",
+        "build:public": "vite build --base=/interview/react/example1/ --outDir=../../../public/react/example1 --emptyOutDir",
         "lint": "oxlint",
         "preview": "vite preview"
     },
