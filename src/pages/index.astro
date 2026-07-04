@@ -2,6 +2,7 @@
 import '../styles/home.css';
 
 import Layout from '../layouts/Layout.astro';
+import HeroSpaceIllustration from '../components/HeroSpaceIllustration.astro';
 import HomeSection from '../components/HomeSection.astro';
 import { examples } from '../data/examples';
 
@@ -127,8 +128,8 @@ const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
     <div class="home" data-home-page>
         <section class="hero" aria-labelledby="home-title">
             <div class="hero-content">
-                <p class="hero-eyebrow">Готовимся уверенно и проходим собеседования успешно</p>
                 <h1 id="home-title" class="hero-title">Frontend Interview Questions</h1>
+                <p class="hero-eyebrow">Готовимся уверенно и проходим собеседования успешно</p>
                 <p class="hero-lead">
                     Вопросы, ответы и практические демо для подготовки frontend-разработчиков:
                     Computer Science, Web Platform, CSS, JavaScript, TypeScript, Angular,
@@ -142,14 +143,7 @@ const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
             </div>
 
             <div class="hero-visual" aria-hidden="true">
-                <span class="orbit orbit-large"></span>
-                <span class="orbit orbit-small"></span>
-                <span class="planet planet-main"></span>
-                <span class="planet planet-ringed"></span>
-                <span class="planet planet-small"></span>
-                <span class="star star-one"></span>
-                <span class="star star-two"></span>
-                <span class="star star-three"></span>
+                <HeroSpaceIllustration />
             </div>
         </section>
 

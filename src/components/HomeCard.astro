@@ -54,10 +54,11 @@ const formatQuestionCount = (count: number): string => {
     <p>{description}</p>
 
     <div class="card-footer">
-        <span class="card-meta">
+          <span class="card-meta">
             {count !== undefined ? formatQuestionCount(count) : 'Практика'}
-        </span>
-        <span class="card-link">Открыть</span>
+          </span>
+
+        <span class="card-arrow" aria-hidden="true">→</span>
     </div>
 </a>
 
@@ -160,6 +161,29 @@ const formatQuestionCount = (count: number): string => {
         gap: 16px;
         margin-top: auto;
         padding-top: 28px;
+    }
+
+    .card-arrow {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid #b9d8f7;
+        border-radius: 999px;
+        color: #315cff;
+        background: #eef7ff;
+        font-size: 1.15rem;
+        font-weight: 900;
+        transition:
+            transform 160ms ease,
+            background 160ms ease,
+            border-color 160ms ease;
+    }
+
+    .card:hover .card-arrow {
+        transform: translateX(3px);
+        border-color: #8bb8ff;
+        background: #e0edff;
     }
 
     .card-meta {

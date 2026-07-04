@@ -1,0 +1,348 @@
+<div class="space-illustration" aria-hidden="true">
+    <svg class="constellation" viewBox="0 0 720 520" fill="none">
+        <path
+            class="constellation-line"
+            d="M116 178 L194 104 L306 146 L408 88 L548 156"
+        />
+
+        <path
+            class="constellation-line constellation-line-soft"
+            d="M172 364 L282 292 L402 336 L520 258"
+        />
+
+        <circle class="star-dot" cx="116" cy="178" r="4" />
+        <circle class="star-dot" cx="194" cy="104" r="5" />
+        <circle class="star-dot" cx="306" cy="146" r="4" />
+        <circle class="star-dot" cx="408" cy="88" r="5" />
+        <circle class="star-dot" cx="548" cy="156" r="4" />
+
+        <circle class="star-dot star-dot-soft" cx="172" cy="364" r="3.5" />
+        <circle class="star-dot star-dot-soft" cx="282" cy="292" r="4" />
+        <circle class="star-dot star-dot-soft" cx="402" cy="336" r="3.5" />
+        <circle class="star-dot star-dot-soft" cx="520" cy="258" r="4" />
+    </svg>
+
+    <span class="orbit orbit-main"></span>
+    <span class="orbit orbit-soft"></span>
+
+    <span class="planet planet-main"></span>
+    <span class="planet planet-small"></span>
+    <span class="saturn">
+        <span class="saturn-ring saturn-ring-back"></span>
+        <span class="saturn-body"></span>
+        <span class="saturn-ring saturn-ring-front"></span>
+    </span>
+
+    <span class="orbit-dot orbit-dot-main"></span>
+
+    <span class="spark spark-1">✦</span>
+    <span class="spark spark-2">✦</span>
+</div>
+
+<style>
+    .spinner {
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .space-illustration {
+        position: relative;
+        min-height: 540px;
+        overflow: hidden;
+    }
+
+    .space-illustration::before {
+        content: '';
+        position: absolute;
+        inset: 8% 0 0 4%;
+        border-radius: 50%;
+        background:
+            radial-gradient(circle at 60% 32%, rgb(49 92 255 / 8%), transparent 34%),
+            radial-gradient(circle at 24% 76%, rgb(14 165 233 / 8%), transparent 30%);
+    }
+
+    .constellation {
+        position: absolute;
+        inset: 2% 0 auto;
+        width: 100%;
+        height: 100%;
+        opacity: 0.72;
+    }
+
+    .constellation-line {
+        stroke: rgb(49 92 255 / 28%);
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .constellation-line-soft {
+        stroke: rgb(14 165 233 / 20%);
+    }
+
+    .star-dot {
+        fill: #3b6fff;
+        filter: drop-shadow(0 0 10px rgb(59 111 255 / 42%));
+    }
+
+    .star-dot-soft {
+        fill: #38bdf8;
+        opacity: 0.78;
+    }
+
+    .orbit {
+        position: absolute;
+        border: 2px solid rgb(72 124 255 / 18%);
+        border-radius: 50%;
+        transform: rotate(-32deg);
+    }
+
+    .orbit-main {
+        top: 22%;
+        right: 11%;
+        width: 540px;
+        height: 180px;
+    }
+
+    .orbit-soft {
+        top: 38%;
+        right: 20%;
+        width: 420px;
+        height: 130px;
+        border-color: rgb(72 124 255 / 10%);
+    }
+
+    .planet {
+        position: absolute;
+        display: block;
+        border-radius: 50%;
+    }
+
+    .planet-main {
+        top: 10%;
+        right: 12%;
+        width: min(30vw, 300px);
+        height: min(30vw, 300px);
+        background:
+            radial-gradient(circle at 30% 22%, rgb(255 255 255 / 26%), transparent 18%),
+            linear-gradient(145deg, #9bbcff 0%, #4f7df7 58%, #315fdc 100%);
+        box-shadow:
+            inset -22px -26px 42px rgb(0 42 160 / 16%),
+            0 30px 80px rgb(49 92 255 / 16%);
+    }
+
+    .planet-main::before,
+    .planet-main::after {
+        content: '';
+        position: absolute;
+        right: 13%;
+        left: 13%;
+        height: 28px;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 12%);
+        transform: rotate(-16deg);
+    }
+
+    .planet-main::before {
+        top: 30%;
+    }
+
+    .planet-main::after {
+        top: 52%;
+    }
+
+    .planet-small {
+        top: 55%;
+        left: 32%;
+        width: 82px;
+        height: 82px;
+        background: linear-gradient(145deg, #8db2ff, #4d7dff);
+        box-shadow: 0 18px 44px rgb(49 92 255 / 16%);
+    }
+
+    .saturn {
+        position: absolute;
+        z-index: 4;
+        right: 10%;
+        bottom: 17%;
+        width: 176px;
+        height: 176px;
+        overflow: visible;
+    }
+
+    .saturn-body {
+        position: absolute;
+        z-index: 2;
+        display: block;
+        overflow: hidden;
+        inset: 0;
+        border-radius: 50%;
+        background:
+            radial-gradient(circle at 32% 24%, rgb(255 255 255 / 28%), transparent 18%),
+            linear-gradient(145deg, #9be8ff 0%, #62cceb 52%, #35aee0 100%);
+        box-shadow:
+            inset -18px -22px 34px rgb(0 96 140 / 14%),
+            0 22px 50px rgb(14 165 233 / 16%);
+    }
+
+    .saturn-body::before,
+    .saturn-body::after {
+        content: '';
+        position: absolute;
+        right: 12%;
+        left: 12%;
+        height: 18px;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 12%);
+        transform: rotate(-16deg);
+    }
+
+    .saturn-body::before {
+        top: 34%;
+    }
+
+    .saturn-body::after {
+        top: 56%;
+    }
+
+    .saturn-ring {
+        position: absolute;
+        top: 54%;
+        left: 50%;
+        width: 155%;
+        height: 46%;
+        border: 10px solid rgb(125 211 252 / 48%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) rotate(-24deg);
+        pointer-events: none;
+    }
+
+    .saturn-ring-back {
+        z-index: 1;
+        opacity: 0.62;
+        filter: drop-shadow(0 12px 20px rgb(14 165 233 / 14%));
+    }
+
+    .saturn-ring-front {
+        z-index: 3;
+        border-color: rgb(125 211 252 / 64%);
+        opacity: 0.82;
+        clip-path: inset(50% 0 0 0);
+    }
+
+    .orbit-dot {
+        position: absolute;
+        top: 39%;
+        right: 41%;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ffffff;
+        box-shadow:
+            0 0 0 5px rgb(49 92 255 / 12%),
+            0 0 24px rgb(49 92 255 / 34%);
+        transform-origin: 200px 72px;
+        animation: orbitDot 14s linear infinite;
+    }
+
+    .spark {
+        position: absolute;
+        color: #4d7dff;
+        font-size: 1.55rem;
+        animation: sparkle 4s ease-in-out infinite;
+    }
+
+    .spark-1 {
+        top: 18%;
+        left: 48%;
+    }
+
+    .spark-2 {
+        bottom: 24%;
+        left: 55%;
+        animation-delay: 1.4s;
+    }
+
+    @keyframes orbitDot {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes sparkle {
+        0%,
+        100% {
+            opacity: 0.42;
+            transform: scale(0.92);
+        }
+
+        50% {
+            opacity: 0.9;
+            transform: scale(1.06);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .orbit-dot,
+        .spark {
+            animation: none;
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .space-illustration {
+            min-height: 360px;
+        }
+
+        .planet-main {
+            right: 8%;
+            width: 230px;
+            height: 230px;
+        }
+
+        .saturn {
+            right: 5%;
+            bottom: 8%;
+            width: 130px;
+            height: 130px;
+        }
+
+        .saturn-ring {
+            border-width: 8px;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .space-illustration {
+            min-height: 260px;
+        }
+
+        .planet-main {
+            width: 180px;
+            height: 180px;
+        }
+
+        .planet-small {
+            width: 58px;
+            height: 58px;
+        }
+
+        .saturn {
+            right: 4%;
+            bottom: 7%;
+            width: 110px;
+            height: 110px;
+        }
+
+        .saturn-ring {
+            border-width: 7px;
+        }
+    }
+</style>
