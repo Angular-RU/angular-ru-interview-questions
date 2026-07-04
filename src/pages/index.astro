@@ -45,12 +45,17 @@ const questionCards = Object.entries(modules)
             category: frontmatter.category ?? 'Frontend',
             kind: frontmatter.kind ?? 'questions',
             order: frontmatter.order ?? 999,
+            actionLabel: 'Вопросы и ответы',
         };
     })
     .filter((item) => item.kind === 'questions')
     .sort((a, b) => a.order - b.order);
 
 const exampleCards = examples
+    .map((example) => ({
+        ...example,
+        actionLabel: 'Открыть демо',
+    }))
     .slice()
     .sort((a, b) => a.order - b.order);
 ---
@@ -59,28 +64,82 @@ const exampleCards = examples
     title="Angular RU Interview Questions"
     description="Вопросы и практические задания для подготовки frontend-разработчиков"
 >
-    <div class="home">
-        <section class="hero">
-            <p class="eyebrow">Angular RU</p>
-            <h1>Frontend Interview Questions</h1>
-            <p class="lead">
-                Вопросы, ответы и практические демо для подготовки frontend-разработчиков:
-                Computer Science, Web Platform, CSS, JavaScript, TypeScript, Angular,
-                React, тестирование, архитектура и soft skills.
-            </p>
+    <div class="home" data-home-page>
+        <header class="site-header" aria-label="Главная навигация">
+            <a class="brand" href="/">Angular RU</a>
+
+            <nav class="nav" aria-label="Разделы">
+                <a href="#theory">Теория</a>
+                <a href="#practice">Практика</a>
+                <a href="/angular/">Angular</a>
+                <a href="/react/">React</a>
+            </nav>
+
+            <a class="header-action" href="https://github.com/Angular-RU/angular-ru-interview-questions">
+                Поддержать проект
+            </a>
+        </header>
+
+        <section class="hero" aria-labelledby="home-title">
+            <div class="hero-content">
+                <p class="hero-eyebrow">Готовимся уверенно и проходим собеседования успешно</p>
+                <h1 id="home-title" class="hero-title">Frontend Interview Questions</h1>
+                <p class="hero-lead">
+                    Вопросы, ответы и практические демо для подготовки frontend-разработчиков:
+                    Computer Science, Web Platform, CSS, JavaScript, TypeScript, Angular,
+                    React, тестирование, архитектура и soft skills.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="primary-action" href="#theory">Начать подготовку</a>
+                    <a class="secondary-action" href="#practice">Смотреть практику</a>
+                </div>
+            </div>
+
+            <div class="hero-visual" aria-hidden="true">
+                <span class="orbit orbit-large"></span>
+                <span class="orbit orbit-small"></span>
+                <span class="planet planet-main"></span>
+                <span class="planet planet-ringed"></span>
+                <span class="planet planet-small"></span>
+                <span class="star star-one"></span>
+                <span class="star star-two"></span>
+                <span class="star star-three"></span>
+            </div>
         </section>
 
+        <ul class="features" aria-label="Преимущества проекта">
+            <li>
+                <span class="feature-icon feature-icon-box"></span>
+                Структурировано по темам
+            </li>
+            <li>
+                <span class="feature-icon feature-icon-flash"></span>
+                Актуальные вопросы
+            </li>
+            <li>
+                <span class="feature-icon feature-icon-code"></span>
+                Практические примеры
+            </li>
+            <li>
+                <span class="feature-icon feature-icon-refresh"></span>
+                Постоянные обновления
+            </li>
+        </ul>
+
         <HomeSection
+            id="theory"
             eyebrow="Теория"
-            title="Вопросы"
-            linkHref="/questions/"
+            title="Вопросы по темам"
+            linkHref="#theory"
             items={questionCards}
         />
 
         <HomeSection
-            eyebrow="Демо"
-            title="Практика"
-            linkHref="/examples/"
+            id="practice"
+            eyebrow="Практика"
+            title="Учись на практике"
+            linkHref="#practice"
             items={exampleCards}
         />
     </div>

@@ -4,11 +4,12 @@ type Props = {
     title: string;
     description: string;
     category: string;
+    actionLabel: string;
     status?: string;
     tags?: string[];
 };
 
-const { href, title, description, category, status, tags = [] } = Astro.props;
+const { href, title, description, category, actionLabel, status, tags = [] } = Astro.props;
 
 const withBase = (path: string) => {
     const base = import.meta.env.BASE_URL.endsWith('/')
@@ -20,6 +21,8 @@ const withBase = (path: string) => {
 ---
 
 <a class="card" href={withBase(href)}>
+    <span class="card-icon" aria-hidden="true"></span>
+
     <div class="badges">
         <span class="badge">{category}</span>
         {status && <span class="badge badge-success">{status}</span>}
@@ -28,6 +31,8 @@ const withBase = (path: string) => {
     <h3>{title}</h3>
 
     <p>{description}</p>
+
+    <span class="card-action">{actionLabel}</span>
 
     {
         tags.length > 0 && (
@@ -42,16 +47,20 @@ const withBase = (path: string) => {
 
 <style>
     .card {
+        position: relative;
         display: flex;
-        min-height: 210px;
+        min-height: 270px;
         flex-direction: column;
-        padding: 28px;
-        border: 1px solid #d7e0ea;
-        border-radius: 12px;
-        color: #172033;
-        background: #fff;
+        overflow: hidden;
+        padding: 30px;
+        border: 1px solid #dbe6f5;
+        border-radius: 14px;
+        color: #071942;
+        background:
+            radial-gradient(circle at 92% 0%, rgb(219 235 255 / 58%), transparent 9rem),
+            rgb(255 255 255 / 82%);
         text-decoration: none;
-        box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
+        box-shadow: 0 10px 28px rgb(27 74 138 / 7%);
         transition:
             transform 160ms ease,
             border-color 160ms ease,
@@ -60,8 +69,32 @@ const withBase = (path: string) => {
 
     .card:hover {
         transform: translateY(-2px);
-        border-color: #9cc7f2;
-        box-shadow: 0 16px 36px rgb(15 23 42 / 10%);
+        border-color: #9fc2ff;
+        box-shadow: 0 20px 42px rgb(27 74 138 / 12%);
+    }
+
+    .card-icon {
+        display: inline-flex;
+        width: 58px;
+        height: 58px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        border: 1px solid #aecaee;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #f5f9ff, #dfecff);
+        box-shadow: inset 0 0 0 8px rgb(47 115 255 / 7%);
+    }
+
+    .card-icon::before {
+        content: '';
+        width: 24px;
+        height: 24px;
+        border: 3px solid #2f73ff;
+        border-radius: 6px;
+        box-shadow:
+            8px 8px 0 -5px #2f73ff,
+            -8px -8px 0 -5px #2f73ff;
     }
 
     .badges,
@@ -76,11 +109,11 @@ const withBase = (path: string) => {
         display: inline-flex;
         width: fit-content;
         align-items: center;
-        border: 1px solid #b9d8f7;
+        border: 1px solid #bdd6ff;
         border-radius: 999px;
-        background: #eef7ff;
-        color: #0d559a;
-        font-size: 0.9rem;
+        background: #f3f8ff;
+        color: #2563eb;
+        font-size: 0.82rem;
         font-weight: 800;
         line-height: 1;
     }
@@ -96,22 +129,41 @@ const withBase = (path: string) => {
     }
 
     h3 {
-        margin: 22px 0 12px;
-        font-size: clamp(1.35rem, 2vw, 1.75rem);
+        margin: 18px 0 12px;
+        font-size: clamp(1.35rem, 2vw, 1.8rem);
         line-height: 1.15;
-        letter-spacing: -0.04em;
+        letter-spacing: 0;
     }
 
     p {
         margin: 0;
-        color: #5f6b7a;
-        font-size: 1.12rem;
+        color: #314467;
+        font-size: 1.02rem;
         line-height: 1.55;
     }
 
-    .tags {
+    .card-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
         margin-top: auto;
-        padding-top: 28px;
+        padding-top: 26px;
+        color: #2f73ff;
+        font-weight: 900;
+    }
+
+    .card-action::after {
+        content: '';
+        width: 22px;
+        height: 10px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: skewX(-35deg);
+    }
+
+    .tags {
+        margin-top: 18px;
+        padding-top: 0;
     }
 
     .tags span {

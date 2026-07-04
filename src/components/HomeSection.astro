@@ -6,30 +6,33 @@ type Card = {
     title: string;
     description: string;
     category: string;
+    actionLabel: string;
     status?: string;
     tags?: string[];
 };
 
 type Props = {
+    id?: string;
     eyebrow: string;
     title: string;
     linkHref: string;
     items: Card[];
 };
 
-const { eyebrow, title, linkHref, items } = Astro.props;
+const { id, eyebrow, title, linkHref, items } = Astro.props;
 
 const withBase = (path: string) =>
     `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
 ---
 
-<section class="section">
+<section class="section" id={id}>
     <header class="section-header">
         <div>
             <p class="eyebrow">{eyebrow}</p>
             <h2>{title}</h2>
         </div>
 
+        <a class="section-link" href={withBase(linkHref)}>Показать все</a>
     </header>
 
     <div class="grid">
@@ -40,6 +43,7 @@ const withBase = (path: string) =>
                     title={item.title}
                     description={item.description}
                     category={item.category}
+                    actionLabel={item.actionLabel}
                     status={item.status}
                     tags={item.tags}
                 />
@@ -50,7 +54,8 @@ const withBase = (path: string) =>
 
 <style>
     .section {
-        margin-top: 72px;
+        scroll-margin-top: 28px;
+        margin-top: 86px;
     }
 
     .section:first-child {
@@ -62,36 +67,55 @@ const withBase = (path: string) =>
         align-items: end;
         justify-content: space-between;
         gap: 24px;
-        margin-bottom: 28px;
+        margin-bottom: 30px;
     }
 
     .eyebrow {
-        margin: 0 0 8px;
-        color: #1264c3;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 14px;
+        color: #2f73ff;
         font-size: 0.95rem;
         font-weight: 900;
         letter-spacing: 0.14em;
         text-transform: uppercase;
     }
 
+    .eyebrow::after {
+        content: '';
+        width: min(24vw, 260px);
+        height: 1px;
+        background: linear-gradient(90deg, #8bb8ff, rgb(139 184 255 / 0%));
+    }
+
     h2 {
         margin: 0;
-        color: #172033;
-        font-size: clamp(2.4rem, 5vw, 4rem);
-        line-height: 0.95;
-        letter-spacing: -0.06em;
+        color: #071942;
+        font-size: clamp(2.2rem, 4vw, 3.25rem);
+        line-height: 1.05;
+        letter-spacing: 0;
     }
 
     .section-link {
-        color: #1264c3;
-        font-size: 1.15rem;
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 18px;
+        border: 1px solid #cbd9ed;
+        border-radius: 12px;
+        color: #10234b;
+        background: rgb(255 255 255 / 76%);
+        font-size: 0.95rem;
         font-weight: 900;
         text-decoration: none;
+        box-shadow: 0 10px 24px rgb(27 74 138 / 7%);
     }
 
     .section-link:hover {
-        text-decoration: underline;
-        text-underline-offset: 4px;
+        border-color: #8bb8ff;
+        color: #2563eb;
     }
 
     .grid {
@@ -108,12 +132,16 @@ const withBase = (path: string) =>
 
     @media (max-width: 700px) {
         .section {
-            margin-top: 48px;
+            margin-top: 56px;
         }
 
         .section-header {
             align-items: start;
             flex-direction: column;
+        }
+
+        .section-link {
+            width: 100%;
         }
 
         .grid {
