@@ -4,12 +4,11 @@ type Props = {
     title: string;
     description: string;
     category: string;
-    actionLabel: string;
-    status?: string;
-    tags?: string[];
+    icon?: string;
+    count?: number;
 };
 
-const { href, title, description, category, actionLabel, status, tags = [] } = Astro.props;
+const { href, title, description, category, icon, count } = Astro.props;
 
 const withBase = (path: string) => {
     const base = import.meta.env.BASE_URL.endsWith('/')
@@ -18,49 +17,65 @@ const withBase = (path: string) => {
 
     return `${base}${path.replace(/^\/+/, '')}`;
 };
+
+const formatQuestionCount = (count: number): string => {
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+
+    if (mod10 === 1 && mod100 !== 11) {
+        return `${count} вопрос`;
+    }
+
+    if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) {
+        return `${count} вопроса`;
+    }
+
+    return `${count} вопросов`;
+};
 ---
 
 <a class="card" href={withBase(href)}>
-    <span class="card-icon" aria-hidden="true"></span>
+    <div class="card-header">
+        {
+            icon ? (
+                <span class="card-icon">
+                    <img src={withBase(icon)} alt="" loading="lazy" />
+                </span>
+            ) : (
+                <span class="card-icon card-icon-fallback" aria-hidden="true">✦</span>
+            )
+        }
 
-    <div class="badges">
         <span class="badge">{category}</span>
-        {status && <span class="badge badge-success">{status}</span>}
     </div>
 
     <h3>{title}</h3>
 
     <p>{description}</p>
 
-    <span class="card-action">{actionLabel}</span>
-
-    {
-        tags.length > 0 && (
-            <div class="tags">
-                {tags.map((tag) => (
-                    <span>{tag}</span>
-                ))}
-            </div>
-        )
-    }
+    <div class="card-footer">
+        <span class="card-meta">
+            {count !== undefined ? formatQuestionCount(count) : 'Практика'}
+        </span>
+        <span class="card-link">Открыть</span>
+    </div>
 </a>
 
 <style>
     .card {
         position: relative;
         display: flex;
-        min-height: 270px;
+        min-height: 260px;
         flex-direction: column;
-        overflow: hidden;
-        padding: 30px;
-        border: 1px solid #dbe6f5;
-        border-radius: 14px;
-        color: #071942;
+        padding: 28px;
+        border: 1px solid rgb(191 207 232 / 85%);
+        border-radius: 20px;
+        color: var(--text);
         background:
-            radial-gradient(circle at 92% 0%, rgb(219 235 255 / 58%), transparent 9rem),
-            rgb(255 255 255 / 82%);
+            radial-gradient(circle at 18% 16%, rgb(49 92 255 / 5%), transparent 9rem),
+            #ffffff;
         text-decoration: none;
-        box-shadow: 0 10px 28px rgb(27 74 138 / 7%);
+        box-shadow: 0 14px 40px rgb(15 23 42 / 5%);
         transition:
             transform 160ms ease,
             border-color 160ms ease,
@@ -68,44 +83,48 @@ const withBase = (path: string) => {
     }
 
     .card:hover {
-        transform: translateY(-2px);
-        border-color: #9fc2ff;
-        box-shadow: 0 20px 42px rgb(27 74 138 / 12%);
+        transform: translateY(-4px);
+        border-color: rgb(99 148 255 / 80%);
+        box-shadow: 0 24px 60px rgb(49 92 255 / 13%);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 28px;
     }
 
     .card-icon {
-        display: inline-flex;
-        width: 58px;
-        height: 58px;
+        display: flex;
+        width: 56px;
+        height: 56px;
+        flex: 0 0 56px;
         align-items: center;
         justify-content: center;
-        margin-bottom: 20px;
-        border: 1px solid #aecaee;
-        border-radius: 50%;
-        background: linear-gradient(145deg, #f5f9ff, #dfecff);
-        box-shadow: inset 0 0 0 8px rgb(47 115 255 / 7%);
+        padding: 0;
+        border: 1px solid #b9d8f7;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        box-shadow: inset 0 0 0 8px rgb(49 92 255 / 5%);
     }
 
-    .card-icon::before {
-        content: '';
-        width: 24px;
-        height: 24px;
-        border: 3px solid #2f73ff;
-        border-radius: 6px;
-        box-shadow:
-            8px 8px 0 -5px #2f73ff,
-            -8px -8px 0 -5px #2f73ff;
+    .card-icon img {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
     }
 
-    .badges,
-    .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
+    .card-icon-fallback {
+        align-items: center;
+        justify-content: center;
+        color: #315cff;
+        font-size: 1.5rem;
+        font-weight: 900;
     }
 
-    .badge,
-    .tags span {
+    .badge {
         display: inline-flex;
         width: fit-content;
         align-items: center;
@@ -116,58 +135,54 @@ const withBase = (path: string) => {
         font-size: 0.82rem;
         font-weight: 800;
         line-height: 1;
-    }
-
-    .badge {
         padding: 7px 12px;
     }
 
-    .badge-success {
-        border-color: #a9e8c7;
-        background: #ecfdf5;
-        color: #087443;
-    }
-
     h3 {
-        margin: 18px 0 12px;
-        font-size: clamp(1.35rem, 2vw, 1.8rem);
-        line-height: 1.15;
+        margin: 0 0 12px;
+        color: #071537;
+        font-size: clamp(1.45rem, 2vw, 1.85rem);
+        line-height: 1.12;
         letter-spacing: 0;
     }
 
     p {
         margin: 0;
-        color: #314467;
-        font-size: 1.02rem;
+        color: #475569;
+        font-size: 1rem;
         line-height: 1.55;
     }
 
-    .card-action {
+    .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: auto;
+        padding-top: 28px;
+    }
+
+    .card-meta {
+        color: #64748b;
+        font-size: 0.92rem;
+        font-weight: 750;
+    }
+
+    .card-link {
         display: inline-flex;
         align-items: center;
-        gap: 12px;
-        margin-top: auto;
-        padding-top: 26px;
-        color: #2f73ff;
+        gap: 10px;
+        color: #315cff;
+        font-size: 0.98rem;
         font-weight: 900;
     }
 
-    .card-action::after {
+    .card-link::after {
         content: '';
-        width: 22px;
-        height: 10px;
+        width: 18px;
+        height: 9px;
         border-right: 2px solid currentColor;
         border-bottom: 2px solid currentColor;
         transform: skewX(-35deg);
-    }
-
-    .tags {
-        margin-top: 18px;
-        padding-top: 0;
-    }
-
-    .tags span {
-        padding: 6px 11px;
-        font-size: 0.86rem;
     }
 </style>

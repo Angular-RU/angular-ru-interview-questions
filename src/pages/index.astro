@@ -12,12 +12,65 @@ type MarkdownModule = {
         category?: string;
         kind?: string;
         order?: number;
+        icon?: string;
     };
 };
 
-const modules = import.meta.glob<MarkdownModule>('./**/index.md', {
+type QuestionCard = {
+    href: string;
+    title: string;
+    description: string;
+    category: string;
+    kind: string;
+    order: number;
+    icon: string;
+    count: number;
+};
+
+const markdownModules = import.meta.glob<MarkdownModule>('./**/index.md', {
     eager: true,
 });
+
+const markdownSources = import.meta.glob<string>('./**/index.md', {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+});
+
+const iconBySlug: Record<string, string> = {
+    angular: '/logos/angular.svg',
+    react: '/logos/react.svg',
+    javascript: '/logos/javascript.svg',
+    typescript: '/logos/typescript.svg',
+    css: '/logos/css.svg',
+    html: '/logos/html5.svg',
+    nodejs: '/logos/nodejs.svg',
+    'computer-science': '/logos/computer-science.svg',
+    'web-platform': '/logos/web-platform.svg',
+    'browser-rendering': '/logos/browser.svg',
+    browser: '/logos/browser.svg',
+    http: '/logos/http.svg',
+    testing: '/logos/testing.svg',
+    'soft-skills': '/logos/soft-skills.svg',
+};
+
+const iconByCategory: Record<string, string> = {
+    Backend: '/logos/nodejs.svg',
+    Career: '/logos/soft-skills.svg',
+    Engineering: '/logos/computer-science.svg',
+    'Engineering Fundamentals': '/logos/computer-science.svg',
+    Frontend: '/logos/web-platform.svg',
+};
+
+const countQuestions = (source: string): number => {
+    const summaryCount = source.match(/<summary[\s>]/gi)?.length ?? 0;
+
+    if (summaryCount > 0) {
+        return summaryCount;
+    }
+
+    return source.match(/<details[\s>]/gi)?.length ?? 0;
+};
 
 const titleFromPath = (path: string) => {
     const slug = path
@@ -32,9 +85,17 @@ const titleFromPath = (path: string) => {
         .join(' ');
 };
 
-const questionCards = Object.entries(modules)
+const slugFromPath = (path: string) =>
+    path
+        .replace('./', '')
+        .replace('/index.md', '')
+        .split('/')
+        .at(-1) ?? '';
+
+const questionCards: QuestionCard[] = Object.entries(markdownModules)
     .map(([path, module]) => {
         const frontmatter = module.frontmatter ?? {};
+        const slug = slugFromPath(path);
 
         const href = `/${path.replace('./', '').replace('/index.md', '/')}`;
 
@@ -45,19 +106,18 @@ const questionCards = Object.entries(modules)
             category: frontmatter.category ?? 'Frontend',
             kind: frontmatter.kind ?? 'questions',
             order: frontmatter.order ?? 999,
-            actionLabel: 'Вопросы и ответы',
+            icon:
+                frontmatter.icon ??
+                iconBySlug[slug] ??
+                iconByCategory[frontmatter.category ?? 'Frontend'] ??
+                '',
+            count: countQuestions(markdownSources[path] ?? ''),
         };
     })
     .filter((item) => item.kind === 'questions')
     .sort((a, b) => a.order - b.order);
 
-const exampleCards = examples
-    .map((example) => ({
-        ...example,
-        actionLabel: 'Открыть демо',
-    }))
-    .slice()
-    .sort((a, b) => a.order - b.order);
+const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
 ---
 
 <Layout
@@ -65,21 +125,6 @@ const exampleCards = examples
     description="Вопросы и практические задания для подготовки frontend-разработчиков"
 >
     <div class="home" data-home-page>
-        <header class="site-header" aria-label="Главная навигация">
-            <a class="brand" href="/">Angular RU</a>
-
-            <nav class="nav" aria-label="Разделы">
-                <a href="#theory">Теория</a>
-                <a href="#practice">Практика</a>
-                <a href="/angular/">Angular</a>
-                <a href="/react/">React</a>
-            </nav>
-
-            <a class="header-action" href="https://github.com/Angular-RU/angular-ru-interview-questions">
-                Поддержать проект
-            </a>
-        </header>
-
         <section class="hero" aria-labelledby="home-title">
             <div class="hero-content">
                 <p class="hero-eyebrow">Готовимся уверенно и проходим собеседования успешно</p>
@@ -108,38 +153,17 @@ const exampleCards = examples
             </div>
         </section>
 
-        <ul class="features" aria-label="Преимущества проекта">
-            <li>
-                <span class="feature-icon feature-icon-box"></span>
-                Структурировано по темам
-            </li>
-            <li>
-                <span class="feature-icon feature-icon-flash"></span>
-                Актуальные вопросы
-            </li>
-            <li>
-                <span class="feature-icon feature-icon-code"></span>
-                Практические примеры
-            </li>
-            <li>
-                <span class="feature-icon feature-icon-refresh"></span>
-                Постоянные обновления
-            </li>
-        </ul>
-
         <HomeSection
             id="theory"
             eyebrow="Теория"
             title="Вопросы по темам"
-            linkHref="#theory"
             items={questionCards}
         />
 
         <HomeSection
             id="practice"
             eyebrow="Практика"
-            title="Учись на практике"
-            linkHref="#practice"
+            title="Учусь на практике"
             items={exampleCards}
         />
     </div>

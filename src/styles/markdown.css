@@ -148,10 +148,6 @@
     max-width: 100%;
     height: auto;
     margin: 24px auto;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: #fff;
-    box-shadow: 0 12px 32px rgb(15 23 42 / 8%);
 }
 
 @media (max-width: 700px) {

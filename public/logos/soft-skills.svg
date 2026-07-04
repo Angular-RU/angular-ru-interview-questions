@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Soft Skills">
+  <circle cx="24" cy="26" r="10" fill="#dbeafe" stroke="#315cff" stroke-width="4"/>
+  <circle cx="42" cy="24" r="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="4"/>
+  <path fill="#eff6ff" stroke="#315cff" stroke-width="4" d="M9 54c2-10 8-16 15-16s13 6 15 16z"/>
+  <path fill="#f0fdfa" stroke="#0f766e" stroke-width="4" d="M32 54c2-8 6-13 12-13 5 0 9 5 11 13z"/>
+</svg>

@@ -5,6 +5,7 @@ export type ExampleCard = {
     category: string;
     tags: string[];
     order: number;
+    icon: string;
 };
 
 export const examples = [
@@ -15,6 +16,7 @@ export const examples = [
         href: '/css/flexbox/index.html',
         category: 'CSS',
         tags: ['Flexbox', 'Layout', 'CSS'],
+        icon: '/logos/css.svg',
         order: 10,
     },
     {
@@ -24,6 +26,7 @@ export const examples = [
         href: '/css/grid/index.html',
         category: 'CSS',
         tags: ['Grid', 'Layout', 'CSS'],
+        icon: '/logos/css.svg',
         order: 20,
     },
     {
@@ -33,6 +36,7 @@ export const examples = [
         href: '/computer-science/index.html',
         category: 'Computer Science',
         tags: ['Memory', 'Garbage Collection', 'DevTools'],
+        icon: '/logos/computer-science.svg',
         order: 30,
     },
     {
@@ -42,6 +46,7 @@ export const examples = [
         href: '/react/example1/index.html',
         category: 'React',
         tags: ['React', 'Vite', 'TypeScript'],
+        icon: '/logos/react.svg',
         order: 40,
     },
     {
@@ -51,6 +56,7 @@ export const examples = [
         href: '/react/example2/index.html',
         category: 'React',
         tags: ['React', 'Vite', 'TypeScript'],
+        icon: '/logos/react.svg',
         order: 50,
     },
     {
@@ -60,6 +66,7 @@ export const examples = [
         href: '/angular/mfe/movie-ticket/index.html',
         category: 'Angular',
         tags: ['Micro Frontends', 'Native Federation', 'Angular'],
+        icon: '/logos/angular.svg',
         order: 60,
     },
 ] satisfies ExampleCard[];

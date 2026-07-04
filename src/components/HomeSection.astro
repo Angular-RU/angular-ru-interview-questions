@@ -6,20 +6,20 @@ type Card = {
     title: string;
     description: string;
     category: string;
-    actionLabel: string;
-    status?: string;
-    tags?: string[];
+    icon: string;
+    count?: number;
 };
 
 type Props = {
     id?: string;
     eyebrow: string;
     title: string;
-    linkHref: string;
+    linkHref?: string;
+    linkText?: string;
     items: Card[];
 };
 
-const { id, eyebrow, title, linkHref, items } = Astro.props;
+const { id, eyebrow, title, linkHref, linkText, items } = Astro.props;
 
 const withBase = (path: string) =>
     `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
@@ -32,7 +32,11 @@ const withBase = (path: string) =>
             <h2>{title}</h2>
         </div>
 
-        <a class="section-link" href={withBase(linkHref)}>Показать все</a>
+        {
+            linkText && linkHref && (
+                <a class="section-link" href={withBase(linkHref)}>{linkText}</a>
+            )
+        }
     </header>
 
     <div class="grid">
@@ -43,9 +47,8 @@ const withBase = (path: string) =>
                     title={item.title}
                     description={item.description}
                     category={item.category}
-                    actionLabel={item.actionLabel}
-                    status={item.status}
-                    tags={item.tags}
+                    icon={item.icon}
+                    count={item.count}
                 />
             ))
         }
