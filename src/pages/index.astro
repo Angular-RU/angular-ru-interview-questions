@@ -4,7 +4,7 @@ import '../styles/home.css';
 import Layout from '../layouts/Layout.astro';
 import HeroSpaceIllustration from '../components/HeroSpaceIllustration.astro';
 import HomeSection from '../components/HomeSection.astro';
-import { examples } from '../data/examples';
+import {examples} from '../data/examples';
 
 type MarkdownModule = {
     frontmatter?: {
@@ -74,11 +74,7 @@ const countQuestions = (source: string): number => {
 };
 
 const titleFromPath = (path: string) => {
-    const slug = path
-        .replace('./', '')
-        .replace('/index.md', '')
-        .split('/')
-        .at(-1);
+    const slug = path.replace('./', '').replace('/index.md', '').split('/').at(-1);
 
     return slug
         ?.split('-')
@@ -86,12 +82,7 @@ const titleFromPath = (path: string) => {
         .join(' ');
 };
 
-const slugFromPath = (path: string) =>
-    path
-        .replace('./', '')
-        .replace('/index.md', '')
-        .split('/')
-        .at(-1) ?? '';
+const slugFromPath = (path: string) => path.replace('./', '').replace('/index.md', '').split('/').at(-1) ?? '';
 
 const questionCards: QuestionCard[] = Object.entries(markdownModules)
     .map(([path, module]) => {
@@ -107,11 +98,7 @@ const questionCards: QuestionCard[] = Object.entries(markdownModules)
             category: frontmatter.category ?? 'Frontend',
             kind: frontmatter.kind ?? 'questions',
             order: frontmatter.order ?? 999,
-            icon:
-                frontmatter.icon ??
-                iconBySlug[slug] ??
-                iconByCategory[frontmatter.category ?? 'Frontend'] ??
-                '',
+            icon: frontmatter.icon ?? iconBySlug[slug] ?? iconByCategory[frontmatter.category ?? 'Frontend'] ?? '',
             count: countQuestions(markdownSources[path] ?? ''),
         };
     })
@@ -125,24 +112,47 @@ const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
     title="Angular RU Interview Questions"
     description="Вопросы и практические задания для подготовки frontend-разработчиков"
 >
-    <div class="home" data-home-page>
-        <section class="hero" aria-labelledby="home-title">
+    <div
+        class="home"
+        data-home-page
+    >
+        <section
+            class="hero"
+            aria-labelledby="home-title"
+        >
             <div class="hero-content">
-                <h1 id="home-title" class="hero-title">Frontend Interview Questions</h1>
+                <h1
+                    id="home-title"
+                    class="hero-title"
+                >
+                    Frontend Interview Questions
+                </h1>
                 <p class="hero-eyebrow">Готовимся уверенно и проходим собеседования успешно</p>
                 <p class="hero-lead">
-                    Вопросы, ответы и практические демо для подготовки frontend-разработчиков:
-                    Computer Science, Web Platform, CSS, JavaScript, TypeScript, Angular,
-                    React, тестирование, архитектура и soft skills.
+                    Вопросы, ответы и практические демо для подготовки frontend-разработчиков: Computer Science, Web
+                    Platform, CSS, JavaScript, TypeScript, Angular, React, тестирование, архитектура и soft skills.
                 </p>
 
                 <div class="hero-actions">
-                    <a class="primary-action" href="#theory">Начать подготовку</a>
-                    <a class="secondary-action" href="#practice">Смотреть практику</a>
+                    <a
+                        class="primary-action"
+                        href="#theory"
+                    >
+                        Начать подготовку
+                    </a>
+                    <a
+                        class="secondary-action"
+                        href="#practice"
+                    >
+                        Смотреть практику
+                    </a>
                 </div>
             </div>
 
-            <div class="hero-visual" aria-hidden="true">
+            <div
+                class="hero-visual"
+                aria-hidden="true"
+            >
                 <HeroSpaceIllustration />
             </div>
         </section>

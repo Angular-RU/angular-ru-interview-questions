@@ -32,6 +32,7 @@
         "tsx": "4.20.6"
     },
     "devDependencies": {
+        "prettier-plugin-astro": "0.14.1",
         "@astrojs/react": "6.0.1",
         "@tailwindcss/vite": "4.3.2",
         "@types/react": "19.2.17",

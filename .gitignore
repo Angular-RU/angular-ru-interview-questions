@@ -9,5 +9,6 @@ pnpm-debug.log*
 .DS_Store
 .idea/
 .angular
-public/angular
-public/react
+public/examples/angular
+public/examples/react
+dist

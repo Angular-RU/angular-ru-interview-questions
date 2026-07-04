@@ -9,10 +9,10 @@ order: 20
 
 ## Web Platform
 
-- [HTML, forms, accessibility, SEO и media](html/index.md)
-- [CSS](../css/index.md)
-- [Browser rendering и performance](browser/index.md)
-- [HTTP, HTTPS и curl](http/index.md)
+- [HTML, forms, accessibility, SEO и media](html/)
+- [CSS](../css/)
+- [Browser rendering и performance](browser/)
+- [HTTP, HTTPS и curl](http/)
 
 ### Большие данные, сеть и browser APIs
 

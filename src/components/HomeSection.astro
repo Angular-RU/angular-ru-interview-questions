@@ -19,13 +19,15 @@ type Props = {
     items: Card[];
 };
 
-const { id, eyebrow, title, linkHref, linkText, items } = Astro.props;
+const {id, eyebrow, title, linkHref, linkText, items} = Astro.props;
 
-const withBase = (path: string) =>
-    `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
 ---
 
-<section class="section" id={id}>
+<section
+    class="section"
+    id={id}
+>
     <header class="section-header">
         <div>
             <p class="eyebrow">{eyebrow}</p>
@@ -34,7 +36,12 @@ const withBase = (path: string) =>
 
         {
             linkText && linkHref && (
-                <a class="section-link" href={withBase(linkHref)}>{linkText}</a>
+                <a
+                    class="section-link"
+                    href={withBase(linkHref)}
+                >
+                    {linkText}
+                </a>
             )
         }
     </header>

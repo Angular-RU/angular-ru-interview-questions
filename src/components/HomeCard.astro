@@ -8,12 +8,10 @@ type Props = {
     count?: number;
 };
 
-const { href, title, description, category, icon, count } = Astro.props;
+const {href, title, description, category, icon, count} = Astro.props;
 
 const withBase = (path: string) => {
-    const base = import.meta.env.BASE_URL.endsWith('/')
-        ? import.meta.env.BASE_URL
-        : `${import.meta.env.BASE_URL}/`;
+    const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 
     return `${base}${path.replace(/^\/+/, '')}`;
 };
@@ -34,15 +32,27 @@ const formatQuestionCount = (count: number): string => {
 };
 ---
 
-<a class="card" href={withBase(href)}>
+<a
+    class="card"
+    href={withBase(href)}
+>
     <div class="card-header">
         {
             icon ? (
                 <span class="card-icon">
-                    <img src={withBase(icon)} alt="" loading="lazy" />
+                    <img
+                        src={withBase(icon)}
+                        alt=""
+                        loading="lazy"
+                    />
                 </span>
             ) : (
-                <span class="card-icon card-icon-fallback" aria-hidden="true">✦</span>
+                <span
+                    class="card-icon card-icon-fallback"
+                    aria-hidden="true"
+                >
+                    ✦
+                </span>
             )
         }
 
@@ -54,11 +64,16 @@ const formatQuestionCount = (count: number): string => {
     <p>{description}</p>
 
     <div class="card-footer">
-          <span class="card-meta">
+        <span class="card-meta">
             {count !== undefined ? formatQuestionCount(count) : 'Практика'}
-          </span>
+        </span>
 
-        <span class="card-arrow" aria-hidden="true">→</span>
+        <span
+            class="card-arrow"
+            aria-hidden="true"
+        >
+            →
+        </span>
     </div>
 </a>
 
@@ -72,9 +87,7 @@ const formatQuestionCount = (count: number): string => {
         border: 1px solid rgb(191 207 232 / 85%);
         border-radius: 20px;
         color: var(--text);
-        background:
-            radial-gradient(circle at 18% 16%, rgb(49 92 255 / 5%), transparent 9rem),
-            #ffffff;
+        background: radial-gradient(circle at 18% 16%, rgb(49 92 255 / 5%), transparent 9rem), #ffffff;
         text-decoration: none;
         box-shadow: 0 14px 40px rgb(15 23 42 / 5%);
         transition:
