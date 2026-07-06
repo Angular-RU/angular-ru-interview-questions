@@ -15,6 +15,7 @@ TypeScript и устройство Angular-приложений.
 - [CSS](src/pages/css/index.md)
 - [Рендеринг браузера и производительность (performance)](src/pages/web-platform/browser/index.md)
 - [HTTP, HTTPS и curl](src/pages/web-platform/http/index.md)
+- [Auth, SSO, OAuth 2.0 и OpenID Connect](src/pages/web-platform/auth/index.md)
 - [JavaScript](src/pages/javascript/index.md)
 - [TypeScript](src/pages/typescript/index.md)
 
@@ -52,6 +53,7 @@ providers; поддерживаемые старые API помечены как
 #### 3.3 Продакшен в Angular
 
 - [Безопасность (Security)](src/pages/angular/index.md#security)
+- [Angular Auth, login/logout и router guards](src/pages/angular/auth/index.md)
 - [Производительность (Performance)](src/pages/angular/index.md#performance)
 - [SSR, hydration и SEO](src/pages/angular/index.md#ssr-hydration-и-seo)
 - [Angular PWA и Service Worker](src/pages/angular/index.md#angular-pwa-и-service-worker)
