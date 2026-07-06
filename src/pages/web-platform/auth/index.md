@@ -26,8 +26,8 @@ Provider, а затем получает доступ к нескольким п
 - **authorization** — проверка, что пользователю разрешено делать;
 - **SSO** — пользовательский сценарий единого входа;
 - **OAuth 2.0** — протокол выдачи ограниченного доступа к ресурсам;
-- **OpenID Connect** — identity layer поверх OAuth 2.0, который добавляет `id_token` и стандартный способ узнать личность
-  пользователя;
+- **OpenID Connect** — identity layer поверх OAuth 2.0, который добавляет `id_token` и стандартный способ узнать
+  личность пользователя;
 - **SAML** — XML-based протокол, который часто встречается в enterprise SSO.
 
 Типичный вариант для современного SPA — Authorization Code Flow with PKCE через OpenID Connect:
@@ -63,9 +63,9 @@ https://idp.example.com/authorize?
 - tokens нельзя бездумно класть в `localStorage`: при XSS их сможет прочитать вредоносный script;
 - в enterprise чаще встречаются интеграции через OIDC или SAML, а конкретные детали зависят от Identity Provider.
 
-Практическая граница ответственности frontend-разработчика: правильно инициировать login/logout flow, обработать callback,
-не хранить секреты в bundle, аккуратно работать с tokens/session state, закрывать routes для UX и понимать, что backend
-обязан повторно проверять authentication, authorization, audience, issuer, expiry и scopes.
+Практическая граница ответственности frontend-разработчика: правильно инициировать login/logout flow, обработать
+callback, не хранить секреты в bundle, аккуратно работать с tokens/session state, закрывать routes для UX и понимать,
+что backend обязан повторно проверять authentication, authorization, audience, issuer, expiry и scopes.
 
 </td></tr></table>
 
