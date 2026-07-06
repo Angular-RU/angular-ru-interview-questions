@@ -58,9 +58,7 @@ export class AuthService {
   readonly isAuthenticated = () => this.userState() !== null;
 
   login(dto: LoginDto): Observable<User> {
-    return this.http
-      .post<User>("/api/auth/login", dto)
-      .pipe(tap((user) => this.userState.set(user)));
+    return this.http.post<User>("/api/auth/login", dto).pipe(tap((user) => this.userState.set(user)));
   }
 
   loadCurrentUser(): Observable<User | null> {
@@ -112,16 +110,13 @@ export class LoginPageComponent {
   submit(): void {
     this.isLoading.set(true);
 
-    this.auth
-      .login({ email: "demo@example.com", password: "password" })
-      .subscribe({
-        next: () => {
-          const returnUrl =
-            this.route.snapshot.queryParamMap.get("returnUrl") ?? "/";
-          void this.router.navigateByUrl(returnUrl);
-        },
-        error: () => this.isLoading.set(false),
-      });
+    this.auth.login({ email: "demo@example.com", password: "password" }).subscribe({
+      next: () => {
+        const returnUrl = this.route.snapshot.queryParamMap.get("returnUrl") ?? "/";
+        void this.router.navigateByUrl(returnUrl);
+      },
+      error: () => this.isLoading.set(false),
+    });
   }
 }
 ```
@@ -165,14 +160,12 @@ import { authGuard } from "./auth.guard";
 export const routes: Routes = [
   {
     path: "login",
-    loadComponent: () =>
-      import("./login-page.component").then((m) => m.LoginPageComponent),
+    loadComponent: () => import("./login-page.component").then((m) => m.LoginPageComponent),
   },
   {
     path: "account",
     canActivate: [authGuard],
-    loadComponent: () =>
-      import("./account-page.component").then((m) => m.AccountPageComponent),
+    loadComponent: () => import("./account-page.component").then((m) => m.AccountPageComponent),
   },
 ];
 ```
