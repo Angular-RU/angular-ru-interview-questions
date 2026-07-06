@@ -31,10 +31,10 @@ order: 121
 Упрощенный пример `AuthService`:
 
 ```ts
-import {HttpClient} from '@angular/common/http';
-import {inject, Injectable, signal} from '@angular/core';
-import {Router} from '@angular/router';
-import {catchError, map, Observable, of, tap} from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable, signal } from "@angular/core";
+import { Router } from "@angular/router";
+import { catchError, map, Observable, of, tap } from "rxjs";
 
 interface LoginDto {
   readonly email: string;
@@ -47,7 +47,7 @@ interface User {
   readonly roles: readonly string[];
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: "root" })
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
@@ -58,13 +58,13 @@ export class AuthService {
   readonly isAuthenticated = () => this.userState() !== null;
 
   login(dto: LoginDto): Observable<User> {
-    return this.http.post<User>('/api/auth/login', dto).pipe(
-      tap((user) => this.userState.set(user)),
-    );
+    return this.http
+      .post<User>("/api/auth/login", dto)
+      .pipe(tap((user) => this.userState.set(user)));
   }
 
   loadCurrentUser(): Observable<User | null> {
-    return this.http.get<User>('/api/auth/me').pipe(
+    return this.http.get<User>("/api/auth/me").pipe(
       tap((user) => this.userState.set(user)),
       catchError(() => {
         this.userState.set(null);
@@ -74,12 +74,13 @@ export class AuthService {
   }
 
   logout(): void {
-    this.http.post('/api/auth/logout', {}).pipe(
-      catchError(() => of(null)),
-    ).subscribe(() => {
-      this.userState.set(null);
-      void this.router.navigate(['/login']);
-    });
+    this.http
+      .post("/api/auth/logout", {})
+      .pipe(catchError(() => of(null)))
+      .subscribe(() => {
+        this.userState.set(null);
+        void this.router.navigate(["/login"]);
+      });
   }
 }
 ```
@@ -87,12 +88,12 @@ export class AuthService {
 Пример login component:
 
 ```ts
-import {Component, inject, signal} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
-import {AuthService} from './auth.service';
+import { Component, inject, signal } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+import { AuthService } from "./auth.service";
 
 @Component({
-  selector: 'app-login-page',
+  selector: "app-login-page",
   template: `
     <form (ngSubmit)="submit()">
       <input name="email" type="email" autocomplete="email" />
@@ -111,13 +112,16 @@ export class LoginPageComponent {
   submit(): void {
     this.isLoading.set(true);
 
-    this.auth.login({email: 'demo@example.com', password: 'password'}).subscribe({
-      next: () => {
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/';
-        void this.router.navigateByUrl(returnUrl);
-      },
-      error: () => this.isLoading.set(false),
-    });
+    this.auth
+      .login({ email: "demo@example.com", password: "password" })
+      .subscribe({
+        next: () => {
+          const returnUrl =
+            this.route.snapshot.queryParamMap.get("returnUrl") ?? "/";
+          void this.router.navigateByUrl(returnUrl);
+        },
+        error: () => this.isLoading.set(false),
+      });
   }
 }
 ```
@@ -125,10 +129,10 @@ export class LoginPageComponent {
 Пример functional guard:
 
 ```ts
-import {inject} from '@angular/core';
-import {CanActivateFn, Router} from '@angular/router';
-import {map} from 'rxjs';
-import {AuthService} from './auth.service';
+import { inject } from "@angular/core";
+import { CanActivateFn, Router } from "@angular/router";
+import { map } from "rxjs";
+import { AuthService } from "./auth.service";
 
 export const authGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
@@ -144,8 +148,8 @@ export const authGuard: CanActivateFn = (route, state) => {
         return true;
       }
 
-      return router.createUrlTree(['/login'], {
-        queryParams: {returnUrl: state.url},
+      return router.createUrlTree(["/login"], {
+        queryParams: { returnUrl: state.url },
       });
     }),
   );
@@ -155,18 +159,20 @@ export const authGuard: CanActivateFn = (route, state) => {
 Пример routes:
 
 ```ts
-import {Routes} from '@angular/router';
-import {authGuard} from './auth.guard';
+import { Routes } from "@angular/router";
+import { authGuard } from "./auth.guard";
 
 export const routes: Routes = [
   {
-    path: 'login',
-    loadComponent: () => import('./login-page.component').then((m) => m.LoginPageComponent),
+    path: "login",
+    loadComponent: () =>
+      import("./login-page.component").then((m) => m.LoginPageComponent),
   },
   {
-    path: 'account',
+    path: "account",
     canActivate: [authGuard],
-    loadComponent: () => import('./account-page.component').then((m) => m.AccountPageComponent),
+    loadComponent: () =>
+      import("./account-page.component").then((m) => m.AccountPageComponent),
   },
 ];
 ```
@@ -174,11 +180,11 @@ export const routes: Routes = [
 Кнопка logout:
 
 ```ts
-import {Component, inject} from '@angular/core';
-import {AuthService} from './auth.service';
+import { Component, inject } from "@angular/core";
+import { AuthService } from "./auth.service";
 
 @Component({
-  selector: 'app-header',
+  selector: "app-header",
   template: `<button type="button" (click)="logout()">Logout</button>`,
 })
 export class HeaderComponent {
