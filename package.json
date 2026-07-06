@@ -23,7 +23,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier !package-lock.json . --ignore-path .gitignore --write",
-    "format:check": "prettier !package-lock.json . --ignore-path .gitignore --check"
+    "format:check": "npm exec -- prettier !package-lock.json . --ignore-path .gitignore --check"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.1",
