@@ -9,6 +9,7 @@ TypeScript и устройство Angular-приложений.
 
 - [Основы](src/pages/computer-science/index.md)
 - [Алгоритмы и структуры данных для frontend](src/pages/typescript/index.md#алгоритмы-и-структуры-данных-для-frontend)
+- [Git](src/pages/git/index.md)
 - [HTML](src/pages/html/index.md)
 - [CSS](src/pages/css/index.md)
 - [JavaScript](src/pages/javascript/index.md)
@@ -122,7 +123,6 @@ providers; поддерживаемые старые API помечены как
 - [Node.js](src/pages/nodejs/index.md)
 - [Node.js для frontend tooling](src/pages/nodejs/index.md#nodejs-для-frontend-tooling)
 - [npm/package managers/workspaces](src/pages/nodejs/index.md#npm-и-package-scripts)
-- [Рабочее окружение frontend-разработчика](src/pages/work-environment/index.md)
 - [Инфраструктура](src/pages/infrastructure/index.md)
 - [Docker и Docker Compose](src/pages/infrastructure/index.md#docker)
 - [CI/CD](src/pages/infrastructure/index.md#cicd-для-frontend-delivery)
