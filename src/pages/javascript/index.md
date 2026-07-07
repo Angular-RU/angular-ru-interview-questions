@@ -1943,6 +1943,294 @@ Frontend-разработчику важно разделять CPU-bound и I/O
 
 </details>
 
+### JavaScript performance
+
+#### Middle+ or Senior
+
+<details>
+<summary>Как DevTools Performance panel помогает найти long tasks?</summary><br>
+<table><tr><td>
+
+Performance panel показывает timeline main thread: scripting, style recalculation, layout, paint, long tasks и события
+input. По flame chart можно увидеть, какая функция, framework render или forced layout заняли кадр. Для Angular полезно
+сопоставлять эти данные с Angular DevTools Profiler и количеством change detection cycles.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как JavaScript может замедлить первый render?</summary><br>
+<table><tr><td>
+
+Синхронный `<script>` останавливает HTML parsing, потому что может изменить документ. Большой bundle также требует
+download, parse, compile и execute на main thread, конкурируя со style calculation, layout и user input.
+
+В Angular это проявляется как поздний initial rendering и длинные tasks до интерактивности. Помогают `defer`, code
+splitting, lazy routes, уменьшение polyfills/dependencies, SSR/SSG и перенос тяжелой работы из startup path.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое performance budget?</summary><br>
+<table><tr><td>
+
+Performance budget — заранее заданный лимит на важные показатели: bundle size, LCP, CLS, INP, TTFB, количество запросов,
+вес изображений или размер CSS. Он помогает не ухудшать продукт незаметно от релиза к релизу. Хороший budget проверяется
+в CI, monitoring или регулярных performance reviews, а не только вручную перед релизом.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие метрики подходят для frontend performance budget?</summary><br>
+<table><tr><td>
+
+Для пользовательского опыта важны LCP, CLS, INP и TTFB. Для инженерного контроля полезны bundle size, количество
+JavaScript, размер CSS, вес изображений и число network requests. Набор метрик зависит от продукта: content site,
+dashboard, SPA, e-commerce, docs или design system.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какими инструментами измерять frontend performance?</summary><br>
+<table><tr><td>
+
+Для лабораторных проверок подходят Lighthouse, WebPageTest и Chrome DevTools Performance. Для реальных пользователей
+нужны RUM-инструменты и Web Vitals. Важно смотреть не только локальные замеры на мощном ноутбуке, но и реальные
+устройства, сеть, регионы и браузеры пользователей.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему performance tools должны быть частью workflow?</summary><br>
+<table><tr><td>
+
+Если performance проверяется только перед релизом, проблемы находят слишком поздно. Лучше встроить проверки в pull
+request, CI, monitoring или регулярные performance reviews. Тогда performance становится частью engineering process, а
+не разовой оптимизацией после жалоб пользователей.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое Web Vitals?</summary><br>
+<table><tr><td>
+
+Web Vitals - пользовательские метрики качества страницы:
+
+- **LCP**: скорость отображения основного контента;
+- **INP**: отзывчивость на взаимодействия;
+- **CLS**: визуальная стабильность.
+
+Метрики анализируют по полевым данным реальных пользователей и дополняют лабораторными измерениями Lighthouse и
+DevTools.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие инструменты использовать для поиска performance bug?</summary><br>
+<table><tr><td>
+
+Для диагностики используют Chrome DevTools Performance, Network, Lighthouse, Coverage, Memory, Angular DevTools и RUM
+метрики из production. Lighthouse удобен как лабораторный smoke test, но реальные LCP, CLS и INP нужно смотреть по
+пользовательским данным. Performance bug лучше искать от симптома и метрики, а не по случайной оптимизации bundle.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как уменьшить perceived load time?</summary><br>
+<table><tr><td>
+
+Perceived load time уменьшают ранним показом meaningful content, skeleton или стабильного placeholder, SSR/SSG, critical
+CSS, приоритизацией LCP resource и отложенной загрузкой второстепенного кода. Важно не имитировать скорость спиннером, а
+дать пользователю полезный первый экран и быстрый путь к интерактивности.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем SSR отличается от CSR?</summary><br>
+<table><tr><td>
+
+CSR строит интерфейс в браузере после загрузки JavaScript, а SSR отдает HTML с сервера для текущего запроса. SSR может
+улучшить first paint, SEO и previews, но добавляет серверную инфраструктуру, constraints на browser-only code и риск
+hydration mismatch. CSR проще для внутренних приложений, где SEO и публичный first render не критичны.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое static rendering?</summary><br>
+<table><tr><td>
+
+Static rendering, или SSG/prerender, генерирует HTML заранее на build time или по заранее известным routes. Это хорошо
+для документации, маркетинговых страниц и контента, который редко меняется. Для персонализированных данных нужен CSR,
+SSR, incremental regeneration или отдельная загрузка данных на клиенте.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое main thread?</summary><br>
+<table><tr><td>
+
+Это поток renderer process, где выполняются JavaScript, style calculation, layout и часть paint. User input и rendering
+конкурируют с application code за его время. Поэтому тяжелая синхронная работа ухудшает отзывчивость.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие задачи конкурируют за main thread?</summary><br>
+<table><tr><td>
+
+Event handlers, timers, framework rendering, parsing, style/layout, часть paint и browser callbacks. Если одна задача
+занимает поток надолго, input и следующий кадр ждут. Вычисления можно разбивать, откладывать или переносить в Worker.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое long task?</summary><br>
+<table><tr><td>
+
+Это задача main thread длительностью более 50ms. Внутри нее браузер не может своевременно обработать input или render.
+Long Tasks API и Performance panel помогают найти источник.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как long task влияет на INP?</summary><br>
+<table><tr><td>
+
+Interaction может ждать окончания уже выполняющейся long task, а затем сам handler и render добавят задержку. INP
+учитывает полную latency взаимодействия до следующего отображенного кадра. Нужно сокращать blocking time, а не только
+handler выбранной кнопки.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое debounce и throttle с точки зрения performance?</summary><br>
+<table><tr><td>
+
+Debounce запускает работу после паузы в серии событий, throttle ограничивает частоту запусков. Они уменьшают число
+дорогих обработок scroll, resize или input. Неправильная задержка может ухудшить ощущение отзывчивости и accessibility.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое virtualization списков?</summary><br>
+<table><tr><td>
+
+Virtualization рендерит только видимую часть большого списка и небольшой buffer. DOM остается компактным, уменьшая
+layout, paint и memory usage. Нужно корректно поддержать высоты, прокрутку, focus и screen readers.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда нужна виртуализация?</summary><br>
+<table><tr><td>
+
+Когда сотни или тысячи сложных строк заметно замедляют initial render и scrolling. Для короткого списка она добавляет
+лишнюю сложность. Решение принимают после измерения DOM size и frame performance.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем Lighthouse отличается от реальных пользовательских метрик?</summary><br>
+<table><tr><td>
+
+Lighthouse выполняет воспроизводимый лабораторный запуск с заданным устройством и сетью. RUM показывает реальных
+пользователей, устройства, кеши и взаимодействия, включая распределение Core Web Vitals. Для диагностики нужны оба
+источника.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как искать memory leak в frontend-приложении?</summary><br>
+<table><tr><td>
+
+Сначала воспроизводят сценарий роста памяти: навигация туда-обратно, открытие и закрытие modal, длинный список, polling.
+Затем сравнивают heap snapshots, смотрят retained objects и allocation timeline.
+
+Частые причины:
+
+- забытые event listeners;
+- timers и subscriptions без cleanup;
+- closures, удерживающие большие объекты;
+- кеши без eviction;
+- `URL.createObjectURL()` без `URL.revokeObjectURL()`;
+- detached DOM nodes.
+
+```ts
+const controller = new AbortController();
+window.addEventListener('resize', onResize, {signal: controller.signal});
+
+controller.abort();
+```
+
+В Angular дополнительно проверяют RxJS subscriptions, long-lived services и effects. В React - cleanup в `useEffect` и
+устаревшие async callbacks.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как построить performance budget для frontend?</summary><br>
+<table><tr><td>
+
+Performance budget фиксирует допустимые границы до релиза: размер initial JS/CSS, количество requests, LCP, INP, CLS,
+время hydration, memory на ключевом flow. Бюджет должен быть связан с реальными устройствами и рынком продукта, а не
+только с локальной машиной разработчика.
+
+Хорошая практика - проверять budget в CI для bundle size и в production через RUM для Core Web Vitals. Если бюджет
+нарушен, команда принимает явный trade-off: оптимизация, lazy loading, перенос feature, split chunk или изменение UX.
+
+```json
+{
+  "budgets": {
+    "initialJsKb": 180,
+    "lcpMsP75": 2500,
+    "clsP75": 0.1
+  }
+}
+```
+
+</td></tr></table>
+
+</details>
+
 ### JavaScript interview questions
 
 #### Junior

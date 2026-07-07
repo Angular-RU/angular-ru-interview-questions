@@ -1,13 +1,13 @@
 ---
-layout: ../../../layouts/Layout.astro
-title: HTML, forms, accessibility, SEO и media
+layout: ../../layouts/Layout.astro
+title: HTML
 description: Вопросы и ответы
 category: Frontend
 kind: questions
 order: 30
 ---
 
-## HTML, forms, accessibility, SEO и media
+## HTML
 
 ### HTML
 
@@ -261,6 +261,151 @@ parsing в порядке объявления и обычно лучше под
 
 `div` не получает focus, keyboard activation, role и accessible name интерактивного элемента автоматически. Их ручная
 имитация сложна и хрупка. Для действий следует использовать `button`, для переходов — `a`.
+
+</td></tr></table>
+
+</details>
+
+### HTML parsing, compatibility и resources
+
+#### Middle+ or Senior
+
+<details>
+<summary>Что происходит после получения HTML-документа?</summary><br>
+<table><tr><td>
+
+Браузер начинает streaming parse HTML еще до полной загрузки документа. Он строит DOM, заранее обнаруживает ресурсы
+через preload scanner, загружает CSS, JavaScript, изображения, fonts и другие зависимости.
+
+Для первого render нужны DOM, CSSOM и render tree. Затем browser выполняет layout, paint и compositing. JavaScript,
+stylesheets, fonts и большие изображения могут задержать отдельные этапы, поэтому производительность оценивают по
+реальному Critical Rendering Path.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит после ввода URL в адресную строку браузера?</summary><br>
+<table><tr><td>
+
+Браузер разбирает URL, проверяет cache, HSTS и service worker, выполняет DNS lookup, устанавливает соединение TCP/TLS
+или QUIC и отправляет HTTP-запрос. После ответа начинается parsing HTML, загрузка зависимостей, построение DOM и CSSOM,
+layout, paint и compositing. На каждом этапе могут влиять redirects, CDN, browser cache, HTTP/2 multiplexing, HTTP/3 и
+blocking resources.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое progressive enhancement?</summary><br>
+<table><tr><td>
+
+Progressive enhancement начинает с базового доступного HTML и постепенно добавляет CSS, JavaScript и продвинутые browser
+features. Если часть улучшений недоступна, основной content и ключевые действия остаются рабочими. Для Angular это
+особенно заметно в SSR/prerender сценариях: пользователь не должен видеть пустую страницу до загрузки bundle.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем progressive enhancement отличается от graceful degradation?</summary><br>
+<table><tr><td>
+
+Progressive enhancement проектирует опыт от базового слоя к улучшениям. Graceful degradation обычно начинается с
+полнофункционального варианта и пытается сохранить приемлемую работу при отсутствии части возможностей. Первый подход
+лучше помогает accessibility, слабым устройствам и нестабильной сети, второй часто встречается при поддержке старых
+браузеров.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем browser support отличается от browser optimization?</summary><br>
+<table><tr><td>
+
+Browser support означает, что пользователь может выполнить основной сценарий в браузере или на устройстве. Browser
+optimization означает, что под важные браузеры, устройства и сети интерфейс дополнительно улучшается. Не всегда нужно
+давать всем одинаковый experience, но базовый сценарий не должен ломаться без явной продуктовой причины.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как определить, какие браузеры поддерживать?</summary><br>
+<table><tr><td>
+
+Browser support должен опираться на аналитику пользователей, требования бизнеса, корпоративную среду, законодательные
+ограничения и стоимость поддержки. Решение нельзя принимать только по личным предпочтениям разработчиков. Его стоит
+записать в guidelines и регулярно пересматривать.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое graded browser support?</summary><br>
+<table><tr><td>
+
+Graded browser support делит браузеры или устройства на уровни. Например, в одних браузерах гарантируется полный
+experience, в других — базовая функциональность, а для устаревших окружений — readable content или explicit fallback.
+Это помогает управлять стоимостью поддержки и ожиданиями бизнеса.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда компоненту нужна отдельная browser support policy?</summary><br>
+<table><tr><td>
+
+Отдельная policy нужна, если компонент использует API с разной поддержкой: camera, clipboard, drag and drop, сложную
+графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире, а
+конкретный advanced component — уже, если fallback честно описан.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему HTML-парсер не падает на невалидной разметке?</summary><br>
+<table><tr><td>
+
+HTML parsing designed to be forgiving: браузеры десятилетиями должны были показывать страницы с ошибками разметки.
+Спецификация описывает tokenization, tree construction и error recovery, поэтому parser исправляет многие случаи сам.
+
+Например, браузер может автоматически закрыть тег, вставить пропущенный `<tbody>` или перестроить некорректную
+вложенность. Поэтому DOM может отличаться от исходного HTML source.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем DOM отличается от HTML source?</summary><br>
+<table><tr><td>
+
+HTML source — это текст, который пришел от сервера или был записан в документ. DOM — live object model, которую браузер
+построил после parsing и error recovery, а затем может изменять JavaScript.
+
+DOM может содержать автоматически добавленные узлы, нормализованную структуру, элементы из templates после runtime
+rendering и изменения, которых не было в исходном HTML. На интервью важно не смешивать view-source и Elements panel.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое preload, prefetch и preconnect?</summary><br>
+<table><tr><td>
+
+`preload` приоритетно загружает ресурс текущей страницы, `prefetch` с низким приоритетом готовит вероятный следующий
+переход, `preconnect` заранее устанавливает соединение с origin. Ошибочное применение расходует bandwidth и конкурирует
+с критическими ресурсами.
 
 </td></tr></table>
 

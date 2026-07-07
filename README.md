@@ -9,11 +9,9 @@ TypeScript и устройство Angular-приложений.
 
 - [Основы Computer Science](src/pages/computer-science/index.md)
 - [Алгоритмы и структуры данных для frontend](src/pages/computer-science/index.md#алгоритмы-и-структуры-данных-для-frontend)
-- [HTML, формы, доступность (accessibility), SEO и media](src/pages/web-platform/html/index.md)
+- [HTML](src/pages/html/index.md)
 - [CSS](src/pages/css/index.md)
-- [Рендеринг браузера и производительность (performance)](src/pages/web-platform/browser/index.md)
 - [HTTP, HTTPS и curl](src/pages/web-platform/http/index.md)
-- [Auth, SSO, OAuth 2.0 и OpenID Connect](src/pages/web-platform/auth/index.md)
 - [JavaScript](src/pages/javascript/index.md)
 - [TypeScript](src/pages/typescript/index.md)
 
