@@ -104,7 +104,6 @@ providers; поддерживаемые старые API помечены как
 - [Dynamic components](src/pages/angular/index.md#компоненты-директивы-сервисы-и-pipes)
 - [Micro Frontends](src/pages/angular/index.md#micro-frontends)
 - [Tooling](src/pages/angular/index.md#tooling)
-- [Frontend system design](src/pages/angular/index.md#frontend-system-design)
 
 ### 10. React
 
@@ -150,7 +149,7 @@ providers; поддерживаемые старые API помечены как
 
 #### 10.5 Практика и интервью по React
 
-- [Вопросы по уровням](src/pages/react/index.md#вопросы-по-уровням)
+- [Архитектурные вопросы](src/pages/react/index.md#архитектурные-вопросы)
 - [Практические задачки](src/pages/react/index.md#практические-задачки)
 - [Мини-проект Travel Planner](src/pages/react/index.md#мини-проект-travel-planner)
 - [Рекомендуемый порядок изучения](src/pages/react/index.md#рекомендуемый-порядок-изучения)
@@ -172,7 +171,15 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 13. Карьера в команде
+### 13. System Design
+
+- [System Design](src/pages/system-design/index.md)
+- [Frontend system design](src/pages/system-design/index.md#frontend-system-design)
+- [Modal/dialog](src/pages/system-design/index.md#frontend-system-design)
+- [Infinite scroll](src/pages/system-design/index.md#frontend-system-design)
+- [CSR, SSR, SSG или ISR](src/pages/system-design/index.md#frontend-system-design)
+
+### 14. Карьера в команде
 
 - [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)
@@ -203,7 +210,7 @@ providers; поддерживаемые старые API помечены как
 - [Практика по React](src/pages/react/index.md#практика-по-react)
 - [React practice app](src/pages/react/index.md#мини-проект-travel-planner)
 - [Computer Science examples](public/examples/computer-science/index.html)
-- [Frontend system design tasks](src/pages/angular/index.md#frontend-system-design)
+- [Frontend system design tasks](src/pages/system-design/index.md#frontend-system-design)
 - [Практические задачи по алгоритмам и design primitives](src/pages/typescript/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [Мини-проекты для интервью](apps/angular/mfe/README.md)
 
