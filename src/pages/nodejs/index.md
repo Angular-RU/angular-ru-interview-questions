@@ -4,7 +4,7 @@ title: Node.js
 description: Вопросы и ответы
 category: Backend
 kind: questions
-order: 140
+order: 75
 ---
 
 ## Node.js
@@ -451,6 +451,476 @@ sandbox. Bundler polyfills не следует считать автоматич
 Scaffolding tools полезны, когда создают повторяемую структуру components, features, libraries или tests по текущим
 командным conventions. Они вредят, если генерируют много непонятного boilerplate или закрепляют устаревшую архитектуру.
 Генератор должен отражать живую codebase, а не исторические привычки.
+
+</td></tr></table>
+
+</details>
+
+### HTTP server, networking и curl
+
+#### Middle
+
+<details>
+<summary>Что такое idempotency?</summary><br>
+<table><tr><td>
+
+Операция идемпотентна, если повтор одного и того же запроса имеет тот же ожидаемый итоговый эффект. Это важно для
+retries при сетевой неопределенности. API может использовать idempotency key для безопасного повторения создания
+платежа.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое HSTS и зачем браузер проверяет HSTS list?</summary><br>
+<table><tr><td>
+
+HSTS (HTTP Strict Transport Security) говорит браузеру обращаться к сайту только по HTTPS. Если domain есть в preloaded
+HSTS list или браузер уже получил `Strict-Transport-Security`, попытка `http://` будет локально повышена до `https://`
+до сетевого запроса.
+
+Это защищает от downgrade attack и случайной отправки cookies по незащищенному соединению. Для frontend это важно при
+диагностике "почему HTTP redirect не виден в Network" и при настройке production-доменов.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое <code>ETag</code>?</summary><br>
+<table><tr><td>
+
+`ETag` — validator версии ресурса. Клиент может отправить `If-None-Match`, и сервер вернет `304 Not Modified`, если
+ресурс не изменился. Это экономит body transfer, но оставляет network round trip, поэтому для content-hashed assets
+часто выгоднее долгий cache lifetime.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое <code>Expires</code>?</summary><br>
+<table><tr><td>
+
+`Expires` задает абсолютную дату, после которой response считается устаревшим. В современных приложениях чаще
+предпочитают `Cache-Control`, потому что относительные правила проще и надежнее при разнице часов между системами. Если
+оба header присутствуют, `Cache-Control` обычно имеет приоритет.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Из чего состоит HTTP request?</summary><br>
+<table><tr><td>
+
+Request line содержит method, target и HTTP version, затем идут headers и optional body. URL включает path и query
+params. Host, authorization и content metadata передаются headers.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Из чего состоит HTTP response?</summary><br>
+<table><tr><td>
+
+Status line содержит HTTP version и status code, затем идут response headers и optional body. Headers описывают content,
+cache, cookies и transport metadata. Body может содержать JSON, HTML, файл или stream.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем <code>OPTIONS</code> и <code>HEAD</code> отличаются от основных HTTP methods?</summary><br>
+<table><tr><td>
+
+`OPTIONS` запрашивает поддерживаемые возможности ресурса или используется браузером для CORS preflight. `HEAD` похож на
+`GET`, но возвращает только headers без body, что полезно для проверки metadata, cache и доступности ресурса. Оба метода
+важны для инфраструктуры, но редко являются основными product actions.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие HTTP methods обычно идемпотентны?</summary><br>
+<table><tr><td>
+
+GET, HEAD, PUT, DELETE и OPTIONS определены как идемпотентные по семантике, PATCH может быть таким по контракту, POST
+обычно нет. Идемпотентность не означает одинаковый response: DELETE повторно может вернуть другой status.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как использовать curl для проверки HTTP API?</summary><br>
+<table><tr><td>
+
+`curl` позволяет отправить запрос вне приложения и увидеть, проблема находится в API, сети или frontend-коде.
+
+```bash
+curl https://api.example.com/users
+```
+
+```bash
+curl -X POST https://api.example.com/users \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Max","role":"frontend"}'
+```
+
+```bash
+curl -X PATCH https://api.example.com/users/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer token" \
+  -d '{"name":"Alex"}'
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем HTTP отличается от HTTPS?</summary><br>
+<table><tr><td>
+
+HTTPS передает HTTP внутри защищенного TLS-соединения. Оно шифрует трафик, подтверждает подлинность сервера сертификатом
+и защищает данные от незаметного изменения в пути.
+
+HTTPS не исправляет XSS, слабую авторизацию или утечку данных на сервере.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как устроены TCP/IP и HTTP?</summary><br>
+<table><tr><td>
+
+Упрощенная модель TCP/IP:
+
+1. Прикладной уровень: HTTP, DNS, WebSocket.
+2. Транспортный уровень: TCP или UDP.
+3. Сетевой уровень: IP и маршрутизация пакетов.
+4. Канальный уровень: передача кадров внутри локальной сети.
+
+HTTP — протокол прикладного уровня с моделью request/response. Клиент отправляет метод, URL, заголовки и при
+необходимости body; сервер возвращает status code, заголовки и body.
+
+HTTPS — HTTP поверх защищенного TLS-соединения. TCP обеспечивает надежную упорядоченную доставку для HTTP/1.1 и HTTP/2;
+HTTP/3 использует QUIC поверх UDP.
+
+TCP устанавливает соединение, гарантирует порядок и повторную доставку потерянных данных. UDP отправляет datagrams без
+таких гарантий, но с меньшими накладными расходами.
+
+В модели OSI HTTP относится к прикладному уровню, TCP/UDP - к транспортному, IP - к сетевому.
+
+Для frontend-разработчика важны методы, коды ответа, заголовки, кеширование, cookies, CORS, TLS, сжатие и понимание
+того, что количество и размер запросов влияют на производительность.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как работает DNS lookup?</summary><br>
+<table><tr><td>
+
+DNS lookup преобразует hostname в IP-адрес. Браузер и ОС сначала проверяют свои кеши, затем resolver обращается к
+настроенному DNS-серверу, который может вернуть ответ из кеша или выполнить recursive lookup через DNS hierarchy.
+
+Ответы имеют TTL, поэтому смена IP, CDN или DNS-записей может доходить до пользователей не мгновенно. В DevTools это
+видно как DNS timing, если соединение не было переиспользовано.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Зачем frontend-разработчику понимать DNS?</summary><br>
+<table><tr><td>
+
+DNS влияет на latency первого запроса к origin, API, CDN, fonts и analytics. Много разных domains увеличивает число DNS
+lookup, TCP/TLS setup и риск частичных сбоев.
+
+Практически это помогает объяснять медленный first visit, выбирать `preconnect` только для действительно критичных
+origins, диагностировать проблемы после смены CDN, CNAME или окружения API.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит перед отправкой HTTP-запроса по HTTPS?</summary><br>
+<table><tr><td>
+
+Браузер открывает или переиспользует соединение с origin. Если нового соединения избежать нельзя, сначала
+устанавливается transport connection, затем выполняется TLS handshake: выбирается версия TLS и cipher suite, проверяется
+certificate chain, согласуются ключи шифрования и имя сервера через SNI.
+
+Только после успешного TLS handshake отправляется HTTP-запрос. Поэтому медленный HTTPS может быть связан не с API
+handler, а с network latency, certificate проблемами, отсутствием connection reuse или слишком большим числом origins.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем TCP отличается от UDP в контексте HTTP?</summary><br>
+<table><tr><td>
+
+TCP дает надежный упорядоченный byte stream: потерянные данные повторно передаются, а приложение получает их в порядке.
+HTTP/1.1 и HTTP/2 обычно работают поверх TCP.
+
+UDP не гарантирует доставку и порядок datagrams. HTTP/3 использует QUIC поверх UDP, добавляя надежность, шифрование и
+мультиплексирование на своем уровне. Для frontend это проявляется в timing, connection setup и поведении при packet
+loss.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит, если сетевой пакет потерялся?</summary><br>
+<table><tr><td>
+
+Для TCP потеря приводит к повторной передаче и увеличению latency; данные выше по стеку будут ждать недостающий кусок. В
+HTTP/2 поверх TCP потеря может задержать несколько streams на одном соединении.
+
+В QUIC/HTTP/3 потеря одного stream меньше блокирует остальные streams, но пользователь все равно видит задержку, timeout
+или retry на уровне приложения. Frontend должен проектировать loading, timeout и idempotent retry с учетом этой
+неопределенности.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как выглядит минимальный HTTP request?</summary><br>
+<table><tr><td>
+
+Минимально важны method, request target, HTTP version и `Host` для HTTP/1.1:
+
+```http
+GET /products?limit=10 HTTP/1.1
+Host: example.com
+Accept: text/html
+```
+
+Реальный browser request добавит headers вроде `User-Agent`, `Accept-Encoding`, `Cookie`, `Sec-Fetch-*`, `If-None-Match`
+или `Origin`. В HTTP/2 и HTTP/3 формат передачи другой, но семантика method, path, headers и body сохраняется.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что означают <code>Date</code> и <code>Age</code> в HTTP headers?</summary><br>
+<table><tr><td>
+
+`Date` показывает время формирования response на сервере или proxy. `Age` показывает, сколько секунд response уже
+находится в cache, например в CDN. Эти headers помогают понять, пришел ли ответ из cache и насколько он свежий.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему раньше ассеты разносили по нескольким доменам?</summary><br>
+<table><tr><td>
+
+В HTTP/1.1 браузеры ограничивали число одновременных соединений к одному host, поэтому domain sharding помогал качать
+больше файлов параллельно. Цена — дополнительные DNS lookup, TLS handshakes, cookies и сложность кеширования. В
+современных проектах этот прием чаще вреден.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое domain prefetch?</summary><br>
+<table><tr><td>
+
+Domain prefetch заранее выполняет DNS lookup для origin, который скоро может понадобиться. Это может сократить задержку
+первого запроса к стороннему домену, но лишние hints расходуют ресурсы и могут раскрывать будущие переходы. Для более
+критичных ресурсов иногда уместнее `preconnect`.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит, если HTML ссылается на ресурсы с других доменов?</summary><br>
+<table><tr><td>
+
+Для каждого нового origin браузеру могут понадобиться отдельные DNS lookup, connection setup и TLS handshake. CSS,
+scripts, images, fonts и API-запросы также подчиняются mixed content, CORS, CORP/CORB, CSP и cookie rules.
+
+Практические проблемы: медленные third-party scripts задерживают render, fonts могут блокировать текст, API может упасть
+из-за CORS, а cookies не отправятся без правильных `SameSite`, `Secure` и credentials settings.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что делает сервер после получения HTTP request?</summary><br>
+<table><tr><td>
+
+Server или edge layer принимает request, разбирает method, path, headers и body, применяет routing, authentication,
+authorization, validation, business logic и обращение к данным. Затем формирует status code, response headers и body.
+
+До application code запрос могут обработать CDN, reverse proxy, WAF, cache или load balancer. Поэтому frontend
+диагностика должна смотреть status, headers, timing, trace id и то, на каком слое возникла ошибка.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Из чего состоят HTTP-запрос и ответ?</summary><br>
+<table><tr><td>
+
+Запрос содержит method, URL, headers и необязательный body. Ответ содержит status code, headers и необязательный body.
+
+Частые headers: `Content-Type`, `Accept`, `Authorization`, `Cache-Control`, `ETag`, `Cookie`, `Set-Cookie`, `Origin`.
+Формат body описывает `Content-Type`.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем WebSocket отличается от SSE?</summary><br>
+<table><tr><td>
+
+WebSocket предоставляет постоянный двусторонний канал и подходит для чатов, multiplayer и совместного редактирования.
+
+SSE передает события только от сервера к клиенту поверх HTTP, автоматически переподключается и проще для уведомлений,
+прогресса и live feed. SSE передает текстовые события и имеет browser-specific ограничения соединений.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Когда выбрать polling, SSE или WebSocket?</summary><br>
+<table><tr><td>
+
+- Polling прост и подходит для редких обновлений, когда задержка допустима.
+- SSE выбирают для постоянного потока server-to-client.
+- WebSocket нужен для частого двустороннего обмена с низкой задержкой.
+
+Учитывают инфраструктуру, reconnect, authentication, масштабирование, mobile network и реальную частоту событий.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем Long Polling, WebSocket и Server-Sent Events отличаются?</summary><br>
+<table><tr><td>
+
+Long Polling держит HTTP-запрос открытым до появления события, затем клиент сразу открывает следующий запрос. SSE дает
+постоянный однонаправленный поток server-to-client поверх HTTP и хорошо подходит для уведомлений. WebSocket открывает
+двусторонний канал с низкой задержкой, но требует отдельного управления reconnect, auth, scaling и проксированием.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое 304 Not Modified и как он связан с кешем?</summary><br>
+<table><tr><td>
+
+`304 Not Modified` означает, что cached response в browser HTTP cache еще можно использовать. Браузер отправляет
+conditional request с `If-None-Match` или `If-Modified-Since`, а сервер отвечает `304` без полного body.
+
+Это экономит bandwidth, но не убирает network round trip. Для hashed assets часто лучше долгий
+`Cache-Control: immutable`, а для `index.html` — revalidation, чтобы быстрее получать новую версию приложения.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое <code>Cache-Control</code>?</summary><br>
+<table><tr><td>
+
+`Cache-Control` задает правила кеширования для browser cache, CDN и промежуточных caches: `max-age`, `s-maxage`,
+`no-cache`, `no-store`, `public`, `private`, `immutable`. Для hashed assets обычно используют долгий `max-age` и
+`immutable`, а для HTML SPA — короткое кеширование или revalidation, чтобы быстрее доставлять новые версии и rollback.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Для чего нужны <code>If-Modified-Since</code> и <code>If-None-Match</code>?</summary><br>
+<table><tr><td>
+
+Это conditional request headers для revalidation. `If-Modified-Since` сравнивает дату изменения ресурса, а
+`If-None-Match` сравнивает `ETag` и обычно точнее. Если ресурс не изменился, сервер отвечает `304` без body, сохраняя
+bandwidth.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое <code>Transfer-Encoding</code>?</summary><br>
+<table><tr><td>
+
+`Transfer-Encoding` описывает, как body передается по соединению, например chunked encoding в HTTP/1.1. Chunked response
+позволяет начинать отправку до того, как известен полный размер body. В HTTP/2 и HTTP/3 framing устроен иначе, но
+семантика streaming response остается важной.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как HTTP/2 и HTTP/3 изменили подход к domain sharding?</summary><br>
+<table><tr><td>
+
+HTTP/2 добавил multiplexing нескольких streams в одном соединении, а HTTP/3 поверх QUIC уменьшает влияние части
+transport-level задержек. Поэтому много доменов обычно хуже: теряется reuse соединения и усложняется приоритизация.
+Оптимизация сместилась к правильному кешированию, размеру ресурсов и CDN, а не к искусственному дроблению origins.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое клиент-серверная архитектура?</summary><br>
+<table><tr><td>
+
+Клиент отвечает за интерфейс и отправляет запросы, сервер хранит данные, применяет бизнес-правила и возвращает ответы.
+
+Граница не является границей доверия: server всегда повторно проверяет authentication, authorization и входные данные,
+даже если frontend уже выполнил validation.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем CDN cache отличается от browser cache?</summary><br>
+<table><tr><td>
+
+Browser cache находится у конкретного пользователя и ускоряет повторные посещения. CDN cache находится ближе к
+пользователям на edge-узлах и снижает latency, трафик до origin и нагрузку на backend.
+
+Для static assets обычно используют content hash и долгий `Cache-Control`. Для HTML чаще нужен короткий TTL или
+revalidation, чтобы пользователь быстро получил новую версию приложения. Важно понимать cache key: URL, headers, cookies
+и query params могут менять попадание в кеш.
+
+```http
+Cache-Control: public, max-age=31536000, immutable
+```
 
 </td></tr></table>
 

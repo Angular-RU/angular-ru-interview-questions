@@ -1164,6 +1164,337 @@ try {
 
 </details>
 
+### Browser HTTP и fetch
+
+#### Junior
+
+<details>
+<summary>Что такое HTTP?</summary><br>
+<table><tr><td>
+
+HTTP — прикладной протокол обмена сообщениями между client и server. Он определяет методы, URL, headers, body и status
+codes, но не диктует внутреннюю архитектуру backend. Сам протокол stateless, а состояние сессии строится поверх него.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое request и response?</summary><br>
+<table><tr><td>
+
+Request отправляет method, target, headers и при необходимости body. Response возвращает status, headers и body. Browser
+DevTools Network показывает обе части и timing.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое HTTP method?</summary><br>
+<table><tr><td>
+
+Method выражает намерение операции над resource. Семантика влияет на кеширование, idempotency, retries и поведение
+proxies. Backend не должен использовать GET для изменения данных.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое status code?</summary><br>
+<table><tr><td>
+
+Это трехзначный код результата HTTP response. Он позволяет client и инфраструктуре отличать успех, redirect,
+пользовательскую ошибку и server failure. Body добавляет machine-readable details.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое headers?</summary><br>
+<table><tr><td>
+
+Headers передают metadata: формат body, авторизацию, кеширование, cookies, content negotiation и tracing. Имена
+регистронезависимы. Чувствительные значения нельзя логировать без фильтрации.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое body запроса?</summary><br>
+<table><tr><td>
+
+Body содержит данные операции, например JSON, form data или файл. Формат описывает `Content-Type`. GET/HEAD body не
+следует использовать в обычном browser API.
+
+```http
+POST /users HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+
+{
+  "name": "Max",
+  "role": "frontend"
+}
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое JSON body?</summary><br>
+<table><tr><td>
+
+Это body, сериализованный в JSON и обычно помеченный `Content-Type: application/json`. Он поддерживает objects, arrays,
+strings, numbers, booleans и `null`. Dates и другие domain types передаются по согласованному строковому или числовому
+контракту.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое query params?</summary><br>
+<table><tr><td>
+
+Это пары после `?` в URL, например `?page=2&sort=name`. Они подходят для фильтров, пагинации и состояния, которое должно
+попадать в ссылку. Значения нужно URL-encode и валидировать на server.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое path params?</summary><br>
+<table><tr><td>
+
+Это динамические сегменты пути, например `/users/:id`. Они обычно идентифицируют resource или иерархию. Query params
+чаще задают опции представления, но это API convention, а не ограничение HTTP.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое Content-Type?</summary><br>
+<table><tr><td>
+
+Header описывает media type отправленного body, например `application/json`. Server использует его для выбора parser.
+Для response он сообщает browser, как интерпретировать данные.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое same-origin policy?</summary><br>
+<table><tr><td>
+
+Same-origin policy ограничивает доступ JavaScript к данным другого origin, где origin определяется схемой, host и port.
+Она защищает пользователя от чтения приватных данных с других сайтов через браузер. CORS не отключает эту модель, а
+позволяет серверу явно разрешить отдельные cross-origin requests.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое REST API?</summary><br>
+<table><tr><td>
+
+REST — архитектурный стиль, в котором ресурсы имеют URL, а стандартные HTTP-методы выражают операции:
+
+- `GET /users/42` — получить ресурс;
+- `POST /users` — создать;
+- `PUT /users/42` — заменить;
+- `PATCH /users/42` — частично изменить;
+- `DELETE /users/42` — удалить.
+
+`POST` обычно создает подчиненный ресурс или запускает команду. `PUT` полностью заменяет ресурс по известному URL, а
+`PATCH` изменяет отдельные поля. `GET` читает данные и в browser `fetch` не может иметь body.
+
+Основные группы статусов:
+
+- `2xx`: успех, например `200`, `201`, `204`;
+- `3xx`: перенаправление и кеш, например `301`, `304`;
+- `4xx`: ошибка клиента, например `400`, `401`, `403`, `404`, `409`, `422`, `429`;
+- `5xx`: ошибка сервера, например `500`, `502`, `503`.
+
+Частые значения:
+
+- `200 OK` - успешный ответ;
+- `201 Created` - ресурс создан;
+- `400 Bad Request` - некорректный запрос;
+- `401 Unauthorized` - нет действительной аутентификации;
+- `403 Forbidden` - пользователь распознан, но доступ запрещен;
+- `404 Not Found` - ресурс не найден;
+- `409 Conflict` - конфликт с текущим состоянием;
+- `422 Unprocessable Content` - данные синтаксически корректны, но не проходят validation;
+- `429 Too Many Requests` - превышен rate limit;
+- `500 Internal Server Error` - внутренняя ошибка сервера.
+
+Частые заголовки: `Content-Type`, `Accept`, `Authorization`, `Cache-Control`, `ETag`, `Cookie`, `Set-Cookie`,
+CORS-заголовки.
+
+REST предполагает stateless-взаимодействие: каждый запрос содержит достаточно контекста для обработки. Идемпотентность
+означает, что повторный одинаковый запрос имеет тот же итоговый эффект; обычно `GET`, `PUT` и `DELETE` проектируют
+идемпотентными.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое JSON и какие форматы body используются?</summary><br>
+<table><tr><td>
+
+JSON представляет objects, arrays, strings, numbers, booleans и `null`. Он не хранит `Date`, `Map`, functions и
+`undefined` как отдельные типы.
+
+Кроме `application/json`, frontend встречает `multipart/form-data` для файлов, `application/x-www-form-urlencoded`,
+plain text, binary data и streams. Клиент и сервер согласуют формат через `Content-Type` и `Accept`.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем отличаются GET, POST, PUT, PATCH и DELETE?</summary><br>
+<table><tr><td>
+
+GET читает, POST создает ресурс или запускает команду, PUT полностью заменяет представление по известному URL, PATCH
+частично изменяет, DELETE удаляет. Конкретный API документирует payload и повторяемость. Method сам по себе не заменяет
+авторизацию.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем отличаются 2xx, 3xx, 4xx и 5xx?</summary><br>
+<table><tr><td>
+
+`2xx` означает успешную обработку, `3xx` — redirect или работу кеша, `4xx` — проблему запроса или доступа, `5xx` —
+ошибку server. Retry зависит от конкретного кода и idempotency. Например, `404` и `503` требуют разной реакции.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Может ли GET-запрос иметь body?</summary><br>
+<table><tr><td>
+
+Семантика body у GET не определена для обычного web-взаимодействия, многие servers и proxies его игнорируют, а browser
+`fetch` запрещает body для GET и HEAD.
+
+Параметры чтения передают через URL. Если запрос слишком сложный или содержит чувствительную структуру, API обычно
+проектируют отдельным POST endpoint для поиска.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что происходит после ввода URL в адресную строку браузера?</summary><br>
+<table><tr><td>
+
+Упрощенная последовательность:
+
+1. Браузер разбирает текст адресной строки и решает, это URL или поисковый запрос.
+2. Проверяются HSTS policy, Service Worker, HTTP cache и возможность reuse существующего соединения.
+3. DNS lookup находит IP-адрес.
+4. Устанавливается транспортное соединение и для HTTPS выполняется TLS handshake.
+5. Отправляется HTTP-запрос.
+6. Браузер обрабатывает redirect и ответ.
+7. HTML парсится, загружаются CSS, JavaScript и другие ресурсы.
+8. Строятся DOM/CSSOM, layout, paint и compositing.
+
+Service worker, HTTP cache, CDN и connection reuse могут изменить отдельные шаги.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как браузер понимает, URL это или поисковый запрос?</summary><br>
+<table><tr><td>
+
+Браузер разбирает введенный текст: ищет явную схему (`https://`), валидный hostname, IP address, localhost, port, path и
+другие URL-признаки. Если строка не выглядит как URL, она отправляется в поисковую систему по умолчанию.
+
+Пограничные случаи зависят от браузера и настроек: `example`, `example.test`, пробелы, Unicode-домены и символы, которые
+нужно percent-encode. Поэтому frontend-код не должен угадывать URL вручную там, где можно использовать `URL`.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое CORS?</summary><br>
+<table><tr><td>
+
+CORS - browser security mechanism, который ограничивает JavaScript-запросы между разными origins. Сервер разрешает
+доступ через `Access-Control-Allow-*` headers, а для части запросов браузер сначала отправляет preflight `OPTIONS`.
+
+Postman не применяет browser same-origin policy, поэтому запрос может работать там и блокироваться в браузере.
+Исправление находится в server CORS configuration или same-origin proxy, а не в отключении защиты браузера.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какими способами frontend взаимодействует с backend?</summary><br>
+<table><tr><td>
+
+- REST/HTTP для обычных request-response операций;
+- GraphQL для управляемой клиентом выборки;
+- WebSocket для двустороннего realtime;
+- SSE для потока server-to-client;
+- polling для простых периодических обновлений;
+- gRPC-web в отдельных инфраструктурах.
+
+Выбор зависит от направления потока, задержки, cache, browser support и возможностей backend.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как проектировать retry и timeout для frontend-запросов?</summary><br>
+<table><tr><td>
+
+Timeout ограничивает ожидание одного запроса, retry повторяет только ошибки, где повтор имеет смысл. Для frontend важно
+не повторять неидемпотентные операции без idempotency key и не создавать лавину запросов при массовом сбое.
+
+Практические правила:
+
+- `GET` чаще retryable, `POST` - только при явном контракте;
+- использовать exponential backoff и jitter;
+- учитывать `Retry-After` для `429` и `503`;
+- давать пользователю понятный fallback;
+- отменять устаревшие запросы при смене экрана или query.
+
+```ts
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+try {
+  await fetch('/api/search', {signal: controller.signal});
+} finally {
+  clearTimeout(timeoutId);
+}
+```
+
+</td></tr></table>
+
+</details>
+
 ### HTTP и REST
 
 #### Junior

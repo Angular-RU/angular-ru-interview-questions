@@ -4111,6 +4111,159 @@ frontend-валидацию границей безопасности.
 #### Middle
 
 <details>
+<summary>Что такое Authorization header?</summary><br>
+<table><tr><td>
+
+Header передает credentials или token по выбранной схеме. Пример: `Authorization: Bearer <token>`. Его отправляют только
+по HTTPS доверенному origin и не выводят в логи.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое Bearer token?</summary><br>
+<table><tr><td>
+
+Это token, право использования которого получает любой владелец значения. Он не доказывает владение отдельным ключом,
+поэтому утечка дает доступ до истечения или отзыва. Scope и срок жизни должны быть минимальными.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое preflight request?</summary><br>
+<table><tr><td>
+
+Browser отправляет `OPTIONS` перед некоторыми cross-origin requests, чтобы проверить разрешенные method и headers.
+Server отвечает CORS headers. Preflight может кешироваться, но неправильная конфигурация блокирует основной запрос.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое cookie?</summary><br>
+<table><tr><td>
+
+Cookie — небольшая пара name/value, которую browser хранит для domain/path и автоматически отправляет подходящим
+requests. Флаги `HttpOnly`, `Secure` и `SameSite` снижают часть рисков. Cookies имеют ограничения размера и требуют
+продуманной CSRF-защиты.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое авторизация через токены?</summary><br>
+<table><tr><td>
+
+После аутентификации сервер выдает credential, например access token. Клиент прикладывает его к запросам, а сервер
+проверяет подпись, срок действия и права.
+
+Access token обычно живет недолго. Refresh token позволяет получить новый access token и требует более строгой защиты и
+ротации.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем cookie отличается от localStorage?</summary><br>
+<table><tr><td>
+
+Cookie автоматически участвует в HTTP и может быть `HttpOnly`; `localStorage` доступен JavaScript и не отправляется
+автоматически. Оба механизма привязаны к origin/domain rules. Секретный token в localStorage уязвим при XSS.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Где хранить access token и refresh token?</summary><br>
+<table><tr><td>
+
+Универсального ответа нет. Частый browser-подход:
+
+- access token хранится в памяти приложения;
+- refresh token находится в `HttpOnly`, `Secure`, `SameSite` cookie и недоступен JavaScript.
+
+`localStorage` переживает перезагрузку, но доступен при XSS. Cookie автоматически отправляется браузером, поэтому
+требует корректной CSRF-защиты. Решение зависит от backend, доменов и threat model.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как проектировать API layer и типизировать backend contracts?</summary><br>
+<table><tr><td>
+
+Data-access слой инкапсулирует endpoints, DTO, mapping и transport errors:
+
+```ts
+export class UsersApi {
+  private readonly http = inject(HttpClient);
+
+  getById(id: string): Observable<User> {
+    return this.http.get<UserDto>(`/api/users/${id}`).pipe(map(mapUserDto));
+  }
+}
+```
+
+Generic в `HttpClient` — compile-time ожидание, а не runtime-валидация. Для внешних данных используют schema validation.
+OpenAPI может генерировать DTO/client, но generated layer обычно оборачивают доменным API.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему CORS preflight может стать performance-проблемой?</summary><br>
+<table><tr><td>
+
+Preflight - дополнительный `OPTIONS` запрос перед небезопасным cross-origin запросом. Он появляется из-за некоторых
+methods, headers или content types. На плохой сети лишний round trip заметен, особенно для частых API-вызовов.
+
+Решения: корректно кешировать preflight через `Access-Control-Max-Age`, избегать лишних custom headers, держать API на
+том же origin через reverse proxy или проектировать batching. Нельзя "лечить" это отключением browser security.
+
+```http
+Access-Control-Allow-Origin: https://app.example.com
+Access-Control-Allow-Methods: GET, POST
+Access-Control-Max-Age: 600
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что делает <code>X-Frame-Options</code>?</summary><br>
+<table><tr><td>
+
+`X-Frame-Options` запрещает или ограничивает встраивание страницы во frame, защищая от clickjacking. Современная
+альтернатива — CSP directive `frame-ancestors`, она гибче и позволяет точнее задать разрешенные origins. Для Angular SPA
+header обычно настраивают на уровне web server или CDN.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое CDN и зачем он нужен?</summary><br>
+<table><tr><td>
+
+CDN хранит копии статических или кешируемых ресурсов ближе к пользователям и снижает latency, нагрузку на origin и риск
+перегрузки. Для Angular deployment CDN особенно полезен для content-hashed assets, HTML delivery, security headers,
+invalidation и rollback. Важно понимать, какие responses кешируются browser cache, а какие CDN cache.
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Как делать retry и отмену HTTP-запросов?</summary><br>
 <table><tr><td>
 

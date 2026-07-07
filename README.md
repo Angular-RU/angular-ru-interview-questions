@@ -11,7 +11,6 @@ TypeScript и устройство Angular-приложений.
 - [Алгоритмы и структуры данных для frontend](src/pages/computer-science/index.md#алгоритмы-и-структуры-данных-для-frontend)
 - [HTML](src/pages/html/index.md)
 - [CSS](src/pages/css/index.md)
-- [HTTP, HTTPS и curl](src/pages/web-platform/http/index.md)
 - [JavaScript](src/pages/javascript/index.md)
 - [TypeScript](src/pages/typescript/index.md)
 
