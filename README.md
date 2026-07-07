@@ -5,28 +5,72 @@ TypeScript и устройство Angular-приложений.
 
 ## Содержание
 
-### 1. Основы frontend-разработки
+### 1. Основы
 
 - [Основы](src/pages/computer-science/index.md)
-- [Алгоритмы и структуры данных для frontend](src/pages/typescript/index.md#алгоритмы-и-структуры-данных-для-frontend)
-- [Git](src/pages/git/index.md)
-- [HTML](src/pages/html/index.md)
-- [CSS](src/pages/css/index.md)
-- [JavaScript](src/pages/javascript/index.md)
-- [TypeScript](src/pages/typescript/index.md)
-
-### 2. Инженерные основы
-
 - [Основы программирования и проектирования](src/pages/typescript/index.md#frontend-fundamentals)
 - [SOLID, DRY, KISS, YAGNI](src/pages/typescript/index.md#принципы-проектирования)
 - [Архитектурные компромиссы (trade-offs)](src/pages/career-teamwork/index.md#принятие-решений-список-вопросов)
 
-### 3. Angular
+### 2. Git
+
+- [Git](src/pages/git/index.md)
+- [Version control и командный workflow](src/pages/git/index.md#version-control-и-командный-workflow)
+- [Git commands](src/pages/git/index.md#git-commands)
+
+### 3. HTML
+
+- [HTML](src/pages/html/index.md)
+- [Forms](src/pages/html/index.md#forms)
+- [Accessibility](src/pages/html/index.md#accessibility)
+- [SEO и metadata](src/pages/html/index.md#seo-и-metadata)
+
+### 4. CSS
+
+- [CSS](src/pages/css/index.md)
+- [CSS Layout](src/pages/css/index.md#css-layout)
+- [CSS Flexbox](src/pages/css/index.md#css-flexbox)
+- [CSS Grid](src/pages/css/index.md#css-grid)
+- [CSS Architecture](src/pages/css/index.md#css-architecture)
+- [CSS rendering pipeline](src/pages/css/index.md#css-rendering-pipeline)
+
+### 5. JavaScript
+
+- [JavaScript](src/pages/javascript/index.md)
+- [Promise и асинхронность](src/pages/javascript/index.md#promise-и-асинхронность)
+- [Browser HTTP и fetch](src/pages/javascript/index.md#browser-http-и-fetch)
+- [DOM, SSR и hydration](src/pages/javascript/index.md#dom-ssr-и-hydration)
+- [Event Loop](src/pages/javascript/index.md#event-loop)
+- [JavaScript performance](src/pages/javascript/index.md#javascript-performance)
+
+### 6. Node.js
+
+- [Node.js](src/pages/nodejs/index.md)
+- [npm и package scripts](src/pages/nodejs/index.md#npm-и-package-scripts)
+- [Node.js для frontend tooling](src/pages/nodejs/index.md#nodejs-для-frontend-tooling)
+- [Project tooling и рабочее окружение](src/pages/nodejs/index.md#project-tooling-и-рабочее-окружение)
+- [Frontend tooling](src/pages/nodejs/index.md#frontend-tooling)
+
+### 7. Docker
+
+- [Docker](src/pages/docker/index.md)
+- [Docker basics](src/pages/docker/index.md#docker-basics)
+- [Docker Compose](src/pages/docker/index.md#docker-compose)
+
+### 8. TypeScript
+
+- [TypeScript](src/pages/typescript/index.md)
+- [Frontend fundamentals](src/pages/typescript/index.md#frontend-fundamentals)
+- [Алгоритмы и структуры данных для frontend](src/pages/typescript/index.md#алгоритмы-и-структуры-данных-для-frontend)
+- [Продвинутый TypeScript](src/pages/typescript/index.md#продвинутый-typescript)
+- [TypeScript и runtime-контракты](src/pages/typescript/index.md#typescript-и-runtime-контракты)
+
+### 9. Angular
 
 Текущие Angular-ответы ориентированы на версии 19–22. Для нового кода используются standalone APIs, signals и functional
 providers; поддерживаемые старые API помечены как legacy.
 
-#### 3.1 Основы Angular
+#### 9.1 Основы Angular
 
 - [Angular Core](src/pages/angular/index.md#angular-core)
 - [Обзор Angular](src/pages/angular/index.md#основные-концепции)
@@ -37,7 +81,7 @@ providers; поддерживаемые старые API помечены как
 - [Angular Change Detection](src/pages/angular/index.md#angular-change-detection)
 - [Angular Signals](src/pages/angular/index.md#angular-signals)
 
-#### 3.2 Поток данных в Angular
+#### 9.2 Поток данных в Angular
 
 - [RxJS](src/pages/angular/index.md#rxjs)
 - [Angular Forms](src/pages/angular/index.md#angular-forms)
@@ -45,7 +89,7 @@ providers; поддерживаемые старые API помечены как
 - [Angular Router](src/pages/angular/index.md#angular-router)
 - [Управление состоянием (State Management) в Angular](src/pages/angular/index.md#управление-состоянием)
 
-#### 3.3 Продакшен в Angular
+#### 9.3 Продакшен в Angular
 
 - [Безопасность (Security)](src/pages/angular/index.md#security)
 - [Angular Auth, login/logout и router guards](src/pages/angular/index.md#login-logout-и-guards)
@@ -54,18 +98,19 @@ providers; поддерживаемые старые API помечены как
 - [Angular PWA и Service Worker](src/pages/angular/index.md#angular-pwa-и-service-worker)
 - [Testing](src/pages/angular/index.md#testing)
 
-#### 3.4 Архитектура и экосистема Angular
+#### 9.4 Архитектура и экосистема Angular
 
 - [Angular libraries и design systems](src/pages/angular/index.md#angular-libraries-и-design-systems)
 - [Dynamic components](src/pages/angular/index.md#компоненты-директивы-сервисы-и-pipes)
 - [Micro Frontends](src/pages/angular/index.md#micro-frontends)
 - [Tooling](src/pages/angular/index.md#tooling)
+- [Frontend system design](src/pages/angular/index.md#frontend-system-design)
 
-### 4. React для Angular-разработчика
+### 10. React
 
-- [React для Angular-разработчика](src/pages/react/index.md)
+- [React](src/pages/react/index.md)
 
-#### 4.1 Основы React
+#### 10.1 Основы React
 
 - [Зачем Angular-разработчику знать React](src/pages/react/index.md#зачем-angular-разработчику-знать-react)
 - [Короткая карта Angular -> React](src/pages/react/index.md#короткая-карта-angular---react)
@@ -73,19 +118,19 @@ providers; поддерживаемые старые API помечены как
 - [State и rendering](src/pages/react/index.md#state-и-rendering)
 - [Hooks](src/pages/react/index.md#hooks)
 
-#### 4.2 Поток данных в React
+#### 10.2 Поток данных в React
 
 - [Forms](src/pages/react/index.md#forms)
 - [Data fetching](src/pages/react/index.md#data-fetching)
 - [Routing](src/pages/react/index.md#routing)
 - [Context и управление состоянием (State Management)](src/pages/react/index.md#context-и-state-management)
 
-#### 4.3 React vs Angular
+#### 10.3 React vs Angular
 
 - [Отличия React от Angular](src/pages/react/index.md#отличия-react-от-angular)
 - [Что важно не перепутать на интервью](src/pages/react/index.md#что-важно-не-перепутать-на-интервью)
 
-#### 4.4 Экосистема React
+#### 10.4 Экосистема React
 
 - [Разные React-стеки](src/pages/react/index.md#разные-react-стеки)
 - [Старт проекта](src/pages/react/index.md#старт-проекта)
@@ -103,14 +148,14 @@ providers; поддерживаемые старые API помечены как
 - [Mobile и desktop](src/pages/react/index.md#mobile-и-desktop)
 - [Выбор стека на интервью](src/pages/react/index.md#выбор-стека-на-интервью)
 
-#### 4.5 Практика и интервью по React
+#### 10.5 Практика и интервью по React
 
 - [Вопросы по уровням](src/pages/react/index.md#вопросы-по-уровням)
 - [Практические задачки](src/pages/react/index.md#практические-задачки)
 - [Мини-проект Travel Planner](src/pages/react/index.md#мини-проект-travel-planner)
 - [Рекомендуемый порядок изучения](src/pages/react/index.md#рекомендуемый-порядок-изучения)
 
-### 5. State Management
+### 11. State Management
 
 - [Общее управление состоянием](src/pages/state-management/index.md)
 - [Client state vs server state](src/pages/state-management/index.md#типы-состояния)
@@ -118,20 +163,16 @@ providers; поддерживаемые старые API помечены как
 - [MobX](src/pages/state-management/index.md#mobx)
 - [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
 
-### 6. DevOps и доставка изменений
+### 12. DevOps
 
-- [Node.js](src/pages/nodejs/index.md)
-- [Node.js для frontend tooling](src/pages/nodejs/index.md#nodejs-для-frontend-tooling)
-- [npm/package managers/workspaces](src/pages/nodejs/index.md#npm-и-package-scripts)
-- [Docker и Docker Compose](src/pages/docker/index.md)
 - [DevOps](src/pages/infrastructure/index.md)
+- [CI/CD overview](src/pages/infrastructure/index.md#cicd-overview)
 - [CI/CD](src/pages/infrastructure/index.md#cicd-для-frontend-delivery)
 - [Frontend deployment](src/pages/infrastructure/index.md#frontend-deployment)
-- [System design basics для frontend](src/pages/angular/index.md#frontend-system-design)
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 7. Карьера в команде
+### 13. Карьера в команде
 
 - [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)

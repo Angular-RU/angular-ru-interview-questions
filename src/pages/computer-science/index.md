@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: Основы
 description: Вопросы и ответы
-category: Engineering Fundamentals
+category: Fundamentals
 kind: questions
 order: 10
 ---
