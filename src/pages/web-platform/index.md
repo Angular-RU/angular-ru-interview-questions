@@ -1,16 +1,21 @@
 ---
 layout: ../../layouts/Layout.astro
-title: Web Platform
+title: Browser APIs, data formats and i18n
 description: Вопросы и ответы
 category: Frontend
-kind: questions
+kind: guide
 order: 20
 ---
 
-## Web Platform
+## Browser APIs, data formats and i18n
+
+Этот файл хранит вопросы, которые находятся на стыке JavaScript, browser APIs, HTTP, performance, i18n и CSS. Они не
+выносятся отдельной карточкой на главной странице, чтобы не дублировать более точные разделы: HTML, CSS, JavaScript,
+Browser rendering, HTTP и Auth.
 
 - [HTML, forms, accessibility, SEO и media](html/)
 - [CSS](../css/)
+- [JavaScript](../javascript/)
 - [Browser rendering и performance](browser/)
 - [HTTP, HTTPS и curl](http/)
 
