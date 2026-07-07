@@ -9,8 +9,6 @@ TypeScript и устройство Angular-приложений.
 
 - [Основы Computer Science](src/pages/computer-science/index.md)
 - [Алгоритмы и структуры данных для frontend](src/pages/computer-science/index.md#алгоритмы-и-структуры-данных-для-frontend)
-- [Web Platform](src/pages/web-platform/index.md)
-- [Большие данные, сеть и browser APIs](src/pages/web-platform/index.md#большие-данные-сеть-и-browser-apis)
 - [HTML, формы, доступность (accessibility), SEO и media](src/pages/web-platform/html/index.md)
 - [CSS](src/pages/css/index.md)
 - [Рендеринг браузера и производительность (performance)](src/pages/web-platform/browser/index.md)
