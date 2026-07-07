@@ -18,7 +18,7 @@ TypeScript и устройство Angular-приложений.
 
 - [Основы программирования и проектирования](src/pages/typescript/index.md#frontend-fundamentals)
 - [SOLID, DRY, KISS, YAGNI](src/pages/typescript/index.md#принципы-проектирования)
-- [Архитектурные компромиссы (trade-offs)](src/pages/soft-skills/index.md#принятие-решений-список-вопросов)
+- [Архитектурные компромиссы (trade-offs)](src/pages/career-teamwork/index.md#принятие-решений-список-вопросов)
 
 ### 3. Angular
 
@@ -131,24 +131,18 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 7. Командная работа
+### 7. Карьера и командная работа
 
-- [Git и командная разработка](src/pages/work-environment/index.md#git-и-командная-разработка)
-- [Agile, Scrum, Kanban, Waterfall](src/pages/methodologies/index.md)
-- [Организационные модели и бирюзовые компании](src/pages/methodologies/index.md#организационные-модели-и-бирюзовые-компании)
-- [Работа с задачами](src/pages/soft-skills/index.md#работа-с-задачами-в-команде)
-- [Оценка задач](src/pages/soft-skills/index.md#работа-с-задачами-в-команде)
-- [Definition of Ready / Definition of Done](src/pages/soft-skills/index.md#работа-с-задачами-в-команде)
-- [ADR и принятие технических решений](src/pages/soft-skills/index.md#принятие-решений-список-вопросов)
-- [Ownership и эскалация рисков](src/pages/soft-skills/index.md#ownership-и-ответственность)
-
-### 8. Поиск работы и интервью
-
-- [Поиск работы и стратегия интервью](src/pages/job-search/index.md)
-- [Самопрезентация](src/pages/soft-skills/index.md#самопрезентация)
-- [Team fit](src/pages/soft-skills/index.md#знакомство-с-командой)
-- [Soft skills](src/pages/soft-skills/index.md)
-- [People management basics для senior/lead](src/pages/soft-skills/index.md#people-management-basics)
+- [Карьера и командная работа](src/pages/career-teamwork/index.md)
+- [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)
+- [Самопрезентация](src/pages/career-teamwork/index.md#самопрезентация)
+- [Team fit](src/pages/career-teamwork/index.md#знакомство-с-командой)
+- [Agile, Scrum, Kanban, Waterfall](src/pages/career-teamwork/index.md#методологии-и-процессы)
+- [Организационные модели и бирюзовые компании](src/pages/career-teamwork/index.md#организационные-модели-и-бирюзовые-компании)
+- [Работа с задачами](src/pages/career-teamwork/index.md#работа-с-задачами-в-команде)
+- [ADR и принятие технических решений](src/pages/career-teamwork/index.md#принятие-решений-список-вопросов)
+- [Ownership и эскалация рисков](src/pages/career-teamwork/index.md#ownership-и-ответственность)
+- [People management basics для senior/lead](src/pages/career-teamwork/index.md#people-management-basics)
 
 ---
 

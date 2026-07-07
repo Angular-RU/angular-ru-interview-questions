@@ -302,8 +302,8 @@ Vite в development использует native ES modules и преобразу
 На уровне командного процесса CI/CD отвечает за правило: каждое изменение должно проходить одинаковые автоматические
 проверки, а доставка в окружения должна быть понятной и воспроизводимой.
 
-Разницу CI и CD как процесса см. в [Методологиях](../methodologies/index.md#чем-ci-отличается-от-cd), а deployment,
-artifacts, CDN cache и rollback — в [Infrastructure](../infrastructure/index.md#frontend-deployment).
+Разницу CI и CD как процесса см. в [Карьере и командной работе](../career-teamwork/index.md#чем-ci-отличается-от-cd), а
+deployment, artifacts, CDN cache и rollback — в [Infrastructure](../infrastructure/index.md#frontend-deployment).
 
 </td></tr></table>
 

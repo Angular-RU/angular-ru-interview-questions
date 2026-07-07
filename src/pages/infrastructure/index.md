@@ -373,7 +373,7 @@ services:
 build. Для критичных пользовательских flows добавляют E2E или component tests в браузере.
 
 Важно сохранять artifacts диагностики: test reports, coverage, traces, screenshots и build logs. Процессное отличие CI и
-CD см. в [Методологиях](../methodologies/index.md#чем-ci-отличается-от-cd).
+CD см. в [Карьере и командной работе](../career-teamwork/index.md#чем-ci-отличается-от-cd).
 
 </td></tr></table>
 
