@@ -17,8 +17,8 @@ TypeScript и устройство Angular-приложений.
 
 ### 2. Инженерные основы
 
-- [Основы программирования и проектирования](src/pages/programming/index.md)
-- [SOLID, DRY, KISS, YAGNI](src/pages/programming/index.md)
+- [Основы программирования и проектирования](src/pages/typescript/index.md#frontend-fundamentals)
+- [SOLID, DRY, KISS, YAGNI](src/pages/typescript/index.md#принципы-проектирования)
 - [Архитектурные компромиссы (trade-offs)](src/pages/soft-skills/index.md#принятие-решений-список-вопросов)
 - [Общее управление состоянием (State Management)](src/pages/state-management/index.md)
 
@@ -163,7 +163,7 @@ providers; поддерживаемые старые API помечены как
 - [React practice app](src/pages/react/index.md#мини-проект-travel-planner)
 - [Computer Science examples](public/examples/computer-science/index.html)
 - [Frontend system design tasks](src/pages/infrastructure/index.md#frontend-system-design)
-- [Практические задачи по алгоритмам и design primitives](src/pages/programming/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
+- [Практические задачи по алгоритмам и design primitives](src/pages/typescript/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [Мини-проекты для интервью](apps/angular/mfe/README.md)
 
 ---
