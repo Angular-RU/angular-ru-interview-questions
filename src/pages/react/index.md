@@ -1,13 +1,13 @@
 ---
 layout: ../../layouts/Layout.astro
-title: React для Angular-разработчика
+title: React
 description: Вопросы и ответы
 category: Frontend
 kind: questions
 order: 130
 ---
 
-# React для Angular-разработчика
+# React
 
 ## Содержание
 

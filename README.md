@@ -118,22 +118,22 @@ providers; поддерживаемые старые API помечены как
 - [MobX](src/pages/state-management/index.md#mobx)
 - [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
 
-### 6. Инфраструктура и доставка изменений
+### 6. DevOps и доставка изменений
 
 - [Node.js](src/pages/nodejs/index.md)
 - [Node.js для frontend tooling](src/pages/nodejs/index.md#nodejs-для-frontend-tooling)
 - [npm/package managers/workspaces](src/pages/nodejs/index.md#npm-и-package-scripts)
-- [Инфраструктура](src/pages/infrastructure/index.md)
-- [Docker и Docker Compose](src/pages/infrastructure/index.md#docker)
+- [Docker и Docker Compose](src/pages/docker/index.md)
+- [DevOps](src/pages/infrastructure/index.md)
 - [CI/CD](src/pages/infrastructure/index.md#cicd-для-frontend-delivery)
 - [Frontend deployment](src/pages/infrastructure/index.md#frontend-deployment)
-- [System design basics для frontend](src/pages/infrastructure/index.md#frontend-system-design)
+- [System design basics для frontend](src/pages/angular/index.md#frontend-system-design)
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 7. Карьера и командная работа
+### 7. Карьера в команде
 
-- [Карьера и командная работа](src/pages/career-teamwork/index.md)
+- [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)
 - [Самопрезентация](src/pages/career-teamwork/index.md#самопрезентация)
 - [Team fit](src/pages/career-teamwork/index.md#знакомство-с-командой)
@@ -162,7 +162,7 @@ providers; поддерживаемые старые API помечены как
 - [Практика по React](src/pages/react/index.md#практика-по-react)
 - [React practice app](src/pages/react/index.md#мини-проект-travel-planner)
 - [Computer Science examples](public/examples/computer-science/index.html)
-- [Frontend system design tasks](src/pages/infrastructure/index.md#frontend-system-design)
+- [Frontend system design tasks](src/pages/angular/index.md#frontend-system-design)
 - [Практические задачи по алгоритмам и design primitives](src/pages/typescript/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [Мини-проекты для интервью](apps/angular/mfe/README.md)
 
