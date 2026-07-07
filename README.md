@@ -19,7 +19,6 @@ TypeScript и устройство Angular-приложений.
 - [Основы программирования и проектирования](src/pages/typescript/index.md#frontend-fundamentals)
 - [SOLID, DRY, KISS, YAGNI](src/pages/typescript/index.md#принципы-проектирования)
 - [Архитектурные компромиссы (trade-offs)](src/pages/soft-skills/index.md#принятие-решений-список-вопросов)
-- [Общее управление состоянием (State Management)](src/pages/state-management/index.md)
 
 ### 3. Angular
 
@@ -110,7 +109,15 @@ providers; поддерживаемые старые API помечены как
 - [Мини-проект Travel Planner](src/pages/react/index.md#мини-проект-travel-planner)
 - [Рекомендуемый порядок изучения](src/pages/react/index.md#рекомендуемый-порядок-изучения)
 
-### 5. Инфраструктура и доставка изменений
+### 5. State Management
+
+- [Общее управление состоянием](src/pages/state-management/index.md)
+- [Client state vs server state](src/pages/state-management/index.md#типы-состояния)
+- [Redux](src/pages/state-management/index.md#redux)
+- [MobX](src/pages/state-management/index.md#mobx)
+- [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
+
+### 6. Инфраструктура и доставка изменений
 
 - [Node.js](src/pages/nodejs/index.md)
 - [Node.js для frontend tooling](src/pages/nodejs/index.md#nodejs-для-frontend-tooling)
@@ -124,7 +131,7 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 6. Командная работа
+### 7. Командная работа
 
 - [Git и командная разработка](src/pages/work-environment/index.md#git-и-командная-разработка)
 - [Agile, Scrum, Kanban, Waterfall](src/pages/methodologies/index.md)
@@ -135,7 +142,7 @@ providers; поддерживаемые старые API помечены как
 - [ADR и принятие технических решений](src/pages/soft-skills/index.md#принятие-решений-список-вопросов)
 - [Ownership и эскалация рисков](src/pages/soft-skills/index.md#ownership-и-ответственность)
 
-### 7. Поиск работы и интервью
+### 8. Поиск работы и интервью
 
 - [Поиск работы и стратегия интервью](src/pages/job-search/index.md)
 - [Самопрезентация](src/pages/soft-skills/index.md#самопрезентация)
