@@ -4976,6 +4976,95 @@ Resolver подходит, когда экран нельзя корректно
 
 </details>
 
+### Feature toggles в Angular
+
+#### Middle+ or Senior
+
+<details>
+<summary>Как использовать feature toggle в Angular?</summary><br>
+<table><tr><td>
+
+Сервис может хранить загруженные флаги в signal и предоставлять узкий API проверки:
+
+```ts
+import {Injectable, signal} from '@angular/core';
+
+type FeatureFlag = 'newCheckout';
+
+@Injectable({providedIn: 'root'})
+export class FeatureFlagsService {
+  private readonly flags = signal<Readonly<Record<FeatureFlag, boolean>>>({
+    newCheckout: false,
+  });
+
+  public isEnabled(flag: FeatureFlag): boolean {
+    return this.flags()[flag];
+  }
+
+  public setFlags(flags: Readonly<Record<FeatureFlag, boolean>>): void {
+    this.flags.set(flags);
+  }
+}
+```
+
+Для большого набора флагов полезны typed keys, schema validation и явные безопасные defaults.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как защитить route через feature toggle?</summary><br>
+<table><tr><td>
+
+Функциональный `CanMatchFn` не даст Router выбрать route с выключенной фичей:
+
+```ts
+import {inject} from '@angular/core';
+import {CanMatchFn} from '@angular/router';
+
+export const newCheckoutGuard: CanMatchFn = () => inject(FeatureFlagsService).isEnabled('newCheckout');
+```
+
+Flags config должен быть загружен до первой навигации или guard должен дождаться его асинхронно. Этот guard управляет
+навигацией, но не заменяет backend authorization.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как использовать feature toggle в Angular-шаблоне?</summary><br>
+<table><tr><td>
+
+Компонент может предоставить вычисляемое состояние:
+
+```ts
+import {computed, inject} from '@angular/core';
+
+export class CheckoutComponent {
+  private readonly featureFlags = inject(FeatureFlagsService);
+
+  protected readonly isNewCheckoutEnabled = computed(() => this.featureFlags.isEnabled('newCheckout'));
+}
+```
+
+Шаблон отображает новую реализацию или fallback:
+
+```html
+@if (isNewCheckoutEnabled()) {
+<app-new-checkout />
+} @else {
+<app-checkout />
+}
+```
+
+Для повторяющегося UI-условия можно создать directive, но единичную проверку проще оставить явной.
+
+</td></tr></table>
+
+</details>
+
 ### Управление состоянием
 
 #### Junior
@@ -8875,6 +8964,26 @@ workspace configuration.
 ### Frontend system design
 
 #### Middle+ or Senior
+
+<details>
+<summary>Какие system design вопросы могут задать senior frontend или Angular-разработчику?</summary><br>
+<table><tr><td>
+
+Чаще спрашивают не backend-детали, а границы frontend-архитектуры:
+
+- как загрузить и показать таблицу на миллионы строк;
+- где делать фильтрацию, сортировку и агрегацию;
+- как кешировать API responses и инвалидировать stale data;
+- как пережить частичную недоступность API;
+- как проектировать retry, timeout, optimistic update и rollback;
+- как разложить фичу между Angular app, CDN, BFF/API и backend jobs;
+- как наблюдать ошибки, latency и деградацию UX после release.
+
+Хороший ответ явно разделяет client, network, CDN, API и storage, называет trade-offs и предлагает graceful degradation.
+
+</td></tr></table>
+
+</details>
 
 <details>
 <summary>Как спроектировать modal/dialog на уровне системы?</summary><br>

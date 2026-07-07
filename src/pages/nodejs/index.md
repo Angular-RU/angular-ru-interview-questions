@@ -1097,7 +1097,7 @@ JavaScript выполняется в основном потоке Node.js. CPU-
 #### Junior
 
 <details>
-<summary>Что такое package.json?</summary><br>
+<summary>Как <code>package.json</code> связан с рабочим окружением?</summary><br>
 <table><tr><td>
 
 `package.json` — manifest Node.js-проекта. В рабочем окружении важно понимать, какие scripts запускать, какой package
