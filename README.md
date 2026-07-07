@@ -9,7 +9,10 @@ TypeScript и устройство Angular-приложений.
 
 - [Основы Computer Science](src/pages/computer-science/index.md)
 - [Алгоритмы и структуры данных для frontend](src/pages/computer-science/index.md#алгоритмы-и-структуры-данных-для-frontend)
-- [JSON, URL, binary data, i18n и browser APIs](src/pages/web-platform/index.md)
+- [JavaScript data formats and binary data](src/pages/javascript/data-formats/index.md)
+- [URL and URLSearchParams](src/pages/http/url/index.md)
+- [Data loading and rendering performance](src/pages/browser/data-performance/index.md)
+- [RTL in frontend interfaces](src/pages/css/rtl/index.md)
 - [HTML, формы, доступность (accessibility), SEO и media](src/pages/web-platform/html/index.md)
 - [CSS](src/pages/css/index.md)
 - [Рендеринг браузера и производительность (performance)](src/pages/web-platform/browser/index.md)
