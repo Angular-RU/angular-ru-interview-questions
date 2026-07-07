@@ -1704,6 +1704,66 @@ Hydration — это процесс, при котором JavaScript подкл
 
 </details>
 
+### JavaScript runtime, CPU и потоки
+
+#### Middle
+
+<details>
+<summary>Что CPU-bound задача?</summary><br>
+<table><tr><td>
+
+- **CPU-bound** — это состояние системы или задачи в информатике, при котором время её выполнения определяется
+  преимущественно скоростью центрального процессора (CPU), а не другими ресурсами системы, такими как память или
+  операции ввода-вывода (I/O). При этом загрузка процессора высока, зачастую достигая 100% в течение нескольких секунд
+  или минут.
+- **Примеры CPU-bound-задач**:
+  - сложные математические вычисления;
+  - обработка больших массивов данных;
+  - шифрование и сжатие информации;
+  - парсинг больших структур данных;
+  - рендеринг сложной графики;
+  - научные вычисления;
+  - обработка изображений;
+  - задачи в системах машинного обучения, где требуется постоянная обработка больших объёмов информации.
+
+![img.png](assets/cpu-bound.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое процесс и поток?</summary><br>
+<table><tr><td>
+
+Процесс имеет собственное адресное пространство и ресурсы операционной системы. Поток выполняет последовательность
+инструкций внутри процесса и разделяет его память с другими потоками. Браузер использует несколько процессов и потоков,
+хотя JavaScript страницы обычно выполняется на одном main thread.
+
+![img.png](assets/process-vs-thread.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Чем concurrency (конкурентность) отличается от parallelism (параллелизм)?</summary><br>
+<table><tr><td>
+
+![img.png](assets/concurrency-vs-parallelism.png)
+
+- Concurrency (конкурентность или одновременность) означает, что несколько задач находятся в работе и чередуются во
+  времени.
+
+- Parallelism (параллелизм) означает их фактическое одновременное выполнение на разных ядрах или процессорах. Browser
+  event loop дает concurrency, а Web Workers могут добавить parallelism для вычислений.
+
+![img.png](assets/concurrency-vs-parallelism.png)
+
+</td></tr></table>
+
+</details>
+
 ### Event Loop
 
 #### Middle+ or Senior
@@ -2182,6 +2242,318 @@ const url = URL.createObjectURL(file);
 </details>
 
 #### Middle+ or Senior
+
+### Память, stack, heap и GC
+
+#### Middle+ or Senior
+
+<details>
+<summary>Что такое stack и heap?</summary><br>
+<table><tr><td>
+
+Stack хранит frames вызовов функций и имеет строгий порядок LIFO. Heap используется для динамически создаваемых объектов
+с менее предсказуемым временем жизни. Конкретная реализация зависит от JavaScript engine, но эта модель полезна для
+понимания рекурсии и утечек.
+
+![img.png](assets/stack-vs-heap.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что обычно хранится в stack?</summary><br>
+<table><tr><td>
+
+В stack обычно находятся call frames: адрес возврата, локальный контекст и служебные данные вызова. Небольшие значения
+движок также может хранить рядом с frame, но спецификация JavaScript не закрепляет физическое размещение. Важно, что
+глубина stack ограничена.
+
+![img.png](assets/stack.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что обычно хранится в heap?</summary><br>
+<table><tr><td>
+
+В heap живут объекты, массивы, функции, замыкания и другие значения с динамическим lifetime. Сборщик мусора освобождает
+их, когда они становятся недостижимыми. Большое число удерживаемых объектов увеличивает memory usage и паузы GC.
+
+![img.png](assets/heap.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему объекты обычно живут в heap?</summary><br>
+<table><tr><td>
+
+Размер и lifetime объекта часто неизвестны во время входа в функцию. Heap позволяет нескольким ссылкам указывать на один
+объект и сохранять его после завершения создавшего вызова. Stack с LIFO-порядком для такого времени жизни неудобен.
+
+![img.png](assets/data-in-heap.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему рекурсия может привести к stack overflow?</summary><br>
+<table><tr><td>
+
+Каждый рекурсивный вызов добавляет новый frame. Если базовый случай отсутствует или глубина слишком велика, stack
+заканчивается и runtime выбрасывает `RangeError`. Для больших входов используют итерацию, явный stack данных или
+разбиение работы.
+
+![img.png](assets/maximum-recursive.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое memory leak?</summary><br>
+<table><tr><td>
+
+Это память, которая больше не нужна приложению, но остается достижимой и не освобождается GC. Утечка проявляется ростом
+heap, замедлением работы и иногда падением вкладки. Причина обычно в забытых ссылках, а не в отсутствии сборщика мусора.
+
+![img.png](assets/memory-leak.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Какие memory leaks бывают во frontend?</summary><br>
+<table><tr><td>
+
+Частые причины: неснятые event listeners, timers, subscriptions, глобальные коллекции, кеш без ограничения и detached
+DOM nodes. Замыкание может удерживать большой объект через одну ненужную ссылку. Особенно важно очищать ресурсы
+долгоживущих SPA-компонентов.
+
+![img.png](assets/memory-leak-example-1.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как найти memory leak в браузере?</summary><br>
+<table><tr><td>
+
+В Chrome DevTools используют Memory: Heap snapshot, Allocation instrumentation и сравнение snapshots после повторения
+сценария. Ищут растущее число объектов, retaining paths и detached DOM nodes. Performance Monitor помогает увидеть
+устойчивый рост JS heap и DOM nodes.
+
+![img.png](assets/find-memory-leak.png)
+
+#### Пример с Detached Elements
+
+Откройте [пример с карточками](/examples/computer-science/example1/memory-leak.html).
+
+- **Шаг 1**. Открой: DevTools → Memory → Heap snapshot. Сделай первый snapshot.
+- **Шаг 2**. Нажми: Create 20 leaky cards. Подожди, пока карточки исчезнут.
+- **Шаг 3**. Сделай второй snapshot. Выбери: Comparison. Ищи: Detached HTMLDivElement
+- **Шаг 4**. Нажми: Clear leaks. Потом в DevTools нажми: Collect garbage. Сделай третий snapshot. После этого количество
+  удерживаемых объектов должно уменьшиться.
+
+![img.png](assets/detached.png)
+
+###### Главная мысль
+
+Элемент исчез со страницы ≠ объект исчез из памяти. Утечка возникает не из-за setTimeout, а из-за этой строки:
+
+```js
+window.__leaks.push({
+  node,
+  payload,
+  handleClick,
+});
+```
+
+Именно она оставляет объект достижимым.
+
+#### Пример с setInterval
+
+Откройте [пример с setInterval](/examples/computer-science/example2/memory-leak-set-interval.html). Проделайте
+аналогичные шаги примеру 1.
+
+![img.png](assets/detached-dom-timer.png)
+
+Главные строки:
+
+```text
+LeakyIntervalCard         # Delta +20
+DOMTimer                  # Delta +20
+ScheduledAction           # Delta +20
+V8Function                # Delta +20
+system / Context / scope  # Delta +20
+Detached <div>            # Delta +20
+```
+
+| Строка в Heap snapshot         | Что означает                                                                                     | Почему важна для поиска leak                                                                                                              |
+| ------------------------------ | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `LeakyIntervalCard`            | Instance нашего JS-класса. В примере каждая карточка создается как `new LeakyIntervalCard(...)`. | Если `# Delta +20`, значит после сценария в памяти осталось 20 instance класса. Это прямой признак, что объекты приложения не очистились. |
+| `DOMTimer`                     | Внутренний объект браузера для `setInterval` / `setTimeout`.                                     | Если `DOMTimer # Delta +20`, значит появилось 20 активных timer/interval. Для `setInterval` leak это важный маркер.                       |
+| `ScheduledAction`              | Запланированное действие, которое браузер должен выполнить по timer.                             | Показывает, что callback интервала все еще запланирован и не очищен.                                                                      |
+| `V8Function`                   | JS-функция внутри движка V8. В нашем примере это callback, переданный в `setInterval`.           | Callback держит замыкание. Через него могут удерживаться `this`, `payload`, DOM node и другие данные.                                     |
+| `system / Context / scope`     | Scope / closure, где хранятся захваченные переменные callback-функции.                           | Очень важный признак: interval callback может держать `this`, а `this` держит весь объект `LeakyIntervalCard`.                            |
+| `Detached <div>`               | DOM-элемент `div`, который удален со страницы, но все еще находится в памяти.                    | Если `Detached <div> # Delta +20`, значит 20 карточек исчезли из DOM, но не были очищены GC.                                              |
+| `Detached Text`                | Текстовый DOM-узел внутри удаленного DOM-элемента.                                               | Обычно идет рядом с `Detached <div>`. Сам по себе не главная причина, а следствие удержания DOM-элемента.                                 |
+| `Detached CSSStyleDeclaration` | Внутренний объект стилей для удаленного DOM-элемента.                                            | Часто появляется вместе с detached DOM node. Это сопутствующий объект, а не основная причина leak.                                        |
+| `Detached DOMTokenList`        | Объект для `classList` удаленного DOM-элемента.                                                  | В нашем примере карточка имеет классы `card`, `leaky`, `removing`, поэтому DevTools показывает связанный `DOMTokenList`.                  |
+| `(concatenated string)`        | Строки, созданные через конкатенацию или template string.                                        | В примере большой `payload` создает много строк. Если они растут вместе с leak, значит данные тоже удерживаются в памяти.                 |
+| `(string)`                     | Обычные строки в heap.                                                                           | Может быть частью payload, логов, текста DOM или служебных данных. Смотреть стоит только если `Size Delta` стабильно растет.              |
+| `{id, index, marker, text}`    | Объекты payload из нашего примера.                                                               | Если таких объектов стало `+20001`, значит массивы данных остались в памяти вместе с `LeakyIntervalCard`.                                 |
+| `Array` / `(array)`            | Массивы JS. В примере это массив `payload`.                                                      | Само по себе не значит leak. Нужно смотреть `# Delta`, `Size Delta` и `Retainers`.                                                        |
+| `Object`                       | Обычные JS-объекты.                                                                              | Слишком общий тип. Полезен только вместе с `Retainers`, чтобы понять, кто держит эти объекты.                                             |
+| `Function`                     | JS-функции.                                                                                      | Может указывать на callback, listener или closure. В interval leak полезно смотреть рядом с `DOMTimer` и `V8Function`.                    |
+| `InternalNode`                 | Внутренний объект браузера / V8 / Blink.                                                         | Часто это шум DevTools или служебные структуры. Не считать leak без анализа `Retainers` и стабильного роста.                              |
+| `Detached InternalNode`        | Внутренний объект браузера, который помечен как detached.                                        | Может выглядеть подозрительно, но часто не относится к твоему коду. Важнее смотреть на размер, рост и `Retainers`.                        |
+
+| Что смотреть первым | Зачем                                                       |
+| ------------------- | ----------------------------------------------------------- |
+| `LeakyIntervalCard` | Показывает, что живы объекты твоего приложения              |
+| `DOMTimer`          | Показывает, что interval не очищен                          |
+| `Detached <div>`    | Показывает, что DOM удален со страницы, но остался в памяти |
+| `# Delta`           | Показывает прирост количества объектов                      |
+| `Size Delta`        | Показывает прирост памяти                                   |
+| `Retainers`         | Показывает, кто именно держит объект                        |
+
+![img.png](assets/retainers.png)
+
+| Что видно в Retainers                   | Что означает                                                 | Почему это важно                                                                                         |
+| --------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `this in system / Context / scope`      | В замыкании callback-функции сохранен `this`.                | Это главный признак: callback интервала держит instance `LeakyIntervalCard`.                             |
+| `context in ()`                         | Scope / closure callback-функции.                            | В этом scope лежат захваченные значения, включая `this`.                                                 |
+| `memory-leak-set-interval.html?...:125` | Строка кода, где создана или используется callback-функция.  | Это полезная привязка к исходному коду. Скорее всего, это место с `setInterval(() => this.tick(), ...)`. |
+| `V8Function`                            | JS-функция внутри движка V8.                                 | Это callback, который браузер должен периодически выполнять.                                             |
+| `ScheduledAction`                       | Запланированное действие таймера.                            | Показывает, что callback все еще запланирован и не очищен.                                               |
+| `DOMTimer`                              | Внутренний объект браузера для `setInterval` / `setTimeout`. | Главный маркер interval leak. Пока `DOMTimer` жив, callback тоже жив.                                    |
+| `Window / http://localhost:63342`       | Глобальный объект страницы.                                  | Через `Window` браузер держит активные таймеры страницы.                                                 |
+| `LeakyIntervalCard @...`                | Instance твоего класса.                                      | Он не очищается, потому что его держит callback интервала.                                               |
+| `node :: Detached <div ...>`            | DOM-элемент удален со страницы, но остался в памяти.         | Instance `LeakyIntervalCard` держит его через поле `this.node`.                                          |
+| `intervalId :: smi number`              | ID активного interval.                                       | По нему можно вызвать `clearInterval(intervalId)`.                                                       |
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое Garbage Collector?</summary><br>
+<table><tr><td>
+
+GC автоматически находит и освобождает память недостижимых объектов. Современные движки используют несколько поколений и
+инкрементальные фазы, чтобы уменьшить длинные паузы. Автоматическая очистка не защищает от логически ненужных, но
+достижимых данных.
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как GC понимает, что объект больше не нужен?</summary><br>
+<table><tr><td>
+
+Движок начинает с roots: global objects, stack frames и внутренних ссылок runtime. Затем отмечает все объекты, до
+которых можно дойти по ссылкам. Неотмеченные объекты считаются недостижимыми и могут быть освобождены.
+
+![img.png](assets/gc.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Что такое reachability?</summary><br>
+<table><tr><td>
+
+Reachability — возможность добраться до значения из корневых ссылок по цепочке объектов. Пока существует такая цепочка,
+GC считает объект нужным. Поэтому одна ссылка из глобального кеша может удерживать большое дерево данных.
+
+![img.png](assets/reachability.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему замыкания могут удерживать память?</summary><br>
+<table><tr><td>
+
+Функция сохраняет доступ к переменным внешней lexical scope даже после завершения внешнего вызова. Если callback живет
+долго, связанные данные тоже могут оставаться достижимыми. Следует не захватывать крупный контекст без необходимости и
+удалять долгоживущие callbacks.
+
+![img.png](assets/closure-gc.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как event listeners могут создавать memory leaks?</summary><br>
+<table><tr><td>
+
+Event target хранит ссылку на handler, а handler через замыкание может удерживать компонент и данные. Listener нужно
+удалять тем же function reference или регистрировать с `AbortSignal`.
+
+```js
+const handler = () => updateLargeViewModel();
+
+window.addEventListener('resize', handler);
+
+// При уничтожении владельца:
+window.removeEventListener('resize', handler);
+```
+
+![img.png](assets/event-listener-gc.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Почему detached DOM nodes могут быть проблемой?</summary><br>
+<table><tr><td>
+
+Узел удален из документа, но JavaScript-ссылка или listener продолжает удерживать его и дочернее дерево. Он не виден
+пользователю, но занимает память. DevTools показывает такие узлы как detached elements и помогает найти retaining path.
+
+![img.png](assets/detached-example.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Как WeakMap и WeakSet помогают с памятью?</summary><br>
+<table><tr><td>
+
+Они не удерживают объект-ключ от сборки мусора. Это удобно для metadata и кеша, lifetime которого должен совпадать с
+lifetime объекта. Их содержимое нельзя надежно перечислять, потому что GC работает недетерминированно.
+
+![img.png](assets/weak-map-vs-weak-set.png)
+
+</td></tr></table>
+
+</details>
+
+<details>
+<summary>Можно ли вручную вызвать GC в JavaScript?</summary><br>
+<table><tr><td>
+
+В обычном web-коде нет стандартного API для принудительного GC. Движок сам выбирает момент сборки на основе давления на
+память и внутренних эвристик. Правильное решение — удалить ненужные ссылки и ресурсы, а не пытаться управлять GC.
+
+</td></tr></table>
+
+</details>
 
 <details>
 <summary>Как устроена память в JavaScript (memory heap, memory stack)?</summary><br>

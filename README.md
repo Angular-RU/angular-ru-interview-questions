@@ -7,8 +7,8 @@ TypeScript и устройство Angular-приложений.
 
 ### 1. Основы frontend-разработки
 
-- [Основы Computer Science](src/pages/computer-science/index.md)
-- [Алгоритмы и структуры данных для frontend](src/pages/computer-science/index.md#алгоритмы-и-структуры-данных-для-frontend)
+- [Основы](src/pages/computer-science/index.md)
+- [Алгоритмы и структуры данных для frontend](src/pages/typescript/index.md#алгоритмы-и-структуры-данных-для-frontend)
 - [HTML](src/pages/html/index.md)
 - [CSS](src/pages/css/index.md)
 - [JavaScript](src/pages/javascript/index.md)
@@ -48,7 +48,7 @@ providers; поддерживаемые старые API помечены как
 #### 3.3 Продакшен в Angular
 
 - [Безопасность (Security)](src/pages/angular/index.md#security)
-- [Angular Auth, login/logout и router guards](src/pages/angular/auth/index.md)
+- [Angular Auth, login/logout и router guards](src/pages/angular/index.md#login-logout-и-guards)
 - [Производительность (Performance)](src/pages/angular/index.md#performance)
 - [SSR, hydration и SEO](src/pages/angular/index.md#ssr-hydration-и-seo)
 - [Angular PWA и Service Worker](src/pages/angular/index.md#angular-pwa-и-service-worker)
