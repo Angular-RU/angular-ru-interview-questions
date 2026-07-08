@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: Основы
-description: Вопросы и ответы
+description: Архитектура компьютера, операционные системы, процессы, сеть, терминал и базовые инженерные принципы
 category: Fundamentals
 kind: questions
 order: 10

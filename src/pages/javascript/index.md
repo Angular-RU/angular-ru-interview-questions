@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: JavaScript
-description: Вопросы и ответы
+description: Типы, функции, память, Promise, Event Loop, DOM, fetch, browser runtime и практические JavaScript-задачи
 category: Frontend
 kind: questions
 order: 70

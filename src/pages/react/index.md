@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: React
-description: Вопросы и ответы
+description: React core, hooks, state, forms, data fetching, routing, ecosystem, отличия от Angular и практические задачи
 category: Frontend
 kind: questions
 order: 130

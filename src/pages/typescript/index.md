@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: TypeScript
-description: Вопросы и ответы
+description: TypeScript, frontend fundamentals, принципы проектирования, алгоритмы, типизация и runtime-контракты
 category: Frontend
 kind: questions
 order: 80

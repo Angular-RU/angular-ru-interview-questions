@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: HTML
-description: Вопросы и ответы
+description: Семантика HTML, формы, accessibility, SEO, metadata, SVG, media и устройство браузерного документа
 category: Frontend
 kind: questions
 order: 30

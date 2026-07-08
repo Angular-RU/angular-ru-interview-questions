@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: CSS
-description: Вопросы и ответы
+description: CSS core, layout, Flexbox, Grid, responsive design, архитектура стилей, rendering и performance
 category: Frontend
 kind: questions
 order: 40

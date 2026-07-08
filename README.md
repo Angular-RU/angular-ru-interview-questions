@@ -5,7 +5,7 @@ TypeScript и устройство Angular-приложений.
 
 ## Содержание
 
-### 1. Основы
+### 1. Основы [<img src="public/logos/computer-science.svg" width="24" alt="Computer Science logo" />](public/logos/computer-science.svg)
 
 - [Основы](src/pages/computer-science/index.md)
 - [Архитектура компьютера](src/pages/computer-science/index.md#архитектура-компьютера)
@@ -14,20 +14,26 @@ TypeScript и устройство Angular-приложений.
 - [SOLID, DRY, KISS, YAGNI](src/pages/typescript/index.md#принципы-проектирования)
 - [Архитектурные компромиссы (trade-offs)](src/pages/career-teamwork/index.md#принятие-решений-список-вопросов)
 
-### 2. Git
+### 2. Linux [<img src="public/logos/linux.svg" width="24" alt="Linux logo" />](public/logos/linux.svg)
+
+- [Linux / Unix](src/pages/linux/index.md)
+- [Unix, Linux и shell basics](src/pages/linux/index.md#unix-linux-и-shell-basics)
+- [Filesystem и навигация](src/pages/linux/index.md#filesystem-и-навигация)
+
+### 3. Git [<img src="public/logos/git.svg" width="24" alt="Git logo" />](public/logos/git.svg)
 
 - [Git](src/pages/git/index.md)
 - [Version control и командный workflow](src/pages/git/index.md#version-control-и-командный-workflow)
 - [Git commands](src/pages/git/index.md#git-commands)
 
-### 3. HTML
+### 4. HTML [<img src="public/logos/html5.svg" width="24" alt="HTML logo" />](public/logos/html5.svg)
 
 - [HTML](src/pages/html/index.md)
 - [Forms](src/pages/html/index.md#forms)
 - [Accessibility](src/pages/html/index.md#accessibility)
 - [SEO и metadata](src/pages/html/index.md#seo-и-metadata)
 
-### 4. CSS
+### 5. CSS [<img src="public/logos/css.svg" width="24" alt="CSS logo" />](public/logos/css.svg)
 
 - [CSS](src/pages/css/index.md)
 - [CSS Layout](src/pages/css/index.md#css-layout)
@@ -36,7 +42,7 @@ TypeScript и устройство Angular-приложений.
 - [CSS Architecture](src/pages/css/index.md#css-architecture)
 - [CSS rendering pipeline](src/pages/css/index.md#css-rendering-pipeline)
 
-### 5. UI/UX
+### 6. UI/UX ✦
 
 - [UI/UX](src/pages/ui-ux/index.md)
 - [Основы UI и UX](src/pages/ui-ux/index.md#основы-ui-и-ux)
@@ -50,7 +56,7 @@ TypeScript и устройство Angular-приложений.
 - [Работа с дизайнером и продуктом](src/pages/ui-ux/index.md#работа-с-дизайнером-и-продуктом)
 - [Практические UI/UX-задачи для интервью](src/pages/ui-ux/index.md#практические-uiux-задачи-для-интервью)
 
-### 6. JavaScript
+### 7. JavaScript [<img src="public/logos/javascript.svg" width="24" alt="JavaScript logo" />](public/logos/javascript.svg)
 
 - [JavaScript](src/pages/javascript/index.md)
 - [Promise и асинхронность](src/pages/javascript/index.md#promise-и-асинхронность)
@@ -59,7 +65,7 @@ TypeScript и устройство Angular-приложений.
 - [Event Loop](src/pages/javascript/index.md#event-loop)
 - [JavaScript performance](src/pages/javascript/index.md#javascript-performance)
 
-### 7. Node.js
+### 8. Node.js [<img src="public/logos/nodejs.svg" width="24" alt="Node.js logo" />](public/logos/nodejs.svg)
 
 - [Node.js](src/pages/nodejs/index.md)
 - [npm и package scripts](src/pages/nodejs/index.md#npm-и-package-scripts)
@@ -67,13 +73,13 @@ TypeScript и устройство Angular-приложений.
 - [Project tooling и рабочее окружение](src/pages/nodejs/index.md#project-tooling-и-рабочее-окружение)
 - [Frontend tooling](src/pages/nodejs/index.md#frontend-tooling)
 
-### 8. Docker
+### 9. Docker [<img src="public/logos/docker.svg" width="24" alt="Docker logo" />](public/logos/docker.svg)
 
 - [Docker](src/pages/docker/index.md)
 - [Docker basics](src/pages/docker/index.md#docker-basics)
 - [Docker Compose](src/pages/docker/index.md#docker-compose)
 
-### 9. TypeScript
+### 10. TypeScript [<img src="public/logos/typescript.svg" width="24" alt="TypeScript logo" />](public/logos/typescript.svg)
 
 - [TypeScript](src/pages/typescript/index.md)
 - [Frontend fundamentals](src/pages/typescript/index.md#frontend-fundamentals)
@@ -81,12 +87,12 @@ TypeScript и устройство Angular-приложений.
 - [Продвинутый TypeScript](src/pages/typescript/index.md#продвинутый-typescript)
 - [TypeScript и runtime-контракты](src/pages/typescript/index.md#typescript-и-runtime-контракты)
 
-### 10. Angular
+### 11. Angular [<img src="public/logos/angular.svg" width="24" alt="Angular logo" />](public/logos/angular.svg)
 
 Текущие Angular-ответы ориентированы на версии 19–22. Для нового кода используются standalone APIs, signals и functional
 providers; поддерживаемые старые API помечены как legacy.
 
-#### 10.1 Основы Angular
+#### 11.1 Основы Angular
 
 - [Angular Core](src/pages/angular/index.md#angular-core)
 - [Обзор Angular](src/pages/angular/index.md#основные-концепции)
@@ -97,7 +103,7 @@ providers; поддерживаемые старые API помечены как
 - [Angular Change Detection](src/pages/angular/index.md#angular-change-detection)
 - [Angular Signals](src/pages/angular/index.md#angular-signals)
 
-#### 10.2 Поток данных в Angular
+#### 11.2 Поток данных в Angular
 
 - [RxJS](src/pages/angular/index.md#rxjs)
 - [Angular Forms](src/pages/angular/index.md#angular-forms)
@@ -105,7 +111,7 @@ providers; поддерживаемые старые API помечены как
 - [Angular Router](src/pages/angular/index.md#angular-router)
 - [Управление состоянием (State Management) в Angular](src/pages/angular/index.md#управление-состоянием)
 
-#### 10.3 Продакшен в Angular
+#### 11.3 Продакшен в Angular
 
 - [Безопасность (Security)](src/pages/angular/index.md#security)
 - [Angular Auth, login/logout и router guards](src/pages/angular/index.md#login-logout-и-guards)
@@ -114,18 +120,18 @@ providers; поддерживаемые старые API помечены как
 - [Angular PWA и Service Worker](src/pages/angular/index.md#angular-pwa-и-service-worker)
 - [Testing](src/pages/angular/index.md#testing)
 
-#### 10.4 Архитектура и экосистема Angular
+#### 11.4 Архитектура и экосистема Angular
 
 - [Angular libraries и design systems](src/pages/angular/index.md#angular-libraries-и-design-systems)
 - [Dynamic components](src/pages/angular/index.md#компоненты-директивы-сервисы-и-pipes)
 - [Micro Frontends](src/pages/angular/index.md#micro-frontends)
 - [Tooling](src/pages/angular/index.md#tooling)
 
-### 11. React
+### 12. React [<img src="public/logos/react.svg" width="24" alt="React logo" />](public/logos/react.svg)
 
 - [React](src/pages/react/index.md)
 
-#### 11.1 Основы React
+#### 12.1 Основы React
 
 - [Зачем Angular-разработчику знать React](src/pages/react/index.md#зачем-angular-разработчику-знать-react)
 - [Короткая карта Angular -> React](src/pages/react/index.md#короткая-карта-angular---react)
@@ -133,19 +139,19 @@ providers; поддерживаемые старые API помечены как
 - [State и rendering](src/pages/react/index.md#state-и-rendering)
 - [Hooks](src/pages/react/index.md#hooks)
 
-#### 11.2 Поток данных в React
+#### 12.2 Поток данных в React
 
 - [Forms](src/pages/react/index.md#forms)
 - [Data fetching](src/pages/react/index.md#data-fetching)
 - [Routing](src/pages/react/index.md#routing)
 - [Context и управление состоянием (State Management)](src/pages/react/index.md#context-и-state-management)
 
-#### 11.3 React vs Angular
+#### 12.3 React vs Angular
 
 - [Отличия React от Angular](src/pages/react/index.md#отличия-react-от-angular)
 - [Что важно не перепутать на интервью](src/pages/react/index.md#что-важно-не-перепутать-на-интервью)
 
-#### 11.4 Экосистема React
+#### 12.4 Экосистема React
 
 - [Разные React-стеки](src/pages/react/index.md#разные-react-стеки)
 - [Старт проекта](src/pages/react/index.md#старт-проекта)
@@ -163,14 +169,14 @@ providers; поддерживаемые старые API помечены как
 - [Mobile и desktop](src/pages/react/index.md#mobile-и-desktop)
 - [Выбор стека на интервью](src/pages/react/index.md#выбор-стека-на-интервью)
 
-#### 11.5 Практика и интервью по React
+#### 12.5 Практика и интервью по React
 
 - [Архитектурные вопросы](src/pages/react/index.md#архитектурные-вопросы)
 - [Практические задачки](src/pages/react/index.md#практические-задачки)
 - [Мини-проект Travel Planner](src/pages/react/index.md#мини-проект-travel-planner)
 - [Рекомендуемый порядок изучения](src/pages/react/index.md#рекомендуемый-порядок-изучения)
 
-### 12. QA
+### 13. QA [<img src="public/logos/playwright.svg" width="24" alt="Playwright logo" />](public/logos/playwright.svg)
 
 - [QA](src/pages/qa/index.md)
 - [Quality mindset](src/pages/qa/index.md#quality-mindset)
@@ -180,7 +186,7 @@ providers; поддерживаемые старые API помечены как
 - [CI/CD and quality gates](src/pages/qa/index.md#cicd-and-quality-gates)
 - [Coverage and risk](src/pages/qa/index.md#coverage-and-risk)
 
-### 13. State Management
+### 14. State Management [<img src="public/logos/redux.svg" width="24" alt="State Management logo" />](public/logos/redux.svg)
 
 - [Общее управление состоянием](src/pages/state-management/index.md)
 - [Client state vs server state](src/pages/state-management/index.md#типы-состояния)
@@ -188,7 +194,7 @@ providers; поддерживаемые старые API помечены как
 - [MobX](src/pages/state-management/index.md#mobx)
 - [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
 
-### 14. AI
+### 15. AI [<img src="public/logos/claude-icon.svg" width="24" alt="AI logo" />](public/logos/claude-icon.svg)
 
 - [AI](src/pages/ai/index.md)
 - [AI-assisted development](src/pages/ai/index.md#ai-assisted-development)
@@ -202,7 +208,7 @@ providers; поддерживаемые старые API помечены как
 - [Продукт и командные процессы](src/pages/ai/index.md#продукт-и-командные-процессы)
 - [Обучение и карьера](src/pages/ai/index.md#обучение-и-карьера)
 
-### 15. DevOps
+### 16. DevOps [<img src="public/logos/gitlab.svg" width="24" alt="DevOps logo" />](public/logos/gitlab.svg)
 
 - [DevOps](src/pages/infrastructure/index.md)
 - [CI/CD overview](src/pages/infrastructure/index.md#cicd-overview)
@@ -211,7 +217,7 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 16. System Design
+### 17. System Design
 
 - [System Design](src/pages/system-design/index.md)
 - [Frontend system design](src/pages/system-design/index.md#frontend-system-design)
@@ -219,7 +225,7 @@ providers; поддерживаемые старые API помечены как
 - [Infinite scroll](src/pages/system-design/index.md#frontend-system-design)
 - [CSR, SSR, SSG или ISR](src/pages/system-design/index.md#frontend-system-design)
 
-### 17. Карьера в команде
+### 18. Карьера в команде
 
 - [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)

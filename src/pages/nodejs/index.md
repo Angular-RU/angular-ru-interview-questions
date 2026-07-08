@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: Node.js
-description: Вопросы и ответы
+description: Node.js basics, npm scripts, frontend tooling, HTTP server, networking, observability и рабочее окружение
 category: Backend
 kind: questions
 order: 75

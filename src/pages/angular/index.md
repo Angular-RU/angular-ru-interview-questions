@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Layout.astro
 title: Angular
-description: Вопросы и ответы
+description: Angular core, templates, DI, change detection, signals, RxJS, forms, router, SSR, security и testing
 category: Frontend
 kind: questions
 order: 120
