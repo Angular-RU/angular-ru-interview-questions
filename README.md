@@ -8,6 +8,8 @@ TypeScript и устройство Angular-приложений.
 ### 1. Основы
 
 - [Основы](src/pages/computer-science/index.md)
+- [Архитектура компьютера](src/pages/computer-science/index.md#архитектура-компьютера)
+- [ОС, процессы, сеть и терминал](src/pages/computer-science/index.md#ос-процессы-сеть-и-терминал)
 - [Основы программирования и проектирования](src/pages/typescript/index.md#frontend-fundamentals)
 - [SOLID, DRY, KISS, YAGNI](src/pages/typescript/index.md#принципы-проектирования)
 - [Архитектурные компромиссы (trade-offs)](src/pages/career-teamwork/index.md#принятие-решений-список-вопросов)
