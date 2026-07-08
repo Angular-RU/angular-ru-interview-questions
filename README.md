@@ -36,7 +36,21 @@ TypeScript и устройство Angular-приложений.
 - [CSS Architecture](src/pages/css/index.md#css-architecture)
 - [CSS rendering pipeline](src/pages/css/index.md#css-rendering-pipeline)
 
-### 5. JavaScript
+### 5. UI/UX
+
+- [UI/UX](src/pages/ui-ux/index.md)
+- [Основы UI и UX](src/pages/ui-ux/index.md#основы-ui-и-ux)
+- [Состояния интерфейса](src/pages/ui-ux/index.md#состояния-интерфейса)
+- [Формы и ввод данных](src/pages/ui-ux/index.md#формы-и-ввод-данных)
+- [Accessibility как часть UX](src/pages/ui-ux/index.md#accessibility-как-часть-ux)
+- [Microcopy и коммуникация интерфейса](src/pages/ui-ux/index.md#microcopy-и-коммуникация-интерфейса)
+- [UX-метрики и проверка решений](src/pages/ui-ux/index.md#ux-метрики-и-проверка-решений)
+- [Когнитивные искажения в UI/UX](src/pages/ui-ux/index.md#когнитивные-искажения-в-uiux)
+- [Этичный UX и dark patterns](src/pages/ui-ux/index.md#этичный-ux-и-dark-patterns)
+- [Работа с дизайнером и продуктом](src/pages/ui-ux/index.md#работа-с-дизайнером-и-продуктом)
+- [Практические UI/UX-задачи для интервью](src/pages/ui-ux/index.md#практические-uiux-задачи-для-интервью)
+
+### 6. JavaScript
 
 - [JavaScript](src/pages/javascript/index.md)
 - [Promise и асинхронность](src/pages/javascript/index.md#promise-и-асинхронность)
@@ -45,7 +59,7 @@ TypeScript и устройство Angular-приложений.
 - [Event Loop](src/pages/javascript/index.md#event-loop)
 - [JavaScript performance](src/pages/javascript/index.md#javascript-performance)
 
-### 6. Node.js
+### 7. Node.js
 
 - [Node.js](src/pages/nodejs/index.md)
 - [npm и package scripts](src/pages/nodejs/index.md#npm-и-package-scripts)
@@ -53,13 +67,13 @@ TypeScript и устройство Angular-приложений.
 - [Project tooling и рабочее окружение](src/pages/nodejs/index.md#project-tooling-и-рабочее-окружение)
 - [Frontend tooling](src/pages/nodejs/index.md#frontend-tooling)
 
-### 7. Docker
+### 8. Docker
 
 - [Docker](src/pages/docker/index.md)
 - [Docker basics](src/pages/docker/index.md#docker-basics)
 - [Docker Compose](src/pages/docker/index.md#docker-compose)
 
-### 8. TypeScript
+### 9. TypeScript
 
 - [TypeScript](src/pages/typescript/index.md)
 - [Frontend fundamentals](src/pages/typescript/index.md#frontend-fundamentals)
@@ -67,12 +81,12 @@ TypeScript и устройство Angular-приложений.
 - [Продвинутый TypeScript](src/pages/typescript/index.md#продвинутый-typescript)
 - [TypeScript и runtime-контракты](src/pages/typescript/index.md#typescript-и-runtime-контракты)
 
-### 9. Angular
+### 10. Angular
 
 Текущие Angular-ответы ориентированы на версии 19–22. Для нового кода используются standalone APIs, signals и functional
 providers; поддерживаемые старые API помечены как legacy.
 
-#### 9.1 Основы Angular
+#### 10.1 Основы Angular
 
 - [Angular Core](src/pages/angular/index.md#angular-core)
 - [Обзор Angular](src/pages/angular/index.md#основные-концепции)
@@ -83,7 +97,7 @@ providers; поддерживаемые старые API помечены как
 - [Angular Change Detection](src/pages/angular/index.md#angular-change-detection)
 - [Angular Signals](src/pages/angular/index.md#angular-signals)
 
-#### 9.2 Поток данных в Angular
+#### 10.2 Поток данных в Angular
 
 - [RxJS](src/pages/angular/index.md#rxjs)
 - [Angular Forms](src/pages/angular/index.md#angular-forms)
@@ -91,7 +105,7 @@ providers; поддерживаемые старые API помечены как
 - [Angular Router](src/pages/angular/index.md#angular-router)
 - [Управление состоянием (State Management) в Angular](src/pages/angular/index.md#управление-состоянием)
 
-#### 9.3 Продакшен в Angular
+#### 10.3 Продакшен в Angular
 
 - [Безопасность (Security)](src/pages/angular/index.md#security)
 - [Angular Auth, login/logout и router guards](src/pages/angular/index.md#login-logout-и-guards)
@@ -100,18 +114,18 @@ providers; поддерживаемые старые API помечены как
 - [Angular PWA и Service Worker](src/pages/angular/index.md#angular-pwa-и-service-worker)
 - [Testing](src/pages/angular/index.md#testing)
 
-#### 9.4 Архитектура и экосистема Angular
+#### 10.4 Архитектура и экосистема Angular
 
 - [Angular libraries и design systems](src/pages/angular/index.md#angular-libraries-и-design-systems)
 - [Dynamic components](src/pages/angular/index.md#компоненты-директивы-сервисы-и-pipes)
 - [Micro Frontends](src/pages/angular/index.md#micro-frontends)
 - [Tooling](src/pages/angular/index.md#tooling)
 
-### 10. React
+### 11. React
 
 - [React](src/pages/react/index.md)
 
-#### 10.1 Основы React
+#### 11.1 Основы React
 
 - [Зачем Angular-разработчику знать React](src/pages/react/index.md#зачем-angular-разработчику-знать-react)
 - [Короткая карта Angular -> React](src/pages/react/index.md#короткая-карта-angular---react)
@@ -119,19 +133,19 @@ providers; поддерживаемые старые API помечены как
 - [State и rendering](src/pages/react/index.md#state-и-rendering)
 - [Hooks](src/pages/react/index.md#hooks)
 
-#### 10.2 Поток данных в React
+#### 11.2 Поток данных в React
 
 - [Forms](src/pages/react/index.md#forms)
 - [Data fetching](src/pages/react/index.md#data-fetching)
 - [Routing](src/pages/react/index.md#routing)
 - [Context и управление состоянием (State Management)](src/pages/react/index.md#context-и-state-management)
 
-#### 10.3 React vs Angular
+#### 11.3 React vs Angular
 
 - [Отличия React от Angular](src/pages/react/index.md#отличия-react-от-angular)
 - [Что важно не перепутать на интервью](src/pages/react/index.md#что-важно-не-перепутать-на-интервью)
 
-#### 10.4 Экосистема React
+#### 11.4 Экосистема React
 
 - [Разные React-стеки](src/pages/react/index.md#разные-react-стеки)
 - [Старт проекта](src/pages/react/index.md#старт-проекта)
@@ -149,14 +163,24 @@ providers; поддерживаемые старые API помечены как
 - [Mobile и desktop](src/pages/react/index.md#mobile-и-desktop)
 - [Выбор стека на интервью](src/pages/react/index.md#выбор-стека-на-интервью)
 
-#### 10.5 Практика и интервью по React
+#### 11.5 Практика и интервью по React
 
 - [Архитектурные вопросы](src/pages/react/index.md#архитектурные-вопросы)
 - [Практические задачки](src/pages/react/index.md#практические-задачки)
 - [Мини-проект Travel Planner](src/pages/react/index.md#мини-проект-travel-planner)
 - [Рекомендуемый порядок изучения](src/pages/react/index.md#рекомендуемый-порядок-изучения)
 
-### 11. State Management
+### 12. QA
+
+- [QA](src/pages/qa/index.md)
+- [Quality mindset](src/pages/qa/index.md#quality-mindset)
+- [Frontend QA](src/pages/qa/index.md#frontend-qa)
+- [Node.js backend QA](src/pages/qa/index.md#nodejs-backend-qa)
+- [Allure, reports and metrics](src/pages/qa/index.md#allure-reports-and-metrics)
+- [CI/CD and quality gates](src/pages/qa/index.md#cicd-and-quality-gates)
+- [Coverage and risk](src/pages/qa/index.md#coverage-and-risk)
+
+### 13. State Management
 
 - [Общее управление состоянием](src/pages/state-management/index.md)
 - [Client state vs server state](src/pages/state-management/index.md#типы-состояния)
@@ -164,7 +188,21 @@ providers; поддерживаемые старые API помечены как
 - [MobX](src/pages/state-management/index.md#mobx)
 - [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
 
-### 12. DevOps
+### 14. AI
+
+- [AI](src/pages/ai/index.md)
+- [AI-assisted development](src/pages/ai/index.md#ai-assisted-development)
+- [Промптинг и декомпозиция](src/pages/ai/index.md#промптинг-и-декомпозиция)
+- [Тестирование с AI](src/pages/ai/index.md#тестирование-с-ai)
+- [Безопасность AI-разработки](src/pages/ai/index.md#безопасность-ai-разработки)
+- [AI-агенты](src/pages/ai/index.md#ai-агенты)
+- [MCP и Skills](src/pages/ai/index.md#mcp-и-skills)
+- [Модели и провайдеры](src/pages/ai/index.md#модели-и-провайдеры)
+- [AI-инструменты разработки](src/pages/ai/index.md#ai-инструменты-разработки)
+- [Продукт и командные процессы](src/pages/ai/index.md#продукт-и-командные-процессы)
+- [Обучение и карьера](src/pages/ai/index.md#обучение-и-карьера)
+
+### 15. DevOps
 
 - [DevOps](src/pages/infrastructure/index.md)
 - [CI/CD overview](src/pages/infrastructure/index.md#cicd-overview)
@@ -173,7 +211,7 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 13. System Design
+### 16. System Design
 
 - [System Design](src/pages/system-design/index.md)
 - [Frontend system design](src/pages/system-design/index.md#frontend-system-design)
@@ -181,7 +219,7 @@ providers; поддерживаемые старые API помечены как
 - [Infinite scroll](src/pages/system-design/index.md#frontend-system-design)
 - [CSR, SSR, SSG или ISR](src/pages/system-design/index.md#frontend-system-design)
 
-### 14. Карьера в команде
+### 17. Карьера в команде
 
 - [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)
