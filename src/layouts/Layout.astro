@@ -1,10 +1,12 @@
 ---
+import SidebarNavigation from '../components/SidebarNavigation.astro';
 import '../styles/global.css';
 
 const {frontmatter} = Astro.props;
 
 const title = frontmatter?.title ?? 'Angular RU Interview Questions';
 const description = frontmatter?.description ?? 'Вопросы и практические задания для подготовки frontend-разработчиков';
+const headings = Astro.props.headings ?? [];
 ---
 
 <!doctype html>
@@ -25,6 +27,11 @@ const description = frontmatter?.description ?? 'Вопросы и практи�
     <body>
         <main class="page">
             <article class="content">
+                <SidebarNavigation
+                    headings={headings}
+                    title={title}
+                />
+
                 <slot />
             </article>
         </main>

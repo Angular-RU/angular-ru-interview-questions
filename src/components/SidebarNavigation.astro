@@ -1,0 +1,195 @@
+---
+interface MarkdownHeading {
+    readonly depth: number;
+    readonly slug: string;
+    readonly text: string;
+}
+
+interface Props {
+    readonly headings?: ReadonlyArray<MarkdownHeading>;
+    readonly title: string;
+}
+
+const {headings = [], title} = Astro.props;
+
+const navigationHeadings = headings.filter(({depth}) => depth >= 2 && depth <= 3);
+const firstNavigationHeading = navigationHeadings.at(0);
+const visibleNavigationHeadings = navigationHeadings.filter(({slug}) => slug !== firstNavigationHeading?.slug);
+---
+
+{
+    visibleNavigationHeadings.length > 0 && (
+        <aside
+            class="sidebar-navigation"
+            aria-label={`Навигация по разделам: ${title}`}
+        >
+            <nav class="sidebar-navigation__panel">
+                <button
+                    class="sidebar-navigation__toggle"
+                    type="button"
+                    aria-controls="sidebar-navigation-content"
+                    aria-expanded="false"
+                    data-navigation-toggle
+                >
+                    <span
+                        class="sidebar-navigation__toggle-icon"
+                        aria-hidden="true"
+                    >
+                        <span />
+                        <span />
+                        <span />
+                    </span>
+                    <span>На этой странице</span>
+                </button>
+
+                <div
+                    class="sidebar-navigation__rail"
+                    aria-hidden="true"
+                >
+                    {visibleNavigationHeadings.map(({slug}) => (
+                        <span
+                            class="sidebar-navigation__marker"
+                            data-heading-marker={slug}
+                        />
+                    ))}
+                </div>
+
+                <div
+                    class="sidebar-navigation__content"
+                    id="sidebar-navigation-content"
+                >
+                    <ul class="sidebar-navigation__list">
+                        {visibleNavigationHeadings.map(({depth, slug, text}) => (
+                            <li>
+                                <a
+                                    class={`sidebar-navigation__link sidebar-navigation__link--depth-${depth}`}
+                                    href={`#${slug}`}
+                                    data-heading-link={slug}
+                                >
+                                    {text}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+    )
+}
+
+<script>
+    const navigation = document.querySelector('.sidebar-navigation');
+
+    if (navigation) {
+        const panel = navigation.querySelector('.sidebar-navigation__panel');
+        const toggle = navigation.querySelector('[data-navigation-toggle]');
+        const links = Array.from(navigation.querySelectorAll('[data-heading-link]'));
+        const markers = Array.from(navigation.querySelectorAll('[data-heading-marker]'));
+        let activeHeadingHoldUntil = 0;
+        let isScrollUpdateScheduled = false;
+        const headingEntries = links
+            .map((link) => {
+                const slug = link.getAttribute('data-heading-link');
+
+                return slug ? {slug, heading: document.getElementById(slug)} : undefined;
+            })
+            .filter((entry) => entry?.heading);
+
+        function setActiveHeading(slug) {
+            for (const link of links) {
+                link.toggleAttribute('aria-current', link.getAttribute('data-heading-link') === slug);
+            }
+
+            for (const marker of markers) {
+                marker.toggleAttribute('data-active', marker.getAttribute('data-heading-marker') === slug);
+            }
+        }
+
+        const getCurrentHeadingSlug = () => {
+            const activationOffset = 48;
+            let activeSlug = headingEntries[0]?.slug;
+
+            if (window.scrollY <= 4) {
+                return activeSlug;
+            }
+
+            for (const {slug, heading} of headingEntries) {
+                if (heading.getBoundingClientRect().top <= activationOffset) {
+                    activeSlug = slug;
+                } else {
+                    break;
+                }
+            }
+
+            return activeSlug;
+        };
+
+        const updateActiveHeadingFromScroll = () => {
+            isScrollUpdateScheduled = false;
+
+            if (Date.now() < activeHeadingHoldUntil) {
+                return;
+            }
+
+            const slug = getCurrentHeadingSlug();
+
+            if (slug) {
+                setActiveHeading(slug);
+            }
+        };
+
+        const scheduleActiveHeadingUpdate = () => {
+            if (isScrollUpdateScheduled) {
+                return;
+            }
+
+            isScrollUpdateScheduled = true;
+            requestAnimationFrame(updateActiveHeadingFromScroll);
+        };
+
+        const setNavigationOpen = (isOpen) => {
+            panel?.toggleAttribute('data-open', isOpen);
+            toggle?.setAttribute('aria-expanded', String(isOpen));
+        };
+
+        toggle?.addEventListener('click', () => {
+            setNavigationOpen(!panel?.hasAttribute('data-open'));
+        });
+
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+
+            if (target instanceof Node && !navigation.contains(target)) {
+                setNavigationOpen(false);
+            }
+        });
+
+        window.addEventListener('scroll', scheduleActiveHeadingUpdate, {passive: true});
+        window.addEventListener('resize', scheduleActiveHeadingUpdate);
+        window.addEventListener('hashchange', () => {
+            activeHeadingHoldUntil = Date.now() + 900;
+
+            window.setTimeout(scheduleActiveHeadingUpdate, 950);
+        });
+
+        const firstHeading = headingEntries[0]?.slug;
+
+        if (firstHeading) {
+            setActiveHeading(firstHeading);
+            requestAnimationFrame(updateActiveHeadingFromScroll);
+        }
+
+        for (const link of links) {
+            link.addEventListener('click', () => {
+                const slug = link.getAttribute('data-heading-link');
+
+                if (slug) {
+                    activeHeadingHoldUntil = Date.now() + 900;
+                    setActiveHeading(slug);
+                    window.setTimeout(scheduleActiveHeadingUpdate, 950);
+                    setNavigationOpen(false);
+                }
+            });
+        }
+    }
+</script>
