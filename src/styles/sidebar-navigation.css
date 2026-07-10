@@ -65,7 +65,7 @@
     width: max-content;
     max-width: min(400px, calc(100vw - 40px));
     max-height: calc(100lvh - 48px);
-    padding: 18px 16px 18px 8px;
+    padding: 18px 16px;
     overflow-y: auto;
     border-radius: 14px;
     background: #fff;

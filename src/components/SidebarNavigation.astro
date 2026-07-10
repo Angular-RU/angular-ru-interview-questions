@@ -16,7 +16,7 @@ const navigationHeadings = headings.filter(({depth}) => depth === 2 || depth ===
 ---
 
 {
-    navigationHeadings.length > 0 && (
+    navigationHeadings.length > 1 && (
         <aside
             class="sidebar-navigation"
             aria-label={`Навигация по разделам: ${title}`}
@@ -77,7 +77,9 @@ const navigationHeadings = headings.filter(({depth}) => depth === 2 || depth ===
 }
 
 <script>
-    const initNavigation = (navigation: HTMLElement): void => {
+    let navigationController: AbortController | undefined;
+
+    const initNavigation = (navigation: HTMLElement, signal: AbortSignal): void => {
         const panel = navigation.querySelector<HTMLElement>('.sidebar-navigation__panel');
         const toggle = navigation.querySelector<HTMLButtonElement>('[data-navigation-toggle]');
 
@@ -148,44 +150,65 @@ const navigationHeadings = headings.filter(({depth}) => depth === 2 || depth ===
             }
         };
 
-        toggle.addEventListener('click', () => {
-            setOpen(!panel.hasAttribute('data-open'));
-        });
+        toggle.addEventListener(
+            'click',
+            () => {
+                setOpen(!panel.hasAttribute('data-open'));
+            },
+            {signal},
+        );
 
-        navigation.addEventListener('click', (event) => {
-            const target = event.target;
+        navigation.addEventListener(
+            'click',
+            (event) => {
+                const target = event.target;
 
-            if (!(target instanceof Element)) {
-                return;
-            }
+                if (!(target instanceof Element)) {
+                    return;
+                }
 
-            const link = target.closest<HTMLAnchorElement>('[data-heading-link]');
+                const link = target.closest<HTMLAnchorElement>('[data-heading-link]');
 
-            if (!link) {
-                return;
-            }
+                if (!link) {
+                    return;
+                }
 
-            setActive(link.dataset.headingLink);
-            setOpen(false);
-        });
-
-        document.addEventListener('click', (event) => {
-            const target = event.target;
-
-            if (target instanceof Node && !navigation.contains(target)) {
+                setActive(link.dataset.headingLink);
                 setOpen(false);
-            }
-        });
+            },
+            {signal},
+        );
+
+        document.addEventListener(
+            'click',
+            (event) => {
+                const target = event.target;
+
+                if (target instanceof Node && !navigation.contains(target)) {
+                    setOpen(false);
+                }
+            },
+            {signal},
+        );
 
         window.addEventListener('scroll', scheduleUpdate, {
             passive: true,
+            signal,
         });
 
-        window.addEventListener('resize', scheduleUpdate);
-        window.addEventListener('hashchange', scheduleUpdate);
+        window.addEventListener('resize', scheduleUpdate, {signal});
+        window.addEventListener('hashchange', scheduleUpdate, {signal});
+        signal.addEventListener('abort', () => cancelAnimationFrame(animationFrame), {once: true});
 
         scheduleUpdate();
     };
 
-    document.querySelectorAll<HTMLElement>('.sidebar-navigation').forEach(initNavigation);
+    document.addEventListener('astro:page-load', () => {
+        navigationController?.abort();
+        navigationController = new AbortController();
+
+        for (const navigation of document.querySelectorAll<HTMLElement>('.sidebar-navigation')) {
+            initNavigation(navigation, navigationController.signal);
+        }
+    });
 </script>
