@@ -2,6 +2,49 @@
 .content h2,
 .content h3,
 .content h4,
+.content h5,
+.content h6 {
+    scroll-margin-top: 40px;
+}
+
+@media (max-width: 1275px) {
+    .content h1,
+    .content h2,
+    .content h3,
+    .content h4,
+    .content h5,
+    .content h6 {
+        scroll-margin-top: 80px;
+    }
+}
+
+.content :is(h4, h5, h6):target {
+    background: #fff3a3;
+}
+
+.content h1:target,
+.content h2:target,
+.content h3:target,
+.content h4:target,
+.content h5:target,
+.content h6:target {
+    animation: heading-highlight 2s ease-out;
+}
+
+@keyframes heading-highlight {
+    from {
+        background-color: #fff3a3;
+    }
+
+    to {
+        background-color: transparent;
+    }
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
 .content summary,
 .content strong {
     color: var(--text);

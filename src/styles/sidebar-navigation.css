@@ -1,20 +1,23 @@
 .sidebar-navigation {
+    --navigation-width: 36px;
+    --content-transform: translate(8px, -50%);
+    --content-open-transform: translate(0, -50%);
+    --content-transition: opacity 140ms ease, transform 180ms ease, visibility 0s linear 180ms;
+
     position: fixed;
     inset-block-start: 50%;
     inset-inline-end: 20px;
     z-index: 20;
-    display: flex;
-    width: 36px;
+    width: var(--navigation-width);
     height: calc(100lvh - 80px);
-    transform: translateY(-50%);
     pointer-events: none;
+    transform: translateY(-50%);
 }
 
 .sidebar-navigation__panel {
     position: relative;
-    width: 36px;
+    width: 100%;
     height: 100%;
-    overflow: visible;
     pointer-events: auto;
 }
 
@@ -26,14 +29,13 @@
     position: relative;
     z-index: 1;
     display: flex;
-    width: 36px;
+    width: 100%;
     height: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 6px;
     overflow: hidden;
-    border-radius: 0;
     transition: opacity 160ms ease;
 }
 
@@ -46,7 +48,7 @@
     display: block;
     width: 30px;
     height: 4px;
-    flex: 0 0 auto;
+    flex: none;
     border-radius: 999px;
     background: #aab2bd;
 }
@@ -63,32 +65,32 @@
     width: max-content;
     max-width: min(400px, calc(100vw - 40px));
     max-height: calc(100lvh - 48px);
-    padding: 18px 16px;
+    padding: 18px 16px 18px 8px;
     overflow-y: auto;
     border-radius: 14px;
-    background: #ffffff;
+    background: #fff;
     box-shadow:
         0 24px 70px rgb(15 23 42 / 18%),
         0 0 0 1px var(--border);
     opacity: 0;
-    pointer-events: none;
-    transform: translate(8px, -50%);
-    transition:
-        opacity 140ms ease,
-        transform 180ms ease,
-        visibility 140ms ease;
     visibility: hidden;
+    pointer-events: none;
+    transform: var(--content-transform);
+    transition: var(--content-transition);
 }
 
 .sidebar-navigation__panel:hover .sidebar-navigation__content,
-.sidebar-navigation__panel:focus-within .sidebar-navigation__content {
+.sidebar-navigation__panel:focus-within .sidebar-navigation__content,
+.sidebar-navigation__panel[data-open] .sidebar-navigation__content {
     opacity: 1;
-    pointer-events: auto;
-    transform: translate(0, -50%);
     visibility: visible;
+    pointer-events: auto;
+    transform: var(--content-open-transform);
+    transition-delay: 0s;
 }
 
-.sidebar-navigation__list {
+.sidebar-navigation__list,
+.content .sidebar-navigation__list {
     display: flex;
     margin: 0;
     padding: 0;
@@ -97,11 +99,8 @@
     list-style: none;
 }
 
-.content .sidebar-navigation__list {
-    list-style: none;
-}
-
-.content .sidebar-navigation__list li {
+.sidebar-navigation__list > li,
+.content .sidebar-navigation__list > li {
     display: block;
     margin: 0;
     padding: 0;
@@ -119,20 +118,20 @@
     line-height: 1.35;
     text-decoration: none;
     transition:
-        background-color 140ms ease,
-        color 140ms ease;
+        color 140ms ease,
+        background-color 140ms ease;
 }
 
 .sidebar-navigation__link:hover,
 .sidebar-navigation__link:focus-visible {
-    background: #eef2f7;
     color: var(--accent-strong);
-    outline: 0;
+    background: #eef2f7;
+    outline: none;
 }
 
 .sidebar-navigation__link[aria-current] {
-    background: #e6e9ee;
     color: var(--text);
+    background: #e6e9ee;
 }
 
 .sidebar-navigation__link[aria-current]::before {
@@ -154,35 +153,28 @@
     margin-inline-start: 18px;
 }
 
-.sidebar-navigation__link--depth-4 {
-    margin-inline-start: 36px;
-    color: var(--body);
-    font-size: 0.88rem;
-    font-weight: 500;
-}
-
 @media (max-width: 1275px) {
     .sidebar-navigation {
+        --content-transform: none;
+        --content-open-transform: none;
+        --content-transition: none;
+
         position: sticky;
-        top: 0;
+        inset-block-start: 0;
         inset-inline: 0;
-        display: block;
+        z-index: 30;
         width: 100%;
         height: auto;
-        transform: none;
-        pointer-events: auto;
-        width: 100%;
-        margin-block-end: 0;
-        z-index: 30;
+        margin-block: -20px 30px;
         align-self: flex-start;
+        pointer-events: auto;
+        transform: none;
     }
 
     .sidebar-navigation__panel {
-        width: 100%;
         height: auto;
         border-block-end: 1px solid var(--border);
         background: var(--surface);
-        box-shadow: none;
     }
 
     .sidebar-navigation__toggle {
@@ -191,14 +183,13 @@
         min-height: 64px;
         align-items: center;
         gap: 16px;
-        padding: 0 24px;
         border: 0;
         color: var(--text);
         background: transparent;
         font: inherit;
         font-size: 1.15rem;
         font-weight: 600;
-        text-align: left;
+        text-align: start;
         cursor: pointer;
     }
 
@@ -208,7 +199,7 @@
     }
 
     .sidebar-navigation__toggle-icon {
-        display: inline-flex;
+        display: flex;
         width: 28px;
         flex-direction: column;
         gap: 5px;
@@ -227,31 +218,16 @@
     }
 
     .sidebar-navigation__content {
-        position: absolute;
         inset-block-start: 100%;
         inset-inline: 0;
+        display: none;
         width: auto;
         max-width: none;
         max-height: calc(100lvh - 64px);
-        padding: 16px 24px 20px;
         border-radius: 0;
         border-block-end: 1px solid var(--border);
         background: var(--surface);
         box-shadow: 0 16px 28px rgb(15 23 42 / 10%);
-        display: none;
-        opacity: 1;
-        overflow-y: auto;
-        pointer-events: auto;
-        transform: none;
-        visibility: visible;
-    }
-
-    .sidebar-navigation__panel:hover .sidebar-navigation__content,
-    .sidebar-navigation__panel:focus-within .sidebar-navigation__content {
-        opacity: 1;
-        pointer-events: auto;
-        transform: none;
-        visibility: visible;
     }
 
     .sidebar-navigation__panel[data-open] .sidebar-navigation__content {
@@ -260,9 +236,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .sidebar-navigation__panel,
+    .sidebar-navigation {
+        --content-transition: none;
+    }
+
     .sidebar-navigation__rail,
-    .sidebar-navigation__content,
     .sidebar-navigation__link {
         transition: none;
     }

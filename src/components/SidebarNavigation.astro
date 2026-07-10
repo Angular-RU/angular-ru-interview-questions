@@ -6,19 +6,17 @@ interface MarkdownHeading {
 }
 
 interface Props {
-    readonly headings?: ReadonlyArray<MarkdownHeading>;
+    readonly headings?: readonly MarkdownHeading[];
     readonly title: string;
 }
 
 const {headings = [], title} = Astro.props;
 
-const navigationHeadings = headings.filter(({depth}) => depth >= 2 && depth <= 3);
-const firstNavigationHeading = navigationHeadings.at(0);
-const visibleNavigationHeadings = navigationHeadings.filter(({slug}) => slug !== firstNavigationHeading?.slug);
+const navigationHeadings = headings.filter(({depth}) => depth === 2 || depth === 3).slice(1);
 ---
 
 {
-    visibleNavigationHeadings.length > 0 && (
+    navigationHeadings.length > 0 && (
         <aside
             class="sidebar-navigation"
             aria-label={`Навигация по разделам: ${title}`}
@@ -39,6 +37,7 @@ const visibleNavigationHeadings = navigationHeadings.filter(({slug}) => slug !==
                         <span />
                         <span />
                     </span>
+
                     <span>На этой странице</span>
                 </button>
 
@@ -46,7 +45,7 @@ const visibleNavigationHeadings = navigationHeadings.filter(({slug}) => slug !==
                     class="sidebar-navigation__rail"
                     aria-hidden="true"
                 >
-                    {visibleNavigationHeadings.map(({slug}) => (
+                    {navigationHeadings.map(({slug}) => (
                         <span
                             class="sidebar-navigation__marker"
                             data-heading-marker={slug}
@@ -59,7 +58,7 @@ const visibleNavigationHeadings = navigationHeadings.filter(({slug}) => slug !==
                     id="sidebar-navigation-content"
                 >
                     <ul class="sidebar-navigation__list">
-                        {visibleNavigationHeadings.map(({depth, slug, text}) => (
+                        {navigationHeadings.map(({depth, slug, text}) => (
                             <li>
                                 <a
                                     class={`sidebar-navigation__link sidebar-navigation__link--depth-${depth}`}
@@ -78,118 +77,115 @@ const visibleNavigationHeadings = navigationHeadings.filter(({slug}) => slug !==
 }
 
 <script>
-    const navigation = document.querySelector('.sidebar-navigation');
+    const initNavigation = (navigation: HTMLElement): void => {
+        const panel = navigation.querySelector<HTMLElement>('.sidebar-navigation__panel');
+        const toggle = navigation.querySelector<HTMLButtonElement>('[data-navigation-toggle]');
 
-    if (navigation) {
-        const panel = navigation.querySelector('.sidebar-navigation__panel');
-        const toggle = navigation.querySelector('[data-navigation-toggle]');
-        const links = Array.from(navigation.querySelectorAll('[data-heading-link]'));
-        const markers = Array.from(navigation.querySelectorAll('[data-heading-marker]'));
-        let activeHeadingHoldUntil = 0;
-        let isScrollUpdateScheduled = false;
-        const headingEntries = links
-            .map((link) => {
-                const slug = link.getAttribute('data-heading-link');
+        if (!panel || !toggle) {
+            return;
+        }
 
-                return slug ? {slug, heading: document.getElementById(slug)} : undefined;
-            })
-            .filter((entry) => entry?.heading);
+        const links = [...navigation.querySelectorAll<HTMLAnchorElement>('[data-heading-link]')];
 
-        function setActiveHeading(slug) {
+        const markers = [...navigation.querySelectorAll<HTMLElement>('[data-heading-marker]')];
+
+        const headings = links.flatMap((link) => {
+            const slug = link.dataset.headingLink;
+            const heading = slug ? document.getElementById(slug) : null;
+
+            return slug && heading ? [{slug, heading}] : [];
+        });
+
+        let animationFrame = 0;
+
+        const setOpen = (open: boolean): void => {
+            panel.toggleAttribute('data-open', open);
+            toggle.setAttribute('aria-expanded', String(open));
+        };
+
+        const setActive = (activeSlug: string | undefined): void => {
             for (const link of links) {
-                link.toggleAttribute('aria-current', link.getAttribute('data-heading-link') === slug);
+                const isActive = link.dataset.headingLink === activeSlug;
+
+                if (isActive) {
+                    link.setAttribute('aria-current', 'location');
+                } else {
+                    link.removeAttribute('aria-current');
+                }
             }
 
             for (const marker of markers) {
-                marker.toggleAttribute('data-active', marker.getAttribute('data-heading-marker') === slug);
+                marker.toggleAttribute('data-active', marker.dataset.headingMarker === activeSlug);
             }
-        }
+        };
 
-        const getCurrentHeadingSlug = () => {
-            const activationOffset = 48;
-            let activeSlug = headingEntries[0]?.slug;
+        const getAnchorOffset = (): number =>
+            Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset')) || 0;
 
-            if (window.scrollY <= 4) {
-                return activeSlug;
-            }
+        const getActiveSlug = (): string | undefined => {
+            let activeSlug = headings[0]?.slug;
+            const offset = getAnchorOffset();
 
-            for (const {slug, heading} of headingEntries) {
-                if (heading.getBoundingClientRect().top <= activationOffset) {
-                    activeSlug = slug;
-                } else {
+            for (const {slug, heading} of headings) {
+                if (heading.getBoundingClientRect().top > offset) {
                     break;
                 }
+
+                activeSlug = slug;
             }
 
             return activeSlug;
         };
 
-        const updateActiveHeadingFromScroll = () => {
-            isScrollUpdateScheduled = false;
+        const updateActiveHeading = (): void => {
+            animationFrame = 0;
+            setActive(getActiveSlug());
+        };
 
-            if (Date.now() < activeHeadingHoldUntil) {
+        const scheduleUpdate = (): void => {
+            if (!animationFrame) {
+                animationFrame = requestAnimationFrame(updateActiveHeading);
+            }
+        };
+
+        toggle.addEventListener('click', () => {
+            setOpen(!panel.hasAttribute('data-open'));
+        });
+
+        navigation.addEventListener('click', (event) => {
+            const target = event.target;
+
+            if (!(target instanceof Element)) {
                 return;
             }
 
-            const slug = getCurrentHeadingSlug();
+            const link = target.closest<HTMLAnchorElement>('[data-heading-link]');
 
-            if (slug) {
-                setActiveHeading(slug);
-            }
-        };
-
-        const scheduleActiveHeadingUpdate = () => {
-            if (isScrollUpdateScheduled) {
+            if (!link) {
                 return;
             }
 
-            isScrollUpdateScheduled = true;
-            requestAnimationFrame(updateActiveHeadingFromScroll);
-        };
-
-        const setNavigationOpen = (isOpen) => {
-            panel?.toggleAttribute('data-open', isOpen);
-            toggle?.setAttribute('aria-expanded', String(isOpen));
-        };
-
-        toggle?.addEventListener('click', () => {
-            setNavigationOpen(!panel?.hasAttribute('data-open'));
+            setActive(link.dataset.headingLink);
+            setOpen(false);
         });
 
         document.addEventListener('click', (event) => {
             const target = event.target;
 
             if (target instanceof Node && !navigation.contains(target)) {
-                setNavigationOpen(false);
+                setOpen(false);
             }
         });
 
-        window.addEventListener('scroll', scheduleActiveHeadingUpdate, {passive: true});
-        window.addEventListener('resize', scheduleActiveHeadingUpdate);
-        window.addEventListener('hashchange', () => {
-            activeHeadingHoldUntil = Date.now() + 900;
-
-            window.setTimeout(scheduleActiveHeadingUpdate, 950);
+        window.addEventListener('scroll', scheduleUpdate, {
+            passive: true,
         });
 
-        const firstHeading = headingEntries[0]?.slug;
+        window.addEventListener('resize', scheduleUpdate);
+        window.addEventListener('hashchange', scheduleUpdate);
 
-        if (firstHeading) {
-            setActiveHeading(firstHeading);
-            requestAnimationFrame(updateActiveHeadingFromScroll);
-        }
+        scheduleUpdate();
+    };
 
-        for (const link of links) {
-            link.addEventListener('click', () => {
-                const slug = link.getAttribute('data-heading-link');
-
-                if (slug) {
-                    activeHeadingHoldUntil = Date.now() + 900;
-                    setActiveHeading(slug);
-                    window.setTimeout(scheduleActiveHeadingUpdate, 950);
-                    setNavigationOpen(false);
-                }
-            });
-        }
-    }
+    document.querySelectorAll<HTMLElement>('.sidebar-navigation').forEach(initNavigation);
 </script>
