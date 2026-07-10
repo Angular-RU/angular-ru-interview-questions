@@ -1,0 +1,28 @@
+::view-transition-old(root) {
+    animation: 160ms ease-in both page-leave;
+}
+
+::view-transition-new(root) {
+    animation: 240ms ease-out both page-enter;
+}
+
+@keyframes page-leave {
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}

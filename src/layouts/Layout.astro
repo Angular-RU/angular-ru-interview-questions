@@ -1,4 +1,6 @@
 ---
+import {ClientRouter} from 'astro:transitions';
+
 import SidebarNavigation from '../components/SidebarNavigation.astro';
 import '../styles/global.css';
 
@@ -22,6 +24,7 @@ const headings = Astro.props.headings ?? [];
             content="width=device-width, initial-scale=1.0"
         />
         <title>{title}</title>
+        <ClientRouter />
     </head>
 
     <body>

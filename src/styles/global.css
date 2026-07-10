@@ -2,6 +2,7 @@
 
 @import './tokens.css';
 @import './base.css';
+@import './page-transitions.css';
 @import './layout.css';
 @import './sidebar-navigation.css';
 @import './markdown.css';
