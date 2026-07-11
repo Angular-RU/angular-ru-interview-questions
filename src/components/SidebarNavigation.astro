@@ -7,70 +7,97 @@ interface MarkdownHeading {
 
 interface Props {
     readonly headings?: readonly MarkdownHeading[];
+    readonly homeHref: string;
+    readonly showHomeLink?: boolean;
     readonly title: string;
 }
 
-const {headings = [], title} = Astro.props;
+const {headings = [], homeHref, showHomeLink = true, title} = Astro.props;
 
 const navigationHeadings = headings.filter(({depth}) => depth === 2 || depth === 3).slice(1);
+const hasContents = navigationHeadings.length > 1;
 ---
 
 {
-    navigationHeadings.length > 1 && (
+    (showHomeLink || hasContents) && (
         <aside
             class="sidebar-navigation"
-            aria-label={`Навигация по разделам: ${title}`}
+            aria-label={`Навигация: ${title}`}
         >
             <nav class="sidebar-navigation__panel">
-                <button
-                    class="sidebar-navigation__toggle"
-                    type="button"
-                    aria-controls="sidebar-navigation-content"
-                    aria-expanded="false"
-                    data-navigation-toggle
-                >
-                    <span
-                        class="sidebar-navigation__toggle-icon"
+                <div class="sidebar-navigation__header">
+                    {showHomeLink && (
+                        <a
+                            class="sidebar-navigation__home"
+                            href={homeHref}
+                            aria-label="На главную"
+                        >
+                            <svg
+                                aria-hidden="true"
+                                viewBox="0 0 24 24"
+                            >
+                                <path d="M3 10.75 12 3l9 7.75V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.75Z" />
+                            </svg>
+                            <span class="sidebar-navigation__home-label">Главная</span>
+                        </a>
+                    )}
+
+                    {hasContents && (
+                        <button
+                            class="sidebar-navigation__toggle"
+                            type="button"
+                            aria-controls="sidebar-navigation-content"
+                            aria-expanded="false"
+                            data-navigation-toggle
+                        >
+                            <span
+                                class="sidebar-navigation__toggle-icon"
+                                aria-hidden="true"
+                            >
+                                <span />
+                                <span />
+                                <span />
+                            </span>
+
+                            <span class="sidebar-navigation__title">Оглавление</span>
+                        </button>
+                    )}
+                </div>
+
+                {hasContents && (
+                    <div
+                        class="sidebar-navigation__rail"
                         aria-hidden="true"
                     >
-                        <span />
-                        <span />
-                        <span />
-                    </span>
-
-                    <span>На этой странице</span>
-                </button>
-
-                <div
-                    class="sidebar-navigation__rail"
-                    aria-hidden="true"
-                >
-                    {navigationHeadings.map(({slug}) => (
-                        <span
-                            class="sidebar-navigation__marker"
-                            data-heading-marker={slug}
-                        />
-                    ))}
-                </div>
-
-                <div
-                    class="sidebar-navigation__content"
-                    id="sidebar-navigation-content"
-                >
-                    <ul class="sidebar-navigation__list">
-                        {navigationHeadings.map(({depth, slug, text}) => (
-                            <li>
-                                <a
-                                    class={`sidebar-navigation__link sidebar-navigation__link--depth-${depth}`}
-                                    href={`#${slug}`}
-                                    data-heading-link={slug}
-                                >
-                                    {text}
-                                </a>
-                            </li>
+                        {navigationHeadings.map(({slug}) => (
+                            <span
+                                class="sidebar-navigation__marker"
+                                data-heading-marker={slug}
+                            />
                         ))}
-                    </ul>
-                </div>
+                    </div>
+                )}
+
+                {hasContents && (
+                    <div
+                        class="sidebar-navigation__content"
+                        id="sidebar-navigation-content"
+                    >
+                        <ul class="sidebar-navigation__list">
+                            {navigationHeadings.map(({depth, slug, text}) => (
+                                <li>
+                                    <a
+                                        class={`sidebar-navigation__link sidebar-navigation__link--depth-${depth}`}
+                                        href={`#${slug}`}
+                                        data-heading-link={slug}
+                                    >
+                                        {text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </nav>
         </aside>
     )
@@ -127,9 +154,16 @@ const navigationHeadings = headings.filter(({depth}) => depth === 2 || depth ===
         const getActiveSlug = (): string | undefined => {
             let activeSlug = headings[0]?.slug;
             const offset = getAnchorOffset();
+            const roundingTolerance = 1;
+            const remainingScroll = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+            const isAtPageBottom = window.scrollY > 0 && remainingScroll <= roundingTolerance;
+
+            if (isAtPageBottom) {
+                return headings.at(-1)?.slug;
+            }
 
             for (const {slug, heading} of headings) {
-                if (heading.getBoundingClientRect().top > offset) {
+                if (heading.getBoundingClientRect().top > offset + roundingTolerance) {
                     break;
                 }
 

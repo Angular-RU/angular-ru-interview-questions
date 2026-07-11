@@ -9,6 +9,10 @@ const {frontmatter} = Astro.props;
 const title = frontmatter?.title ?? 'Angular RU Interview Questions';
 const description = frontmatter?.description ?? 'Вопросы и практические задания для подготовки frontend-разработчиков';
 const headings = Astro.props.headings ?? [];
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const homeHref = `${basePath}/`;
+const showHomeLink = currentPath !== basePath;
 ---
 
 <!doctype html>
@@ -32,6 +36,8 @@ const headings = Astro.props.headings ?? [];
             <article class="content">
                 <SidebarNavigation
                     headings={headings}
+                    homeHref={homeHref}
+                    showHomeLink={showHomeLink}
                     title={title}
                 />
 

@@ -1,3 +1,7 @@
+:root {
+    --anchor-offset: 40px;
+}
+
 .content h1,
 .content h2,
 .content h3,
@@ -8,6 +12,10 @@
 }
 
 @media (max-width: 1275px) {
+    :root {
+        --anchor-offset: 80px;
+    }
+
     .content h1,
     .content h2,
     .content h3,
