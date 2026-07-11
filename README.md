@@ -194,7 +194,22 @@ providers; поддерживаемые старые API помечены как
 - [MobX](src/pages/state-management/index.md#mobx)
 - [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
 
-### 15. AI [<img src="public/logos/claude-icon.svg" width="24" alt="AI logo" />](public/logos/claude-icon.svg)
+### 15. Frontend Architecture Patterns [<img src="public/logos/frontend-architecture.svg" width="24" alt="Frontend Architecture logo" />](public/logos/frontend-architecture.svg)
+
+- [Frontend Architecture Patterns](src/pages/frontend-architecture-patterns/index.md)
+- [Границы и структура feature](src/pages/frontend-architecture-patterns/index.md#границы-и-структура-feature)
+- [Паттерны UI-композиции](src/pages/frontend-architecture-patterns/index.md#паттерны-ui-композиции)
+- [Слои и масштабирование](src/pages/frontend-architecture-patterns/index.md#слои-и-масштабирование)
+- [Application Models](src/pages/frontend-architecture-patterns/index.md#application-models)
+- [Rendering Strategies](src/pages/frontend-architecture-patterns/index.md#rendering-strategies)
+- [Service Patterns](src/pages/frontend-architecture-patterns/index.md#service-patterns)
+- [Performance Patterns](src/pages/frontend-architecture-patterns/index.md#performance-patterns)
+- [Code Organization Strategies](src/pages/frontend-architecture-patterns/index.md#code-organization-strategies)
+- [Testing Patterns](src/pages/frontend-architecture-patterns/index.md#testing-patterns)
+- [Best Practices and Guidelines](src/pages/frontend-architecture-patterns/index.md#best-practices-and-guidelines)
+- [Выбор паттерна](src/pages/frontend-architecture-patterns/index.md#выбор-паттерна)
+
+### 16. AI [<img src="public/logos/claude-icon.svg" width="24" alt="AI logo" />](public/logos/claude-icon.svg)
 
 - [AI](src/pages/ai/index.md)
 - [AI-assisted development](src/pages/ai/index.md#ai-assisted-development)
@@ -208,7 +223,7 @@ providers; поддерживаемые старые API помечены как
 - [Продукт и командные процессы](src/pages/ai/index.md#продукт-и-командные-процессы)
 - [Обучение и карьера](src/pages/ai/index.md#обучение-и-карьера)
 
-### 16. DevOps [<img src="public/logos/gitlab.svg" width="24" alt="DevOps logo" />](public/logos/gitlab.svg)
+### 17. DevOps [<img src="public/logos/gitlab.svg" width="24" alt="DevOps logo" />](public/logos/gitlab.svg)
 
 - [DevOps](src/pages/infrastructure/index.md)
 - [CI/CD overview](src/pages/infrastructure/index.md#cicd-overview)
@@ -217,7 +232,7 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 17. System Design
+### 18. System Design
 
 - [System Design](src/pages/system-design/index.md)
 - [Frontend system design](src/pages/system-design/index.md#frontend-system-design)
@@ -225,7 +240,7 @@ providers; поддерживаемые старые API помечены как
 - [Infinite scroll](src/pages/system-design/index.md#frontend-system-design)
 - [CSR, SSR, SSG или ISR](src/pages/system-design/index.md#frontend-system-design)
 
-### 18. Карьера в команде
+### 19. Карьера в команде
 
 - [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)
