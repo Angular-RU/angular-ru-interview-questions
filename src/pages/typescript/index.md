@@ -1520,7 +1520,7 @@ class LruCache<TKey, TValue> {
 
 </details>
 
-### Junior
+#### Junior
 
 <details>
 <summary>Что такое пользовательский тип данных</summary><br>
@@ -1770,7 +1770,7 @@ emp.greet('world');
 
 </details>
 
-### Middle
+#### Middle
 
 <details>
 <summary>Зачем нам нужны определения типов, где есть JavaScript c динамической типизацией?</summary><br>

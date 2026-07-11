@@ -155,4 +155,4 @@ contract tests.
 
 Вопросы по этому демо находятся в основном README:
 
-- [Angular / Micro Frontends](../../../angular/README.md#micro-frontends)
+- [Angular / Micro Frontends](../../../src/pages/angular/index.md#micro-frontends)
