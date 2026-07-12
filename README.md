@@ -9,7 +9,7 @@
 
 - [Архитектура компьютера](src/pages/computer-science/index.md)
 
-### Операционные системы [<img src="public/logos/computer-science.svg" width="24" alt="Computer Science logo" />](public/logos/computer-science.svg)
+### Операционные системы [<img src="public/logos/microsoft-windows-icon.svg" width="24" alt="Windows logo" />](public/logos/microsoft-windows-icon.svg)
 
 - [Операционные системы](src/pages/operating-systems/index.md)
 
@@ -25,7 +25,7 @@
 - [Version control и командный workflow](src/pages/git/index.md#version-control-и-командный-workflow)
 - [Git commands](src/pages/git/index.md#git-commands)
 
-### Веб-протоколы и безопасность
+### Веб-протоколы и безопасность [<img src="public/logos/json-schema-icon.svg" width="24" alt="JSON Schema logo" />](public/logos/json-schema-icon.svg)
 
 - [Веб-протоколы и безопасность](src/pages/web-protocols/index.md)
 
@@ -61,7 +61,7 @@
 - [CSS Architecture](src/pages/css/index.md#css-architecture)
 - [CSS rendering pipeline](src/pages/css/index.md#css-rendering-pipeline)
 
-### UI/UX ✦
+### UI/UX [<img src="public/logos/figma.svg" width="24" alt="Figma logo" />](public/logos/figma.svg)
 
 - [UI/UX](src/pages/ui-ux/index.md)
 - [Основы UI и UX](src/pages/ui-ux/index.md#основы-ui-и-ux)
@@ -183,13 +183,13 @@ providers; поддерживаемые старые API помечены как
 
 ### State Management [<img src="public/logos/redux.svg" width="24" alt="State Management logo" />](public/logos/redux.svg)
 
-- [Общее управление состоянием](src/pages/state-management/index.md)
+- [State Management](src/pages/state-management/index.md)
 - [Client state vs server state](src/pages/state-management/index.md#типы-состояния)
 - [Redux](src/pages/state-management/index.md#redux)
 - [MobX](src/pages/state-management/index.md#mobx)
 - [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
 
-### Организация кода [<img src="public/logos/frontend-architecture.svg" width="24" alt="Frontend Architecture logo" />](public/logos/frontend-architecture.svg)
+### Организация кода [<img src="public/logos/frontend-architecture.svg" width="24" alt="Code organization logo" />](public/logos/frontend-architecture.svg)
 
 - [Организация кода](src/pages/frontend-architecture-patterns/index.md)
 - [Границы и структура feature](src/pages/frontend-architecture-patterns/index.md#границы-и-структура-feature)
@@ -204,7 +204,7 @@ providers; поддерживаемые старые API помечены как
 - [Best Practices and Guidelines](src/pages/frontend-architecture-patterns/index.md#best-practices-and-guidelines)
 - [Выбор паттерна](src/pages/frontend-architecture-patterns/index.md#выбор-паттерна)
 
-### Проектирование UI
+### Проектирование UI [<img src="public/logos/web-platform.svg" width="24" alt="Web Platform logo" />](public/logos/web-platform.svg)
 
 - [Проектирование UI](src/pages/system-design/index.md)
 - [Задачи проектирования UI](src/pages/system-design/index.md#задачи-проектирования-ui)
@@ -222,21 +222,21 @@ providers; поддерживаемые старые API помечены как
 - [Project tooling и рабочее окружение](src/pages/nodejs/index.md#project-tooling-и-рабочее-окружение)
 - [Frontend tooling](src/pages/nodejs/index.md#frontend-tooling)
 
-### Базы данных
+### Базы данных [<img src="public/logos/postgresql.svg" width="24" alt="PostgreSQL logo" />](public/logos/postgresql.svg)
 
 - [Базы данных](src/pages/databases-sql/index.md)
 
-### Интеграции
+### Интеграции [<img src="public/logos/kafka-icon.svg" width="24" alt="Kafka logo" />](public/logos/kafka-icon.svg)
 
 - [Интеграции](src/pages/integrations/index.md)
 
-### Распределенные системы
+### Распределенные системы [<img src="public/logos/aws-app-mesh.svg" width="24" alt="AWS App Mesh logo" />](public/logos/aws-app-mesh.svg)
 
 - [Распределенные системы](src/pages/architecture/index.md)
 
 ## Архитектура
 
-### Системный анализ
+### Системный анализ [<img src="public/logos/web-platform.svg" width="24" alt="Web Platform logo" />](public/logos/web-platform.svg)
 
 - [Системный анализ](src/pages/system-analysis/index.md)
 
@@ -269,11 +269,11 @@ providers; поддерживаемые старые API помечены как
 
 ## Карьера
 
-### Процессы разработки
+### Процессы разработки [<img src="public/logos/soft-skills.svg" width="24" alt="Teamwork logo" />](public/logos/soft-skills.svg)
 
 - [Процессы разработки](src/pages/development-process/index.md)
 
-### Карьера в команде
+### Карьера в команде [<img src="public/logos/soft-skills.svg" width="24" alt="Teamwork logo" />](public/logos/soft-skills.svg)
 
 - [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)
@@ -294,15 +294,15 @@ providers; поддерживаемые старые API помечены как
 - [CSS layout и component tasks](src/pages/css/index.md#css-layout-и-component-tasks)
 - [CSS Flexbox](public/examples/css/flexbox/index.html)
 - [CSS Grid](public/examples/css/grid/index.html)
-- [Задачи по JavaScript](src/pages/javascript/index.md)
+- [Задачи по JavaScript](src/pages/javascript/index.md#практика-по-javascript)
 - [Практика по JavaScript](src/pages/javascript/index.md#практика-по-javascript)
-- [Задачи по TypeScript](src/pages/typescript/index.md)
+- [Задачи по TypeScript](src/pages/typescript/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [React Hello](public/examples/react/example1/index.html)
 - [React counter](public/examples/react/example2/index.html)
 - [Практика по React](src/pages/react/index.md#практика-по-react)
 - [React practice app](src/pages/react/index.md#мини-проект-travel-planner)
 - [Memory leaks](public/examples/computer-science/index.html)
-- [Frontend system design tasks](src/pages/system-design/index.md#задачи-проектирования-ui)
+- [Задачи проектирования UI](src/pages/system-design/index.md#задачи-проектирования-ui)
 - [Практические задачи по алгоритмам и design primitives](src/pages/typescript/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [Мини-проекты для интервью](apps/angular/mfe/README.md)
 
