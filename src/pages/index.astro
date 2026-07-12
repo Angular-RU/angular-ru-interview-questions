@@ -40,6 +40,7 @@ const markdownSources = import.meta.glob<string>('./**/index.md', {
 
 const iconBySlug: Record<string, string> = {
     angular: '/logos/angular.svg',
+    'databases-sql': '/logos/postgresql.svg',
     docker: '/logos/docker.svg',
     git: '/logos/git.svg',
     linux: '/logos/linux.svg',
@@ -51,7 +52,9 @@ const iconBySlug: Record<string, string> = {
     typescript: '/logos/typescript.svg',
     css: '/logos/css.svg',
     html: '/logos/html5.svg',
+    integrations: '/logos/kafka-icon.svg',
     nodejs: '/logos/nodejs.svg',
+    'operating-systems': '/logos/computer-science.svg',
     'computer-science': '/logos/computer-science.svg',
     'web-platform': '/logos/web-platform.svg',
     'browser-rendering': '/logos/browser.svg',
@@ -64,12 +67,17 @@ const iconBySlug: Record<string, string> = {
 
 const iconByCategory: Record<string, string> = {
     Backend: '/logos/nodejs.svg',
+    'Базы данных': '/logos/computer-science.svg',
     Career: '/logos/soft-skills.svg',
     DevOps: '/logos/gitlab.svg',
     Engineering: '/logos/computer-science.svg',
     Fundamentals: '/logos/computer-science.svg',
     Frontend: '/logos/web-platform.svg',
     'System Design': '/logos/web-platform.svg',
+    Архитектура: '/logos/web-platform.svg',
+    Инфраструктура: '/logos/gitlab.svg',
+    Карьера: '/logos/soft-skills.svg',
+    'Основы и инструменты': '/logos/computer-science.svg',
 };
 
 const countQuestions = (source: string): number => {
@@ -114,12 +122,26 @@ const questionCards: QuestionCard[] = Object.entries(markdownModules)
     .filter((item) => item.kind === 'questions')
     .sort((a, b) => a.order - b.order);
 
+const questionSections = [
+    {id: 'fundamentals', title: 'Основы и инструменты', category: 'Основы и инструменты'},
+    {id: 'frontend', title: 'Frontend', category: 'Frontend'},
+    {id: 'backend', title: 'Backend', category: 'Backend'},
+    {id: 'architecture', title: 'Архитектура', category: 'Архитектура'},
+    {id: 'infrastructure', title: 'Инфраструктура', category: 'Инфраструктура'},
+    {id: 'career', title: 'Карьера', category: 'Карьера'},
+].map((section) => ({
+    ...section,
+    items: questionCards.filter((card) => card.category === section.category),
+}));
+
+const navigationItems = [...questionSections.map(({id, title}) => ({id, title})), {id: 'demos', title: 'Демки'}];
+
 const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
 ---
 
 <Layout
-    title="Angular RU Interview Questions"
-    description="Вопросы и практические задания для подготовки frontend-разработчиков"
+    title="Developer Interview Questions"
+    description="Вопросы и практические задания для подготовки разработчиков"
 >
     <div
         class="home"
@@ -134,27 +156,28 @@ const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
                     id="home-title"
                     class="hero-title"
                 >
-                    Frontend Interview Questions
+                    Developer Interview Questions
                 </h1>
                 <p class="hero-eyebrow">Готовимся уверенно и проходим собеседования успешно</p>
                 <p class="hero-lead">
-                    Вопросы, ответы и практические демо для подготовки frontend-разработчиков: Computer Science, Web
-                    Platform, CSS, JavaScript, TypeScript, Angular, React, QA, архитектура и soft skills.
+                    Вопросы, ответы и практические демо для подготовки разработчиков: инженерные основы, Frontend,
+                    Backend, архитектура, инфраструктура и soft skills.
                 </p>
 
-                <div class="hero-actions">
-                    <a
-                        class="primary-action"
-                        href="#theory"
-                    >
-                        Начать подготовку
-                    </a>
-                    <a
-                        class="secondary-action"
-                        href="#practice"
-                    >
-                        Смотреть практику
-                    </a>
+                <div
+                    class="hero-navigation"
+                    aria-label="Разделы"
+                >
+                    {
+                        navigationItems.map((item) => (
+                            <a
+                                class="navigation-chip"
+                                href={`#${item.id}`}
+                            >
+                                {item.title}
+                            </a>
+                        ))
+                    }
                 </div>
             </div>
 
@@ -166,16 +189,20 @@ const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
             </div>
         </section>
 
-        <HomeSection
-            id="theory"
-            eyebrow="Теория"
-            title=""
-            items={questionCards}
-        />
+        {
+            questionSections.map((section) => (
+                <HomeSection
+                    id={section.id}
+                    eyebrow={section.title}
+                    title=""
+                    items={section.items}
+                />
+            ))
+        }
 
         <HomeSection
-            id="practice"
-            eyebrow="Практика"
+            id="demos"
+            eyebrow="Демки"
             title=""
             items={exampleCards}
         />

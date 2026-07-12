@@ -1,15 +1,15 @@
 ---
 layout: ../../layouts/Layout.astro
-title: System Design
-description: Frontend system design, UX architecture, rendering modes и trade-offs
-category: System Design
+title: Проектирование UI
+description: Проектирование frontend-интерфейсов, UX-архитектура, rendering modes и trade-offs
+category: Frontend
 kind: questions
 order: 890
 ---
 
-## System Design
+## Проектирование UI
 
-### Frontend system design
+### Задачи проектирования UI
 
 #### Middle+ or Senior
 

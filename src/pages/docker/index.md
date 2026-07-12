@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: Docker
 description: Docker, containers, images, Dockerfile и Docker Compose для frontend-разработчика
-category: DevOps
+category: Инфраструктура
 kind: questions
 order: 76
 ---

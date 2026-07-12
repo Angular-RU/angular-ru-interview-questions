@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: AI
 description: Вопросы про AI-assisted development, vibe coding, ревью AI-кода и рост инженеров
-category: Engineering
+category: Основы и инструменты
 kind: questions
 order: 150
 icon: /logos/claude-icon.svg

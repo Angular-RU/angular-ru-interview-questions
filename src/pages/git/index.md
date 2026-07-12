@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: Git
 description: Version control, branching, pull requests, rebase, merge, revert и командный workflow
-category: Fundamentals
+category: Основы и инструменты
 kind: questions
 order: 20
 ---

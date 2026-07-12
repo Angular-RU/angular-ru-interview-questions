@@ -3,7 +3,7 @@ layout: ../../layouts/Layout.astro
 title: QA
 description:
   Вопросы и ответы по качеству, тестированию, отчетности и метрикам для Frontend и Node.js backend разработчика
-category: Engineering
+category: Инфраструктура
 kind: questions
 order: 135
 icon: /logos/playwright.svg

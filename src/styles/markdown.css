@@ -187,6 +187,29 @@
     background: transparent;
 }
 
+.content fieldset {
+    min-width: 0;
+    margin: 24px 0;
+    padding: 8px 16px 16px;
+    border: 1px solid #b9d2ff;
+    border-radius: var(--radius-md);
+    background: #f8fbff;
+}
+
+.content fieldset legend {
+    padding: 5px 12px;
+    border: 1px solid #b9d2ff;
+    border-radius: 999px;
+    color: #245dcc;
+    background: #fff;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.content fieldset pre {
+    margin-block: 8px 0;
+}
+
 .content a {
     color: var(--accent);
     font-weight: 700;

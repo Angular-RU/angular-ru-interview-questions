@@ -3,7 +3,7 @@ layout: ../../layouts/Layout.astro
 title: UI/UX
 description:
   UI, UX, usability, состояния интерфейса, продуктовые решения и когнитивные искажения для frontend-разработчика
-category: UI/UX
+category: Frontend
 kind: questions
 order: 50
 ---

@@ -5,11 +5,10 @@ TypeScript и устройство Angular-приложений.
 
 ## Содержание
 
-### 1. Основы [<img src="public/logos/computer-science.svg" width="24" alt="Computer Science logo" />](public/logos/computer-science.svg)
+### 1. Основы и инструменты [<img src="public/logos/computer-science.svg" width="24" alt="Computer Science logo" />](public/logos/computer-science.svg)
 
-- [Основы](src/pages/computer-science/index.md)
-- [Архитектура компьютера](src/pages/computer-science/index.md#архитектура-компьютера)
-- [ОС, процессы, сеть и терминал](src/pages/computer-science/index.md#ос-процессы-сеть-и-терминал)
+- [Архитектура компьютера](src/pages/computer-science/index.md)
+- [Операционные системы](src/pages/operating-systems/index.md)
 - [Основы программирования и проектирования](src/pages/typescript/index.md#frontend-fundamentals)
 - [SOLID, DRY, KISS, YAGNI](src/pages/typescript/index.md#принципы-проектирования)
 - [Архитектурные компромиссы (trade-offs)](src/pages/career-teamwork/index.md#принятие-решений-список-вопросов)
@@ -194,9 +193,9 @@ providers; поддерживаемые старые API помечены как
 - [MobX](src/pages/state-management/index.md#mobx)
 - [Связь с Angular и React](src/pages/state-management/index.md#связь-с-angular-и-react)
 
-### 15. Frontend Architecture Patterns [<img src="public/logos/frontend-architecture.svg" width="24" alt="Frontend Architecture logo" />](public/logos/frontend-architecture.svg)
+### 15. Организация кода [<img src="public/logos/frontend-architecture.svg" width="24" alt="Frontend Architecture logo" />](public/logos/frontend-architecture.svg)
 
-- [Frontend Architecture Patterns](src/pages/frontend-architecture-patterns/index.md)
+- [Организация кода](src/pages/frontend-architecture-patterns/index.md)
 - [Границы и структура feature](src/pages/frontend-architecture-patterns/index.md#границы-и-структура-feature)
 - [Паттерны UI-композиции](src/pages/frontend-architecture-patterns/index.md#паттерны-ui-композиции)
 - [Слои и масштабирование](src/pages/frontend-architecture-patterns/index.md#слои-и-масштабирование)
@@ -232,15 +231,19 @@ providers; поддерживаемые старые API помечены как
 - [CDN/cache/rollback](src/pages/infrastructure/index.md#frontend-deployment)
 - [Feature toggles](src/pages/infrastructure/index.md#feature-toggles)
 
-### 18. System Design
+### 18. Распределенные системы
 
-- [System Design](src/pages/system-design/index.md)
-- [Frontend system design](src/pages/system-design/index.md#frontend-system-design)
-- [Modal/dialog](src/pages/system-design/index.md#frontend-system-design)
-- [Infinite scroll](src/pages/system-design/index.md#frontend-system-design)
-- [CSR, SSR, SSG или ISR](src/pages/system-design/index.md#frontend-system-design)
+- [Распределенные системы](src/pages/architecture/index.md)
 
-### 19. Карьера в команде
+### 19. Проектирование UI
+
+- [Проектирование UI](src/pages/system-design/index.md)
+- [Задачи проектирования UI](src/pages/system-design/index.md#задачи-проектирования-ui)
+- [Modal/dialog](src/pages/system-design/index.md#задачи-проектирования-ui)
+- [Infinite scroll](src/pages/system-design/index.md#задачи-проектирования-ui)
+- [CSR, SSR, SSG или ISR](src/pages/system-design/index.md#задачи-проектирования-ui)
+
+### 20. Карьера в команде
 
 - [Карьера в команде](src/pages/career-teamwork/index.md)
 - [Поиск работы и стратегия интервью](src/pages/career-teamwork/index.md#поиск-работы-и-стратегия-интервью)
@@ -271,7 +274,7 @@ providers; поддерживаемые старые API помечены как
 - [Практика по React](src/pages/react/index.md#практика-по-react)
 - [React practice app](src/pages/react/index.md#мини-проект-travel-planner)
 - [Computer Science examples](public/examples/computer-science/index.html)
-- [Frontend system design tasks](src/pages/system-design/index.md#frontend-system-design)
+- [Frontend system design tasks](src/pages/system-design/index.md#задачи-проектирования-ui)
 - [Практические задачи по алгоритмам и design primitives](src/pages/typescript/index.md#практические-задачи-по-алгоритмам-и-design-primitives)
 - [Мини-проекты для интервью](apps/angular/mfe/README.md)
 

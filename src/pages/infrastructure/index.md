@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: DevOps
 description: CI/CD, deployment, feature toggles и delivery frontend-приложений
-category: DevOps
+category: Инфраструктура
 kind: questions
 order: 160
 ---

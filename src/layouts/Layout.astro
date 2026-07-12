@@ -7,7 +7,7 @@ import '../styles/global.css';
 const {frontmatter} = Astro.props;
 
 const title = frontmatter?.title ?? 'Angular RU Interview Questions';
-const description = frontmatter?.description ?? 'Вопросы и практические задания для подготовки frontend-разработчиков';
+const description = frontmatter?.description ?? 'Вопросы и практические задания для подготовки разработчиков';
 const headings = Astro.props.headings ?? [];
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPath = Astro.url.pathname.replace(/\/$/, '');

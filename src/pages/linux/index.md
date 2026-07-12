@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: Linux / Unix
 description: Linux, Unix shell, популярные команды, права, процессы, сеть, отличия от macOS и Homebrew
-category: Fundamentals
+category: Основы и инструменты
 kind: questions
 order: 19
 icon: /logos/linux.svg

@@ -2,7 +2,7 @@
 layout: ../../layouts/Layout.astro
 title: Карьера в команде
 description: Поиск работы, интервью, soft skills, командные процессы и методологии
-category: Career
+category: Карьера
 kind: questions
 order: 900
 ---

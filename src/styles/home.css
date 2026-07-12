@@ -20,8 +20,7 @@
     padding: 34px 0 42px;
 }
 
-.home .primary-action,
-.home .secondary-action {
+.home .navigation-chip {
     text-decoration: none;
 }
 
@@ -78,36 +77,42 @@
     line-height: 1.75;
 }
 
-.hero-actions {
+.hero-navigation {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     margin-top: 34px;
 }
 
-.home .primary-action,
-.home .secondary-action {
+.home .navigation-chip {
     display: inline-flex;
-    min-height: 58px;
+    min-height: 42px;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 900;
+    padding: 0 16px;
+    border: 1px solid #b9d2ff;
+    border-radius: 999px;
+    color: #245dcc;
+    background: rgb(244 248 255 / 88%);
+    font-size: 0.92rem;
+    font-weight: 850;
+    transition:
+        border-color 160ms ease,
+        color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
 }
 
-.home .primary-action {
-    min-width: 240px;
-    color: #fff;
-    background: linear-gradient(135deg, #2f73ff 0%, #436dff 100%);
-    box-shadow: 0 18px 32px rgb(47 115 255 / 22%);
+.home .navigation-chip:hover {
+    transform: translateY(-2px);
+    border-color: #6c9cff;
+    color: #174bb5;
+    background: #eaf2ff;
 }
 
-.home .secondary-action {
-    min-width: 220px;
-    border: 1px solid #cbd9ed;
-    color: #10234b;
-    background: rgb(255 255 255 / 72%);
+.home .navigation-chip:focus-visible {
+    outline: 3px solid rgb(47 115 255 / 28%);
+    outline-offset: 3px;
 }
 
 .hero-visual {
@@ -138,12 +143,6 @@
 
     .home .hero-title {
         font-size: clamp(3.2rem, 16vw, 5rem);
-    }
-
-    .hero-actions,
-    .home .primary-action,
-    .home .secondary-action {
-        width: 100%;
     }
 
     .hero-visual {
