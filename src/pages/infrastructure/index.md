@@ -11,8 +11,6 @@ order: 160
 
 ### CI/CD overview
 
-#### Middle+ or Senior
-
 <details>
 <summary>Что такое CI/CD?</summary><br>
 <table><tr><td>
@@ -31,8 +29,6 @@ Deployment, artifacts, CDN cache и rollback описаны ниже в разд
 </details>
 
 ### CI/CD для frontend delivery
-
-#### Middle+ or Senior
 
 <details>
 <summary>Что проверяет frontend CI pipeline?</summary><br>
@@ -62,8 +58,6 @@ CD берет уже проверенный build artifact и доставляе
 </details>
 
 ### Frontend deployment
-
-#### Middle+ or Senior
 
 <details>
 <summary>Что значит интегрировать frontend code в production environment?</summary><br>
@@ -379,8 +373,6 @@ release version и сегментам. Нужны alerts и быстрый сп�
 
 ### Feature toggles
 
-#### Junior
-
 <details>
 <summary>Что такое feature toggle?</summary><br>
 <table><tr><td>
@@ -402,8 +394,6 @@ Kill switch — ops flag для быстрого отключения пробл
 </td></tr></table>
 
 </details>
-
-#### Middle
 
 <details>
 <summary>Чем deploy отличается от release?</summary><br>

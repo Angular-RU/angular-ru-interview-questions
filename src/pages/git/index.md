@@ -11,8 +11,6 @@ order: 20
 
 ### Version control и командный workflow
 
-#### Middle
-
 <details>
 <summary>Зачем команде version control workflow?</summary><br>
 <table><tr><td>
@@ -87,8 +85,6 @@ resolution, pull request и code review. Если был опыт SVN, Mercurial
 </details>
 
 ### Git commands
-
-#### Middle
 
 <details>
 <summary>Чем git revert отличается от git reset?</summary><br>

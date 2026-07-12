@@ -9,8 +9,6 @@ order: 11
 
 ## Операционные системы
 
-#### Junior
-
 <details>
 <summary>Что такое программа?</summary><br>
 <table><tr><td>

@@ -9,8 +9,6 @@ order: 30
 
 ## Веб-протоколы и безопасность
 
-#### Middle+ or Senior
-
 <details>
 <summary>Что такое протокол? Какие протоколы знаешь?</summary><br>
 <table><tr><td>

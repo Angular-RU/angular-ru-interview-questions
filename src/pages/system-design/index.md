@@ -11,8 +11,6 @@ order: 890
 
 ### Задачи проектирования UI
 
-#### Middle+ or Senior
-
 <details>
 <summary>Какие system design вопросы могут задать senior frontend-разработчику?</summary><br>
 <table><tr><td>

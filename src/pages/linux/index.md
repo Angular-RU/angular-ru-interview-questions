@@ -12,8 +12,6 @@ icon: /logos/linux.svg
 
 ### Unix, Linux и shell basics
 
-#### Junior+ or Middle
-
 <details>
 <summary>Что такое Linux и чем он полезен frontend-разработчику?</summary><br>
 <table><tr><td>
@@ -114,8 +112,6 @@ npm test >> test.log
 </details>
 
 ### Filesystem и навигация
-
-#### Junior+ or Middle
 
 <details>
 <summary>Что делают команды pwd, ls и cd?</summary><br>
@@ -244,8 +240,6 @@ cd ~
 
 ### Permissions и пользователи
 
-#### Middle
-
 <details>
 <summary>Как устроены Linux permissions?</summary><br>
 <table><tr><td>
@@ -297,8 +291,6 @@ chgrp developers file.txt
 </details>
 
 ### Processes и system information
-
-#### Middle
 
 <details>
 <summary>Что делают ps, top, htop и kill?</summary><br>
@@ -379,8 +371,6 @@ env
 
 ### Network diagnostics
 
-#### Middle
-
 <details>
 <summary>Что делают ping, curl и wget?</summary><br>
 <table><tr><td>
@@ -439,8 +429,6 @@ ip route
 
 ### Package managers
 
-#### Middle
-
 <details>
 <summary>Какие package managers бывают в Linux?</summary><br>
 <table><tr><td>
@@ -494,8 +482,6 @@ apt search package-name
 </details>
 
 ### Linux vs macOS
-
-#### Middle+ or Senior
 
 <details>
 <summary>Чем Linux отличается от macOS?</summary><br>
@@ -556,8 +542,6 @@ Docker images обычно case-sensitive. Поэтому import path с неп�
 </details>
 
 ### Homebrew
-
-#### Junior+ or Middle
 
 <details>
 <summary>Что такое Homebrew?</summary><br>

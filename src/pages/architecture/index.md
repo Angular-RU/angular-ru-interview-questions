@@ -9,8 +9,6 @@ order: 887
 
 ## Распределенные системы
 
-#### Middle+ or Senior
-
 <details>
 <summary>Что такое клиент-сервер архитектура?</summary><br>
 <table><tr><td>

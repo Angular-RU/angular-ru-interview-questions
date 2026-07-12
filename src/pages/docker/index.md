@@ -11,8 +11,6 @@ order: 76
 
 ### Docker для frontend-разработчика
 
-#### Middle+ or Senior
-
 <details>
 <summary>Что нужно знать frontend-разработчику о Docker?</summary><br>
 <table><tr><td>
@@ -26,8 +24,6 @@ integration tests. Глубокие вопросы про image, container, Dock
 </details>
 
 ### Docker basics
-
-#### Middle+ or Senior
 
 <details>
 <summary>Что такое Docker?</summary><br>
@@ -246,8 +242,6 @@ docker exec -it <container_id> sh
 </details>
 
 ### Docker Compose
-
-#### Middle+ or Senior
 
 <details>
 <summary>Что такое Docker Compose?</summary><br>

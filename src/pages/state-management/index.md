@@ -11,8 +11,6 @@ order: 140
 
 ### Типы состояния
 
-#### Junior
-
 <details>
 <summary>Чем client state отличается от server state?</summary><br>
 <table><tr><td>
@@ -48,8 +46,6 @@ pagination cursor. Cache state должен иметь понятные прав
 </td></tr></table>
 
 </details>
-
-#### Middle
 
 <details>
 <summary>Что такое normalized state?</summary><br>
@@ -110,8 +106,6 @@ store, если появилась реальная координационна
 
 </details>
 
-#### Middle+ or Senior
-
 <details>
 <summary>Как выбирать между signals, service, RxJS, NgRx, Redux, Zustand и TanStack Query?</summary><br>
 <table><tr><td>
@@ -140,8 +134,6 @@ TanStack Query не заменяет client store: она решает server st
 </details>
 
 ### Redux
-
-#### Middle+ or Senior
 
 <details>
 <summary>Что такое Redux?</summary><br>
@@ -314,8 +306,6 @@ observable middleware или listener middleware. Результат обычн�
 
 ### MobX
 
-#### Junior
-
 <details>
 <summary>Что такое MobX?</summary><br>
 <table><tr><td>
@@ -361,8 +351,6 @@ Reaction запускает side effect при изменении наблюда
 
 </details>
 
-#### Middle
-
 <details>
 <summary>Какие плюсы MobX?</summary><br>
 <table><tr><td>
@@ -384,8 +372,6 @@ lifecycle или чрезмерно mutable shared model. Нужны согла�
 </td></tr></table>
 
 </details>
-
-#### Middle+ or Senior
 
 <details>
 <summary>Чем MobX отличается от Redux?</summary><br>

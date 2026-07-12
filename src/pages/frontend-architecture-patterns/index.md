@@ -16,8 +16,6 @@ order: 145
 
 ### Границы и структура feature
 
-#### Junior
-
 <details>
 <summary>Что такое feature-first структура и почему она обычно лучше папок по типу файлов?</summary><br>
 <table><tr><td>
@@ -125,8 +123,6 @@ export class OrdersPageComponent {
 
 </details>
 
-#### Middle
-
 <details>
 <summary>Что означает правило dependency direction?</summary><br>
 <table><tr><td>
@@ -217,8 +213,6 @@ const toOrder = (dto: OrderDto): Order => ({
 </details>
 
 ### Паттерны UI-композиции
-
-#### Middle
 
 <details>
 <summary>Когда выбирать composition вместо множества boolean props?</summary><br>
@@ -335,8 +329,6 @@ element injector и directives. Особенно важно централизо
 
 ### Слои и масштабирование
 
-#### Middle+ or Senior
-
 <details>
 <summary>Что такое layered architecture и когда она достаточна?</summary><br>
 <table><tr><td>
@@ -425,8 +417,6 @@ Angular и React можно объединить через host, Web Components
 </details>
 
 ### Выбор паттерна
-
-#### Middle+ or Senior
 
 <details>
 <summary>Как аргументировать архитектурный выбор на интервью?</summary><br>
