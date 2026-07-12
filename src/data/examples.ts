@@ -10,7 +10,7 @@ export type ExampleCard = {
 
 export const examples = [
     {
-        title: 'CSS Flexbox examples',
+        title: 'CSS Flexbox',
         description:
             'Учебные примеры по осям, выравниванию, переносам, gap и гибким колонкам во Flexbox.',
         href: '/examples/css/flexbox/index.html',
@@ -20,7 +20,7 @@ export const examples = [
         order: 10,
     },
     {
-        title: 'CSS Grid examples',
+        title: 'CSS Grid',
         description:
             'Учебные примеры по grid tracks, areas, stacking, wrapping, auto-fit и minmax().',
         href: '/examples/css/grid/index.html',
@@ -30,19 +30,19 @@ export const examples = [
         order: 20,
     },
     {
-        title: 'Memory leaks examples',
+        title: 'Memory leaks',
         description:
             'Интерактивные примеры для поиска detached DOM nodes, удержанных ссылок и setInterval leaks.',
         href: '/examples/computer-science/index.html',
-        category: 'Computer Science',
+        category: 'JavaScript',
         tags: ['Memory', 'Garbage Collection', 'DevTools'],
-        icon: '/logos/computer-science.svg',
+        icon: '/logos/javascript.svg',
         order: 30,
     },
     {
-        title: 'React example 1',
+        title: 'React Hello',
         description:
-            'Интерактивный React/Vite пример для подготовки к frontend-интервью.',
+            'Минимальный React/Vite пример с компонентом Hello и передачей props.',
         href: '/examples/react/example1/index.html',
         category: 'React',
         tags: ['React', 'Vite', 'TypeScript'],
@@ -50,9 +50,9 @@ export const examples = [
         order: 40,
     },
     {
-        title: 'React example 2',
+        title: 'React counter',
         description:
-            'Интерактивный React/Vite пример с отдельной сборкой для GitHub Pages.',
+            'Интерактивный React/Vite пример со счетчиком и локальным состоянием.',
         href: '/examples/react/example2/index.html',
         category: 'React',
         tags: ['React', 'Vite', 'TypeScript'],
@@ -60,7 +60,7 @@ export const examples = [
         order: 50,
     },
     {
-        title: 'Micro Frontends: Movie Ticket',
+        title: 'Micro Frontends',
         description:
             'Host-приложение загружает два remote-приложения через Native Federation.',
         href: '/examples/angular/mfe/movie-ticket/index.html',
