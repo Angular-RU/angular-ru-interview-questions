@@ -127,6 +127,7 @@ providers; поддерживаемые старые API помечены как
 
 #### Архитектура и экосистема Angular
 
+- [Архитектура Angular-приложений](src/pages/angular/index.md#архитектура-angular-приложений)
 - [Angular libraries и design systems](src/pages/angular/index.md#angular-libraries-и-design-systems)
 - [Dynamic components](src/pages/angular/index.md#компоненты-директивы-сервисы-и-pipes)
 - [Micro Frontends](src/pages/angular/index.md#micro-frontends)
