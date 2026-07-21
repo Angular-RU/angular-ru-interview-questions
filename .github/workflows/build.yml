@@ -28,6 +28,41 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Merge questions into Node.js page
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync, writeFileSync} from 'node:fs';
+
+          const pagePath = 'src/pages/nodejs/index.md';
+          const extraPath = 'src/pages/nodejs-concurrency/index.md';
+          const marker = '### npm и package scripts';
+          const extraStart = '### Основы многопоточности';
+
+          const page = readFileSync(pagePath, 'utf8');
+          const extraPage = readFileSync(extraPath, 'utf8');
+          const startIndex = extraPage.indexOf(extraStart);
+
+          if (!page.includes(marker) || startIndex === -1) {
+            throw new Error('Не удалось найти место для вставки вопросов');
+          }
+
+          const extra = extraPage
+            .slice(startIndex)
+            .replace(extraStart, '### Многопоточность и синхронизация')
+            .trim();
+          const merged = page.replace(marker, `${extra}\n\n${marker}`);
+
+          writeFileSync(pagePath, merged);
+          NODE
+          npx prettier src/pages/nodejs/index.md --write
+          rm src/pages/nodejs-concurrency/index.md
+
+      - name: Upload merged Node.js page
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-nodejs-page
+          path: src/pages/nodejs/index.md
+
       - name: Check formatting
         run: npm run format:check
 
