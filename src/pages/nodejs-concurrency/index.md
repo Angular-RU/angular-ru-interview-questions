@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/Layout.astro
-title: Node.js: многопоточность и синхронизация
+title: 'Node.js: многопоточность и синхронизация'
 description: Worker Threads, параллелизм, race condition, Atomics, mutex и semaphore в Node.js
 category: Backend
 kind: questions
