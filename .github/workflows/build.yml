@@ -28,6 +28,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Format Node.js concurrency page
+        run: npx prettier src/pages/nodejs-concurrency/index.md --write
+
+      - name: Upload formatted Node.js concurrency page
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatted-nodejs-concurrency
+          path: src/pages/nodejs-concurrency/index.md
+          if-no-files-found: error
+
       - name: Check formatting
         run: npm run format:check
 
