@@ -4,15 +4,39 @@ import {ClientRouter} from 'astro:transitions';
 import SidebarNavigation from '../components/SidebarNavigation.astro';
 import '../styles/global.css';
 
-const {frontmatter} = Astro.props;
+interface MarkdownHeading {
+    readonly depth: number;
+    readonly slug: string;
+    readonly text: string;
+}
 
-const title = frontmatter?.title ?? 'Angular RU Interview Questions';
-const description = frontmatter?.description ?? 'Вопросы и практические задания для подготовки разработчиков';
-const headings = Astro.props.headings ?? [];
+interface Frontmatter {
+    readonly title?: string;
+    readonly description?: string;
+}
+
+interface Props {
+    readonly title?: string;
+    readonly description?: string;
+    readonly frontmatter?: Frontmatter;
+    readonly headings?: readonly MarkdownHeading[];
+}
+
+const {title: titleFromProps, description: descriptionFromProps, frontmatter, headings = []} = Astro.props;
+
+const title = titleFromProps ?? frontmatter?.title ?? 'Angular RU Interview Questions';
+const description =
+    descriptionFromProps ?? frontmatter?.description ?? 'Вопросы и практические задания для подготовки разработчиков';
+
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
 const homeHref = `${basePath}/`;
 const showHomeLink = currentPath !== basePath;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
+const pagefindPath = `${basePath}/pagefind`;
+const searchBasePath = `${basePath}/`;
+const searchEnabled = import.meta.env.PROD;
 ---
 
 <!doctype html>
@@ -27,13 +51,77 @@ const showHomeLink = currentPath !== basePath;
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
+        <meta
+            name="theme-color"
+            content="#f6f8fb"
+        />
+        <meta
+            property="og:title"
+            content={title}
+        />
+        <meta
+            property="og:description"
+            content={description}
+        />
+        <meta
+            property="og:type"
+            content="website"
+        />
+        <meta
+            property="og:url"
+            content={canonicalUrl}
+        />
+        <meta
+            property="og:locale"
+            content="ru_RU"
+        />
+        <link
+            rel="canonical"
+            href={canonicalUrl}
+        />
+        {
+            searchEnabled && (
+                <link
+                    rel="stylesheet"
+                    href={`${pagefindPath}/pagefind-component-ui.css`}
+                />
+            )
+        }
         <title>{title}</title>
         <ClientRouter />
+        {
+            searchEnabled && (
+                <script
+                    type="module"
+                    src={`${pagefindPath}/pagefind-component-ui.js`}
+                />
+            )
+        }
     </head>
 
     <body>
         <main class="page">
-            <article class="content">
+            <article
+                class="content"
+                data-pagefind-body
+            >
+                {
+                    searchEnabled && (
+                        <div
+                            class="site-search"
+                            data-pagefind-ignore
+                        >
+                            <pagefind-config
+                                bundle-path={`${pagefindPath}/`}
+                                base-url={searchBasePath}
+                                lang="ru"
+                            />
+                            <pagefind-modal-trigger placeholder="Поиск" />
+                            <pagefind-modal />
+                        </div>
+                    )
+                }
+
                 <SidebarNavigation
                     headings={headings}
                     homeHref={homeHref}
