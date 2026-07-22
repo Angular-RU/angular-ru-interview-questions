@@ -13,6 +13,27 @@
     box-shadow: var(--shadow-page);
 }
 
+.site-search {
+    --pf-text: var(--text);
+    --pf-text-secondary: var(--body);
+    --pf-text-muted: var(--muted);
+    --pf-background: var(--surface);
+    --pf-border: var(--border);
+    --pf-border-focus: var(--accent);
+    --pf-hover: var(--accent-soft);
+    --pf-mark: var(--accent-strong);
+    --pf-outline-focus: var(--accent);
+    --pf-font: inherit;
+
+    display: flex;
+    justify-content: flex-end;
+    margin-block-end: 24px;
+}
+
+.site-search pagefind-modal-trigger {
+    display: block;
+}
+
 @media (max-width: 700px) {
     .page {
         width: min(100% - 24px, 1120px);
