@@ -2,8 +2,8 @@
     "name": "angular-ru-interview-questions",
     "version": "1.0.0",
     "private": true,
-    "description": "Вопросы подготовлены непосредственно для того, чтобы определить уровень разработчика, насколько глубоко, поверхностно или сносно он знает Angular. Вопросы для собеседования на знание JavaScript или Web-стека хорошо освещены в других местах, поэтому ниже будет добавлен список ресурсов по этой теме:",
-    "homepage": "https://github.com/Angular-RU/angular-ru-interview-questions#readme",
+    "description": "Справочник с вопросами, ответами и практическими заданиями для подготовки разработчиков к техническим собеседованиям",
+    "homepage": "https://angular-ru.github.io/interview/",
     "bugs": {
         "url": "https://github.com/Angular-RU/angular-ru-interview-questions/issues"
     },
@@ -19,7 +19,8 @@
         "predev": "npm run prebuild",
         "dev": "astro dev",
         "prebuild": "npm run build:public --workspaces --if-present",
-        "build": "astro build",
+        "build": "astro build && npm run build:search",
+        "build:search": "npx --yes pagefind@1.5.2 --site dist --exclude-selectors \".sidebar-navigation, .site-search\"",
         "preview": "astro preview",
         "astro": "astro",
         "format": "prettier \"!package-lock.json\" . --ignore-path .gitignore --write",
