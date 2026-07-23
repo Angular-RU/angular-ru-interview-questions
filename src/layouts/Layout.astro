@@ -2,6 +2,7 @@
 import {ClientRouter} from 'astro:transitions';
 
 import SidebarNavigation from '../components/SidebarNavigation.astro';
+import SiteSearch from '../components/SiteSearch.astro';
 import '../styles/global.css';
 
 interface MarkdownHeading {
@@ -31,11 +32,11 @@ const description =
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
 const homeHref = `${basePath}/`;
-const showHomeLink = currentPath !== basePath;
+const isHomePage = currentPath === basePath;
+const showHomeLink = !isHomePage;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const pagefindPath = `${basePath}/pagefind`;
-const searchBasePath = `${basePath}/`;
 const searchEnabled = import.meta.env.PROD;
 ---
 
@@ -105,22 +106,7 @@ const searchEnabled = import.meta.env.PROD;
                 class="content"
                 data-pagefind-body
             >
-                {
-                    searchEnabled && (
-                        <div
-                            class="site-search"
-                            data-pagefind-ignore
-                        >
-                            <pagefind-config
-                                bundle-path={`${pagefindPath}/`}
-                                base-url={searchBasePath}
-                                lang="ru"
-                            />
-                            <pagefind-modal-trigger placeholder="Поиск" />
-                            <pagefind-modal />
-                        </div>
-                    )
-                }
+                {!isHomePage && <SiteSearch />}
 
                 <SidebarNavigation
                     headings={headings}
@@ -132,5 +118,21 @@ const searchEnabled = import.meta.env.PROD;
                 <slot />
             </article>
         </main>
+
+        <script>
+            declare global {
+                interface Window {
+                    PagefindComponents?: {
+                        getInstanceManager(): {
+                            removeInstance(name: string): void;
+                        };
+                    };
+                }
+            }
+
+            document.addEventListener('astro:before-swap', () => {
+                window.PagefindComponents?.getInstanceManager().removeInstance('default');
+            });
+        </script>
     </body>
 </html>

@@ -1,0 +1,30 @@
+---
+interface Props {
+    readonly placeholder?: string;
+    readonly variant?: 'default' | 'hero';
+}
+
+const {placeholder = 'Поиск', variant = 'default'} = Astro.props;
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pagefindPath = `${basePath}/pagefind`;
+const searchBasePath = `${basePath}/`;
+const searchEnabled = import.meta.env.PROD;
+---
+
+{
+    searchEnabled && (
+        <div
+            class:list={['site-search', variant === 'hero' && 'site-search--hero']}
+            data-pagefind-ignore
+        >
+            <pagefind-config
+                bundle-path={`${pagefindPath}/`}
+                base-url={searchBasePath}
+                lang="ru"
+            />
+            <pagefind-modal-trigger placeholder={placeholder} />
+            <pagefind-modal />
+        </div>
+    )
+}

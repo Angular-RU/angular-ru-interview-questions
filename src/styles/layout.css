@@ -34,6 +34,20 @@
     display: block;
 }
 
+.site-search--hero {
+    --pf-input-height: 54px;
+    --pf-border-radius: 14px;
+
+    width: 100%;
+    max-width: 660px;
+    justify-content: stretch;
+    margin: 28px 0 0;
+}
+
+.site-search--hero pagefind-modal-trigger {
+    width: 100%;
+}
+
 @media (max-width: 700px) {
     .page {
         width: min(100% - 24px, 1120px);
