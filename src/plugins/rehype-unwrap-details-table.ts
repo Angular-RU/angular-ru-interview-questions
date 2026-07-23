@@ -33,6 +33,83 @@ const getSingleCellChildren = (table: Element): ElementContent[] | null => {
     return cells[0].children;
 };
 
+const getTextContent = (node: Node): string => {
+    if (node.type === 'text') {
+        return node.value;
+    }
+
+    if (!('children' in node)) {
+        return '';
+    }
+
+    return node.children.map((child) => getTextContent(child)).join('');
+};
+
+const createSlug = (value: string): string =>
+    value
+        .toLocaleLowerCase('ru')
+        .trim()
+        .replace(/[^\p{Letter}\p{Number}\s-]/gu, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+
+const createUniqueId = (baseId: string, usedIds: Set<string>): string => {
+    let id = baseId;
+    let suffix = 2;
+
+    while (usedIds.has(id)) {
+        id = `${baseId}-${suffix}`;
+        suffix += 1;
+    }
+
+    usedIds.add(id);
+
+    return id;
+};
+
+const indexSummary = (details: Element, usedIds: Set<string>): void => {
+    if (details.tagName !== 'details') {
+        return;
+    }
+
+    const summary = getElementChildren(details, 'summary')[0];
+
+    if (
+        !summary ||
+        getElementChildren(summary).some((child) => /^h[1-6]$/.test(child.tagName))
+    ) {
+        return;
+    }
+
+    const question = getTextContent(summary).trim();
+
+    if (!question) {
+        return;
+    }
+
+    const explicitId =
+        typeof summary.properties.id === 'string' ? summary.properties.id : '';
+    const generatedId = `question-${createSlug(question) || 'untitled'}`;
+    const id = explicitId || createUniqueId(generatedId, usedIds);
+
+    if (explicitId) {
+        delete summary.properties.id;
+    }
+
+    summary.children = [
+        {
+            type: 'element',
+            tagName: 'h4',
+            properties: {
+                className: ['question-search-heading'],
+                id,
+            },
+            children: summary.children,
+        },
+    ];
+};
+
 const unwrapDetailsTable = (details: Element): void => {
     if (details.tagName !== 'details') {
         return;
@@ -72,18 +149,32 @@ const unwrapDetailsTable = (details: Element): void => {
     details.children = nextChildren;
 };
 
-const walk = (node: Node): void => {
-    if (isElement(node)) {
-        unwrapDetailsTable(node);
+const collectIds = (node: Node, usedIds: Set<string>): void => {
+    if (isElement(node) && typeof node.properties.id === 'string') {
+        usedIds.add(node.properties.id);
     }
 
     if ('children' in node) {
-        node.children.forEach((child) => walk(child));
+        node.children.forEach((child) => collectIds(child, usedIds));
+    }
+};
+
+const walk = (node: Node, usedIds: Set<string>): void => {
+    if (isElement(node)) {
+        unwrapDetailsTable(node);
+        indexSummary(node, usedIds);
+    }
+
+    if ('children' in node) {
+        node.children.forEach((child) => walk(child, usedIds));
     }
 };
 
 export const rehypeUnwrapDetailsTable = () => {
     return (tree: Root): void => {
-        walk(tree);
+        const usedIds = new Set<string>();
+
+        collectIds(tree, usedIds);
+        walk(tree, usedIds);
     };
 };

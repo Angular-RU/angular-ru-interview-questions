@@ -19,33 +19,33 @@
         "predev": "npm run prebuild",
         "dev": "astro dev",
         "prebuild": "npm run build:public --workspaces --if-present",
-        "build": "astro build && npm run build:search",
-        "build:search": "npx --yes pagefind@1.5.2 --site dist --exclude-selectors \".sidebar-navigation, .site-search\"",
+        "build": "astro build",
+        "postbuild": "pagefind --site dist --exclude-selectors \".sidebar-navigation, .site-search\"",
         "preview": "astro preview",
+        "debug": "npm run build && astro preview --host 127.0.0.1 --port 4321",
         "astro": "astro",
         "format": "prettier \"!package-lock.json\" . --ignore-path .gitignore --write",
         "format:check": "prettier \"!package-lock.json\" . --ignore-path .gitignore --check"
     },
-    "dependencies": {
-        "@astrojs/markdown-remark": "^7.2.1",
-        "@types/node": "26.1.0",
-        "prettier": "3.8.4",
-        "rehype-raw": "^7.0.0",
-        "tsx": "4.20.6"
-    },
     "devDependencies": {
-        "prettier-plugin-astro": "0.14.1",
+        "@astrojs/markdown-remark": "7.2.1",
         "@astrojs/react": "6.0.1",
         "@tailwindcss/vite": "4.3.2",
+        "@types/node": "26.1.0",
         "@types/react": "19.2.17",
         "@types/react-dom": "19.2.3",
         "astro": "7.0.6",
         "highlight.js": "11.11.1",
         "markdown-it": "14.2.0",
         "markdown-it-anchor": "9.2.0",
+        "pagefind": "1.5.2",
+        "prettier": "3.8.4",
+        "prettier-plugin-astro": "0.14.1",
         "react": "19.2.7",
         "react-dom": "19.2.7",
+        "rehype-raw": "7.0.0",
         "sharp": "0.35.3",
-        "tailwindcss": "4.3.2"
+        "tailwindcss": "4.3.2",
+        "tsx": "4.20.6"
     }
 }

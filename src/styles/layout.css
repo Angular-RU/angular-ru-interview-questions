@@ -34,6 +34,10 @@
     display: block;
 }
 
+.site-search .pf-input {
+    padding-inline-end: 7rem !important;
+}
+
 .site-search--hero {
     --pf-input-height: 54px;
     --pf-border-radius: 14px;
