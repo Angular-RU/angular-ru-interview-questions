@@ -4,6 +4,7 @@ import '../styles/home.css';
 import Layout from '../layouts/Layout.astro';
 import HeroSpaceIllustration from '../components/HeroSpaceIllustration.astro';
 import HomeSection from '../components/HomeSection.astro';
+import SiteSearch from '../components/SiteSearch.astro';
 import {examples} from '../data/examples';
 
 type MarkdownModule = {
@@ -166,6 +167,11 @@ const exampleCards = examples.slice().sort((a, b) => a.order - b.order);
                     Вопросы, ответы и практические демо для подготовки разработчиков: инженерные основы, Frontend,
                     Backend, архитектура, инфраструктура и soft skills.
                 </p>
+
+                <SiteSearch
+                    placeholder="Найти вопрос, тему или технологию..."
+                    variant="hero"
+                />
 
                 <div
                     class="hero-navigation"

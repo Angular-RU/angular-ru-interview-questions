@@ -16,6 +16,17 @@
     list-style-position: outside;
 }
 
+.content summary .question-search-heading {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+}
+
 .content details[open] summary {
     border-bottom: 1px solid var(--border);
     background: #f8fafc;
