@@ -88,6 +88,14 @@ const searchEnabled = import.meta.env.PROD;
                 />
             )
         }
+        {
+            !isHomePage && (
+                <meta
+                    data-pagefind-filter="page[content]"
+                    content={currentPath}
+                />
+            )
+        }
         <title>{title}</title>
         <ClientRouter />
         {
@@ -106,7 +114,7 @@ const searchEnabled = import.meta.env.PROD;
                 class="content"
                 data-pagefind-body
             >
-                {!isHomePage && <SiteSearch />}
+                {!isHomePage && <SiteSearch pagePath={currentPath} />}
 
                 <SidebarNavigation
                     headings={headings}
@@ -120,10 +128,17 @@ const searchEnabled = import.meta.env.PROD;
         </main>
 
         <script>
+            interface PagefindModalElement extends HTMLElement {
+                close(): void;
+            }
+
             declare global {
                 interface Window {
                     PagefindComponents?: {
                         getInstanceManager(): {
+                            getInstance(name: string): {
+                                triggerFilter(name: string, values: ReadonlyArray<string>): void;
+                            };
                             removeInstance(name: string): void;
                         };
                     };
@@ -132,6 +147,54 @@ const searchEnabled = import.meta.env.PROD;
 
             document.addEventListener('astro:before-swap', () => {
                 window.PagefindComponents?.getInstanceManager().removeInstance('default');
+            });
+
+            document.addEventListener('astro:page-load', () => {
+                const pagePath = document.querySelector<HTMLElement>('.site-search')?.dataset.pagePath;
+                const searchModal = document.querySelector<PagefindModalElement>('.site-search pagefind-modal');
+
+                if (pagePath) {
+                    window.PagefindComponents?.getInstanceManager()
+                        .getInstance('default')
+                        .triggerFilter('page', [pagePath]);
+                }
+
+                searchModal?.addEventListener('click', (event) => {
+                    const resultLink =
+                        event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
+
+                    if (!resultLink) {
+                        return;
+                    }
+
+                    const resultUrl = new URL(resultLink.href);
+                    const isCurrentPageResult =
+                        resultUrl.origin === window.location.origin &&
+                        resultUrl.pathname === window.location.pathname &&
+                        resultUrl.search === window.location.search &&
+                        Boolean(resultUrl.hash);
+
+                    if (!isCurrentPageResult) {
+                        return;
+                    }
+
+                    const dialog = searchModal.querySelector('dialog');
+
+                    if (!dialog) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    dialog.addEventListener(
+                        'close',
+                        () => {
+                            window.location.hash = resultUrl.hash;
+                            document.getElementById(decodeURIComponent(resultUrl.hash.slice(1)))?.scrollIntoView();
+                        },
+                        {once: true},
+                    );
+                    searchModal.close();
+                });
             });
         </script>
     </body>

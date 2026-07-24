@@ -1,10 +1,11 @@
 ---
 interface Props {
+    readonly pagePath?: string;
     readonly placeholder?: string;
     readonly variant?: 'default' | 'hero';
 }
 
-const {placeholder = 'Поиск', variant = 'default'} = Astro.props;
+const {pagePath, placeholder = 'Поиск', variant = 'default'} = Astro.props;
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const pagefindPath = `${basePath}/pagefind`;
@@ -16,6 +17,7 @@ const searchEnabled = import.meta.env.PROD;
     searchEnabled && (
         <div
             class:list={['site-search', variant === 'hero' && 'site-search--hero']}
+            data-page-path={pagePath}
             data-pagefind-ignore
         >
             <pagefind-config
