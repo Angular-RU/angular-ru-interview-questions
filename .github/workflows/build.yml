@@ -28,6 +28,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Migrate code fence metadata
+        run: node scripts/migrate-code-fence-meta.mjs
+
+      - name: Format files
+        run: npm run format
+
+      - name: Upload migrated sources
+        uses: actions/upload-artifact@v4
+        with:
+          name: migrated-content-figures
+          path: |
+            src/pages
+            src/plugins/rehype-content-figures.ts
+            src/styles/content-figures.css
+
       - name: Check formatting
         run: npm run format:check
 
