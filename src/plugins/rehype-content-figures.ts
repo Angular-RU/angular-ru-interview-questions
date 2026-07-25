@@ -2,8 +2,11 @@ import type {Element, ElementContent, Root, RootContent} from 'hast';
 
 type Node = Root | RootContent | ElementContent;
 type TransformContext = {
-    readonly codeGroupLabel?: string;
     readonly insideFigure?: boolean;
+};
+type CodeMeta = {
+    readonly filename?: string;
+    readonly label?: string;
 };
 
 const LANGUAGE_LABELS: Readonly<Record<string, string>> = {
@@ -64,16 +67,6 @@ const getClassNames = (element: Element): string[] => {
 const getDirectElement = (element: Element, tagName: string): Element | undefined =>
     element.children.find((child): child is Element => isTag(child, tagName));
 
-const hasDescendant = (node: Node, tagName: string): boolean => {
-    if (isTag(node, tagName)) {
-        return true;
-    }
-
-    return (
-        'children' in node && node.children.some((child) => hasDescendant(child, tagName))
-    );
-};
-
 const getCodeElement = (pre: Element): Element | undefined =>
     pre.tagName === 'pre' ? getDirectElement(pre, 'code') : undefined;
 
@@ -85,32 +78,60 @@ const getCodeLanguage = (code: Element): string | undefined => {
     return languageClass?.slice('language-'.length).toLowerCase();
 };
 
-const getCodeMeta = (code: Element): string => {
+const getCodeMetaString = (code: Element): string => {
     const meta = code.data?.meta;
 
-    return typeof meta === 'string' ? meta : '';
+    return typeof meta === 'string' ? meta.trim() : '';
 };
 
-const getExplicitFilename = (pre: Element, code: Element): string | undefined => {
-    const propertyFilename = pre.properties.dataFilename ?? code.properties.dataFilename;
+const unwrapQuotes = (value: string): string => {
+    const trimmed = value.trim();
+    const first = trimmed.at(0);
+    const last = trimmed.at(-1);
 
-    if (typeof propertyFilename === 'string' && propertyFilename.trim()) {
-        return propertyFilename.trim();
+    return trimmed.length >= 2 && first === last && (first === '"' || first === "'")
+        ? trimmed.slice(1, -1).trim()
+        : trimmed;
+};
+
+const isFilename = (value: string): boolean =>
+    !/\s/.test(value) && /(?:^|\/)[\w@.-]+(?:\.[\w-]+)+$/u.test(value);
+
+const getExplicitCodeMeta = (pre: Element, code: Element): CodeMeta => {
+    const propertyFilename = pre.properties.dataFilename ?? code.properties.dataFilename;
+    const meta = getCodeMetaString(code);
+    const filenameMatch = meta.match(
+        /(?:^|\s)(?:filename|file)=(?:"([^"]+)"|'([^']+)'|([^\s]+))/i,
+    );
+    const matchedFilename = filenameMatch?.slice(1).find(Boolean);
+    const filename =
+        typeof propertyFilename === 'string' && propertyFilename.trim()
+            ? propertyFilename.trim()
+            : matchedFilename?.trim();
+    const remainingMeta = filenameMatch
+        ? meta.replace(filenameMatch[0], ' ').replace(/\s+/g, ' ').trim()
+        : meta;
+    const plainMeta = unwrapQuotes(remainingMeta);
+
+    if (filename) {
+        return {
+            filename,
+            label: plainMeta || undefined,
+        };
     }
 
-    const meta = getCodeMeta(code);
-    const metaMatch = meta.match(
-        /(?:^|\s)(?:filename|file|title)=(?:"([^"]+)"|'([^']+)'|([^\s]+))/i,
-    );
-
-    return metaMatch?.slice(1).find(Boolean)?.trim();
+    return isFilename(plainMeta)
+        ? {filename: plainMeta}
+        : {
+              label: plainMeta || undefined,
+          };
 };
 
-const getCommentFilename = (code: Element): string | undefined => {
+const getCommentCodeMeta = (code: Element): CodeMeta => {
     const firstLine = getTextContent(code).split('\n', 1)[0]?.trim();
 
     if (!firstLine) {
-        return undefined;
+        return {};
     }
 
     const comment =
@@ -120,20 +141,29 @@ const getCommentFilename = (code: Element): string | undefined => {
         firstLine.match(/^#\s*(.+)$/)?.[1];
 
     if (!comment) {
-        return undefined;
+        return {};
     }
 
-    const candidate = comment.split(/:\s*/).at(-1)?.trim();
+    const separatorIndex = comment.lastIndexOf(':');
+    const candidate = (separatorIndex >= 0 ? comment.slice(separatorIndex + 1) : comment).trim();
 
-    if (!candidate || /\s/.test(candidate)) {
-        return undefined;
+    if (!isFilename(candidate)) {
+        return {};
     }
 
-    return /(?:^|\/)[\w@.-]+(?:\.[\w-]+)+$/u.test(candidate) ? candidate : undefined;
+    const label = separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;
+
+    return {
+        filename: candidate,
+        label: label || undefined,
+    };
 };
 
-const getCodeFilename = (pre: Element, code: Element): string | undefined =>
-    getExplicitFilename(pre, code) ?? getCommentFilename(code);
+const getCodeMeta = (pre: Element, code: Element): CodeMeta => {
+    const explicit = getExplicitCodeMeta(pre, code);
+
+    return explicit.filename || explicit.label ? explicit : getCommentCodeMeta(code);
+};
 
 const getImageFromContent = (content: readonly Node[]): Element | undefined => {
     const meaningful = content.filter((child) => !isWhitespace(child));
@@ -159,7 +189,7 @@ const getImageFromContent = (content: readonly Node[]): Element | undefined => {
         : undefined;
 };
 
-const getImageCaption = (image: Element): string => {
+const getImageDescription = (image: Element): string | undefined => {
     const title = image.properties.title;
     const alt = image.properties.alt;
     const description =
@@ -170,8 +200,8 @@ const getImageCaption = (image: Element): string => {
               : '';
 
     return !description || /^(?:img|image|picture)(?:\.\w+)?$/i.test(description)
-        ? 'Иллюстрация'
-        : `Иллюстрация: ${description}`;
+        ? undefined
+        : description;
 };
 
 const createCaption = (label: string, value?: string, valueAsCode = false): Element => ({
@@ -204,15 +234,14 @@ const createCaption = (label: string, value?: string, valueAsCode = false): Elem
     ],
 });
 
-const createCodeFigure = (pre: Element, groupLabel?: string): Element => {
+const createCodeFigure = (pre: Element): Element => {
     const code = getCodeElement(pre);
     const language = code ? getCodeLanguage(code) : undefined;
-    const filename = code ? getCodeFilename(pre, code) : undefined;
+    const {filename, label} = code ? getCodeMeta(pre, code) : {};
     const languageLabel = language
         ? (LANGUAGE_LABELS[language] ?? language.toUpperCase())
-        : undefined;
-    const context =
-        groupLabel && (filename || languageLabel) ? `${groupLabel} · ` : groupLabel;
+        : 'пример';
+    const captionValue = filename && label ? `${label} · ${filename}` : filename ?? label ?? languageLabel;
 
     return {
         type: 'element',
@@ -222,8 +251,8 @@ const createCodeFigure = (pre: Element, groupLabel?: string): Element => {
         },
         children: [
             filename
-                ? createCaption('Файл', `${context ?? ''}${filename}`, true)
-                : createCaption('Код', `${context ?? ''}${languageLabel ?? 'пример'}`),
+                ? createCaption('Файл', captionValue, true)
+                : createCaption('Код', captionValue),
             pre,
         ],
     };
@@ -235,7 +264,7 @@ const createImageFigure = (content: ElementContent[], image: Element): Element =
     properties: {
         className: ['content-figure', 'image-figure'],
     },
-    children: [...content, createCaption(getImageCaption(image))],
+    children: [...content, createCaption('Иллюстрация', getImageDescription(image))],
 });
 
 const transformChildren = (
@@ -250,39 +279,10 @@ const transformChildren = (
             continue;
         }
 
-        if (child.tagName === 'fieldset' && hasDescendant(child, 'pre')) {
-            const legend = getDirectElement(child, 'legend');
-            const groupLabel = legend ? getTextContent(legend).trim() : 'Примеры кода';
-            const groupChildren = child.children.filter((item) => item !== legend);
-
-            result.push({
-                type: 'element',
-                tagName: 'section',
-                properties: {
-                    ariaLabel: groupLabel,
-                    className: ['code-example-group'],
-                },
-                children: [
-                    {
-                        type: 'element',
-                        tagName: 'p',
-                        properties: {
-                            className: ['code-example-group__title'],
-                        },
-                        children: [{type: 'text', value: groupLabel}],
-                    },
-                    ...(transformChildren(groupChildren, {
-                        codeGroupLabel: groupLabel,
-                    }) as ElementContent[]),
-                ],
-            });
-            continue;
-        }
-
         const insideFigure = context.insideFigure || child.tagName === 'figure';
 
         if (child.tagName === 'pre' && getCodeElement(child) && !context.insideFigure) {
-            result.push(createCodeFigure(child, context.codeGroupLabel));
+            result.push(createCodeFigure(child));
             continue;
         }
 
@@ -297,7 +297,6 @@ const transformChildren = (
 
         if ('children' in child) {
             child.children = transformChildren(child.children, {
-                ...context,
                 insideFigure,
             }) as ElementContent[];
         }
