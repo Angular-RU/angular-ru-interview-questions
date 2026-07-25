@@ -69,32 +69,6 @@
     background: transparent;
 }
 
-.content .code-example-group {
-    min-width: 0;
-    margin: 24px 0;
-    padding: 16px;
-    border: 1px solid #b9d2ff;
-    border-radius: var(--radius-md);
-    background: #f8fbff;
-}
-
-.content .code-example-group__title {
-    display: inline-flex;
-    margin: 0 0 12px;
-    padding: 5px 12px;
-    border: 1px solid #b9d2ff;
-    border-radius: 999px;
-    color: var(--accent-strong);
-    background: #fff;
-    font-size: 0.85rem;
-    font-weight: 800;
-    line-height: 1.4;
-}
-
-.content .code-example-group .code-figure {
-    margin-block: 12px 0;
-}
-
 @media (max-width: 700px) {
     .content .content-figure__caption {
         align-items: flex-start;
