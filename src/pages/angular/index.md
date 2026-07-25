@@ -6077,8 +6077,7 @@ Hydration подключает Angular к уже существующему serv
 
 Пример настройки:
 
-```ts
-// app.config.ts
+```ts app.config.ts
 import {ApplicationConfig} from '@angular/core';
 import {provideClientHydration, withEventReplay} from '@angular/platform-browser';
 
@@ -6087,8 +6086,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-```ts
-// app.config.server.ts
+```ts app.config.server.ts
 import {ApplicationConfig, mergeApplicationConfig} from '@angular/core';
 import {provideServerRendering} from '@angular/ssr';
 
@@ -7787,8 +7785,7 @@ CSS import нужен не ради JavaScript export, а ради самого 
 
 Pure package экспортирует функции или значения и не выполняет важный код при импорте.
 
-```ts
-// src/math.ts
+```ts src/math.ts
 export function add(a: number, b: number): number {
   return a + b;
 }
@@ -7816,8 +7813,7 @@ export function multiply(a: number, b: number): number {
 <summary>Как выглядит package с CSS side effect?</summary><br>
 <table><tr><td>
 
-```ts
-// src/index.ts
+```ts src/index.ts
 import './global-styles.css';
 
 export {Button} from './button';
@@ -7845,16 +7841,14 @@ export {Input} from './input';
 
 Barrel file выглядит как простой public API, но любой top-level import в нем выполняется при импорте entry point.
 
-```ts
-// src/index.ts
+```ts src/index.ts
 import './init';
 
 export * from './button';
 export * from './input';
 ```
 
-```ts
-// src/init.ts
+```ts src/init.ts
 globalThis.__MY_LIBRARY_READY__ = true;
 ```
 
@@ -9506,8 +9500,7 @@ management, forms, error handling, loading states и тестированию. �
 модификаторов доступа и принудительного указания типов данных для всех переменных, методов и членов класса, которые вы
 используете в коде. Желательно все необходимые правила конвенции кода настраивать в ESLint.
 
-```ts
-// my.ts
+```ts my.ts
 export interface My {}
 
 // my-impl.ts

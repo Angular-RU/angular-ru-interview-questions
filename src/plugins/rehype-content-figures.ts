@@ -145,13 +145,16 @@ const getCommentCodeMeta = (code: Element): CodeMeta => {
     }
 
     const separatorIndex = comment.lastIndexOf(':');
-    const candidate = (separatorIndex >= 0 ? comment.slice(separatorIndex + 1) : comment).trim();
+    const candidate = (
+        separatorIndex >= 0 ? comment.slice(separatorIndex + 1) : comment
+    ).trim();
 
     if (!isFilename(candidate)) {
         return {};
     }
 
-    const label = separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;
+    const label =
+        separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;
 
     return {
         filename: candidate,
@@ -241,7 +244,10 @@ const createCodeFigure = (pre: Element): Element => {
     const languageLabel = language
         ? (LANGUAGE_LABELS[language] ?? language.toUpperCase())
         : 'пример';
-    const captionValue = filename && label ? `${label} · ${filename}` : filename ?? label ?? languageLabel;
+    const captionValue =
+        filename && label
+            ? `${label} · ${filename}`
+            : (filename ?? label ?? languageLabel);
 
     return {
         type: 'element',
