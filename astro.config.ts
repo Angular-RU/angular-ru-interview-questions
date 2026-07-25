@@ -3,6 +3,7 @@ import {defineConfig, passthroughImageService} from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import {unified} from '@astrojs/markdown-remark';
 import react from '@astrojs/react';
+import {rehypeContentFigures} from './src/plugins/rehype-content-figures';
 import {rehypeUnwrapDetailsTable} from './src/plugins/rehype-unwrap-details-table';
 import rehypeRaw from 'rehype-raw';
 
@@ -19,7 +20,7 @@ export default defineConfig({
     integrations: [react()],
     markdown: {
         processor: unified({
-            rehypePlugins: [rehypeRaw, rehypeUnwrapDetailsTable],
+            rehypePlugins: [rehypeRaw, rehypeContentFigures, rehypeUnwrapDetailsTable],
         }),
     },
 });
