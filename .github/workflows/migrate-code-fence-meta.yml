@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - agent/semantic-content-figures
+  workflow_dispatch:
 
 permissions:
   contents: write
