@@ -78,22 +78,68 @@ plugin = replaceRequired(
 
 plugin = replaceRequired(
     plugin,
-    /const isFilename = \(value: string\): boolean =>\n\s*!\/\\s\/\.test\(value\) && \/\(\?:\^\|\\\/\)\[\\w@\.\-\]\+\(\?:\\\.\[\\w\-\]\+\)\+\$\/u\.test\(value\);/u,
-    `const isFilename = (value: string): boolean =>\n    /^(?!.*\\s)(?:(?:.+\\/)?[^/]+\\.[^/]+|(?:.+\\/)?(?:Dockerfile|Jenkinsfile|Makefile|Procfile))$/iu.test(\n        value,\n    );`,
+    `const isFilename = (value: string): boolean =>
+    !/\\s/.test(value) && /(?:^|\\/)[\\w@.-]+(?:\\.[\\w-]+)+$/u.test(value);`,
+    `const isFilename = (value: string): boolean =>
+    /^(?!.*\\s)(?:(?:.+\\/)?[^/]+\\.[^/]+|(?:.+\\/)?(?:Dockerfile|Jenkinsfile|Makefile|Procfile))$/iu.test(
+        value,
+    );`,
     'filename detection',
 );
 
 plugin = replaceRequired(
     plugin,
     /const getExplicitCodeMeta = \(pre: Element, code: Element\): CodeMeta => \{[\s\S]*?\n\};\n\nconst getCommentCodeMeta/u,
-    `const getExplicitCodeMeta = (pre: Element, code: Element): CodeMeta => {\n    const propertyFilename = pre.properties.dataFilename ?? code.properties.dataFilename;\n    const meta = getCodeMetaString(code);\n    const filenameMatch = meta.match(\n        /(?:^|\\s)(?:filename|file)=(?:\"([^\"]+)\"|'([^']+)'|([^\\s]+))/i,\n    );\n    const titleMatch = meta.match(\n        /(?:^|\\s)title=(?:\"([^\"]+)\"|'([^']+)'|([^\\s]+))/i,\n    );\n    const matchedFilename = filenameMatch?.slice(1).find(Boolean)?.trim();\n    const matchedTitle = titleMatch?.slice(1).find(Boolean)?.trim();\n    const filename =\n        typeof propertyFilename === 'string' && propertyFilename.trim()\n            ? propertyFilename.trim()\n            : matchedFilename;\n    const remainingMeta = [filenameMatch?.[0], titleMatch?.[0]]\n        .filter((value): value is string => Boolean(value))\n        .reduce((value, match) => value.replace(match, ' '), meta)\n        .replace(/\\s+/g, ' ')\n        .trim();\n    const plainMeta = unwrapQuotes(remainingMeta);\n    const fallbackFilename = !filename && isFilename(plainMeta) ? plainMeta : undefined;\n    const title = matchedTitle ?? (plainMeta && !fallbackFilename ? plainMeta : undefined);\n\n    return {\n        filename: filename ?? fallbackFilename,\n        title,\n    };\n};\n\nconst getCommentCodeMeta`,
+    `const getExplicitCodeMeta = (pre: Element, code: Element): CodeMeta => {
+    const propertyFilename = pre.properties.dataFilename ?? code.properties.dataFilename;
+    const meta = getCodeMetaString(code);
+    const filenameMatch = meta.match(
+        /(?:^|\\s)(?:filename|file)=(?:"([^"]+)"|'([^']+)'|([^\\s]+))/i,
+    );
+    const titleMatch = meta.match(
+        /(?:^|\\s)title=(?:"([^"]+)"|'([^']+)'|([^\\s]+))/i,
+    );
+    const matchedFilename = filenameMatch?.slice(1).find(Boolean)?.trim();
+    const matchedTitle = titleMatch?.slice(1).find(Boolean)?.trim();
+    const filename =
+        typeof propertyFilename === 'string' && propertyFilename.trim()
+            ? propertyFilename.trim()
+            : matchedFilename;
+    const remainingMeta = [filenameMatch?.[0], titleMatch?.[0]]
+        .filter((value): value is string => Boolean(value))
+        .reduce((value, match) => value.replace(match, ' '), meta)
+        .replace(/\\s+/g, ' ')
+        .trim();
+    const plainMeta = unwrapQuotes(remainingMeta);
+    const fallbackFilename = !filename && isFilename(plainMeta) ? plainMeta : undefined;
+    const title = matchedTitle ?? (plainMeta && !fallbackFilename ? plainMeta : undefined);
+
+    return {
+        filename: filename ?? fallbackFilename,
+        title,
+    };
+};
+
+const getCommentCodeMeta`,
     'explicit filename and title parsing',
 );
 
 plugin = replaceRequired(
     plugin,
-    `    const label =\n        separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;\n\n    return {\n        filename: candidate,\n        label: label || undefined,\n    };`,
-    `    const title =\n        separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;\n\n    return {\n        filename: candidate,\n        title: title || undefined,\n    };`,
+    `    const label =
+        separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;
+
+    return {
+        filename: candidate,
+        label: label || undefined,
+    };`,
+    `    const title =
+        separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;
+
+    return {
+        filename: candidate,
+        title: title || undefined,
+    };`,
     'comment metadata title',
 );
 
@@ -113,8 +159,12 @@ plugin = replaceRequired(
 
 plugin = replaceRequired(
     plugin,
-    `        filename && label\n            ? \`\${label} · \${filename}\`\n            : (filename ?? label ?? languageLabel);`,
-    `        filename && title\n            ? \`\${title} · \${filename}\`\n            : (filename ?? title ?? languageLabel);`,
+    `        filename && label
+            ? \`\${label} · \${filename}\`
+            : (filename ?? label ?? languageLabel);`,
+    `        filename && title
+            ? \`\${title} · \${filename}\`
+            : (filename ?? title ?? languageLabel);`,
     'code figure caption',
 );
 
