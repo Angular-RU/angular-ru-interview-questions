@@ -6,7 +6,7 @@ type TransformContext = {
 };
 type CodeMeta = {
     readonly filename?: string;
-    readonly label?: string;
+    readonly title?: string;
 };
 
 const LANGUAGE_LABELS: Readonly<Record<string, string>> = {
@@ -95,7 +95,9 @@ const unwrapQuotes = (value: string): string => {
 };
 
 const isFilename = (value: string): boolean =>
-    !/\s/.test(value) && /(?:^|\/)[\w@.-]+(?:\.[\w-]+)+$/u.test(value);
+    /^(?!.*\s)(?:(?:.+\/)?[^/]+\.[^/]+|(?:.+\/)?(?:Dockerfile|Jenkinsfile|Makefile|Procfile))$/iu.test(
+        value,
+    );
 
 const getExplicitCodeMeta = (pre: Element, code: Element): CodeMeta => {
     const propertyFilename = pre.properties.dataFilename ?? code.properties.dataFilename;
@@ -103,28 +105,27 @@ const getExplicitCodeMeta = (pre: Element, code: Element): CodeMeta => {
     const filenameMatch = meta.match(
         /(?:^|\s)(?:filename|file)=(?:"([^"]+)"|'([^']+)'|([^\s]+))/i,
     );
-    const matchedFilename = filenameMatch?.slice(1).find(Boolean);
+    const titleMatch = meta.match(/(?:^|\s)title=(?:"([^"]+)"|'([^']+)'|([^\s]+))/i);
+    const matchedFilename = filenameMatch?.slice(1).find(Boolean)?.trim();
+    const matchedTitle = titleMatch?.slice(1).find(Boolean)?.trim();
     const filename =
         typeof propertyFilename === 'string' && propertyFilename.trim()
             ? propertyFilename.trim()
-            : matchedFilename?.trim();
-    const remainingMeta = filenameMatch
-        ? meta.replace(filenameMatch[0], ' ').replace(/\s+/g, ' ').trim()
-        : meta;
+            : matchedFilename;
+    const remainingMeta = [filenameMatch?.[0], titleMatch?.[0]]
+        .filter((value): value is string => Boolean(value))
+        .reduce((value, match) => value.replace(match, ' '), meta)
+        .replace(/\s+/g, ' ')
+        .trim();
     const plainMeta = unwrapQuotes(remainingMeta);
+    const fallbackFilename = !filename && isFilename(plainMeta) ? plainMeta : undefined;
+    const title =
+        matchedTitle ?? (plainMeta && !fallbackFilename ? plainMeta : undefined);
 
-    if (filename) {
-        return {
-            filename,
-            label: plainMeta || undefined,
-        };
-    }
-
-    return isFilename(plainMeta)
-        ? {filename: plainMeta}
-        : {
-              label: plainMeta || undefined,
-          };
+    return {
+        filename: filename ?? fallbackFilename,
+        title,
+    };
 };
 
 const getCommentCodeMeta = (code: Element): CodeMeta => {
@@ -153,19 +154,19 @@ const getCommentCodeMeta = (code: Element): CodeMeta => {
         return {};
     }
 
-    const label =
+    const title =
         separatorIndex >= 0 ? comment.slice(0, separatorIndex).trim() : undefined;
 
     return {
         filename: candidate,
-        label: label || undefined,
+        title: title || undefined,
     };
 };
 
 const getCodeMeta = (pre: Element, code: Element): CodeMeta => {
     const explicit = getExplicitCodeMeta(pre, code);
 
-    return explicit.filename || explicit.label ? explicit : getCommentCodeMeta(code);
+    return explicit.filename || explicit.title ? explicit : getCommentCodeMeta(code);
 };
 
 const getImageFromContent = (content: readonly Node[]): Element | undefined => {
@@ -240,14 +241,14 @@ const createCaption = (label: string, value?: string, valueAsCode = false): Elem
 const createCodeFigure = (pre: Element): Element => {
     const code = getCodeElement(pre);
     const language = code ? getCodeLanguage(code) : undefined;
-    const {filename, label} = code ? getCodeMeta(pre, code) : {};
+    const {filename, title} = code ? getCodeMeta(pre, code) : {};
     const languageLabel = language
         ? (LANGUAGE_LABELS[language] ?? language.toUpperCase())
         : 'пример';
     const captionValue =
-        filename && label
-            ? `${label} · ${filename}`
-            : (filename ?? label ?? languageLabel);
+        filename && title
+            ? `${title} · ${filename}`
+            : (filename ?? title ?? languageLabel);
 
     return {
         type: 'element',

@@ -57,7 +57,7 @@ Container связывает route, use case, состояние и presentation
 В React container обычно использует hook и передает props. В Angular container инжектирует facade или service, а
 presentational component получает `input()` и отдает событие через `output()`.
 
-```tsx OrdersPage.tsx
+```tsx filename="OrdersPage.tsx"
 function OrdersPage() {
   const {orders, cancelOrder} = useOrders();
 
@@ -70,7 +70,7 @@ function OrdersPage() {
 }
 ```
 
-```ts orders-list.component.ts
+```ts filename="orders-list.component.ts"
 @Component({
   selector: 'app-orders-list',
   template: `
@@ -90,7 +90,7 @@ export class OrdersListComponent {
 }
 ```
 
-```ts orders-page.component.ts
+```ts filename="orders-page.component.ts"
 @Component({
   imports: [OrdersListComponent],
   template: `
@@ -137,7 +137,7 @@ facade может использовать state manager, но не обязан
 В React эту роль часто играет custom hook. В Angular это обычно service с readonly signals или Observable API. UI не
 должен вызывать `HttpClient` или dispatch произвольных actions напрямую.
 
-```ts orders.facade.ts
+```ts filename="orders.facade.ts"
 @Injectable({providedIn: 'root'})
 export class OrdersFacade {
   private readonly api = inject(OrdersApi);
@@ -206,7 +206,7 @@ const toOrder = (dto: OrderDto): Order => ({
 React использует `children` и compound components. Angular использует content projection (`ng-content`) и directives для
 маркировки проецируемых частей.
 
-```tsx React
+```tsx title="React"
 <Dialog>
   <Dialog.Title>Удалить заказ?</Dialog.Title>
   <Dialog.Actions>
@@ -215,7 +215,7 @@ React использует `children` и compound components. Angular испол
 </Dialog>
 ```
 
-```html Angular
+```html title="Angular"
 <app-dialog>
   <h2 dialog-title>Удалить заказ?</h2>
   <div dialog-actions><button type="button">Удалить</button></div>
@@ -237,7 +237,7 @@ Custom hook повторно использует stateful логику React: �
 Выбор определяется lifetime: service может быть root-, route- или component-scoped, тогда как hook живет вместе с
 вызвавшим его component.
 
-```ts Angular
+```ts title="Angular"
 // Angular: component-scoped state
 @Injectable()
 export class SearchState {
@@ -457,7 +457,7 @@ React обычно подключает Redux Toolkit через `useSelector()`
 component выбирает данные selector-ом и отправляет event через `store.dispatch()`. Для небольшого feature достаточно
 service с readonly signal и явными methods.
 
-```ts Angular
+```ts title="Angular"
 @Injectable({providedIn: 'root'})
 export class CounterStore {
   private readonly countState = signal(0);
@@ -480,7 +480,7 @@ export class CounterStore {
 provider. В Angular эту задачу решают DI hierarchy и service. Provider на component или route дает scoped instance, а
 `providedIn: 'root'` — application-wide instance.
 
-```tsx React
+```tsx title="React"
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function ThemeProvider({children}: PropsWithChildren) {
@@ -491,7 +491,7 @@ function ThemeProvider({children}: PropsWithChildren) {
 }
 ```
 
-```ts Angular
+```ts title="Angular"
 @Injectable()
 export class ThemeState {
   private readonly themeState = signal<'light' | 'dark'>('light');
@@ -552,7 +552,7 @@ type FetchEvent<T> =
 Observer подписывает потребителей на изменения source. DOM events, RxJS Observable, store subscriptions и signals —
 разные реализации этой идеи. Вручную писать mutable массив observers обычно не нужно: важны teardown и lifetime.
 
-```ts Angular
+```ts title="Angular"
 const searchResults$ = queryControl.valueChanges.pipe(
   debounceTime(250),
   distinctUntilChanged(),
@@ -574,7 +574,7 @@ Factory централизует выбор реализации по type ил�
 в Angular — mapping на dynamic component type или DI factory provider. Большой `switch` стоит заменить registry, если
 варианты добавляют независимые модули.
 
-```ts Angular
+```ts title="Angular"
 type FieldKind = 'email' | 'password' | 'select';
 
 const fieldByKind = {
@@ -598,7 +598,7 @@ function getFieldComponent(kind: FieldKind): Type<unknown> {
 Ручной `getInstance()` создает скрытый global state и усложняет тесты. В React singleton module допустим для stateless
 API client, но зависимости проще передавать через provider. В Angular lifecycle singleton-а контролирует injector.
 
-```ts Angular
+```ts title="Angular"
 @Injectable({providedIn: 'root'})
 export class ApiClient {
   private readonly http = inject(HttpClient);
@@ -696,7 +696,7 @@ render modes.
 Страница в основном состоит из static HTML, а независимые интерактивные islands гидратируются отдельно. В Astro это
 выражают directives `client:load`, `client:idle` и `client:visible`.
 
-```astro Astro
+```astro title="Astro"
 <Article content={post} />
 <SearchBar client:load />
 <Newsletter client:visible />
@@ -706,7 +706,7 @@ render modes.
 Angular не является islands framework, но incremental hydration и `@defer` решают похожую задачу при SSR: тяжелый блок
 можно загрузить и гидратировать по viewport или interaction trigger.
 
-```html Angular
+```html title="Angular"
 @defer (on viewport) {
 <app-comments />
 } @placeholder {
@@ -724,7 +724,7 @@ Angular не является islands framework, но incremental hydration и `
 Host загружает exposed modules независимо развернутого remote в build time или runtime. Shared dependencies требуют
 совместимых версий; `singleton: true` снижает риск двух runtime framework, но не заменяет контракт версий.
 
-```js React
+```js title="React"
 new ModuleFederationPlugin({
   name: 'catalog',
   filename: 'remoteEntry.js',
@@ -807,7 +807,7 @@ CSR рендерит после загрузки JavaScript и подходит 
 HTML на каждый initial request и подходит динамическим индексируемым страницам. SSG генерирует HTML на build time и
 лучше всего работает для стабильного контента.
 
-```ts Angular
+```ts title="Angular"
 export const serverRoutes: ServerRoute[] = [
   {path: 'dashboard', renderMode: RenderMode.Client},
   {path: 'products/:id', renderMode: RenderMode.Server},
@@ -828,7 +828,7 @@ React выбирает эти режимы через framework вроде Next.
 ISR сохраняет производительность static page, но периодически или по событию регенерирует ее. Во время regeneration
 пользователь может получить предыдущую версию, поэтому система допускает окно stale content.
 
-```ts React / Next.js
+```ts title="React / Next.js"
 export const revalidate = 60;
 
 export default async function ProductPage() {
@@ -850,7 +850,7 @@ prerender + deployment rebuild/webhook, CDN stale-while-revalidate или server
 RSC остаются server-only и не добавляют свой code в client bundle; client components нужны для state, events и browser
 APIs. Angular SSR обычно выполняет те же components на server для initial HTML, а затем гидратирует их на client.
 
-```tsx React
+```tsx title="React"
 async function BlogPost({id}: {readonly id: string}) {
   const post = await db.posts.findById(id);
 
@@ -958,7 +958,7 @@ provider/hook; schema types лучше генерировать, а не дуб�
 Route-based splitting выносит feature в отдельный chunk. Component-based splitting откладывает тяжелый editor, chart или
 dialog до момента использования.
 
-```tsx React
+```tsx title="React"
 const Dashboard = lazy(() => import('./dashboard'));
 
 function App() {
@@ -970,7 +970,7 @@ function App() {
 }
 ```
 
-```ts Angular
+```ts title="Angular"
 export const routes: Routes = [
   {
     path: 'dashboard',
@@ -1006,7 +1006,7 @@ Code splitting создает chunks, lazy loading определяет моме
 ></script>
 ```
 
-```html Angular
+```html title="Angular"
 @defer (on viewport; prefetch on idle) {
 <app-recommendations />
 } @placeholder {
@@ -1027,14 +1027,14 @@ Memoization полезна для измеримо дорогого pure calcula
 `useCallback` и `memo`; React Compiler может оптимизировать часть случаев автоматически. В Angular `computed()` лениво
 кеширует значение до изменения зависимых signals, а pure pipe кеширует последний набор arguments.
 
-```tsx React
+```tsx title="React"
 const filtered = useMemo(
   () => products.filter((product) => categories.includes(product.category)),
   [products, categories],
 );
 ```
 
-```ts Angular
+```ts title="Angular"
 readonly filteredProducts = computed(() => {
   const categories = this.selectedCategories();
   return this.products().filter((product) => categories.includes(product.category));
@@ -1053,7 +1053,7 @@ Memoization имеет стоимость сравнения, cache и усло�
 Virtualization оставляет в DOM только видимое окно элементов и небольшой overscan. React использует react-window или
 React Virtuoso; Angular — CDK virtual scrolling. Fixed item height проще и дешевле variable-height measurement.
 
-```tsx React
+```tsx title="React"
 <FixedSizeList
   height={600}
   itemCount={items.length}
@@ -1064,7 +1064,7 @@ React Virtuoso; Angular — CDK virtual scrolling. Fixed item height проще 
 </FixedSizeList>
 ```
 
-```html Angular
+```html title="Angular"
 <cdk-virtual-scroll-viewport
   itemSize="50"
   class="viewport"
@@ -1119,7 +1119,7 @@ Server сначала присылает готовый HTML, затем framewo
 гидратируется раньше, below-the-fold — при viewport/idle/interaction. React использует streaming и Suspense boundaries;
 Astro — islands; Angular — incremental hydration с hydrate triggers у `@defer`.
 
-```html Angular
+```html title="Angular"
 @defer (hydrate on viewport) {
 <app-comments />
 } @placeholder {
@@ -1207,7 +1207,7 @@ data-access реализует ports; presentation зависит от applicati
 Remote store технически можно expose и подключить в нескольких applications, но это связывает release versions,
 framework runtime и state schema. Ошибка загрузки remote блокирует всех consumers.
 
-```js React
+```js title="React"
 new ModuleFederationPlugin({
   name: 'sharedState',
   exposes: {'./store': './src/store'},
@@ -1251,7 +1251,7 @@ Playwright — для настоящего routing, browser APIs и integration 
 Arrange готовит данные и dependencies, Act выполняет одно значимое действие, Assert проверяет observable result. В
 zoneless Angular после действия нужно дождаться scheduled rendering.
 
-```ts Angular
+```ts title="Angular"
 it('shows the updated title', async () => {
   const fixture = TestBed.createComponent(ProfileCard);
   fixture.componentInstance.title.set('Architect');
@@ -1339,7 +1339,7 @@ framework internals.
 - ISP: card получает `Pick<User, 'id' | 'name'>`, а не огромный object со всеми полями.
 - DIP: use case зависит от repository token/interface, infrastructure предоставляет implementation.
 
-```ts Angular
+```ts title="Angular"
 export const USERS_REPOSITORY = new InjectionToken<UsersRepository>('UsersRepository');
 
 export const usersRepositoryProvider = {
@@ -1361,7 +1361,7 @@ class: abstraction нужна на настоящей границе или пр
 Data-access получает DTO, domain pure function сортирует и фильтрует products, application facade координирует loading,
 а component отображает готовый view model.
 
-```ts Angular
+```ts title="Angular"
 const selectAvailableProducts = (products: ReadonlyArray<Product>): ReadonlyArray<Product> =>
   products.filter((product) => product.stock > 0).toSorted((left, right) => right.price - left.price);
 
@@ -1386,7 +1386,7 @@ DRY устраняет повторение одного знания, а не �
 теряет cancellation, validation, cache keys и domain semantics. Абстракция полезна, когда повторился стабильный
 protocol.
 
-```ts Angular
+```ts title="Angular"
 const loadUser = () => http.get<UserDto>('/api/user').pipe(map(toUser));
 const loadProducts = () => http.get<ReadonlyArray<ProductDto>>('/api/products').pipe(map(toProducts));
 ```
