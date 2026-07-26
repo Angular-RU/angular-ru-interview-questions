@@ -2491,8 +2491,7 @@ state, effects, browser APIs и event handlers.
 С Angular SSR это похоже только верхнеуровнево: оба подхода могут отдавать HTML с сервера, но Next.js сильнее связывает
 routing, data fetching, server/client boundary и deployment runtime с framework conventions.
 
-```tsx
-// app/users/[id]/page.tsx
+```tsx filename="app/users/[id]/page.tsx"
 export default async function UserPage({params}: {params: Promise<{id: string}>}) {
   const {id} = await params;
   const user = await loadUser(id);
