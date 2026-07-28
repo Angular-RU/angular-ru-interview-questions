@@ -15,6 +15,13 @@ order: 160
 <summary>Что такое CI/CD?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+На уровне командного процесса CI/CD отвечает за правило: каждое изменение должно проходить одинаковые автоматические
+проверки, а доставка в окружения должна быть понятной и воспроизводимой.
+
+**Полный ответ**
+
 На уровне командного процесса CI/CD отвечает за правило: каждое изменение должно проходить одинаковые автоматические
 проверки, а доставка в окружения должна быть понятной и воспроизводимой.
 
@@ -34,6 +41,13 @@ Deployment, artifacts, CDN cache и rollback описаны ниже в разд
 <summary>Что проверяет frontend CI pipeline?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Обычно pipeline устанавливает зависимости по lock-файлу, запускает type check, lint, unit/integration tests и production
+build. Для критичных пользовательских flows добавляют E2E или component tests в браузере.
+
+**Полный ответ**
+
 Обычно pipeline устанавливает зависимости по lock-файлу, запускает type check, lint, unit/integration tests и production
 build. Для критичных пользовательских flows добавляют E2E или component tests в браузере.
 
@@ -46,6 +60,13 @@ build. Для критичных пользовательских flows доба
 <details>
 <summary>Что делает CD pipeline для frontend?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CD берет уже проверенный build artifact и доставляет его в окружение: preview, staging или production. Хороший pipeline
+не пересобирает произвольный другой код на этапе выкладки, а продвигает понятный artifact между окружениями.
+
+**Полный ответ**
 
 CD берет уже проверенный build artifact и доставляет его в окружение: preview, staging или production. Хороший pipeline
 не пересобирает произвольный другой код на этапе выкладки, а продвигает понятный artifact между окружениями.
@@ -63,6 +84,14 @@ CD берет уже проверенный build artifact и доставляе
 <summary>Что значит интегрировать frontend code в production environment?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это значит не только собрать bundle, но и доставить его в окружение, где работают routing, API, CDN, cache, runtime
+config, security headers, monitoring и rollback. Для SPA важно настроить fallback на index.html, версионирование assets
+и стратегию cache invalidation, чтобы пользователь не получил несовместимые версии файлов.
+
+**Полный ответ**
+
 Это значит не только собрать bundle, но и доставить его в окружение, где работают routing, API, CDN, cache, runtime
 config, security headers, monitoring и rollback. Для SPA важно настроить fallback на `index.html`, версионирование
 assets и стратегию cache invalidation, чтобы пользователь не получил несовместимые версии файлов.
@@ -74,6 +103,14 @@ assets и стратегию cache invalidation, чтобы пользовате
 <details>
 <summary>Какие вопросы нужно задать перед production deployment frontend-приложения?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно понять, где собирается приложение, где хранятся artifacts, как задаются environment variables, кто отвечает за
+release, как работает rollback, какие checks обязательны и как мониторятся ошибки. Без этих ответов deployment остается
+ручной и рискованной процедурой.
+
+**Полный ответ**
 
 Нужно понять, где собирается приложение, где хранятся artifacts, как задаются environment variables, кто отвечает за
 release, как работает rollback, какие checks обязательны и как мониторятся ошибки. Без этих ответов deployment остается
@@ -87,6 +124,13 @@ release, как работает rollback, какие checks обязатель�
 <summary>Что является артефактом frontend build?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Обычно это index.html, hashed JavaScript/CSS chunks, images, fonts и manifests. SSR дополнительно создает server bundle.
+Artifact должен быть immutable и одинаково проходить stage и production.
+
+**Полный ответ**
+
 Обычно это `index.html`, hashed JavaScript/CSS chunks, images, fonts и manifests. SSR дополнительно создает server
 bundle. Artifact должен быть immutable и одинаково проходить stage и production.
 
@@ -97,6 +141,13 @@ bundle. Artifact должен быть immutable и одинаково прох�
 <details>
 <summary>Чем dev server отличается от production hosting?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Dev server дает watch, source maps и HMR, но не рассчитан на security, compression, caching и нагрузку. Production
+hosting раздает готовые artifacts через web server/CDN. Проверка только через dev server недостаточна.
+
+**Полный ответ**
 
 Dev server дает watch, source maps и HMR, но не рассчитан на security, compression, caching и нагрузку. Production
 hosting раздает готовые artifacts через web server/CDN. Проверка только через dev server недостаточна.
@@ -109,6 +160,13 @@ hosting раздает готовые artifacts через web server/CDN. Пр�
 <summary>Где обычно хранят production frontend assets?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В object storage, CDN origin, web server image или managed hosting. Static assets удобно хранить отдельно от backend.
+Доступ должен поддерживать HTTPS, correct MIME types и cache headers.
+
+**Полный ответ**
+
 В object storage, CDN origin, web server image или managed hosting. Static assets удобно хранить отдельно от backend.
 Доступ должен поддерживать HTTPS, correct MIME types и cache headers.
 
@@ -120,6 +178,13 @@ hosting раздает готовые artifacts через web server/CDN. Пр�
 <summary>Что такое CDN?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CDN кеширует и отдает content с edge servers ближе к пользователю. Он снижает latency и нагрузку на origin. Нужно
+управлять cache keys, invalidation, compression и security headers.
+
+**Полный ответ**
+
 CDN кеширует и отдает content с edge servers ближе к пользователю. Он снижает latency и нагрузку на origin. Нужно
 управлять cache keys, invalidation, compression и security headers.
 
@@ -130,6 +195,13 @@ CDN кеширует и отдает content с edge servers ближе к по�
 <details>
 <summary>Как CDN меняет путь от браузера до сервера?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Браузер обычно идет не напрямую на origin server, а на ближайший edge node CDN. Edge может отдать cached response,
+сделать TLS termination, применить redirects/security headers/compression или проксировать request дальше на origin.
+
+**Полный ответ**
 
 Браузер обычно идет не напрямую на origin server, а на ближайший edge node CDN. Edge может отдать cached response,
 сделать TLS termination, применить redirects/security headers/compression или проксировать request дальше на origin.
@@ -146,6 +218,13 @@ trace id.
 <summary>Что такое load balancing?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Load balancing распределяет запросы между несколькими instance приложения или сервиса. Он повышает доступность,
+позволяет переживать рост нагрузки и выводить instance из rotation при проблемах.
+
+**Полный ответ**
+
 Load balancing распределяет запросы между несколькими instance приложения или сервиса. Он повышает доступность,
 позволяет переживать рост нагрузки и выводить instance из rotation при проблемах.
 
@@ -161,6 +240,14 @@ Frontend-разработчику важно понимать последств
 <summary>Как load balancer влияет на frontend?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Load balancer может отправлять соседние API-запросы на разные backend instances. Поэтому frontend не должен полагаться
+на состояние в памяти одного сервера, а backend должен хранить session/data в общем хранилище или использовать
+осознанные sticky sessions.
+
+**Полный ответ**
+
 Load balancer может отправлять соседние API-запросы на разные backend instances. Поэтому frontend не должен полагаться
 на состояние в памяти одного сервера, а backend должен хранить session/data в общем хранилище или использовать
 осознанные sticky sessions.
@@ -175,6 +262,13 @@ Load balancer может отправлять соседние API-запрос�
 <details>
 <summary>Что такое cache invalidation?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Cache invalidation — правила, по которым кеш перестает считать данные актуальными. Это может быть TTL, revalidation
+через ETag, purge в CDN, versioned URL или явное обновление application cache после mutation.
+
+**Полный ответ**
 
 Cache invalidation — правила, по которым кеш перестает считать данные актуальными. Это может быть TTL, revalidation
 через `ETag`, purge в CDN, versioned URL или явное обновление application cache после mutation.
@@ -193,6 +287,13 @@ state manager или backend. Иначе можно исправить данн�
 <summary>Что такое queue или message broker на базовом уровне?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Queue хранит сообщения или задачи до обработки consumer-ом. Message broker помогает передавать события между сервисами,
+выравнивать пики нагрузки и повторять обработку при временных сбоях.
+
+**Полный ответ**
+
 Queue хранит сообщения или задачи до обработки consumer-ом. Message broker помогает передавать события между сервисами,
 выравнивать пики нагрузки и повторять обработку при временных сбоях.
 
@@ -207,6 +308,13 @@ Queue хранит сообщения или задачи до обработк�
 <details>
 <summary>Что такое retry, timeout и backoff?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Timeout ограничивает время ожидания операции. Retry повторяет запрос после временной ошибки. Backoff увеличивает паузу
+между повторами, чтобы не усилить нагрузку на уже проблемный сервис.
+
+**Полный ответ**
 
 Timeout ограничивает время ожидания операции. Retry повторяет запрос после временной ошибки. Backoff увеличивает паузу
 между повторами, чтобы не усилить нагрузку на уже проблемный сервис.
@@ -232,6 +340,13 @@ await fetch('/api/orders', {
 <summary>Что такое idempotency и почему это важно для frontend forms?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Idempotency означает, что повтор той же операции не меняет результат сверх первого успешного выполнения. Для форм это
+критично при double click, retry после timeout, восстановлении сети и повторной отправке вкладкой.
+
+**Полный ответ**
+
 Idempotency означает, что повтор той же операции не меняет результат сверх первого успешного выполнения. Для форм это
 критично при double click, retry после timeout, восстановлении сети и повторной отправке вкладкой.
 
@@ -246,6 +361,14 @@ UI помогает блокировкой submit, loading state и защито
 <details>
 <summary>Что такое CAP theorem на базовом уровне?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CAP theorem говорит, что при network partition распределенная система выбирает компромисс между consistency и
+availability. Это не значит, что всегда выбирают только две буквы из трех; важно понимать поведение системы во время
+сбоев сети.
+
+**Полный ответ**
 
 CAP theorem говорит, что при network partition распределенная система выбирает компромисс между consistency и
 availability. Это не значит, что всегда выбирают только две буквы из трех; важно понимать поведение системы во время
@@ -263,6 +386,13 @@ Frontend-разработчику это полезно для UX: данные 
 <summary>Что такое sharding?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Sharding делит данные на части по ключу, например по tenant, user id или региону. Это помогает масштабировать хранение и
+нагрузку, но усложняет запросы, миграции, балансировку и операции между shard-ами.
+
+**Полный ответ**
+
 Sharding делит данные на части по ключу, например по tenant, user id или региону. Это помогает масштабировать хранение и
 нагрузку, но усложняет запросы, миграции, балансировку и операции между shard-ами.
 
@@ -278,6 +408,13 @@ Sharding делит данные на части по ключу, наприме
 <summary>Что такое eventual consistency?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Eventual consistency означает, что система не обещает мгновенно одинаковое состояние во всех местах, но при отсутствии
+новых изменений со временем сходится к согласованному результату.
+
+**Полный ответ**
+
 Eventual consistency означает, что система не обещает мгновенно одинаковое состояние во всех местах, но при отсутствии
 новых изменений со временем сходится к согласованному результату.
 
@@ -292,6 +429,14 @@ Eventual consistency означает, что система не обещает
 <details>
 <summary>Почему <code>index.html</code> и hashed assets кешируют по-разному?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Content-hashed assets не меняются под тем же URL, поэтому их безопасно кешировать долго: Cache-Control: public,
+max-age=31536000, immutable. Новый release создает новые filenames, а старые assets можно держать до окончания активных
+сессий.
+
+**Полный ответ**
 
 Content-hashed assets не меняются под тем же URL, поэтому их безопасно кешировать долго:
 `Cache-Control: public, max-age=31536000, immutable`. Новый release создает новые filenames, а старые assets можно
@@ -309,6 +454,13 @@ Content-hashed assets не меняются под тем же URL, поэтом
 <summary>Что такое cache busting?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это изменение URL ресурса при изменении content, чтобы кеш не вернул старую версию. Наиболее надежный способ — content
+hash в filename. Query string поддерживается не всеми cache policies одинаково.
+
+**Полный ответ**
+
 Это изменение URL ресурса при изменении content, чтобы кеш не вернул старую версию. Наиболее надежный способ — content
 hash в filename. Query string поддерживается не всеми cache policies одинаково.
 
@@ -319,6 +471,13 @@ hash в filename. Query string поддерживается не всеми cach
 <details>
 <summary>Как hash в имени файла помогает кешированию?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Одинаковый content получает стабильный URL, измененный — новый URL. Старый и новый releases могут временно существовать
+вместе. Это позволяет долго кешировать chunks без ручной invalidation.
+
+**Полный ответ**
 
 Одинаковый content получает стабильный URL, измененный — новый URL. Старый и новый releases могут временно существовать
 вместе. Это позволяет долго кешировать chunks без ручной invalidation.
@@ -331,6 +490,13 @@ hash в filename. Query string поддерживается не всеми cach
 <summary>Как environment variables попадают во frontend?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+При build-time configuration bundler заменяет значения и они становятся частью публичного JavaScript. Static app не
+читает environment server после загрузки. Секреты во frontend передавать нельзя.
+
+**Полный ответ**
+
 При build-time configuration bundler заменяет значения и они становятся частью публичного JavaScript. Static app не
 читает environment server после загрузки. Секреты во frontend передавать нельзя.
 
@@ -341,6 +507,13 @@ hash в filename. Query string поддерживается не всеми cach
 <details>
 <summary>Почему runtime config иногда лучше build-time config?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Один artifact можно продвигать между окружениями, меняя небольшой config JSON при старте или запросе. Это упрощает
+rollback и снижает число сборок. Нужно обработать загрузку, schema validation и cache config.
+
+**Полный ответ**
 
 Один artifact можно продвигать между окружениями, меняя небольшой config JSON при старте или запросе. Это упрощает
 rollback и снижает число сборок. Нужно обработать загрузку, schema validation и cache config.
@@ -353,6 +526,13 @@ rollback и снижает число сборок. Нужно обработа�
 <summary>Как откатить frontend-релиз?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Вернуть предыдущий immutable artifact или переключить pointer/route на него. Старые hashed assets сохраняют до истечения
+активных сессий и cache TTL. Rollback проверяют как часть release process.
+
+**Полный ответ**
+
 Вернуть предыдущий immutable artifact или переключить pointer/route на него. Старые hashed assets сохраняют до истечения
 активных сессий и cache TTL. Rollback проверяют как часть release process.
 
@@ -363,6 +543,13 @@ rollback и снижает число сборок. Нужно обработа�
 <details>
 <summary>Какие метрики важно смотреть после деплоя frontend?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+JavaScript errors, failed asset/API requests, Core Web Vitals, conversion и ключевые user flows. Метрики сравнивают по
+release version и сегментам. Нужны alerts и быстрый способ отключить проблемную функцию.
+
+**Полный ответ**
 
 JavaScript errors, failed asset/API requests, Core Web Vitals, conversion и ключевые user flows. Метрики сравнивают по
 release version и сегментам. Нужны alerts и быстрый способ отключить проблемную функцию.
@@ -377,6 +564,13 @@ release version и сегментам. Нужны alerts и быстрый сп�
 <summary>Что такое feature toggle?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Feature toggle, или feature flag, — механизм включения и выключения функциональности без нового деплоя. Код уже может
+находиться в production, но пользователи увидят фичу только после включения флага.
+
+**Полный ответ**
+
 Feature toggle, или feature flag, — механизм включения и выключения функциональности без нового деплоя. Код уже может
 находиться в production, но пользователи увидят фичу только после включения флага.
 
@@ -387,6 +581,13 @@ Feature toggle, или feature flag, — механизм включения и 
 <details>
 <summary>Что такое kill switch?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Kill switch — ops flag для быстрого отключения проблемной функциональности в production без нового деплоя. Например, им
+можно вернуть старый checkout при росте ошибок оплаты. Переключение и fallback следует проверить заранее.
+
+**Полный ответ**
 
 Kill switch — ops flag для быстрого отключения проблемной функциональности в production без нового деплоя. Например, им
 можно вернуть старый checkout при росте ошибок оплаты. Переключение и fallback следует проверить заранее.
@@ -399,6 +600,13 @@ Kill switch — ops flag для быстрого отключения пробл
 <summary>Чем deploy отличается от release?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Deploy — доставка кода в окружение, release — предоставление функциональности пользователям. Feature toggles разделяют
+эти этапы: код можно задеплоить заранее, проверить и включить позднее.
+
+**Полный ответ**
+
 Deploy — доставка кода в окружение, release — предоставление функциональности пользователям. Feature toggles разделяют
 эти этапы: код можно задеплоить заранее, проверить и включить позднее.
 
@@ -410,6 +618,13 @@ Deploy — доставка кода в окружение, release — пред
 <summary>Зачем нужны feature toggles во frontend?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Они позволяют постепенно выкатывать изменения, проводить A/B-тесты, давать доступ отдельным группам и быстро отключать
+проблемный UI. Это уменьшает риск релиза, но требует контроля жизненного цикла флагов.
+
+**Полный ответ**
+
 Они позволяют постепенно выкатывать изменения, проводить A/B-тесты, давать доступ отдельным группам и быстро отключать
 проблемный UI. Это уменьшает риск релиза, но требует контроля жизненного цикла флагов.
 
@@ -420,6 +635,12 @@ Deploy — доставка кода в окружение, release — пред
 <details>
 <summary>Какие бывают типы feature toggles?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+У типов разные владельцы и срок жизни: например, release flag обычно удаляют, а permission rule может быть постоянной.
+
+**Полный ответ**
 
 - Release toggles временно скрывают незавершенную или постепенно выкатываемую фичу.
 - Experiment toggles распределяют варианты A/B-теста.
@@ -437,6 +658,13 @@ Deploy — доставка кода в окружение, release — пред
 <summary>Чем feature toggle отличается от permission check?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Feature toggle управляет выпуском или экспериментом, а permission check — правами конкретного пользователя. Условия
+могут выглядеть похоже, но имеют разные причины изменения, владельцев и требования к безопасности.
+
+**Полный ответ**
+
 Feature toggle управляет выпуском или экспериментом, а permission check — правами конкретного пользователя. Условия
 могут выглядеть похоже, но имеют разные причины изменения, владельцев и требования к безопасности.
 
@@ -448,6 +676,13 @@ Feature toggle управляет выпуском или эксперимент
 <summary>Чем feature toggle отличается от environment config?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Environment config обычно фиксирован для dev, stage или production. Feature toggle может меняться во время работы и
+зависеть от пользователя, роли, процента аудитории или варианта эксперимента.
+
+**Полный ответ**
+
 Environment config обычно фиксирован для dev, stage или production. Feature toggle может меняться во время работы и
 зависеть от пользователя, роли, процента аудитории или варианта эксперимента.
 
@@ -458,6 +693,14 @@ Environment config обычно фиксирован для dev, stage или pr
 <details>
 <summary>Что лучше: build-time flag или runtime flag?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Build-time flag встраивается в bundle и требует новой сборки и деплоя для изменения. Runtime flag загружается при
+запуске или обновляется во время работы. Для оперативного production rollout обычно нужен runtime flag, а build-time
+подходит для постоянных различий сборок и dead-code elimination.
+
+**Полный ответ**
 
 Build-time flag встраивается в bundle и требует новой сборки и деплоя для изменения. Runtime flag загружается при
 запуске или обновляется во время работы. Для оперативного production rollout обычно нужен runtime flag, а build-time
@@ -471,6 +714,14 @@ Build-time flag встраивается в bundle и требует новой 
 <summary>Где хранить feature flags config?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Флаги можно хранить в backend/config service, remote config, CMS, admin panel или feature-management service. Для
+production предпочтителен централизованный источник с audit log, валидацией, контролем доступа и возможностью изменить
+runtime-конфигурацию без нового frontend build.
+
+**Полный ответ**
+
 Флаги можно хранить в backend/config service, remote config, CMS, admin panel или feature-management service. Для
 production предпочтителен централизованный источник с audit log, валидацией, контролем доступа и возможностью изменить
 runtime-конфигурацию без нового frontend build.
@@ -482,6 +733,12 @@ runtime-конфигурацию без нового frontend build.
 <details>
 <summary>Какие риски есть у feature toggles?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужны владелец, срок удаления, audit log, безопасное значение по умолчанию и наблюдаемость по варианту флага.
+
+**Полный ответ**
 
 - Старые флаги забывают удалить.
 - Условия усложняют код и увеличивают число сценариев.
@@ -499,6 +756,13 @@ runtime-конфигурацию без нового frontend build.
 <summary>Почему frontend feature toggle не заменяет backend authorization?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Frontend-код и сетевые запросы можно изучить и изменить. Флаг может скрыть UI, но backend обязан независимо проверять
+права на данные и операции. Иначе пользователь сможет обойти ограничение прямым API-запросом.
+
+**Полный ответ**
+
 Frontend-код и сетевые запросы можно изучить и изменить. Флаг может скрыть UI, но backend обязан независимо проверять
 права на данные и операции. Иначе пользователь сможет обойти ограничение прямым API-запросом.
 
@@ -509,6 +773,14 @@ Frontend-код и сетевые запросы можно изучить и и
 <details>
 <summary>Как тестировать feature toggles?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Минимально тестируют включенный и выключенный флаг. Для критичной фичи также проверяют безопасный default, ошибку и
+задержку загрузки config, права доступа, постепенный rollout и rollback. Тесты должны явно задавать набор флагов, чтобы
+не зависеть от внешнего сервиса.
+
+**Полный ответ**
 
 Минимально тестируют включенный и выключенный флаг. Для критичной фичи также проверяют безопасный default, ошибку и
 задержку загрузки config, права доступа, постепенный rollout и rollback. Тесты должны явно задавать набор флагов, чтобы
@@ -522,6 +794,13 @@ Frontend-код и сетевые запросы можно изучить и и
 <summary>Когда feature toggle нужно удалить?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Release toggle удаляют после стабильного выката на всю аудиторию вместе с устаревшей веткой кода и тестами для нее.
+Полезно заранее назначить владельца и дату удаления, иначе флаги превращаются в постоянный технический долг.
+
+**Полный ответ**
+
 Release toggle удаляют после стабильного выката на всю аудиторию вместе с устаревшей веткой кода и тестами для нее.
 Полезно заранее назначить владельца и дату удаления, иначе флаги превращаются в постоянный технический долг.
 
@@ -532,6 +811,13 @@ Release toggle удаляют после стабильного выката н�
 <details>
 <summary>Как feature toggles помогают с микрофронтендами?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Host может скрыть вход в фичу, не загружать сломанный remote и показать fallback UI. Runtime flag позволяет сделать это
+без срочного деплоя host-приложения, если решение о загрузке принимается до импорта remote.
+
+**Полный ответ**
 
 Host может скрыть вход в фичу, не загружать сломанный remote и показать fallback UI. Runtime flag позволяет сделать это
 без срочного деплоя host-приложения, если решение о загрузке принимается до импорта remote.
@@ -544,6 +830,14 @@ Host может скрыть вход в фичу, не загружать сл�
 <summary>Что может пойти не так при загрузке feature flags?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Config service может быть недоступен или ответить поздно; разные части приложения могут получить разные версии; UI может
+сначала показать одну ветку, а затем другую. Нужны timeout, кеширование, согласованный snapshot конфигурации, schema
+validation и явные fallback-значения.
+
+**Полный ответ**
+
 Config service может быть недоступен или ответить поздно; разные части приложения могут получить разные версии; UI может
 сначала показать одну ветку, а затем другую. Нужны timeout, кеширование, согласованный snapshot конфигурации, schema
 validation и явные fallback-значения.
@@ -555,6 +849,14 @@ validation и явные fallback-значения.
 <details>
 <summary>Что показывать, пока feature flags загружаются или если config недоступен?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Выбор зависит от риска. Для некритичной UI-фичи подойдет безопасное default value. Для оплаты, прав доступа и других
+критичных сценариев используют loading state или conservative fallback: новая функциональность остается выключенной,
+пока конфигурация не подтверждена.
+
+**Полный ответ**
 
 Выбор зависит от риска. Для некритичной UI-фичи подойдет безопасное default value. Для оплаты, прав доступа и других
 критичных сценариев используют loading state или conservative fallback: новая функциональность остается выключенной,

@@ -15,6 +15,14 @@ order: 20
 <summary>Зачем команде version control workflow?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Version control workflow определяет, как создаются branches, pull requests, releases, hotfixes и rollback. Без общей
+договоренности изменения сложнее ревьюить, релизы сложнее собирать, а история становится шумной. Workflow должен
+соответствовать размеру команды, частоте релизов и риску продукта.
+
+**Полный ответ**
+
 Version control workflow определяет, как создаются branches, pull requests, releases, hotfixes и rollback. Без общей
 договоренности изменения сложнее ревьюить, релизы сложнее собирать, а история становится шумной. Workflow должен
 соответствовать размеру команды, частоте релизов и риску продукта.
@@ -26,6 +34,14 @@ Version control workflow определяет, как создаются branche
 <details>
 <summary>Чем feature branch workflow отличается от trunk-based development?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Feature branch workflow держит изменения в отдельных ветках до merge. Trunk-based development предполагает маленькие
+частые изменения в основной ветке, часто с feature flags и сильными automated checks. Первый подход проще для
+изолированной работы, второй лучше для частых релизов и меньших merge conflicts.
+
+**Полный ответ**
 
 Feature branch workflow держит изменения в отдельных ветках до merge. Trunk-based development предполагает маленькие
 частые изменения в основной ветке, часто с feature flags и сильными automated checks. Первый подход проще для
@@ -39,6 +55,14 @@ Feature branch workflow держит изменения в отдельных в
 <summary>Кто должен отвечать за качество version-controlled code?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Ответственность разделена: автор отвечает за изменение, reviewer — за проверку, maintainers — за правила репозитория и
+release process. Хорошая команда фиксирует branch protection, required checks, review rules и ownership, чтобы качество
+не зависело только от внимательности одного человека.
+
+**Полный ответ**
+
 Ответственность разделена: автор отвечает за изменение, reviewer — за проверку, maintainers — за правила репозитория и
 release process. Хорошая команда фиксирует branch protection, required checks, review rules и ownership, чтобы качество
 не зависело только от внимательности одного человека.
@@ -50,6 +74,14 @@ release process. Хорошая команда фиксирует branch protect
 <details>
 <summary>Где лучше вести issues и почему это важно?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Issues должны жить в одном понятном месте: GitHub Issues, Jira, YouTrack, Linear или другой системе. Важно, чтобы pull
+requests, bugs, decisions и releases были связаны между собой. Иначе команда теряет контекст, почему изменение было
+сделано и какие ограничения обсуждались.
+
+**Полный ответ**
 
 Issues должны жить в одном понятном месте: GitHub Issues, Jira, YouTrack, Linear или другой системе. Важно, чтобы pull
 requests, bugs, decisions и releases были связаны между собой. Иначе команда теряет контекст, почему изменение было
@@ -63,6 +95,13 @@ requests, bugs, decisions и releases были связаны между соб�
 <summary>Для чего нужен Husky?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Husky настраивает Git hooks в проекте. Например, pre-commit может запускать lint-staged, а commit-msg - проверять формат
+сообщения.
+
+**Полный ответ**
+
 Husky настраивает Git hooks в проекте. Например, `pre-commit` может запускать lint-staged, а `commit-msg` - проверять
 формат сообщения.
 
@@ -75,6 +114,14 @@ Hooks дают быстрый локальный feedback, но не замен�
 <details>
 <summary>Какие version control systems вы использовали?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Ожидается не только название Git, но и понимание ежедневных операций: branch, commit, merge, rebase, revert, conflict
+resolution, pull request и code review. Если был опыт SVN, Mercurial или monorepo tooling, полезно объяснить, чем
+отличались процессы и какие ограничения это создавало.
+
+**Полный ответ**
 
 Ожидается не только название Git, но и понимание ежедневных операций: branch, commit, merge, rebase, revert, conflict
 resolution, pull request и code review. Если был опыт SVN, Mercurial или monorepo tooling, полезно объяснить, чем
@@ -90,6 +137,13 @@ resolution, pull request и code review. Если был опыт SVN, Mercurial
 <summary>Чем git revert отличается от git reset?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+git revert создает новый коммит, отменяющий изменения выбранного коммита. Он безопасен для общей ветки, потому что не
+переписывает историю.
+
+**Полный ответ**
+
 `git revert` создает новый коммит, отменяющий изменения выбранного коммита. Он безопасен для общей ветки, потому что не
 переписывает историю.
 
@@ -104,6 +158,12 @@ resolution, pull request и code review. Если был опыт SVN, Mercurial
 <summary>Чем merge отличается от rebase?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+merge объединяет истории и обычно создает merge commit. Реальные commit hashes существующей ветки сохраняются.
+
+**Полный ответ**
+
 `merge` объединяет истории и обычно создает merge commit. Реальные commit hashes существующей ветки сохраняются.
 
 `rebase` переносит коммиты на новую базу, создавая для них новые hashes и линейную историю. Rebase удобен для локальной
@@ -116,6 +176,12 @@ feature-ветки, но опубликованную общую историю 
 <details>
 <summary>Как переключиться на hotfix с незакоммиченными изменениями?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Безопасные варианты:
+
+**Полный ответ**
 
 Безопасные варианты:
 
@@ -132,6 +198,13 @@ feature-ветки, но опубликованную общую историю 
 <details>
 <summary>Что происходит с коммитами при rebase на свежий develop?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Git берет коммиты feature-ветки и последовательно применяет их поверх нового develop. Содержимое может сохраниться, но
+commits получают новые parent links и hashes.
+
+**Полный ответ**
 
 Git берет коммиты feature-ветки и последовательно применяет их поверх нового `develop`. Содержимое может сохраниться, но
 commits получают новые parent links и hashes.

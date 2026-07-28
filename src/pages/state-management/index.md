@@ -15,6 +15,13 @@ order: 140
 <summary>Чем client state отличается от server state?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Client state принадлежит интерфейсу: выбранная вкладка, открытый dropdown, черновик формы, текущий шаг wizard. Его
+источник истины находится в приложении, поэтому UI сам решает lifetime, defaults и правила изменения.
+
+**Полный ответ**
+
 Client state принадлежит интерфейсу: выбранная вкладка, открытый dropdown, черновик формы, текущий шаг wizard. Его
 источник истины находится в приложении, поэтому UI сам решает lifetime, defaults и правила изменения.
 
@@ -32,6 +39,13 @@ transitions и близость к месту использования.
 <details>
 <summary>Что такое URL state, form state и cache state?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+URL state - состояние, которое должно переживать refresh, copy link и browser navigation: route params, query params,
+filters, pagination, selected tab, search string. Его лучше держать в URL, а не только в store.
+
+**Полный ответ**
 
 URL state - состояние, которое должно переживать refresh, copy link и browser navigation: route params, query params,
 filters, pagination, selected tab, search string. Его лучше держать в URL, а не только в store.
@@ -51,6 +65,13 @@ pagination cursor. Cache state должен иметь понятные прав
 <summary>Что такое normalized state?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Normalized state хранит entities по id и отдельно хранит списки id или связи между entities. Вместо вложенных копий
+одного пользователя в десяти местах есть один users.byId[userId], а экраны собирают нужную форму через selectors.
+
+**Полный ответ**
+
 Normalized state хранит entities по id и отдельно хранит списки id или связи между entities. Вместо вложенных копий
 одного пользователя в десяти местах есть один `users.byId[userId]`, а экраны собирают нужную форму через selectors.
 
@@ -69,6 +90,13 @@ Normalized state хранит entities по id и отдельно хранит 
 <summary>Что такое state machine и когда смотреть на XState?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+State machine описывает конечный набор состояний и допустимые переходы между ними. Вместо набора boolean flags вроде
+isLoading, isOpen, hasError, isSubmitted модель явно говорит: idle, loading, success, error, confirming, submitted.
+
+**Полный ответ**
+
 State machine описывает конечный набор состояний и допустимые переходы между ними. Вместо набора boolean flags вроде
 `isLoading`, `isOpen`, `hasError`, `isSubmitted` модель явно говорит: `idle`, `loading`, `success`, `error`,
 `confirming`, `submitted`.
@@ -86,6 +114,13 @@ State machine не нужна для каждого dropdown или формы �
 <details>
 <summary>Когда не нужен state manager?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+State manager не нужен автоматически. Часто достаточно локального component state, URL, form layer, query/cache layer
+или простого feature service.
+
+**Полный ответ**
 
 State manager не нужен автоматически. Часто достаточно локального component state, URL, form layer, query/cache layer
 или простого feature service.
@@ -109,6 +144,12 @@ store, если появилась реальная координационна
 <details>
 <summary>Как выбирать между signals, service, RxJS, NgRx, Redux, Zustand и TanStack Query?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Выбор начинается не с библиотеки, а с типа состояния и владельца данных.
+
+**Полный ответ**
 
 Выбор начинается не с библиотеки, а с типа состояния и владельца данных.
 
@@ -139,6 +180,14 @@ TanStack Query не заменяет client store: она решает server st
 <summary>Что такое Redux?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Redux — библиотека управления состоянием с единым store и явными событиями. Новое состояние вычисляется reducers из
+предыдущего состояния и action. Обычно используют Redux Toolkit, который уменьшает boilerplate и безопасно применяет
+immutable updates.
+
+**Полный ответ**
+
 Redux — библиотека управления состоянием с единым store и явными событиями. Новое состояние вычисляется reducers из
 предыдущего состояния и action. Обычно используют Redux Toolkit, который уменьшает boilerplate и безопасно применяет
 immutable updates.
@@ -151,6 +200,13 @@ immutable updates.
 <summary>Какие основные идеи Redux?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+State хранится централизованно, изменения описываются actions, а reducers вычисляют следующий state предсказуемо.
+Однонаправленный поток облегчает tracing и replay. Side effects выносят за пределы reducers.
+
+**Полный ответ**
+
 State хранится централизованно, изменения описываются actions, а reducers вычисляют следующий state предсказуемо.
 Однонаправленный поток облегчает tracing и replay. Side effects выносят за пределы reducers.
 
@@ -161,6 +217,13 @@ State хранится централизованно, изменения опи
 <details>
 <summary>Что такое store?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Store хранит текущее state tree, принимает actions через dispatch и уведомляет subscribers. Он также объединяет reducers
+и middleware. Store не обязан содержать все локальное UI-состояние приложения.
+
+**Полный ответ**
 
 Store хранит текущее state tree, принимает actions через `dispatch` и уведомляет subscribers. Он также объединяет
 reducers и middleware. Store не обязан содержать все локальное UI-состояние приложения.
@@ -173,6 +236,13 @@ reducers и middleware. Store не обязан содержать все лок
 <summary>Что такое action?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Action — обычный объект, описывающий произошедшее событие, обычно с полем type и payload. Хорошее имя отражает domain
+event, а не инструкцию изменения каждого поля. Actions должны быть сериализуемыми, если важны DevTools и persistence.
+
+**Полный ответ**
+
 Action — обычный объект, описывающий произошедшее событие, обычно с полем `type` и payload. Хорошее имя отражает domain
 event, а не инструкцию изменения каждого поля. Actions должны быть сериализуемыми, если важны DevTools и persistence.
 
@@ -183,6 +253,13 @@ event, а не инструкцию изменения каждого поля. 
 <details>
 <summary>Что такое reducer?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Reducer — функция (state, action) => nextState. Она обрабатывает известные actions и возвращает прежний state для
+остальных. Reducer не выполняет HTTP, timers и случайные вычисления.
+
+**Полный ответ**
 
 Reducer — функция `(state, action) => nextState`. Она обрабатывает известные actions и возвращает прежний state для
 остальных. Reducer не выполняет HTTP, timers и случайные вычисления.
@@ -207,6 +284,13 @@ function counterReducer(state = {count: 0}, action) {
 <summary>Почему reducer должен быть чистой функцией?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Одинаковые входы должны давать одинаковый результат без внешних side effects. Это делает обновления тестируемыми,
+поддерживает replay и time-travel debugging. I/O выполняет middleware или отдельный orchestration layer.
+
+**Полный ответ**
+
 Одинаковые входы должны давать одинаковый результат без внешних side effects. Это делает обновления тестируемыми,
 поддерживает replay и time-travel debugging. I/O выполняет middleware или отдельный orchestration layer.
 
@@ -217,6 +301,14 @@ function counterReducer(state = {count: 0}, action) {
 <details>
 <summary>Что такое immutable update?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это создание нового объекта для изменившейся ветки вместо мутации существующего state. Ссылочное сравнение позволяет
+быстро определить изменения. Redux Toolkit использует Immer, поэтому внутри reducer можно писать mutation-like syntax с
+immutable результатом.
+
+**Полный ответ**
 
 Это создание нового объекта для изменившейся ветки вместо мутации существующего state. Ссылочное сравнение позволяет
 быстро определить изменения. Redux Toolkit использует Immer, поэтому внутри reducer можно писать mutation-like syntax с
@@ -230,6 +322,13 @@ immutable результатом.
 <summary>Что такое selector?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Selector читает или вычисляет данные из store. Memoized selector не пересчитывает результат, пока его входные ссылки не
+изменились. Сложную derivation logic лучше держать в selectors, а не компонентах.
+
+**Полный ответ**
+
 Selector читает или вычисляет данные из store. Memoized selector не пересчитывает результат, пока его входные ссылки не
 изменились. Сложную derivation logic лучше держать в selectors, а не компонентах.
 
@@ -240,6 +339,13 @@ Selector читает или вычисляет данные из store. Memoize
 <details>
 <summary>Что такое middleware?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Middleware перехватывает dispatch между caller и reducer. Оно используется для async flows, logging, analytics и
+обработки ошибок. Middleware не должно скрывать критичную бизнес-логику без наблюдаемых actions.
+
+**Полный ответ**
 
 Middleware перехватывает dispatch между caller и reducer. Оно используется для async flows, logging, analytics и
 обработки ошибок. Middleware не должно скрывать критичную бизнес-логику без наблюдаемых actions.
@@ -252,6 +358,13 @@ Middleware перехватывает dispatch между caller и reducer. О�
 <summary>Что такое side effects в Redux?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это HTTP, storage, timers, navigation, случайность и любое взаимодействие вне чистого reducer. Их реализуют thunk, saga,
+observable middleware или listener middleware. Результат обычно возвращается в store новым action.
+
+**Полный ответ**
+
 Это HTTP, storage, timers, navigation, случайность и любое взаимодействие вне чистого reducer. Их реализуют thunk, saga,
 observable middleware или listener middleware. Результат обычно возвращается в store новым action.
 
@@ -262,6 +375,13 @@ observable middleware или listener middleware. Результат обычн�
 <details>
 <summary>Какие плюсы Redux?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Явный поток данных, хорошие DevTools, предсказуемые updates, testability и удобная диагностика сложных сценариев.
+Центральный event log полезен большим командам. Экосистема предлагает устойчивые patterns для normalized data.
+
+**Полный ответ**
 
 Явный поток данных, хорошие DevTools, предсказуемые updates, testability и удобная диагностика сложных сценариев.
 Центральный event log полезен большим командам. Экосистема предлагает устойчивые patterns для normalized data.
@@ -274,6 +394,13 @@ observable middleware или listener middleware. Результат обычн�
 <summary>Какие минусы Redux?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Дополнительные actions, reducers, selectors и async conventions увеличивают объем кода и порог входа. Глобальный store
+легко перегрузить локальным state. Плохая granularity вызывает лишние updates и связанность features.
+
+**Полный ответ**
+
 Дополнительные actions, reducers, selectors и async conventions увеличивают объем кода и порог входа. Глобальный store
 легко перегрузить локальным state. Плохая granularity вызывает лишние updates и связанность features.
 
@@ -284,6 +411,14 @@ observable middleware или listener middleware. Результат обычн�
 <details>
 <summary>Когда Redux оправдан?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Когда много удаленных компонентов используют общее сложное состояние, важны audit/debugging и несколько команд меняют
+одни domain entities. Он полезен для долгоживущих async workflows и normalized caches. Решение должно окупать
+инфраструктуру.
+
+**Полный ответ**
 
 Когда много удаленных компонентов используют общее сложное состояние, важны audit/debugging и несколько команд меняют
 одни domain entities. Он полезен для долгоживущих async workflows и normalized caches. Решение должно окупать
@@ -296,6 +431,13 @@ observable middleware или listener middleware. Результат обычн�
 <details>
 <summary>Когда Redux будет лишним усложнением?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для формы, раскрытия панели или данных одного feature часто достаточно component state или query cache. Если actions
+лишь дублируют простые setters, архитектура не дает пользы. Начинать лучше с colocated state.
+
+**Полный ответ**
 
 Для формы, раскрытия панели или данных одного feature часто достаточно component state или query cache. Если actions
 лишь дублируют простые setters, архитектура не дает пользы. Начинать лучше с colocated state.
@@ -310,6 +452,14 @@ observable middleware или listener middleware. Результат обычн�
 <summary>Что такое MobX?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+MobX — реактивная библиотека, которая отслеживает чтения observable state и автоматически обновляет зависящие
+computations и views. Код часто выглядит как обычные объекты и методы. Связи формируются динамически во время
+выполнения.
+
+**Полный ответ**
+
 MobX — реактивная библиотека, которая отслеживает чтения observable state и автоматически обновляет зависящие
 computations и views. Код часто выглядит как обычные объекты и методы. Связи формируются динамически во время
 выполнения.
@@ -322,6 +472,13 @@ computations и views. Код часто выглядит как обычные 
 <summary>Что такое observable state?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это состояние, чтения и изменения которого отслеживает MobX. Когда observable меняется, зависимые computed values и
+reactions инвалидируются. Изменения обычно группируют в actions.
+
+**Полный ответ**
+
 Это состояние, чтения и изменения которого отслеживает MobX. Когда observable меняется, зависимые computed values и
 reactions инвалидируются. Изменения обычно группируют в actions.
 
@@ -332,6 +489,13 @@ reactions инвалидируются. Изменения обычно груп
 <details>
 <summary>Что такое computed value?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Computed — производное значение из observables. MobX кеширует его и пересчитывает при изменении реально прочитанных
+dependencies. Computed должен быть чистым и не выполнять I/O.
+
+**Полный ответ**
 
 Computed — производное значение из observables. MobX кеширует его и пересчитывает при изменении реально прочитанных
 dependencies. Computed должен быть чистым и не выполнять I/O.
@@ -344,6 +508,13 @@ dependencies. Computed должен быть чистым и не выполня
 <summary>Что такое reaction?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Reaction запускает side effect при изменении наблюдаемого выражения. Его используют для persistence, analytics или
+интеграции с внешним API. Reaction нужно уничтожать, когда заканчивается lifetime владельца.
+
+**Полный ответ**
+
 Reaction запускает side effect при изменении наблюдаемого выражения. Его используют для persistence, analytics или
 интеграции с внешним API. Reaction нужно уничтожать, когда заканчивается lifetime владельца.
 
@@ -354,6 +525,13 @@ Reaction запускает side effect при изменении наблюда
 <details>
 <summary>Какие плюсы MobX?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Меньше boilerplate, естественная объектная модель и точные updates по фактически прочитанным dependencies. Удобен для
+богатых domain models и сложных производных значений. Быстро внедряется в локальные features.
+
+**Полный ответ**
 
 Меньше boilerplate, естественная объектная модель и точные updates по фактически прочитанным dependencies. Удобен для
 богатых domain models и сложных производных значений. Быстро внедряется в локальные features.
@@ -366,6 +544,13 @@ Reaction запускает side effect при изменении наблюда
 <summary>Какие минусы MobX?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Динамический dependency graph и скрытая реактивность могут усложнить tracing. Легко создать side effects с неочевидным
+lifecycle или чрезмерно mutable shared model. Нужны соглашения о actions, ownership и disposal.
+
+**Полный ответ**
+
 Динамический dependency graph и скрытая реактивность могут усложнить tracing. Легко создать side effects с неочевидным
 lifecycle или чрезмерно mutable shared model. Нужны соглашения о actions, ownership и disposal.
 
@@ -377,6 +562,13 @@ lifecycle или чрезмерно mutable shared model. Нужны согла�
 <summary>Чем MobX отличается от Redux?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Redux делает события и переходы состояния явными через actions/reducers. MobX больше опирается на observable graph и
+автоматические reactions, поэтому бывает лаконичнее. При неаккуратном дизайне поток изменений сложнее проследить.
+
+**Полный ответ**
+
 Redux делает события и переходы состояния явными через actions/reducers. MobX больше опирается на observable graph и
 автоматические reactions, поэтому бывает лаконичнее. При неаккуратном дизайне поток изменений сложнее проследить.
 
@@ -387,6 +579,14 @@ Redux делает события и переходы состояния явн�
 <details>
 <summary>Когда MobX может быть удобнее Redux?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Когда важна лаконичная модель объектов, много computed dependencies и команда принимает runtime-реактивность. Redux
+удобнее, если нужен строгий event log и максимально явный flow. Выбор зависит от требований к debugging и культуре
+команды.
+
+**Полный ответ**
 
 Когда важна лаконичная модель объектов, много computed dependencies и команда принимает runtime-реактивность. Redux
 удобнее, если нужен строгий event log и максимально явный flow. Выбор зависит от требований к debugging и культуре

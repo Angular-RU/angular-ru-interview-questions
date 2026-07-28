@@ -16,6 +16,13 @@ icon: /logos/linux.svg
 <summary>Что такое Linux и чем он полезен frontend-разработчику?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Linux — семейство Unix-like operating systems на базе Linux kernel. Для frontend-разработчика он важен потому, что
+большая часть CI, Docker images, production servers и cloud-инфраструктуры работает именно в Linux-окружении.
+
+**Полный ответ**
+
 Linux — семейство Unix-like operating systems на базе Linux kernel. Для frontend-разработчика он важен потому, что
 большая часть CI, Docker images, production servers и cloud-инфраструктуры работает именно в Linux-окружении.
 
@@ -31,6 +38,14 @@ Linux — семейство Unix-like operating systems на базе Linux ker
 <summary>Что такое Unix-like system?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Unix-like system следует идеям Unix: filesystem как дерево, процессы, текстовые streams, pipes, permissions и набор
+маленьких утилит, которые можно комбинировать. Linux, macOS и BSD относятся к Unix-like системам, но используют разные
+kernels, системные утилиты и package managers.
+
+**Полный ответ**
+
 Unix-like system следует идеям Unix: filesystem как дерево, процессы, текстовые streams, pipes, permissions и набор
 маленьких утилит, которые можно комбинировать. Linux, macOS и BSD относятся к Unix-like системам, но используют разные
 kernels, системные утилиты и package managers.
@@ -42,6 +57,13 @@ kernels, системные утилиты и package managers.
 <details>
 <summary>Чем shell отличается от terminal?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Terminal — приложение или интерфейс, который показывает текстовый ввод/вывод. Shell — программа, которая интерпретирует
+команды: bash, zsh, fish.
+
+**Полный ответ**
 
 Terminal — приложение или интерфейс, который показывает текстовый ввод/вывод. Shell — программа, которая интерпретирует
 команды: `bash`, `zsh`, `fish`.
@@ -56,6 +78,13 @@ shells поддерживают похожий базовый синтаксис
 <details>
 <summary>Что такое PATH?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+PATH — environment variable со списком directories, где shell ищет executable files. Когда выполняется node, shell
+проходит по PATH слева направо и запускает первый найденный executable.
+
+**Полный ответ**
 
 `PATH` — environment variable со списком directories, где shell ищет executable files. Когда выполняется `node`, shell
 проходит по `PATH` слева направо и запускает первый найденный executable.
@@ -75,6 +104,12 @@ command -v npm
 <details>
 <summary>Что такое stdin, stdout и stderr?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+У процесса есть стандартные streams:
+
+**Полный ответ**
 
 У процесса есть стандартные streams:
 
@@ -97,6 +132,12 @@ npm run build > build.log 2> build-error.log
 <summary>Как работают pipes и redirection?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Pipe | передает stdout одной команды в stdin следующей. Redirection записывает или читает stream из файла.
+
+**Полный ответ**
+
 Pipe `|` передает `stdout` одной команды в `stdin` следующей. Redirection записывает или читает stream из файла.
 
 ```bash
@@ -116,6 +157,12 @@ npm test >> test.log
 <details>
 <summary>Что делают команды pwd, ls и cd?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+pwd показывает current working directory. ls выводит содержимое directory. cd меняет current directory.
+
+**Полный ответ**
 
 `pwd` показывает current working directory. `ls` выводит содержимое directory. `cd` меняет current directory.
 
@@ -137,6 +184,12 @@ cd -
 <details>
 <summary>Что делают mkdir, touch, cp, mv и rm?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Базовые команды для работы с файлами и directories:
+
+**Полный ответ**
 
 Базовые команды для работы с файлами и directories:
 
@@ -165,6 +218,12 @@ rm unused.txt
 <summary>Что делают cat, less, head и tail?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Эти команды читают файлы:
+
+**Полный ответ**
+
 Эти команды читают файлы:
 
 - `cat` печатает файл целиком;
@@ -189,6 +248,13 @@ tail -f server.log
 <summary>Что делают find, grep и ripgrep?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+find ищет файлы по имени, типу, времени изменения и другим признакам. grep ищет текст по содержимому. rg или ripgrep —
+быстрый современный аналог grep, который по умолчанию уважает .gitignore.
+
+**Полный ответ**
+
 `find` ищет файлы по имени, типу, времени изменения и другим признакам. `grep` ищет текст по содержимому. `rg` или
 ripgrep — быстрый современный аналог `grep`, который по умолчанию уважает `.gitignore`.
 
@@ -208,6 +274,13 @@ rg "kind: questions" src
 <summary>Что такое absolute и relative path?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Absolute path начинается от root directory, например /Users/name/project или /var/log/nginx/access.log. Relative path
+считается от current working directory, например src/pages или ../README.md.
+
+**Полный ответ**
+
 Absolute path начинается от root directory, например `/Users/name/project` или `/var/log/nginx/access.log`. Relative
 path считается от current working directory, например `src/pages` или `../README.md`.
 
@@ -221,6 +294,12 @@ path считается от current working directory, например `src/pa
 <details>
 <summary>Что означают символы ., .. и ~?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+. означает current directory. .. означает parent directory. обычно раскрывается в home directory текущего пользователя.
+
+**Полный ответ**
 
 `.` означает current directory. `..` означает parent directory. `~` обычно раскрывается в home directory текущего
 пользователя.
@@ -244,6 +323,12 @@ cd ~
 <summary>Как устроены Linux permissions?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+У файла есть owner, group и permissions для трех наборов пользователей: owner, group, others. Базовые права:
+
+**Полный ответ**
+
 У файла есть owner, group и permissions для трех наборов пользователей: owner, group, others. Базовые права:
 
 - `r` — read;
@@ -260,6 +345,12 @@ cd ~
 <details>
 <summary>Что делают chmod, chown и chgrp?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+chmod меняет permissions, chown меняет owner, chgrp меняет group.
+
+**Полный ответ**
 
 `chmod` меняет permissions, `chown` меняет owner, `chgrp` меняет group.
 
@@ -280,6 +371,13 @@ chgrp developers file.txt
 <summary>Для чего нужен sudo?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+sudo запускает команду с повышенными правами, обычно от root. Это нужно для системных операций: установка системных
+пакетов, изменение protected directories, управление services.
+
+**Полный ответ**
+
 `sudo` запускает команду с повышенными правами, обычно от root. Это нужно для системных операций: установка системных
 пакетов, изменение protected directories, управление services.
 
@@ -295,6 +393,13 @@ chgrp developers file.txt
 <details>
 <summary>Что делают ps, top, htop и kill?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ps показывает processes snapshot. top и htop показывают процессы в интерактивном режиме. kill отправляет signal
+процессу.
+
+**Полный ответ**
 
 `ps` показывает processes snapshot. `top` и `htop` показывают процессы в интерактивном режиме. `kill` отправляет signal
 процессу.
@@ -317,6 +422,12 @@ kill -9 12345
 <summary>Как понять, какой процесс занял port?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+На Linux часто используют ss, lsof или fuser. На macOS обычно доступен lsof.
+
+**Полный ответ**
+
 На Linux часто используют `ss`, `lsof` или `fuser`. На macOS обычно доступен `lsof`.
 
 ```bash
@@ -334,6 +445,13 @@ service.
 <details>
 <summary>Что показывают df, du и free?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+df показывает свободное место на mounted filesystems. du показывает размер files/directories. free показывает
+использование памяти на Linux.
+
+**Полный ответ**
 
 `df` показывает свободное место на mounted filesystems. `du` показывает размер files/directories. `free` показывает
 использование памяти на Linux.
@@ -353,6 +471,13 @@ free -h
 <details>
 <summary>Что делают uname, whoami и env?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+uname показывает информацию о системе и kernel. whoami показывает текущего пользователя. env выводит environment
+variables.
+
+**Полный ответ**
 
 `uname` показывает информацию о системе и kernel. `whoami` показывает текущего пользователя. `env` выводит environment
 variables.
@@ -375,6 +500,13 @@ env
 <summary>Что делают ping, curl и wget?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ping проверяет базовую сетевую доступность через ICMP. curl выполняет HTTP и другие network requests. wget часто
+используют для скачивания файлов.
+
+**Полный ответ**
+
 `ping` проверяет базовую сетевую доступность через ICMP. `curl` выполняет HTTP и другие network requests. `wget` часто
 используют для скачивания файлов.
 
@@ -395,6 +527,12 @@ wget https://example.com/file.tar.gz
 <summary>Что делают ssh и scp?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ssh подключается к удаленной машине по secure shell. scp копирует файлы через SSH.
+
+**Полный ответ**
+
 `ssh` подключается к удаленной машине по secure shell. `scp` копирует файлы через SSH.
 
 ```bash
@@ -412,6 +550,12 @@ CI secrets, deploy keys и работы с private Git repositories.
 <details>
 <summary>Чем ifconfig отличается от ip?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ifconfig — старая команда из net-tools. В современных Linux-дистрибутивах чаще используют ip из iproute2.
+
+**Полный ответ**
 
 `ifconfig` — старая команда из net-tools. В современных Linux-дистрибутивах чаще используют `ip` из iproute2.
 
@@ -433,6 +577,12 @@ ip route
 <summary>Какие package managers бывают в Linux?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Package manager зависит от дистрибутива:
+
+**Полный ответ**
+
 Package manager зависит от дистрибутива:
 
 - Debian/Ubuntu используют `apt`;
@@ -450,6 +600,12 @@ Frontend-разработчик чаще всего встречает `apt` в 
 <details>
 <summary>Как работать с apt?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+apt устанавливает, обновляет и удаляет packages в Debian/Ubuntu.
+
+**Полный ответ**
 
 `apt` устанавливает, обновляет и удаляет packages в Debian/Ubuntu.
 
@@ -471,6 +627,13 @@ apt search package-name
 <summary>Чем apt отличается от apt-get?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+apt-get — более стабильный низкоуровневый CLI, который часто используют в scripts и Dockerfile. apt — более удобный
+интерактивный интерфейс для человека, с progress и более дружелюбным выводом.
+
+**Полный ответ**
+
 `apt-get` — более стабильный низкоуровневый CLI, который часто используют в scripts и Dockerfile. `apt` — более удобный
 интерактивный интерфейс для человека, с progress и более дружелюбным выводом.
 
@@ -487,6 +650,14 @@ apt search package-name
 <summary>Чем Linux отличается от macOS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Linux использует Linux kernel и обычно GNU userland. macOS использует Darwin/XNU kernel и BSD userland. Обе системы
+Unix-like, поэтому базовые команды похожи, но опции утилит, filesystem behavior, services, package management и security
+model могут отличаться.
+
+**Полный ответ**
+
 Linux использует Linux kernel и обычно GNU userland. macOS использует Darwin/XNU kernel и BSD userland. Обе системы
 Unix-like, поэтому базовые команды похожи, но опции утилит, filesystem behavior, services, package management и security
 model могут отличаться.
@@ -501,6 +672,13 @@ model могут отличаться.
 <details>
 <summary>Почему sed, date и другие команды ведут себя по-разному в Linux и macOS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В Linux часто установлены GNU coreutils, а в macOS — BSD variants. Они реализуют похожие команды, но не всегда
+поддерживают одинаковые flags.
+
+**Полный ответ**
 
 В Linux часто установлены GNU coreutils, а в macOS — BSD variants. Они реализуют похожие команды, но не всегда
 поддерживают одинаковые flags.
@@ -517,6 +695,13 @@ model могут отличаться.
 <summary>Чем отличаются filesystem paths в Linux и macOS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В Linux часто встречаются paths вроде /home/user, /etc, /var/log, /usr/bin. В macOS home directory обычно находится в
+/Users/user, а приложения часто живут в /Applications.
+
+**Полный ответ**
+
 В Linux часто встречаются paths вроде `/home/user`, `/etc`, `/var/log`, `/usr/bin`. В macOS home directory обычно
 находится в `/Users/user`, а приложения часто живут в `/Applications`.
 
@@ -531,6 +716,12 @@ Docker images обычно case-sensitive. Поэтому import path с неп�
 <details>
 <summary>Чем отличаются launchd и systemd?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+systemd — распространенная init/service manager система в Linux. launchd выполняет похожую роль в macOS.
+
+**Полный ответ**
 
 `systemd` — распространенная init/service manager система в Linux. `launchd` выполняет похожую роль в macOS.
 
@@ -547,6 +738,13 @@ Docker images обычно case-sensitive. Поэтому import path с неп�
 <summary>Что такое Homebrew?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Homebrew — package manager, популярный на macOS и доступный на Linux. Он устанавливает CLI tools, libraries и desktop
+applications без ручного скачивания архивов и настройки paths.
+
+**Полный ответ**
+
 Homebrew — package manager, популярный на macOS и доступный на Linux. Он устанавливает CLI tools, libraries и desktop
 applications без ручного скачивания архивов и настройки paths.
 
@@ -560,6 +758,12 @@ applications без ручного скачивания архивов и нас
 <details>
 <summary>Для чего нужен brew install?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+brew install устанавливает package или CLI tool из formula.
+
+**Полный ответ**
 
 `brew install` устанавливает package или CLI tool из formula.
 
@@ -579,6 +783,13 @@ Formula описывает, где взять source или binary bottle, ка�
 <summary>Что такое formula, cask и tap в Homebrew?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Formula обычно описывает CLI tool или library. Cask описывает macOS application, font или более крупный binary package.
+Tap — дополнительный repository с formulae и casks.
+
+**Полный ответ**
+
 Formula обычно описывает CLI tool или library. Cask описывает macOS application, font или более крупный binary package.
 Tap — дополнительный repository с formulae и casks.
 
@@ -597,6 +808,12 @@ brew tap owner/repository
 <details>
 <summary>Как обновлять пакеты через Homebrew?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Базовый workflow:
+
+**Полный ответ**
 
 Базовый workflow:
 
@@ -618,6 +835,12 @@ brew cleanup
 <summary>Как диагностировать проблемы Homebrew?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Полезные команды:
+
+**Полный ответ**
+
 Полезные команды:
 
 ```bash
@@ -638,6 +861,13 @@ brew list
 <summary>Где Homebrew устанавливает пакеты?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+На Apple Silicon macOS Homebrew обычно использует prefix /opt/homebrew. На Intel macOS часто используется /usr/local. На
+Linux обычно используется /home/linuxbrew/.linuxbrew.
+
+**Полный ответ**
+
 На Apple Silicon macOS Homebrew обычно использует prefix `/opt/homebrew`. На Intel macOS часто используется
 `/usr/local`. На Linux обычно используется `/home/linuxbrew/.linuxbrew`.
 
@@ -652,6 +882,13 @@ brew list
 <summary>Чем Homebrew отличается от apt?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+apt — системный package manager Debian/Ubuntu, тесно связанный с OS repositories и system packages. Homebrew —
+user-space package manager, который чаще используют для developer tools и macOS applications.
+
+**Полный ответ**
+
 `apt` — системный package manager Debian/Ubuntu, тесно связанный с OS repositories и system packages. Homebrew —
 user-space package manager, который чаще используют для developer tools и macOS applications.
 
@@ -665,6 +902,13 @@ user-space package manager, который чаще используют для 
 <details>
 <summary>Когда не стоит ставить Node.js через Homebrew?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Если проекту нужны разные версии Node.js, удобнее использовать version manager: nvm, fnm, volta или похожий инструмент.
+Homebrew ставит system-wide developer tool, а version manager позволяет закреплять версию per project.
+
+**Полный ответ**
 
 Если проекту нужны разные версии Node.js, удобнее использовать version manager: `nvm`, `fnm`, `volta` или похожий
 инструмент. Homebrew ставит system-wide developer tool, а version manager позволяет закреплять версию per project.

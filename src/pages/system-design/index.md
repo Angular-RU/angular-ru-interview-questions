@@ -15,6 +15,12 @@ order: 890
 <summary>Какие system design вопросы могут задать senior frontend-разработчику?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Чаще спрашивают не backend-детали, а границы frontend-архитектуры:
+
+**Полный ответ**
+
 Чаще спрашивают не backend-детали, а границы frontend-архитектуры:
 
 - как загрузить и показать таблицу на миллионы строк;
@@ -34,6 +40,14 @@ order: 890
 <details>
 <summary>Как спроектировать modal/dialog на уровне системы?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Dialog - не только overlay. Нужны focus trap, restore focus, Escape, click outside policy, scroll lock, aria attributes,
+stacking, portal/root strategy, animation with reduced motion и cleanup. Для design system важно определить API:
+controlled/uncontrolled open state, sizes, destructive actions, async submit, nested dialogs policy.
+
+**Полный ответ**
 
 Dialog - не только overlay. Нужны focus trap, restore focus, Escape, click outside policy, scroll lock, aria attributes,
 stacking, portal/root strategy, animation with reduced motion и cleanup. Для design system важно определить API:
@@ -61,6 +75,14 @@ controlled/uncontrolled open state, sizes, destructive actions, async submit, ne
 <details>
 <summary>Как спроектировать infinite scroll?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно описать API pagination contract, loading states, error retry, deduplication, scroll position, accessibility и
+observability. На клиенте часто используют IntersectionObserver для sentinel-элемента, но API должен поддерживать cursor
+pagination, иначе при изменении данных возможны пропуски и дубли.
+
+**Полный ответ**
 
 Нужно описать API pagination contract, loading states, error retry, deduplication, scroll position, accessibility и
 observability. На клиенте часто используют `IntersectionObserver` для sentinel-элемента, но API должен поддерживать
@@ -91,6 +113,14 @@ observer.observe(sentinelElement);
 <details>
 <summary>Как выбрать CSR, SSR, SSG или ISR для frontend-продукта?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CSR проще для authenticated dashboards и internal tools, где SEO почти не важен. SSR помогает first paint, SEO и preview
+metadata, но добавляет server runtime, cache invalidation и hydration complexity. SSG хорош для стабильного content,
+ISR - для контента, который должен обновляться без полного rebuild.
+
+**Полный ответ**
 
 CSR проще для authenticated dashboards и internal tools, где SEO почти не важен. SSR помогает first paint, SEO и preview
 metadata, но добавляет server runtime, cache invalidation и hydration complexity. SSG хорош для стабильного content,

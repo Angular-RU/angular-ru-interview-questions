@@ -15,6 +15,13 @@ order: 40
 <summary>Что такое CSS и как браузер применяет его к HTML?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSS описывает presentation документа. Браузер разбирает stylesheets в CSSOM, сопоставляет selectors с DOM, разрешает
+cascade и inheritance, вычисляет значения, а затем использует их для layout, paint и compositing.
+
+**Полный ответ**
+
 CSS описывает presentation документа. Браузер разбирает stylesheets в CSSOM, сопоставляет selectors с DOM, разрешает
 cascade и inheritance, вычисляет значения, а затем использует их для layout, paint и compositing.
 
@@ -25,6 +32,13 @@ cascade и inheritance, вычисляет значения, а затем ис�
 <details>
 <summary>Что такое selector и declaration?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Selector выбирает элементы, declaration задает пару property/value внутри rule. Несколько selectors могут совпасть с
+одним элементом, после чего cascade определяет победившее значение каждого property.
+
+**Полный ответ**
 
 Selector выбирает элементы, declaration задает пару property/value внутри rule. Несколько selectors могут совпасть с
 одним элементом, после чего cascade определяет победившее значение каждого property.
@@ -37,6 +51,13 @@ Selector выбирает элементы, declaration задает пару pr
 <summary>Что такое cascade?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Cascade разрешает конфликт declarations по relevance, origin и importance, cascade layer, specificity, scope proximity и
+порядку. Specificity — только один этап, поэтому «самый тяжелый selector всегда побеждает» — неверное упрощение.
+
+**Полный ответ**
+
 Cascade разрешает конфликт declarations по relevance, origin и importance, cascade layer, specificity, scope proximity и
 порядку. Specificity — только один этап, поэтому «самый тяжелый selector всегда побеждает» — неверное упрощение.
 
@@ -48,6 +69,13 @@ Cascade разрешает конфликт declarations по relevance, origin 
 <summary>Что такое inheritance в CSS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Некоторые properties, например color и font-family, по умолчанию наследуют computed value родителя; размеры и box
+properties обычно нет. Наследование применяется после cascade, когда для элемента нет собственного выигравшего значения.
+
+**Полный ответ**
+
 Некоторые properties, например `color` и `font-family`, по умолчанию наследуют computed value родителя; размеры и box
 properties обычно нет. Наследование применяется после cascade, когда для элемента нет собственного выигравшего значения.
 
@@ -58,6 +86,14 @@ properties обычно нет. Наследование применяется 
 <details>
 <summary>Что такое initial value и что делают <code>inherit</code>, <code>initial</code>, <code>unset</code>, <code>revert</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Каждое property имеет initial value. inherit берет значение родителя, initial возвращает specification default, unset
+выбирает inherit или initial по природе property, revert откатывает текущий cascade origin/layer к более раннему
+результату.
+
+**Полный ответ**
 
 Каждое property имеет initial value. `inherit` берет значение родителя, `initial` возвращает specification default,
 `unset` выбирает inherit или initial по природе property, `revert` откатывает текущий cascade origin/layer к более
@@ -71,6 +107,13 @@ properties обычно нет. Наследование применяется 
 <summary>Что такое CSS box model?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Box состоит из content, padding, border и margin. При content-box заданная ширина относится только к content, а при
+border-box включает padding и border. Margin находится снаружи и не входит в размер border box.
+
+**Полный ответ**
+
 Box состоит из content, padding, border и margin. При `content-box` заданная ширина относится только к content, а при
 `border-box` включает padding и border. Margin находится снаружи и не входит в размер border box.
 
@@ -81,6 +124,13 @@ Box состоит из content, padding, border и margin. При `content-box`
 <details>
 <summary>Чем единицы <code>em</code>, <code>rem</code>, <code>%</code>, <code>vw</code>, <code>vh</code> и <code>px</code> отличаются?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+rem зависит от root font size, em — от font size текущего контекста, % — от property-specific containing value, viewport
+units — от viewport, px — CSS pixel. Выбор определяется тем, относительно чего размер должен изменяться.
+
+**Полный ответ**
 
 `rem` зависит от root font size, `em` — от font size текущего контекста, `%` — от property-specific containing value,
 viewport units — от viewport, `px` — CSS pixel. Выбор определяется тем, относительно чего размер должен изменяться.
@@ -93,6 +143,13 @@ viewport units — от viewport, `px` — CSS pixel. Выбор определ�
 <summary>Что такое CSS custom properties?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Custom properties объявляются как --color и читаются через var(). Они участвуют в cascade, наследуются и могут меняться
+runtime. Sass variables вычисляются при сборке и не существуют в browser CSSOM после compilation.
+
+**Полный ответ**
+
 Custom properties объявляются как `--color` и читаются через `var()`. Они участвуют в cascade, наследуются и могут
 меняться runtime. Sass variables вычисляются при сборке и не существуют в browser CSSOM после compilation.
 
@@ -104,6 +161,13 @@ Custom properties объявляются как `--color` и читаются ч
 <summary>Что такое <code>currentColor</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+currentColor означает вычисленное значение property color. Его удобно использовать для borders, shadows и SVG иконок,
+чтобы они автоматически следовали цвету текста и состояниям компонента.
+
+**Полный ответ**
+
 `currentColor` означает вычисленное значение property `color`. Его удобно использовать для borders, shadows и SVG
 иконок, чтобы они автоматически следовали цвету текста и состояниям компонента.
 
@@ -114,6 +178,12 @@ Custom properties объявляются как `--color` и читаются ч
 <details>
 <summary>Веса в CSS</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Специфичность селектора записывают как три числа: ID - классы - типы.
+
+**Полный ответ**
 
 Специфичность селектора записывают как три числа: `ID - классы - типы`.
 
@@ -149,6 +219,12 @@ Inline style рассматривают отдельно: он сильнее о
 <summary>Что такое user agent style?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+То есть CSS, который браузер сам применяет к HTML-элементам, даже если ты не написал свой CSS.
+
+**Полный ответ**
+
 То есть CSS, который браузер сам применяет к HTML-элементам, даже если ты не написал свой CSS.
 
 ```html
@@ -180,6 +256,12 @@ button {
 <summary>Что делает box-sizing: border-box?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+При border-box заданные width и height уже включают padding и border. Это делает размеры элементов предсказуемее.
+
+**Полный ответ**
+
 При `border-box` заданные `width` и `height` уже включают padding и border. Это делает размеры элементов предсказуемее.
 
 ```css
@@ -198,6 +280,15 @@ button {
 <summary>Как браузер сопоставляет CSS selector с элементами?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Браузер строит CSSOM и сопоставляет selectors с DOM-элементами, обычно начиная с правой части selector и проверяя
+ancestors дальше влево. Поэтому слишком общие правые части и глубокие chains могут быть дороже, но в большинстве
+интерфейсов bottleneck чаще в layout, paint и количестве DOM, а не в одном selector. Писать selectors все равно стоит
+простыми и устойчивыми к изменениям разметки.
+
+**Полный ответ**
+
 Браузер строит CSSOM и сопоставляет selectors с DOM-элементами, обычно начиная с правой части selector и проверяя
 ancestors дальше влево. Поэтому слишком общие правые части и глубокие chains могут быть дороже, но в большинстве
 интерфейсов bottleneck чаще в layout, paint и количестве DOM, а не в одном selector. Писать selectors все равно стоит
@@ -210,6 +301,14 @@ ancestors дальше влево. Поэтому слишком общие пр
 <details>
 <summary>Чем reset CSS отличается от normalize CSS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Reset CSS aggressively сбрасывает browser defaults, чтобы начать с почти пустой базы. Normalize CSS сохраняет полезные
+defaults и выравнивает различия между браузерами точечнее. В современных проектах часто используют небольшой base layer:
+box-sizing, typography, form controls и явно выбранные defaults дизайн-системы.
+
+**Полный ответ**
 
 Reset CSS aggressively сбрасывает browser defaults, чтобы начать с почти пустой базы. Normalize CSS сохраняет полезные
 defaults и выравнивает различия между браузерами точечнее. В современных проектах часто используют небольшой base layer:
@@ -227,6 +326,14 @@ normalize-подход меньше ломает привычное поведе
 <summary>Какие ошибки делают CSS неэффективным?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Частые ошибки: огромный unused CSS, слишком широкие global rules, тяжелые shadows/filters на больших списках,
+transition: all, layout properties в частых анимациях и глубокая зависимость от DOM-структуры. Эффективность проверяют
+DevTools, Coverage и реальными сценариями, а не только визуальным результатом.
+
+**Полный ответ**
+
 Частые ошибки: огромный unused CSS, слишком широкие global rules, тяжелые shadows/filters на больших списках,
 `transition: all`, layout properties в частых анимациях и глубокая зависимость от DOM-структуры. Эффективность проверяют
 DevTools, Coverage и реальными сценариями, а не только визуальным результатом.
@@ -241,6 +348,14 @@ DevTools, Coverage и реальными сценариями, а не толь�
 <summary>Что такое normal flow?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Normal flow — стандартное размещение элементов без positioning, float и специальных layout-контекстов. Block-элементы
+идут сверху вниз, inline-контент располагается внутри строк. Flex и Grid создают собственные правила раскладки для
+дочерних элементов.
+
+**Полный ответ**
+
 Normal flow — стандартное размещение элементов без positioning, float и специальных layout-контекстов. Block-элементы
 идут сверху вниз, inline-контент располагается внутри строк. Flex и Grid создают собственные правила раскладки для
 дочерних элементов.
@@ -252,6 +367,14 @@ Normal flow — стандартное размещение элементов �
 <details>
 <summary>Что такое block formatting context?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+BFC — изолированный контекст раскладки block-элементов. Он удерживает floats и предотвращает схлопывание внешних margin
+с содержимым в ряде случаев. Его создают, например, display: flow-root, flex/grid containers и некоторые значения
+overflow.
+
+**Полный ответ**
 
 BFC — изолированный контекст раскладки block-элементов. Он удерживает floats и предотвращает схлопывание внешних margin
 с содержимым в ряде случаев. Его создают, например, `display: flow-root`, flex/grid containers и некоторые значения
@@ -265,6 +388,13 @@ BFC — изолированный контекст раскладки block-э�
 <summary>Что такое inline formatting context?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В нем текст и inline boxes формируют строки внутри контейнера. На расположение влияют line-height, baseline,
+vertical-align и доступная ширина. Перенос строки создает новый line box.
+
+**Полный ответ**
+
 В нем текст и inline boxes формируют строки внутри контейнера. На расположение влияют `line-height`, baseline,
 `vertical-align` и доступная ширина. Перенос строки создает новый line box.
 
@@ -275,6 +405,14 @@ BFC — изолированный контекст раскладки block-э�
 <details>
 <summary>Что такое margin collapsing?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Вертикальные margin соседних block boxes в normal flow могут объединиться в один margin вместо суммы. Обычно остается
+наибольший положительный отступ, а отрицательные значения участвуют по отдельным правилам. Flex и Grid items не
+схлопывают margin.
+
+**Полный ответ**
 
 Вертикальные margin соседних block boxes в normal flow могут объединиться в один margin вместо суммы. Обычно остается
 наибольший положительный отступ, а отрицательные значения участвуют по отдельным правилам. Flex и Grid items не
@@ -288,6 +426,13 @@ BFC — изолированный контекст раскладки block-э�
 <summary>Когда margin схлопывается?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Между соседними block-элементами, а также между parent и первым или последним child при отсутствии border, padding,
+inline content и разделяющей высоты. Может схлопываться margin пустого блока. Это относится к block formatting context.
+
+**Полный ответ**
+
 Между соседними block-элементами, а также между parent и первым или последним child при отсутствии border, padding,
 inline content и разделяющей высоты. Может схлопываться margin пустого блока. Это относится к block formatting context.
 
@@ -298,6 +443,13 @@ inline content и разделяющей высоты. Может схлопыв
 <details>
 <summary>Как избежать схлопывания margin?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Предпочесть gap, добавить осмысленный padding/border или создать BFC через display: flow-root. Не стоит добавлять
+случайный overflow: hidden, если обрезание содержимого нежелательно. Решение должно соответствовать layout-смыслу.
+
+**Полный ответ**
 
 Предпочесть `gap`, добавить осмысленный padding/border или создать BFC через `display: flow-root`. Не стоит добавлять
 случайный `overflow: hidden`, если обрезание содержимого нежелательно. Решение должно соответствовать layout-смыслу.
@@ -310,6 +462,13 @@ inline content и разделяющей высоты. Может схлопыв
 <summary>Когда margin не схлопывается?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+У flex/grid items, absolutely positioned elements, floats и элементов в разных BFC. Border, padding или inline content
+между parent и child также разделяют margin. Горизонтальные margin не схлопываются.
+
+**Полный ответ**
+
 У flex/grid items, absolutely positioned elements, floats и элементов в разных BFC. Border, padding или inline content
 между parent и child также разделяют margin. Горизонтальные margin не схлопываются.
 
@@ -320,6 +479,14 @@ inline content и разделяющей высоты. Может схлопыв
 <details>
 <summary>Что такое positioning в CSS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Свойство position определяет, участвует ли box в normal flow и относительно чего работают inset-свойства top, right,
+bottom, left. Positioning используют для overlays, sticky headers и локального смещения. Основной layout обычно лучше
+строить Flexbox или Grid.
+
+**Полный ответ**
 
 Свойство `position` определяет, участвует ли box в normal flow и относительно чего работают inset-свойства `top`,
 `right`, `bottom`, `left`. Positioning используют для overlays, sticky headers и локального смещения. Основной layout
@@ -333,6 +500,14 @@ inline content и разделяющей высоты. Может схлопыв
 <summary>Чем отличаются <code>relative</code>, <code>absolute</code>, <code>fixed</code> и <code>sticky</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+relative сохраняет место в flow и создает containing block для потомков. absolute исключается из flow, fixed обычно
+привязан к viewport, sticky ведет себя как normal flow до заданного scroll threshold. Sticky требует подходящего scroll
+container и inset, например top: 0.
+
+**Полный ответ**
+
 `relative` сохраняет место в flow и создает containing block для потомков. `absolute` исключается из flow, `fixed`
 обычно привязан к viewport, `sticky` ведет себя как normal flow до заданного scroll threshold. Sticky требует
 подходящего scroll container и inset, например `top: 0`.
@@ -344,6 +519,13 @@ inline content и разделяющей высоты. Может схлопыв
 <details>
 <summary>Что такое stacking context?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это локальная система наложения элементов. Новый context создают, например, positioned element с z-index, opacity меньше
+1, transform и isolation: isolate. Дочерний элемент не может выйти своим z-index за пределы context родителя.
+
+**Полный ответ**
 
 Это локальная система наложения элементов. Новый context создают, например, positioned element с `z-index`, `opacity`
 меньше 1, `transform` и `isolation: isolate`. Дочерний элемент не может выйти своим `z-index` за пределы context
@@ -357,6 +539,13 @@ inline content и разделяющей высоты. Может схлопыв
 <summary>Что такое z-index и почему он иногда не работает?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+z-index задает порядок внутри текущего stacking context, а не глобально на странице. Большое число проиграет элементу из
+context, который целиком расположен выше. Нужно искать родителей, создающих contexts, а не увеличивать значение.
+
+**Полный ответ**
+
 `z-index` задает порядок внутри текущего stacking context, а не глобально на странице. Большое число проиграет элементу
 из context, который целиком расположен выше. Нужно искать родителей, создающих contexts, а не увеличивать значение.
 
@@ -367,6 +556,13 @@ inline content и разделяющей высоты. Может схлопыв
 <details>
 <summary>Что такое overflow?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Overflow описывает поведение содержимого, выходящего за padding box. Он может обрезать содержимое или создать scroll
+container. Это влияет на sticky positioning, доступность скрытого контента и layout.
+
+**Полный ответ**
 
 Overflow описывает поведение содержимого, выходящего за padding box. Он может обрезать содержимое или создать scroll
 container. Это влияет на sticky positioning, доступность скрытого контента и layout.
@@ -379,6 +575,14 @@ container. Это влияет на sticky positioning, доступность �
 <summary>Чем отличаются <code>overflow: hidden</code>, <code>auto</code>, <code>scroll</code> и <code>clip</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+hidden обрезает содержимое, но контейнер остается программно прокручиваемым. auto показывает scrollbars при
+необходимости, scroll резервирует прокрутку всегда, clip обрезает без scroll container. Выбор должен сохранять
+доступность контента с клавиатуры.
+
+**Полный ответ**
+
 `hidden` обрезает содержимое, но контейнер остается программно прокручиваемым. `auto` показывает scrollbars при
 необходимости, `scroll` резервирует прокрутку всегда, `clip` обрезает без scroll container. Выбор должен сохранять
 доступность контента с клавиатуры.
@@ -390,6 +594,13 @@ container. Это влияет на sticky positioning, доступность �
 <details>
 <summary>Что такое scroll-snap?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Scroll Snap позволяет контейнеру после прокрутки остановиться у заданных snap positions. Контейнер задает ось и
+строгость, элементы — точки выравнивания. Это CSS-enhancement, а не замена доступной навигации carousel.
+
+**Полный ответ**
 
 Scroll Snap позволяет контейнеру после прокрутки остановиться у заданных snap positions. Контейнер задает ось и
 строгость, элементы — точки выравнивания. Это CSS-enhancement, а не замена доступной навигации carousel.
@@ -415,6 +626,13 @@ Scroll Snap позволяет контейнеру после прокрутк�
 <summary>Когда стоит использовать scroll-snap?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для горизонтальных галерей, paged sections и сценариев, где остановка на целом элементе ожидаема пользователем. Нужно
+оставить обычную прокрутку и элементы управления. Для длинного читаемого контента mandatory snapping часто мешает.
+
+**Полный ответ**
+
 Для горизонтальных галерей, paged sections и сценариев, где остановка на целом элементе ожидаема пользователем. Нужно
 оставить обычную прокрутку и элементы управления. Для длинного читаемого контента mandatory snapping часто мешает.
 
@@ -425,6 +643,14 @@ Scroll Snap позволяет контейнеру после прокрутк�
 <details>
 <summary>Какие проблемы бывают у scroll-snap на мобильных устройствах?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Слишком строгий snap может бороться с жестом пользователя, затруднять диагональную прокрутку и перескакивать после
+изменения размера контента. Safe areas и browser chrome меняют viewport. Поведение нужно проверять на touch devices и с
+увеличенным шрифтом.
+
+**Полный ответ**
 
 Слишком строгий snap может бороться с жестом пользователя, затруднять диагональную прокрутку и перескакивать после
 изменения размера контента. Safe areas и browser chrome меняют viewport. Поведение нужно проверять на touch devices и с
@@ -438,6 +664,14 @@ Scroll Snap позволяет контейнеру после прокрутк�
 <summary>Что такое containing block?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Containing block — прямоугольник, относительно которого вычисляются position и percentage sizes элемента. Его источник
+зависит от position, formatting context и properties ancestors; для absolute element это не всегда непосредственный
+родитель.
+
+**Полный ответ**
+
 Containing block — прямоугольник, относительно которого вычисляются position и percentage sizes элемента. Его источник
 зависит от `position`, formatting context и properties ancestors; для absolute element это не всегда непосредственный
 родитель.
@@ -449,6 +683,14 @@ Containing block — прямоугольник, относительно кот
 <details>
 <summary>Что такое float и почему сейчас его редко используют для layout?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+float изначально нужен для обтекания изображений и вставок текстом. Раньше на нем строили колонки, но это требовало
+clearfix, ломало высоты контейнеров и плохо выражало намерение layout. Для современной раскладки обычно выбирают Flexbox
+или Grid, а float оставляют для настоящего text wrapping.
+
+**Полный ответ**
 
 `float` изначально нужен для обтекания изображений и вставок текстом. Раньше на нем строили колонки, но это требовало
 clearfix, ломало высоты контейнеров и плохо выражало намерение layout. Для современной раскладки обычно выбирают Flexbox
@@ -462,6 +704,14 @@ clearfix, ломало высоты контейнеров и плохо выр�
 <summary>Какие способы clearing существуют и когда они нужны?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Clearing нужен, когда контейнер должен учитывать плавающие элементы. Исторически использовали clear: both и clearfix
+через pseudo-element; современный простой вариант — создать BFC через display: flow-root. Лучше сначала проверить, нужен
+ли float вообще, потому что Flexbox и Grid обычно снимают эту проблему.
+
+**Полный ответ**
+
 Clearing нужен, когда контейнер должен учитывать плавающие элементы. Исторически использовали `clear: both` и clearfix
 через pseudo-element; современный простой вариант — создать BFC через `display: flow-root`. Лучше сначала проверить,
 нужен ли `float` вообще, потому что Flexbox и Grid обычно снимают эту проблему.
@@ -473,6 +723,14 @@ Clearing нужен, когда контейнер должен учитыват
 <details>
 <summary>Как решать browser-specific CSS issues?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Сначала нужно воспроизвести проблему в конкретном браузере, проверить поддержку свойства, cascade, computed styles и
+минимальный пример. Затем выбирают feature detection через @supports, progressive enhancement, fallback или ограниченный
+workaround. User agent sniffing оставляют как последний вариант для документированного browser bug.
+
+**Полный ответ**
 
 Сначала нужно воспроизвести проблему в конкретном браузере, проверить поддержку свойства, cascade, computed styles и
 минимальный пример. Затем выбирают feature detection через `@supports`, progressive enhancement, fallback или
@@ -486,6 +744,14 @@ Clearing нужен, когда контейнер должен учитыват
 <summary>Что такое feature-constrained browser?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это браузер или webview, где часть современных возможностей отсутствует или ограничена: старый engine, embedded webview,
+режим экономии, слабое устройство или корпоративная среда. Интерфейс должен иметь базовый рабочий слой и улучшаться при
+наличии возможностей. Это практическая причина использовать progressive enhancement и проверку @supports.
+
+**Полный ответ**
+
 Это браузер или webview, где часть современных возможностей отсутствует или ограничена: старый engine, embedded webview,
 режим экономии, слабое устройство или корпоративная среда. Интерфейс должен иметь базовый рабочий слой и улучшаться при
 наличии возможностей. Это практическая причина использовать progressive enhancement и проверку `@supports`.
@@ -497,6 +763,14 @@ Clearing нужен, когда контейнер должен учитыват
 <details>
 <summary>Какие плюсы и минусы у CSS preprocessors?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Sass/Less дают nesting, mixins, functions, modules и удобства для дизайн-систем. Минусы: дополнительная сборка, риск
+глубокой вложенности, абстракций поверх CSS и расхождения с runtime-возможностями браузера. Многие задачи сегодня
+закрывают native CSS custom properties, nesting, cascade layers и modern selectors.
+
+**Полный ответ**
 
 Sass/Less дают nesting, mixins, functions, modules и удобства для дизайн-систем. Минусы: дополнительная сборка, риск
 глубокой вложенности, абстракций поверх CSS и расхождения с runtime-возможностями браузера. Многие задачи сегодня
@@ -510,6 +784,14 @@ Sass/Less дают nesting, mixins, functions, modules и удобства дл�
 <summary>Зачем нужны CSS postprocessors?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSS postprocessors обрабатывают уже написанный CSS: добавляют vendor prefixes, оптимизируют output, раскрывают
+современный синтаксис или проверяют правила. Типичный пример — PostCSS с Autoprefixer. Это снижает ручную работу, но
+должно опираться на реальную browser support policy, а не на настройки на всякий случай.
+
+**Полный ответ**
+
 CSS postprocessors обрабатывают уже написанный CSS: добавляют vendor prefixes, оптимизируют output, раскрывают
 современный синтаксис или проверяют правила. Типичный пример — PostCSS с Autoprefixer. Это снижает ручную работу, но
 должно опираться на реальную browser support policy, а не на настройки на всякий случай.
@@ -521,6 +803,14 @@ CSS postprocessors обрабатывают уже написанный CSS: д�
 <details>
 <summary>Как подключать нестандартные шрифты?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Шрифты подключают через @font-face, задают font-family, src, font-weight, font-style и font-display. Используют WOFF2,
+preload только для критичных начертаний и fallback stack с похожими метриками, чтобы снизить CLS. Слишком много
+начертаний ухудшает LCP и first render.
+
+**Полный ответ**
 
 Шрифты подключают через `@font-face`, задают `font-family`, `src`, `font-weight`, `font-style` и `font-display`.
 Используют WOFF2, preload только для критичных начертаний и fallback stack с похожими метриками, чтобы снизить CLS.
@@ -538,6 +828,14 @@ preload strategy и связь с design tokens. Это защищает про�
 <summary>Что такое FOUT и FOIT?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+FOUT означает, что браузер сначала показывает fallback font, а потом заменяет его на custom font. FOIT означает, что
+текст временно невидим, пока custom font не загрузится. Обычно этим управляют через font-display, preload только
+критичных fonts, subset и fallback с близкими метриками.
+
+**Полный ответ**
+
 FOUT означает, что браузер сначала показывает fallback font, а потом заменяет его на custom font. FOIT означает, что
 текст временно невидим, пока custom font не загрузится. Обычно этим управляют через `font-display`, preload только
 критичных fonts, subset и fallback с близкими метриками.
@@ -549,6 +847,14 @@ FOUT означает, что браузер сначала показывает
 <details>
 <summary>Что такое pseudo-element?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Pseudo-element создает стилизуемую часть элемента, которой нет как отдельного DOM-узла: ::before, ::after, ::marker,
+::placeholder, ::selection. Его используют для декоративного контента, markers и визуальных деталей. Смысловой текст
+лучше хранить в HTML, чтобы он был доступен assistive technologies и копированию.
+
+**Полный ответ**
 
 Pseudo-element создает стилизуемую часть элемента, которой нет как отдельного DOM-узла: `::before`, `::after`,
 `::marker`, `::placeholder`, `::selection`. Его используют для декоративного контента, markers и визуальных деталей.
@@ -562,6 +868,14 @@ Pseudo-element создает стилизуемую часть элемента
 <summary>Что такое pseudo-class?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Pseudo-class выбирает элемент по состоянию или отношению: :hover, :focus-visible, :checked, :disabled, :first-child,
+:has(). Она не создает новый box, а уточняет selector. Для accessibility особенно важны :focus-visible, disabled states
+и состояния form controls.
+
+**Полный ответ**
+
 Pseudo-class выбирает элемент по состоянию или отношению: `:hover`, `:focus-visible`, `:checked`, `:disabled`,
 `:first-child`, `:has()`. Она не создает новый box, а уточняет selector. Для accessibility особенно важны
 `:focus-visible`, disabled states и состояния form controls.
@@ -573,6 +887,14 @@ Pseudo-class выбирает элемент по состоянию или от
 <details>
 <summary>Чем <code>nth-child()</code> отличается от <code>nth-of-type()</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+:nth-child() считает элемент среди всех siblings, а :nth-of-type() — только среди siblings того же tag name. Например,
+p:nth-child(2) выберет p, только если он второй child вообще, а p:nth-of-type(2) выберет второй p. Разница важна, когда
+структура содержит смешанные элементы.
+
+**Полный ответ**
 
 `:nth-child()` считает элемент среди всех siblings, а `:nth-of-type()` — только среди siblings того же tag name.
 Например, `p:nth-child(2)` выберет `p`, только если он второй child вообще, а `p:nth-of-type(2)` выберет второй `p`.
@@ -586,6 +908,14 @@ Pseudo-class выбирает элемент по состоянию или от
 <summary>Чем responsive layout отличается от mobile-first strategy?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Responsive layout адаптирует интерфейс к разным размерам и возможностям устройства. Mobile-first — стратегия написания
+CSS, где базовые стили рассчитаны на узкий экран, а более широкие состояния добавляются через min-width. Можно сделать
+responsive layout и без mobile-first, но mobile-first часто помогает приоритизировать content и performance.
+
+**Полный ответ**
+
 Responsive layout адаптирует интерфейс к разным размерам и возможностям устройства. Mobile-first — стратегия написания
 CSS, где базовые стили рассчитаны на узкий экран, а более широкие состояния добавляются через `min-width`. Можно сделать
 responsive layout и без mobile-first, но mobile-first часто помогает приоритизировать content и performance.
@@ -597,6 +927,14 @@ responsive layout и без mobile-first, но mobile-first часто помо�
 <details>
 <summary>Что такое fixed, fluid и responsive layout?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Fixed layout использует жесткие размеры и почти не реагирует на viewport. Fluid layout растягивается в процентах или
+гибких единицах. Responsive layout меняет структуру, размеры и иногда порядок content через constraints, media queries,
+Flexbox, Grid и container queries.
+
+**Полный ответ**
 
 Fixed layout использует жесткие размеры и почти не реагирует на viewport. Fluid layout растягивается в процентах или
 гибких единицах. Responsive layout меняет структуру, размеры и иногда порядок content через constraints, media queries,
@@ -610,6 +948,14 @@ Flexbox, Grid и container queries.
 <summary>Чем <code>display: block</code>, <code>inline</code>, <code>inline-block</code>, <code>flex</code>, <code>grid</code> отличаются друг от друга?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+block занимает доступную строку, inline участвует в тексте и не принимает обычные width/height, inline-block сохраняет
+inline-размещение с размером box. flex управляет элементами преимущественно по одной оси, grid — по строкам и колонкам.
+Выбор определяется задачей layout, а не внешним видом элемента.
+
+**Полный ответ**
+
 `block` занимает доступную строку, `inline` участвует в тексте и не принимает обычные width/height, `inline-block`
 сохраняет inline-размещение с размером box. `flex` управляет элементами преимущественно по одной оси, `grid` — по
 строкам и колонкам. Выбор определяется задачей layout, а не внешним видом элемента.
@@ -621,6 +967,14 @@ Flexbox, Grid и container queries.
 <details>
 <summary>Как визуально скрыть элемент, но оставить его доступным для screen reader?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Используют visually-hidden class: элемент остается в DOM и accessibility tree, но визуально убран за счет clipping и
+минимального размера. Нельзя использовать display: none, visibility: hidden или aria-hidden="true", если текст должен
+быть прочитан screen reader. Для focusable skip-link скрытие должно сниматься при focus.
+
+**Полный ответ**
 
 Используют visually-hidden class: элемент остается в DOM и accessibility tree, но визуально убран за счет clipping и
 минимального размера. Нельзя использовать `display: none`, `visibility: hidden` или `aria-hidden="true"`, если текст
@@ -634,6 +988,14 @@ Flexbox, Grid и container queries.
 <summary>Какие media types кроме <code>screen</code> существуют?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Чаще всего встречаются screen, print и all. print используют для печатной версии: убрать навигацию, раскрыть URL ссылок,
+настроить page breaks и контраст. Старые типы вроде speech имеют ограниченную практическую поддержку, поэтому важнее
+знать реальные media features.
+
+**Полный ответ**
+
 Чаще всего встречаются `screen`, `print` и `all`. `print` используют для печатной версии: убрать навигацию, раскрыть URL
 ссылок, настроить page breaks и контраст. Старые типы вроде `speech` имеют ограниченную практическую поддержку, поэтому
 важнее знать реальные media features.
@@ -645,6 +1007,14 @@ Flexbox, Grid и container queries.
 <details>
 <summary>Что такое retina graphics и какие техники использовать?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Retina graphics учитывает высокий device pixel ratio, где одному CSS pixel соответствует несколько device pixels. Для
+растровых изображений используют srcset с x или w descriptors, responsive images и подходящее сжатие. Иконки и простая
+графика часто лучше работают как SVG, потому что масштабируются без потери четкости.
+
+**Полный ответ**
 
 Retina graphics учитывает высокий device pixel ratio, где одному CSS pixel соответствует несколько device pixels. Для
 растровых изображений используют `srcset` с `x` или `w` descriptors, responsive images и подходящее сжатие. Иконки и
@@ -666,6 +1036,13 @@ Retina graphics учитывает высокий device pixel ratio, где о�
 <details>
 <summary id="flexbox-what">Что такое Flexbox?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Flexbox — одномерная модель раскладки для строки или колонки. Она распределяет свободное пространство, выравнивает
+элементы и управляет их ростом и сжатием. Подходит для toolbar, sidebar/content и элементов компонента.
+
+**Полный ответ**
 
 Flexbox — одномерная модель раскладки для строки или колонки. Она распределяет свободное пространство, выравнивает
 элементы и управляет их ростом и сжатием. Подходит для toolbar, sidebar/content и элементов компонента.
@@ -696,6 +1073,13 @@ Flexbox — одномерная модель раскладки для стро
 <summary id="flexbox-tasks">Какие задачи решает Flexbox?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Flexbox помогает строить одномерные раскладки: строку, колонку, toolbar, группу кнопок, карточку или пару sidebar и
+content. Он распределяет свободное место, выравнивает элементы, управляет переносом, ростом и сжатием flex items.
+
+**Полный ответ**
+
 Flexbox помогает строить одномерные раскладки: строку, колонку, toolbar, группу кнопок, карточку или пару sidebar и
 content. Он распределяет свободное место, выравнивает элементы, управляет переносом, ростом и сжатием flex items.
 
@@ -708,6 +1092,13 @@ content. Он распределяет свободное место, вырав
 <details>
 <summary id="flexbox-axes">Что такое main axis и cross axis?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Main axis задается flex-direction: горизонтально для row и вертикально для column. Cross axis перпендикулярна главной.
+Поэтому смысл justify-content и align-items зависит от направления контейнера.
+
+**Полный ответ**
 
 Main axis задается `flex-direction`: горизонтально для `row` и вертикально для `column`. Cross axis перпендикулярна
 главной. Поэтому смысл `justify-content` и `align-items` зависит от направления контейнера.
@@ -722,6 +1113,13 @@ Main axis задается `flex-direction`: горизонтально для `
 <summary id="flexbox-direction">Что делает <code>flex-direction</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+flex-direction задает направление main axis: row, row-reverse, column или column-reverse. От него зависит, куда
+раскладываются flex items и по какой оси работает justify-content.
+
+**Полный ответ**
+
 `flex-direction` задает направление main axis: `row`, `row-reverse`, `column` или `column-reverse`. От него зависит,
 куда раскладываются flex items и по какой оси работает `justify-content`.
 
@@ -734,6 +1132,13 @@ Main axis задается `flex-direction`: горизонтально для `
 <details>
 <summary id="flexbox-wrap">Что делает <code>flex-wrap</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+flex-wrap определяет, должны ли элементы оставаться в одной строке или могут переноситься на новые flex lines. При
+переносе расстояния между строками можно контролировать через row-gap, а распределение строк — через align-content.
+
+**Полный ответ**
 
 `flex-wrap` определяет, должны ли элементы оставаться в одной строке или могут переноситься на новые flex lines. При
 переносе расстояния между строками можно контролировать через `row-gap`, а распределение строк — через `align-content`.
@@ -748,6 +1153,13 @@ Main axis задается `flex-direction`: горизонтально для `
 <summary id="flexbox-gap">Что делает <code>gap</code> во Flexbox?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+gap задает расстояние между flex items и между flex lines, если элементы переносятся. Он принадлежит контейнеру и не
+добавляет внешний отступ по краям раскладки.
+
+**Полный ответ**
+
 `gap` задает расстояние между flex items и между flex lines, если элементы переносятся. Он принадлежит контейнеру и не
 добавляет внешний отступ по краям раскладки.
 
@@ -760,6 +1172,13 @@ Main axis задается `flex-direction`: горизонтально для `
 <details>
 <summary id="flexbox-flex-1">Что значит <code>flex: 1</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В современном CSS это обычно раскрывается примерно в flex: 1 1 0%. Элемент начинает с нулевого basis, может расти и
+сжиматься, деля доступное пространство с соседями. Для контента часто дополнительно нужен min-width: 0.
+
+**Полный ответ**
 
 В современном CSS это обычно раскрывается примерно в `flex: 1 1 0%`. Элемент начинает с нулевого basis, может расти и
 сжиматься, деля доступное пространство с соседями. Для контента часто дополнительно нужен `min-width: 0`.
@@ -774,6 +1193,13 @@ Main axis задается `flex-direction`: горизонтально для `
 <summary id="flexbox-card-bottom">Как прижать кнопку или блок к низу карточки через Flexbox?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Карточку делают flex-контейнером с flex-direction: column, а нужному нижнему блоку задают margin-top: auto. Auto margin
+забирает свободное пространство и отталкивает блок к нижнему краю карточки.
+
+**Полный ответ**
+
 Карточку делают flex-контейнером с `flex-direction: column`, а нужному нижнему блоку задают `margin-top: auto`. Auto
 margin забирает свободное пространство и отталкивает блок к нижнему краю карточки.
 
@@ -786,6 +1212,13 @@ margin забирает свободное пространство и отта�
 <details>
 <summary id="flexbox-centering">Как центрировать элемент по горизонтали и вертикали через Flexbox?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Контейнеру задают display: flex, justify-content: center и align-items: center. При flex-direction: row горизонтальное
+центрирование идет по main axis, а вертикальное — по cross axis.
+
+**Полный ответ**
 
 Контейнеру задают `display: flex`, `justify-content: center` и `align-items: center`. При `flex-direction: row`
 горизонтальное центрирование идет по main axis, а вертикальное — по cross axis.
@@ -800,6 +1233,13 @@ margin забирает свободное пространство и отта�
 <summary id="flexbox-justify-align">Чем <code>justify-content</code> отличается от <code>align-items</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+justify-content распределяет элементы и свободное пространство вдоль main axis. align-items выравнивает flex items вдоль
+cross axis. Для отдельного элемента cross-axis выравнивание можно изменить через align-self.
+
+**Полный ответ**
+
 `justify-content` распределяет элементы и свободное пространство вдоль main axis. `align-items` выравнивает flex items
 вдоль cross axis. Для отдельного элемента cross-axis выравнивание можно изменить через `align-self`.
 
@@ -812,6 +1252,14 @@ margin забирает свободное пространство и отта�
 <details>
 <summary id="flexbox-gap-vs-margin">Почему <code>gap</code> часто удобнее, чем margin между элементами?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+gap описывает внутреннее расстояние между соседними элементами на уровне контейнера. Не нужны отдельные правила для
+первого или последнего элемента, отрицательные margin и компенсация краев. Margin лучше оставлять для внешнего
+расстояния между независимыми блоками.
+
+**Полный ответ**
 
 `gap` описывает внутреннее расстояние между соседними элементами на уровне контейнера. Не нужны отдельные правила для
 первого или последнего элемента, отрицательные margin и компенсация краев. Margin лучше оставлять для внешнего
@@ -827,6 +1275,13 @@ margin забирает свободное пространство и отта�
 <summary id="flexbox-grow-shrink-basis">Что делают <code>flex-grow</code>, <code>flex-shrink</code> и <code>flex-basis</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+flex-basis задает базовый размер до распределения пространства. flex-grow определяет долю положительного свободного
+места, flex-shrink — участие в сжатии при нехватке места. Итоговый размер также зависит от min/max constraints.
+
+**Полный ответ**
+
 `flex-basis` задает базовый размер до распределения пространства. `flex-grow` определяет долю положительного свободного
 места, `flex-shrink` — участие в сжатии при нехватке места. Итоговый размер также зависит от min/max constraints.
 
@@ -840,6 +1295,14 @@ margin забирает свободное пространство и отта�
 <details>
 <summary id="flexbox-basis-0-auto">Чем <code>flex-basis: 0</code> отличается от <code>flex-basis: auto</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+flex-basis: 0 начинает распределение свободного места от нулевой базы, поэтому элементы с одинаковым flex-grow чаще
+получают равные доли. flex-basis: auto сначала учитывает width, height или размер содержимого, а уже потом распределяет
+оставшееся пространство.
+
+**Полный ответ**
 
 `flex-basis: 0` начинает распределение свободного места от нулевой базы, поэтому элементы с одинаковым `flex-grow` чаще
 получают равные доли. `flex-basis: auto` сначала учитывает `width`, `height` или размер содержимого, а уже потом
@@ -855,6 +1318,14 @@ margin забирает свободное пространство и отта�
 <summary id="flexbox-min-width-0">Почему во Flexbox часто нужен <code>min-width: 0</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Flex items по умолчанию имеют automatic minimum size, часто равный min-content width. Длинный текст или вложенный блок
+может растягивать колонку и ломать layout. min-width: 0 разрешает элементу сжиматься внутри flex-контейнера, после чего
+работают wrapping, ellipsis или overflow.
+
+**Полный ответ**
+
 Flex items по умолчанию имеют automatic minimum size, часто равный min-content width. Длинный текст или вложенный блок
 может растягивать колонку и ломать layout. `min-width: 0` разрешает элементу сжиматься внутри flex-контейнера, после
 чего работают wrapping, ellipsis или overflow.
@@ -869,6 +1340,13 @@ Flex items по умолчанию имеют automatic minimum size, часто
 <summary id="flexbox-fixed-fluid-columns">Как сделать две колонки, где одна занимает фиксированную ширину, а вторая все остальное место?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Контейнеру задают display: flex, фиксированной колонке — flex: 0 0 280px, а гибкой — flex: 1 1 auto и часто
+min-width: 0. Так sidebar сохраняет ширину, а content занимает оставшееся пространство.
+
+**Полный ответ**
+
 Контейнеру задают `display: flex`, фиксированной колонке — `flex: 0 0 280px`, а гибкой — `flex: 1 1 auto` и часто
 `min-width: 0`. Так sidebar сохраняет ширину, а content занимает оставшееся пространство.
 
@@ -882,6 +1360,13 @@ Flex items по умолчанию имеют automatic minimum size, часто
 <summary id="flexbox-equal-columns">Как сделать равные колонки через Flexbox?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для равных колонок обычно задают элементам одинаковое сокращение, например flex: 1 1 0. Нулевой basis убирает влияние
+начального размера контента, а одинаковый flex-grow делит свободное место поровну.
+
+**Полный ответ**
+
 Для равных колонок обычно задают элементам одинаковое сокращение, например `flex: 1 1 0`. Нулевой basis убирает влияние
 начального размера контента, а одинаковый `flex-grow` делит свободное место поровну.
 
@@ -894,6 +1379,14 @@ Flex items по умолчанию имеют automatic minimum size, часто
 <details>
 <summary id="flexbox-common-mistakes">Какие типичные ошибки бывают при использовании Flexbox?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Частые ошибки: путать main axis и cross axis, ждать от Flexbox полноценной двумерной сетки, забывать про flex-wrap,
+использовать margin вместо gap для внутренних расстояний, не учитывать flex-shrink и не задавать min-width: 0 для
+колонок с длинным контентом.
+
+**Полный ответ**
 
 Частые ошибки: путать main axis и cross axis, ждать от Flexbox полноценной двумерной сетки, забывать про `flex-wrap`,
 использовать margin вместо `gap` для внутренних расстояний, не учитывать `flex-shrink` и не задавать `min-width: 0` для
@@ -913,6 +1406,13 @@ Flex items по умолчанию имеют automatic minimum size, часто
 <summary id="grid-what">Что такое CSS Grid?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Grid — двумерная система раскладки со строками, колонками и областями. Она позволяет определить структуру контейнера, а
+элементам — занимать одну или несколько ячеек. Grid удобен для карточек и page-level layout.
+
+**Полный ответ**
+
 Grid — двумерная система раскладки со строками, колонками и областями. Она позволяет определить структуру контейнера, а
 элементам — занимать одну или несколько ячеек. Grid удобен для карточек и page-level layout.
 
@@ -927,6 +1427,13 @@ Grid — двумерная система раскладки со строка�
 <summary id="grid-template-tracks">Что делают <code>grid-template-columns</code> и <code>grid-template-rows</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Они описывают явные tracks сетки и их размеры. Можно использовать px, %, fr, minmax(), repeat() и intrinsic keywords.
+Неявные tracks создаются автоматически для элементов вне заданной сетки.
+
+**Полный ответ**
+
 Они описывают явные tracks сетки и их размеры. Можно использовать px, `%`, `fr`, `minmax()`, `repeat()` и intrinsic
 keywords. Неявные tracks создаются автоматически для элементов вне заданной сетки.
 
@@ -940,6 +1447,14 @@ keywords. Неявные tracks создаются автоматически д
 <details>
 <summary id="flexbox-vs-grid-when">Когда лучше использовать Flexbox, а когда CSS Grid?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Flexbox выбирают для строки, колонки, выравнивания и неизвестного числа элементов. Grid — когда важны согласованные
+колонки, строки или двумерные области. Если приходится имитировать строки вложенными flex-контейнерами, Grid обычно
+проще.
+
+**Полный ответ**
 
 Flexbox выбирают для строки, колонки, выравнивания и неизвестного числа элементов. Grid — когда важны согласованные
 колонки, строки или двумерные области. Если приходится имитировать строки вложенными flex-контейнерами, Grid обычно
@@ -956,6 +1471,14 @@ Flexbox выбирают для строки, колонки, выравнива
 <summary id="grid-vs-flexbox">Чем Grid отличается от Flexbox?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Grid управляет двумя измерениями одновременно и начинает с структуры контейнера. Flexbox распределяет элементы вдоль
+одной основной оси и лучше адаптируется к содержимому. Их часто комбинируют: Grid для страницы, Flexbox внутри
+компонентов.
+
+**Полный ответ**
+
 Grid управляет двумя измерениями одновременно и начинает с структуры контейнера. Flexbox распределяет элементы вдоль
 одной основной оси и лучше адаптируется к содержимому. Их часто комбинируют: Grid для страницы, Flexbox внутри
 компонентов.
@@ -970,6 +1493,14 @@ Grid управляет двумя измерениями одновременн
 <details>
 <summary id="grid-when">Когда лучше использовать Grid вместо Flexbox?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Grid лучше выбирать для двумерной структуры: согласованных строк, колонок, областей страницы и карточных сеток. Flexbox
+удобнее для одномерного распределения элементов внутри компонента. Если layout одновременно зависит и от строк, и от
+колонок, Grid обычно проще и устойчивее.
+
+**Полный ответ**
 
 Grid лучше выбирать для двумерной структуры: согласованных строк, колонок, областей страницы и карточных сеток. Flexbox
 удобнее для одномерного распределения элементов внутри компонента. Если layout одновременно зависит и от строк, и от
@@ -986,6 +1517,13 @@ Grid лучше выбирать для двумерной структуры: �
 <summary id="grid-minmax">Что такое <code>minmax()</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+minmax(min, max) задает диапазон размера grid track. Например, колонка может быть не уже 240px, но растягиваться до доли
+свободного пространства. Это основа многих responsive grids без media queries.
+
+**Полный ответ**
+
 `minmax(min, max)` задает диапазон размера grid track. Например, колонка может быть не уже `240px`, но растягиваться до
 доли свободного пространства. Это основа многих responsive grids без media queries.
 
@@ -998,6 +1536,13 @@ Grid лучше выбирать для двумерной структуры: �
 <details>
 <summary id="grid-auto-fit-fill">Что такое <code>auto-fit</code> и <code>auto-fill</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Оба значения создают столько повторяющихся tracks, сколько помещается. auto-fill сохраняет пустые tracks, а auto-fit
+схлопывает их и растягивает занятые. Разница заметна, когда элементов меньше доступных колонок.
+
+**Полный ответ**
 
 Оба значения создают столько повторяющихся tracks, сколько помещается. `auto-fill` сохраняет пустые tracks, а `auto-fit`
 схлопывает их и растягивает занятые. Разница заметна, когда элементов меньше доступных колонок.
@@ -1019,6 +1564,14 @@ Grid лучше выбирать для двумерной структуры: �
 <details>
 <summary id="grid-stacking">Что такое Grid stacking?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Grid stacking — прием, при котором несколько grid items размещают в одной и той же области сетки или в пересекающихся
+grid lines. Элементы накладываются друг на друга, а порядок слоя определяется обычными правилами stacking context:
+порядком в DOM, z-index, position, opacity, transform и другими свойствами.
+
+**Полный ответ**
 
 Grid stacking — прием, при котором несколько grid items размещают в одной и той же области сетки или в пересекающихся
 grid lines. Элементы накладываются друг на друга, а порядок слоя определяется обычными правилами stacking context:
@@ -1050,6 +1603,14 @@ grid lines. Элементы накладываются друг на друга
 <summary id="grid-wrapping">Как сделать Grid wrapping?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В Grid нет прямого аналога flex-wrap, потому что grid items автоматически переходят в новые строки или колонки по
+правилам auto-placement. Для карточных сеток обычно задают повторяющиеся колонки через repeat(), auto-fit или auto-fill,
+а минимальный и максимальный размер колонки описывают через minmax().
+
+**Полный ответ**
+
 В Grid нет прямого аналога `flex-wrap`, потому что grid items автоматически переходят в новые строки или колонки по
 правилам auto-placement. Для карточных сеток обычно задают повторяющиеся колонки через `repeat()`, `auto-fit` или
 `auto-fill`, а минимальный и максимальный размер колонки описывают через `minmax()`.
@@ -1077,6 +1638,14 @@ media queries.
 <summary>Чем responsive design отличается от adaptive design?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Responsive layout плавно подстраивается под доступное пространство, а adaptive обычно выбирает несколько заранее
+подготовленных layouts для диапазонов устройств. На практике подходы комбинируют, а границы выбирают по content, не по
+моделям телефонов.
+
+**Полный ответ**
+
 Responsive layout плавно подстраивается под доступное пространство, а adaptive обычно выбирает несколько заранее
 подготовленных layouts для диапазонов устройств. На практике подходы комбинируют, а границы выбирают по content, не по
 моделям телефонов.
@@ -1088,6 +1657,14 @@ Responsive layout плавно подстраивается под доступ�
 <details>
 <summary>Что такое mobile-first?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Mobile-first начинает с базового layout для узкого экрана и добавляет возможности через min-width queries. Это помогает
+приоритизировать content и progressive enhancement, но не отменяет тестирование desktop, touch, keyboard и разных input
+capabilities.
+
+**Полный ответ**
 
 Mobile-first начинает с базового layout для узкого экрана и добавляет возможности через `min-width` queries. Это
 помогает приоритизировать content и progressive enhancement, но не отменяет тестирование desktop, touch, keyboard и
@@ -1101,6 +1678,13 @@ Mobile-first начинает с базового layout для узкого э�
 <summary>Что такое safe area?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Safe area учитывает вырезы, скругления и системные overlays устройства. Значения env(safe-area-inset-) добавляют
+необходимые padding при подходящем viewport configuration, особенно для fixed controls у краев экрана.
+
+**Полный ответ**
+
 Safe area учитывает вырезы, скругления и системные overlays устройства. Значения `env(safe-area-inset-*)` добавляют
 необходимые padding при подходящем viewport configuration, особенно для fixed controls у краев экрана.
 
@@ -1111,6 +1695,13 @@ Safe area учитывает вырезы, скругления и систем�
 <details>
 <summary>Как учитывать разные плотности экранов?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Layout строят в CSS pixels, а raster assets предоставляют с подходящим resolution через srcset или image-set. SVG
+масштабируется независимо от DPR. Не следует умножать все CSS-размеры на device pixel ratio вручную.
+
+**Полный ответ**
 
 Layout строят в CSS pixels, а raster assets предоставляют с подходящим resolution через `srcset` или image-set. SVG
 масштабируется независимо от DPR. Не следует умножать все CSS-размеры на device pixel ratio вручную.
@@ -1123,6 +1714,13 @@ Layout строят в CSS pixels, а raster assets предоставляют �
 <summary>Как responsive images связаны с responsive layout?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Layout определяет отображаемую ширину, а sizes сообщает ее браузеру для выбора кандидата из srcset. Если sizes не
+соответствует реальному layout, браузер может загрузить слишком большой или размытый ресурс.
+
+**Полный ответ**
+
 Layout определяет отображаемую ширину, а `sizes` сообщает ее браузеру для выбора кандидата из `srcset`. Если `sizes` не
 соответствует реальному layout, браузер может загрузить слишком большой или размытый ресурс.
 
@@ -1133,6 +1731,15 @@ Layout определяет отображаемую ширину, а `sizes` с
 <details>
 <summary>Что такое media query?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+@media применяет rules при совпадении характеристик viewport, устройства или предпочтений пользователя: width,
+orientation, hover, pointer, prefers-reduced-motion, prefers-color-scheme и других признаков. Media queries используют
+не только для breakpoints, но и для адаптации input, motion и contrast. Breakpoints выбирают там, где ломается layout, а
+не по названиям устройств.
+
+**Полный ответ**
 
 `@media` применяет rules при совпадении характеристик viewport, устройства или предпочтений пользователя: width,
 orientation, hover, pointer, prefers-reduced-motion, prefers-color-scheme и других признаков. Media queries используют
@@ -1147,6 +1754,13 @@ orientation, hover, pointer, prefers-reduced-motion, prefers-color-scheme и д�
 <summary>Что такое container query и чем она отличается от media query?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Media query смотрит на viewport или device features, container query — на размер или styles ближайшего query container.
+Container queries делают компонент адаптивным к месту использования, независимо от ширины всей страницы.
+
+**Полный ответ**
+
 Media query смотрит на viewport или device features, container query — на размер или styles ближайшего query container.
 Container queries делают компонент адаптивным к месту использования, независимо от ширины всей страницы.
 
@@ -1157,6 +1771,12 @@ Container queries делают компонент адаптивным к мес
 <details>
 <summary>Что такое fluid typography и как работает <code>clamp()</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Fluid typography плавно меняет размер между границами. clamp(min, preferred, max) ограничивает вычисленное значение:
+
+**Полный ответ**
 
 Fluid typography плавно меняет размер между границами. `clamp(min, preferred, max)` ограничивает вычисленное значение:
 
@@ -1178,6 +1798,14 @@ Fluid typography плавно меняет размер между границ�
 <summary>Что такое CSS methodology и зачем она нужна?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSS methodology — это набор правил для организации CSS: например BEM, SMACSS, OOCSS, CSS Modules или utility-first
+подход. Методология помогает договориться, как называть классы, где хранить styles и как ограничивать область влияния.
+Важно не название методологии, а консистентность, понятные границы и documented exceptions.
+
+**Полный ответ**
+
 CSS methodology — это набор правил для организации CSS: например BEM, SMACSS, OOCSS, CSS Modules или utility-first
 подход. Методология помогает договориться, как называть классы, где хранить styles и как ограничивать область влияния.
 Важно не название методологии, а консистентность, понятные границы и documented exceptions.
@@ -1189,6 +1817,14 @@ CSS methodology — это набор правил для организации
 <details>
 <summary>Что такое design tokens?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Tokens — именованные design decisions: colors, spacing, typography, radii, motion. Их хранят в нейтральном source of
+truth и преобразуют в CSS custom properties, platform constants и design-tool variables. Семантические tokens вроде
+--color-danger устойчивее прямых названий оттенков.
+
+**Полный ответ**
 
 Tokens — именованные design decisions: colors, spacing, typography, radii, motion. Их хранят в нейтральном source of
 truth и преобразуют в CSS custom properties, platform constants и design-tool variables. Семантические tokens вроде
@@ -1202,6 +1838,13 @@ truth и преобразуют в CSS custom properties, platform constants и 
 <summary>Что такое cascade layers <code>@layer</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Cascade layers задают явный порядок групп styles до сравнения specificity. Например, reset, base, components и utilities
+можно упорядочить один раз, уменьшая войны selectors и !important.
+
+**Полный ответ**
+
 Cascade layers задают явный порядок групп styles до сравнения specificity. Например, `reset`, `base`, `components` и
 `utilities` можно упорядочить один раз, уменьшая войны selectors и `!important`.
 
@@ -1212,6 +1855,14 @@ Cascade layers задают явный порядок групп styles до с�
 <details>
 <summary>Что такое Shadow DOM style encapsulation?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Shadow DOM создает отдельное tree boundary: обычные document selectors не проникают внутрь, а внутренние styles не
+выходят наружу. Наследуемые properties, CSS custom properties, ::part и ::slotted формируют контролируемые точки
+настройки.
+
+**Полный ответ**
 
 Shadow DOM создает отдельное tree boundary: обычные document selectors не проникают внутрь, а внутренние styles не
 выходят наружу. Наследуемые properties, CSS custom properties, `::part` и `::slotted` формируют контролируемые точки
@@ -1224,6 +1875,12 @@ Shadow DOM создает отдельное tree boundary: обычные docum
 <details>
 <summary>Что такое BEM?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+BEM делит CSS-имена на block, element и modifier:
+
+**Полный ответ**
 
 BEM делит CSS-имена на block, element и modifier:
 
@@ -1247,6 +1904,14 @@ BEM делит CSS-имена на block, element и modifier:
 <summary>Зачем команде нужны CSS principles?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSS principles фиксируют подход к именованию, композиции, специфичности, layout, responsive design и переиспользованию.
+Без таких правил CSS быстро превращается в набор случайных overrides. Хороший ответ должен упомянуть локальность стилей,
+короткие selectors, осторожность с !important, общий base layer и понятные исключения.
+
+**Полный ответ**
+
 CSS principles фиксируют подход к именованию, композиции, специфичности, layout, responsive design и переиспользованию.
 Без таких правил CSS быстро превращается в набор случайных overrides. Хороший ответ должен упомянуть локальность стилей,
 короткие selectors, осторожность с `!important`, общий base layer и понятные исключения.
@@ -1258,6 +1923,14 @@ CSS principles фиксируют подход к именованию, комп
 <details>
 <summary>Когда отклонение от CSS methodology допустимо?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Отклонение допустимо, если стандартный подход плохо решает конкретную задачу: интеграция с внешним UI kit, legacy-код,
+performance-ограничение или нестандартный layout. Исключение должно быть локальным, объясненным и по возможности
+задокументированным, иначе оно быстро становится новой неявной методологией.
+
+**Полный ответ**
 
 Отклонение допустимо, если стандартный подход плохо решает конкретную задачу: интеграция с внешним UI kit, legacy-код,
 performance-ограничение или нестандартный layout. Исключение должно быть локальным, объясненным и по возможности
@@ -1271,6 +1944,14 @@ performance-ограничение или нестандартный layout. И�
 <summary>Как выбрать CSS framework для проекта?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSS framework выбирают по требованиям продукта: скорость разработки, accessibility компонентов, кастомизация, bundle
+size, качество документации, SSR-совместимость и связь с design system. Важно заранее решить, где команда следует
+framework, а где пишет собственный слой, иначе проект обрастает хаотичными overrides.
+
+**Полный ответ**
+
 CSS framework выбирают по требованиям продукта: скорость разработки, accessibility компонентов, кастомизация, bundle
 size, качество документации, SSR-совместимость и связь с design system. Важно заранее решить, где команда следует
 framework, а где пишет собственный слой, иначе проект обрастает хаотичными overrides.
@@ -1283,6 +1964,13 @@ framework, а где пишет собственный слой, иначе пр
 <summary>Какие плюсы и минусы у БЭМ?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+БЭМ дает предсказуемые глобальные имена и явно показывает block, element и modifier. Цена — длинные class names,
+дисциплина соглашений и возможное дублирование контекста там, где framework уже изолирует component styles.
+
+**Полный ответ**
+
 БЭМ дает предсказуемые глобальные имена и явно показывает block, element и modifier. Цена — длинные class names,
 дисциплина соглашений и возможное дублирование контекста там, где framework уже изолирует component styles.
 
@@ -1293,6 +1981,14 @@ framework, а где пишет собственный слой, иначе пр
 <details>
 <summary>Чем CSS Modules, CSS-in-JS и utility-first CSS отличаются?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CSS Modules генерируют локальные class names, CSS-in-JS связывает styles с JavaScript runtime или build step,
+utility-first собирает UI из небольших готовых classes. Выбор влияет на isolation, runtime cost, theming, tooling,
+server rendering и читаемость markup.
+
+**Полный ответ**
 
 CSS Modules генерируют локальные class names, CSS-in-JS связывает styles с JavaScript runtime или build step,
 utility-first собирает UI из небольших готовых classes. Выбор влияет на isolation, runtime cost, theming, tooling,
@@ -1306,6 +2002,14 @@ server rendering и читаемость markup.
 <summary>Какие плюсы и минусы у Tailwind-подхода?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Utilities ускоряют композицию, ограничивают произвольные значения и удаляют неиспользуемые rules при сборке. Минусы —
+шумная markup, необходимость соглашений для повторяющихся patterns и риск смешать design decisions со случайными
+utilities без tokens и component boundaries.
+
+**Полный ответ**
+
 Utilities ускоряют композицию, ограничивают произвольные значения и удаляют неиспользуемые rules при сборке. Минусы —
 шумная markup, необходимость соглашений для повторяющихся patterns и риск смешать design decisions со случайными
 utilities без tokens и component boundaries.
@@ -1317,6 +2021,14 @@ utilities без tokens и component boundaries.
 <details>
 <summary>Как сделать theme и dark theme?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Компоненты используют semantic custom properties, а theme переопределяет их на root container. Начальный выбор может
+учитывать prefers-color-scheme, пользовательская настройка должна иметь приоритет и сохраняться. Проверяют contrast,
+media assets и browser controls через color-scheme.
+
+**Полный ответ**
 
 Компоненты используют semantic custom properties, а theme переопределяет их на root container. Начальный выбор может
 учитывать `prefers-color-scheme`, пользовательская настройка должна иметь приоритет и сохраняться. Проверяют contrast,
@@ -1330,6 +2042,14 @@ media assets и browser controls через `color-scheme`.
 <summary>Почему глобальные стили могут быть проблемой?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Широкие selectors создают неявные зависимости, conflicts и regressions в далеких features. Global layer оставляют для
+reset, tokens, typography и действительно общих primitives; component и feature styles ограничивают понятными
+boundaries.
+
+**Полный ответ**
+
 Широкие selectors создают неявные зависимости, conflicts и regressions в далеких features. Global layer оставляют для
 reset, tokens, typography и действительно общих primitives; component и feature styles ограничивают понятными
 boundaries.
@@ -1341,6 +2061,12 @@ boundaries.
 <details>
 <summary>Чем SCSS @import отличается от @use?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Legacy @import глобально объединяет файлы, может загружать их повторно и создает конфликты имен.
+
+**Полный ответ**
 
 Legacy `@import` глобально объединяет файлы, может загружать их повторно и создает конфликты имен.
 
@@ -1364,6 +2090,12 @@ Legacy `@import` глобально объединяет файлы, может 
 <summary>Какие есть способы изоляции стилей?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Основные варианты:
+
+**Полный ответ**
+
 Основные варианты:
 
 - соглашения именования, например BEM;
@@ -1383,6 +2115,12 @@ Legacy `@import` глобально объединяет файлы, может 
 <summary>Какие плюсы и минусы готового UI Kit?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Плюсы: единый дизайн, accessibility primitives, быстрый старт, готовые сложные компоненты и меньше дублирования.
+
+**Полный ответ**
+
 Плюсы: единый дизайн, accessibility primitives, быстрый старт, готовые сложные компоненты и меньше дублирования.
 
 Минусы: ограниченная кастомизация, лишний bundle, зависимость от release cycle и сложные обновления. Перед выбором
@@ -1398,6 +2136,14 @@ Legacy `@import` глобально объединяет файлы, может 
 <summary>Что такое critical CSS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Critical CSS — минимальный набор стилей, нужный для первого видимого экрана. Его можно встроить в HTML или выделить
+отдельно, чтобы браузер быстрее показал initial view. В Angular SSR/prerender сценариях это может улучшить perceived
+performance, но усложняет build pipeline, cache и диагностику визуальных regressions.
+
+**Полный ответ**
+
 Critical CSS — минимальный набор стилей, нужный для первого видимого экрана. Его можно встроить в HTML или выделить
 отдельно, чтобы браузер быстрее показал initial view. В Angular SSR/prerender сценариях это может улучшить perceived
 performance, но усложняет build pipeline, cache и диагностику визуальных regressions.
@@ -1410,6 +2156,13 @@ performance, но усложняет build pipeline, cache и диагности
 <summary>Что такое reflow/layout?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Layout вычисляет геометрию render tree: размеры и координаты элементов. Изменение ширины, шрифта или структуры может
+потребовать пересчета части или всей страницы. Стоимость растет с размером и связанностью layout.
+
+**Полный ответ**
+
 Layout вычисляет геометрию render tree: размеры и координаты элементов. Изменение ширины, шрифта или структуры может
 потребовать пересчета части или всей страницы. Стоимость растет с размером и связанностью layout.
 
@@ -1420,6 +2173,14 @@ Layout вычисляет геометрию render tree: размеры и ко
 <details>
 <summary>Почему GPU не делает любую анимацию бесплатной?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Compositor может дешево перемещать готовый layer, но его сначала нужно rasterize и хранить в GPU memory. Большие layers,
+filters, uploads и частые изменения content создают overhead. Производительность подтверждают trace, а не наличием
+transform: translateZ(0).
+
+**Полный ответ**
 
 Compositor может дешево перемещать готовый layer, но его сначала нужно rasterize и хранить в GPU memory. Большие layers,
 filters, uploads и частые изменения content создают overhead. Производительность подтверждают trace, а не наличием
@@ -1433,6 +2194,14 @@ filters, uploads и частые изменения content создают overh
 <summary>Что делают <code>contain</code> и <code>content-visibility</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+contain ограничивает влияние layout, paint, size или style элемента на остальную страницу. content-visibility: auto
+позволяет пропускать rendering вне viewport, сохраняя content для поиска и accessibility tree. Для стабильной прокрутки
+часто задают contain-intrinsic-size.
+
+**Полный ответ**
+
 `contain` ограничивает влияние layout, paint, size или style элемента на остальную страницу. `content-visibility: auto`
 позволяет пропускать rendering вне viewport, сохраняя content для поиска и accessibility tree. Для стабильной прокрутки
 часто задают `contain-intrinsic-size`.
@@ -1445,6 +2214,13 @@ filters, uploads и частые изменения content создают overh
 <summary>Что такое repaint?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Paint рисует пиксели для фона, текста, border, shadow и других визуальных свойств. Он может выполняться без нового
+layout, если геометрия не изменилась. Большие painted areas и сложные эффекты увеличивают стоимость.
+
+**Полный ответ**
+
 Paint рисует пиксели для фона, текста, border, shadow и других визуальных свойств. Он может выполняться без нового
 layout, если геометрия не изменилась. Большие painted areas и сложные эффекты увеличивают стоимость.
 
@@ -1455,6 +2231,13 @@ layout, если геометрия не изменилась. Большие pa
 <details>
 <summary>Что такое compositing?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Compositing собирает ранее нарисованные слои в итоговый кадр, применяя трансформации и прозрачность. Эту работу часто
+можно передать compositor thread/GPU. Но создание и хранение слоев расходует память.
+
+**Полный ответ**
 
 Compositing собирает ранее нарисованные слои в итоговый кадр, применяя трансформации и прозрачность. Эту работу часто
 можно передать compositor thread/GPU. Но создание и хранение слоев расходует память.
@@ -1467,6 +2250,13 @@ Compositing собирает ранее нарисованные слои в и�
 <summary>Чем reflow отличается от repaint?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Reflow пересчитывает геометрию и обычно приводит к последующему paint. Repaint меняет пиксели без обязательного
+пересчета размеров. Compositing может обновить итоговый кадр без обоих этапов для подходящих свойств.
+
+**Полный ответ**
+
 Reflow пересчитывает геометрию и обычно приводит к последующему paint. Repaint меняет пиксели без обязательного
 пересчета размеров. Compositing может обновить итоговый кадр без обоих этапов для подходящих свойств.
 
@@ -1477,6 +2267,13 @@ Reflow пересчитывает геометрию и обычно приво�
 <details>
 <summary>Какие CSS-свойства чаще вызывают layout?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Свойства размеров и геометрии: width, height, margin, padding, border, position offsets, font metrics и изменения DOM.
+Точная область пересчета зависит от layout и containment. Проверять нужно в Performance panel.
+
+**Полный ответ**
 
 Свойства размеров и геометрии: `width`, `height`, margin, padding, border, position offsets, font metrics и изменения
 DOM. Точная область пересчета зависит от layout и containment. Проверять нужно в Performance panel.
@@ -1489,6 +2286,13 @@ DOM. Точная область пересчета зависит от layout �
 <summary>Какие CSS-свойства чаще вызывают paint?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Цвета, backgrounds, borders, shadows и часть filters обычно требуют paint, но не layout. Чем больше область и сложнее
+эффект, тем дороже операция. Реальная pipeline зависит от браузера и layer structure.
+
+**Полный ответ**
+
 Цвета, backgrounds, borders, shadows и часть filters обычно требуют paint, но не layout. Чем больше область и сложнее
 эффект, тем дороже операция. Реальная pipeline зависит от браузера и layer structure.
 
@@ -1499,6 +2303,13 @@ DOM. Точная область пересчета зависит от layout �
 <details>
 <summary>Почему <code>transform</code> и <code>opacity</code> обычно лучше для анимаций?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Они часто применяются на этапе compositing без повторного layout и paint содержимого. Это уменьшает работу main thread и
+делает кадры стабильнее. Гарантии нет: сложная сцена и лишние layers тоже могут быть дорогими.
+
+**Полный ответ**
 
 Они часто применяются на этапе compositing без повторного layout и paint содержимого. Это уменьшает работу main thread и
 делает кадры стабильнее. Гарантии нет: сложная сцена и лишние layers тоже могут быть дорогими.
@@ -1511,6 +2322,13 @@ DOM. Точная область пересчета зависит от layout �
 <summary>Что выполняется на CPU, а что может уйти на GPU?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+JavaScript, style calculation и layout в основном выполняются CPU/main thread. GPU часто ускоряет rasterization и
+compositing слоев. Он не делает произвольную CSS-анимацию бесплатной и не исправляет long JavaScript tasks.
+
+**Полный ответ**
+
 JavaScript, style calculation и layout в основном выполняются CPU/main thread. GPU часто ускоряет rasterization и
 compositing слоев. Он не делает произвольную CSS-анимацию бесплатной и не исправляет long JavaScript tasks.
 
@@ -1521,6 +2339,13 @@ compositing слоев. Он не делает произвольную CSS-ан
 <details>
 <summary>Что такое compositor layer?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это поверхность, которую браузер может независимо перемещать и смешивать при сборке кадра. Layers полезны для
+анимируемых элементов, fixed content и video. Каждый слой требует памяти и может увеличить raster/compositing work.
+
+**Полный ответ**
 
 Это поверхность, которую браузер может независимо перемещать и смешивать при сборке кадра. Layers полезны для
 анимируемых элементов, fixed content и video. Каждый слой требует памяти и может увеличить raster/compositing work.
@@ -1533,6 +2358,13 @@ compositing слоев. Он не делает произвольную CSS-ан
 <summary>Что такое layer promotion?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Браузер решает вынести элемент в отдельный compositor layer из-за transform, animation или других эвристик. Разработчик
+может подсказать намерение через will-change, но итог контролирует engine. Promotion нужно подтверждать Layers panel.
+
+**Полный ответ**
+
 Браузер решает вынести элемент в отдельный compositor layer из-за transform, animation или других эвристик. Разработчик
 может подсказать намерение через `will-change`, но итог контролирует engine. Promotion нужно подтверждать Layers panel.
 
@@ -1543,6 +2375,13 @@ compositing слоев. Он не делает произвольную CSS-ан
 <details>
 <summary>Что делает <code>will-change</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Он заранее сообщает браузеру, какое свойство скоро изменится, чтобы подготовить оптимизацию. Использовать его следует
+незадолго до анимации и для ограниченного числа элементов. После завершения долгой подготовки hint можно убрать.
+
+**Полный ответ**
 
 Он заранее сообщает браузеру, какое свойство скоро изменится, чтобы подготовить оптимизацию. Использовать его следует
 незадолго до анимации и для ограниченного числа элементов. После завершения долгой подготовки hint можно убрать.
@@ -1555,6 +2394,13 @@ compositing слоев. Он не делает произвольную CSS-ан
 <summary>Почему <code>will-change</code> нельзя ставить на все элементы?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Браузер может создать слишком много слоев и потратить GPU memory. Это увеличивает rasterization, compositing и иногда
+ухудшает производительность сильнее исходной проблемы. will-change — точечный hint, а не reset.
+
+**Полный ответ**
+
 Браузер может создать слишком много слоев и потратить GPU memory. Это увеличивает rasterization, compositing и иногда
 ухудшает производительность сильнее исходной проблемы. `will-change` — точечный hint, а не reset.
 
@@ -1565,6 +2411,13 @@ compositing слоев. Он не делает произвольную CSS-ан
 <details>
 <summary>Почему <code>top/left</code> часто хуже для анимаций, чем <code>transform</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Offsets меняют геометрию positioned element и могут запускать layout и paint. Transform обычно перемещает готовый слой
+на этапе compositing. Итог зависит от элемента, поэтому анимацию измеряют.
+
+**Полный ответ**
 
 Offsets меняют геометрию positioned element и могут запускать layout и paint. Transform обычно перемещает готовый слой
 на этапе compositing. Итог зависит от элемента, поэтому анимацию измеряют.
@@ -1589,6 +2442,13 @@ Offsets меняют геометрию positioned element и могут зап�
 <summary>Почему <code>box-shadow</code> и <code>filter</code> могут быть дорогими?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Они требуют вычисления пикселей вокруг элемента, размытия и дополнительных offscreen surfaces. Большой blur radius и
+анимация на крупной области особенно дороги. Иногда дешевле использовать подготовленный asset или меньшую область.
+
+**Полный ответ**
+
 Они требуют вычисления пикселей вокруг элемента, размытия и дополнительных offscreen surfaces. Большой blur radius и
 анимация на крупной области особенно дороги. Иногда дешевле использовать подготовленный asset или меньшую область.
 
@@ -1599,6 +2459,13 @@ Offsets меняют геометрию positioned element и могут зап�
 <details>
 <summary>Что такое layout thrashing?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это повторное чередование DOM writes и layout reads, вынуждающее браузер синхронно пересчитывать геометрию много раз за
+кадр. Проблема часто возникает в циклах. Чтения и записи нужно группировать.
+
+**Полный ответ**
 
 Это повторное чередование DOM writes и layout reads, вынуждающее браузер синхронно пересчитывать геометрию много раз за
 кадр. Проблема часто возникает в циклах. Чтения и записи нужно группировать.
@@ -1611,6 +2478,13 @@ Offsets меняют геометрию positioned element и могут зап�
 <summary>Как избежать layout thrashing?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Сначала прочитать необходимые размеры, затем пакетно изменить DOM. Для кадра использовать requestAnimationFrame, для
+списков — class changes вместо множества inline writes. Профилировщик покажет forced synchronous layout.
+
+**Полный ответ**
+
 Сначала прочитать необходимые размеры, затем пакетно изменить DOM. Для кадра использовать `requestAnimationFrame`, для
 списков — class changes вместо множества inline writes. Профилировщик покажет forced synchronous layout.
 
@@ -1621,6 +2495,14 @@ Offsets меняют геометрию positioned element и могут зап�
 <details>
 <summary>Почему чтение <code>offsetWidth</code> после записи стилей может быть проблемой?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+После write вычисленные размеры становятся устаревшими. Чтение offsetWidth требует актуального значения и заставляет
+браузер немедленно завершить style/layout вместо отложенной пакетной работы. Повторение этого паттерна создает forced
+reflow.
+
+**Полный ответ**
 
 После write вычисленные размеры становятся устаревшими. Чтение `offsetWidth` требует актуального значения и заставляет
 браузер немедленно завершить style/layout вместо отложенной пакетной работы. Повторение этого паттерна создает forced
@@ -1634,6 +2516,13 @@ reflow.
 <summary>Как DevTools Performance помогает искать reflow/repaint?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Запись trace показывает scripting, style recalculation, layout, paint и compositing по кадрам. Можно открыть дорогой
+event, увидеть call stack и affected nodes. Paint flashing и Layers дополняют анализ.
+
+**Полный ответ**
+
 Запись trace показывает scripting, style recalculation, layout, paint и compositing по кадрам. Можно открыть дорогой
 event, увидеть call stack и affected nodes. Paint flashing и Layers дополняют анализ.
 
@@ -1644,6 +2533,13 @@ event, увидеть call stack и affected nodes. Paint flashing и Layers д�
 <details>
 <summary>Что такое FPS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+FPS — число отображенных кадров в секунду. Низкий или нестабильный FPS заметен как рывки анимации и scrolling. Важно
+смотреть не только среднее, но и пропущенные кадры.
+
+**Полный ответ**
 
 FPS — число отображенных кадров в секунду. Низкий или нестабильный FPS заметен как рывки анимации и scrolling. Важно
 смотреть не только среднее, но и пропущенные кадры.
@@ -1656,6 +2552,13 @@ FPS — число отображенных кадров в секунду. Ни
 <summary>Почему 60 FPS означает бюджет около 16.6ms на кадр?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Секунда делится на 60 интервалов: примерно 1000 / 60 = 16.6ms. В этот бюджет входят input, JavaScript, style, layout,
+paint и compositing. На дисплеях 120Hz бюджет еще меньше.
+
+**Полный ответ**
+
 Секунда делится на 60 интервалов: примерно `1000 / 60 = 16.6ms`. В этот бюджет входят input, JavaScript, style, layout,
 paint и compositing. На дисплеях 120Hz бюджет еще меньше.
 
@@ -1666,6 +2569,13 @@ paint и compositing. На дисплеях 120Hz бюджет еще меньш
 <details>
 <summary>Как <code>requestAnimationFrame</code> помогает с анимациями?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Callback вызывается перед следующим paint и синхронизирует обновление с refresh cycle. Браузер может приостанавливать
+его в фоновой вкладке. Тяжелая работа внутри callback все равно блокирует кадр.
+
+**Полный ответ**
 
 Callback вызывается перед следующим paint и синхронизирует обновление с refresh cycle. Браузер может приостанавливать
 его в фоновой вкладке. Тяжелая работа внутри callback все равно блокирует кадр.
@@ -1680,6 +2590,15 @@ Callback вызывается перед следующим paint и синхр�
 <summary>Что такое FOUC и как его уменьшить?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+FOUC, Flash of Unstyled Content, возникает, когда HTML уже отрисован, а нужные CSS или fonts еще не применились.
+Помогают critical CSS, корректное размещение stylesheet, preload важных fonts, стабильные fallback fonts и отказ от
+поздней загрузки базовых стилей через JavaScript. В Angular также важно, чтобы server-rendered HTML и client styles
+давали согласованный first render.
+
+**Полный ответ**
+
 FOUC, Flash of Unstyled Content, возникает, когда HTML уже отрисован, а нужные CSS или fonts еще не применились.
 Помогают critical CSS, корректное размещение stylesheet, preload важных fonts, стабильные fallback fonts и отказ от
 поздней загрузки базовых стилей через JavaScript. В Angular также важно, чтобы server-rendered HTML и client styles
@@ -1693,6 +2612,14 @@ FOUC, Flash of Unstyled Content, возникает, когда HTML уже от
 <summary>Как подключение custom fonts влияет на performance?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Custom fonts могут задерживать отображение текста, влиять на LCP и вызывать FOUT или FOIT. Нужно выбирать WOFF2,
+font-display, preload только критичных начертаний, subset и fallback stack с близкими метриками. Чем больше font files и
+weights, тем выше риск медленного first render.
+
+**Полный ответ**
+
 Custom fonts могут задерживать отображение текста, влиять на LCP и вызывать FOUT или FOIT. Нужно выбирать WOFF2,
 `font-display`, preload только критичных начертаний, subset и fallback stack с близкими метриками. Чем больше font files
 и weights, тем выше риск медленного first render.
@@ -1704,6 +2631,13 @@ Custom fonts могут задерживать отображение текст
 <details>
 <summary>Что такое CSSOM и почему CSS может блокировать рендеринг?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CSSOM — object model разобранных CSS rules. Браузеру нужен CSSOM, чтобы вычислить стили и построить render tree, поэтому
+внешний stylesheet обычно является render-blocking resource для первого render.
+
+**Полный ответ**
 
 CSSOM — object model разобранных CSS rules. Браузеру нужен CSSOM, чтобы вычислить стили и построить render tree, поэтому
 внешний stylesheet обычно является render-blocking resource для первого render.
@@ -1719,6 +2653,12 @@ styles по routes и аккуратная загрузка fonts.
 <summary>Что такое render tree?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Элементы вроде display: none не участвуют в render tree, хотя остаются в DOM.
+
+**Полный ответ**
+
 - DOM представляет структуру HTML.
 - CSSOM содержит разобранные CSS-правила.
 - Render tree объединяет видимые DOM-узлы с вычисленными стилями.
@@ -1732,6 +2672,14 @@ styles по routes и аккуратная загрузка fonts.
 <details>
 <summary>Чем layout, paint и compositing отличаются друг от друга?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Layout, или reflow, вычисляет размеры и положение элементов. Paint превращает styled boxes, text, borders и shadows в
+пиксели или paint commands. Compositing собирает слои в итоговый кадр и часто может выполняться без нового layout и
+paint.
+
+**Полный ответ**
 
 Layout, или reflow, вычисляет размеры и положение элементов. Paint превращает styled boxes, text, borders и shadows в
 пиксели или paint commands. Compositing собирает слои в итоговый кадр и часто может выполняться без нового layout и
@@ -1748,6 +2696,14 @@ paint.
 <summary>Что такое Critical Rendering Path?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это последовательность получения HTML/CSS, построения DOM и CSSOM, создания render tree, layout, paint и compositing до
+появления пикселей. Блокирующие ресурсы и long tasks удлиняют путь. Оптимизация должна улучшать измеряемый LCP и первый
+render, а не только число запросов.
+
+**Полный ответ**
+
 Это последовательность получения HTML/CSS, построения DOM и CSSOM, создания render tree, layout, paint и compositing до
 появления пикселей. Блокирующие ресурсы и long tasks удлиняют путь. Оптимизация должна улучшать измеряемый LCP и первый
 render, а не только число запросов.
@@ -1760,6 +2716,13 @@ render, а не только число запросов.
 <summary>Что такое render-blocking resources?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это ресурсы, без обработки которых браузер откладывает первый render. К ним обычно относятся stylesheets и часть
+синхронных scripts. Critical CSS, code splitting и корректные defer/async уменьшают блокировку.
+
+**Полный ответ**
+
 Это ресурсы, без обработки которых браузер откладывает первый render. К ним обычно относятся stylesheets и часть
 синхронных scripts. Critical CSS, code splitting и корректные `defer`/`async` уменьшают блокировку.
 
@@ -1770,6 +2733,15 @@ render, а не только число запросов.
 <details>
 <summary>Как улучшить scroll performance?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно уменьшить работу на main thread во время scroll: использовать passive listeners, не читать и не писать layout в
+каждом событии, виртуализировать большие списки и избегать тяжелых shadows/filters на множестве элементов. Sticky,
+parallax и infinite scroll проверяют на реальных устройствах. В Angular важно не запускать лишние state updates и change
+detection на каждый пиксель прокрутки.
+
+**Полный ответ**
 
 Нужно уменьшить работу на main thread во время scroll: использовать passive listeners, не читать и не писать layout в
 каждом событии, виртуализировать большие списки и избегать тяжелых shadows/filters на множестве элементов. Sticky,
@@ -1783,6 +2755,13 @@ detection на каждый пиксель прокрутки.
 <details>
 <summary>Почему не стоит использовать transition: all?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+transition: all анимирует любые изменившиеся свойства, включая неожиданные и дорогие для layout. Это усложняет поддержку
+и может создавать случайные анимации.
+
+**Полный ответ**
 
 `transition: all` анимирует любые изменившиеся свойства, включая неожиданные и дорогие для layout. Это усложняет
 поддержку и может создавать случайные анимации.
@@ -1807,6 +2786,14 @@ detection на каждый пиксель прокрутки.
 <summary>Что такое CSS nesting?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Native nesting позволяет вкладывать relative selectors внутрь style rule. Оно уменьшает повторение context, но глубокая
+вложенность повышает specificity и связанность. Синтаксис и результат следует отличать от дополнительных возможностей
+Sass.
+
+**Полный ответ**
+
 Native nesting позволяет вкладывать relative selectors внутрь style rule. Оно уменьшает повторение context, но глубокая
 вложенность повышает specificity и связанность. Синтаксис и результат следует отличать от дополнительных возможностей
 Sass.
@@ -1818,6 +2805,14 @@ Sass.
 <details>
 <summary>Что такое <code>:has()</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+:has() выбирает element по совпадению relative selector внутри или рядом, например form group с invalid input. Это
+позволяет стилизовать parent без JavaScript, но слишком широкие selectors на больших деревьях следует применять
+осознанно.
+
+**Полный ответ**
 
 `:has()` выбирает element по совпадению relative selector внутри или рядом, например form group с invalid input. Это
 позволяет стилизовать parent без JavaScript, но слишком широкие selectors на больших деревьях следует применять
@@ -1831,6 +2826,14 @@ Sass.
 <summary>Что такое style queries?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Style container queries применяют rules по computed style container, прежде всего по custom properties. Это позволяет
+компоненту реагировать на semantic state контекста. Поддержку конкретного синтаксиса нужно проверять для целевых
+браузеров.
+
+**Полный ответ**
+
 Style container queries применяют rules по computed style container, прежде всего по custom properties. Это позволяет
 компоненту реагировать на semantic state контекста. Поддержку конкретного синтаксиса нужно проверять для целевых
 браузеров.
@@ -1843,6 +2846,13 @@ Style container queries применяют rules по computed style container, 
 <summary>Что такое logical properties?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Logical properties описывают flow-relative стороны: margin-inline-start, padding-block, inset-inline-end. В отличие от
+left и right, они адаптируются к writing mode и направлению LTR/RTL, уменьшая отдельные overrides для локализации.
+
+**Полный ответ**
+
 Logical properties описывают flow-relative стороны: `margin-inline-start`, `padding-block`, `inset-inline-end`. В
 отличие от `left` и `right`, они адаптируются к writing mode и направлению LTR/RTL, уменьшая отдельные overrides для
 локализации.
@@ -1854,6 +2864,13 @@ Logical properties описывают flow-relative стороны: `margin-inli
 <details>
 <summary>Какие frontend-проблемы появляются при RTL?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+RTL влияет на direction, порядок inline content, иконки направления, отступы, scroll behavior, charts, drag and drop и
+анимации. CSS logical properties (margin-inline-start, inset-inline-end) уменьшают количество отдельных overrides.
+
+**Полный ответ**
 
 RTL влияет на direction, порядок inline content, иконки направления, отступы, scroll behavior, charts, drag and drop и
 анимации. CSS logical properties (`margin-inline-start`, `inset-inline-end`) уменьшают количество отдельных overrides.
@@ -1876,6 +2893,13 @@ date/number formatting и screenshots основных экранов.
 <summary>Чем <code>:is()</code> отличается от <code>:where()</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Обе pseudo-classes группируют selectors. Specificity :is() равна самому специфичному аргументу, а :where() всегда имеет
+нулевую specificity. Поэтому :where() удобен для легко переопределяемых defaults.
+
+**Полный ответ**
+
 Обе pseudo-classes группируют selectors. Specificity `:is()` равна самому специфичному аргументу, а `:where()` всегда
 имеет нулевую specificity. Поэтому `:where()` удобен для легко переопределяемых defaults.
 
@@ -1887,6 +2911,13 @@ date/number formatting и screenshots основных экранов.
 <summary>Для чего нужны <code>accent-color</code> и <code>color-scheme</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+accent-color настраивает accent native form controls, сохраняя их поведение. color-scheme сообщает браузеру, какие
+цветовые схемы поддерживает область, чтобы он согласовал controls, scrollbars и системные colors.
+
+**Полный ответ**
+
 `accent-color` настраивает accent native form controls, сохраняя их поведение. `color-scheme` сообщает браузеру, какие
 цветовые схемы поддерживает область, чтобы он согласовал controls, scrollbars и системные colors.
 
@@ -1897,6 +2928,14 @@ date/number formatting и screenshots основных экранов.
 <details>
 <summary>Как работают <code>prefers-color-scheme</code> и <code>prefers-reduced-motion</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Эти media features отражают системные предпочтения пользователя. Первая помогает выбрать начальную theme, вторая —
+уменьшить необязательное движение. Reduced motion означает не «выключить все», а убрать потенциально проблемные эффекты,
+сохранив понятную обратную связь.
+
+**Полный ответ**
 
 Эти media features отражают системные предпочтения пользователя. Первая помогает выбрать начальную theme, вторая —
 уменьшить необязательное движение. Reduced motion означает не «выключить все», а убрать потенциально проблемные эффекты,
@@ -1910,6 +2949,14 @@ date/number formatting и screenshots основных экранов.
 <summary>Для чего нужны <code>aspect-ratio</code> и <code>object-fit</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+aspect-ratio задает предпочтительное соотношение сторон box и помогает резервировать место. object-fit определяет, как
+replaced content вроде image или video вписывается в заданный box: contain сохраняет весь content, cover заполняет
+область с crop.
+
+**Полный ответ**
+
 `aspect-ratio` задает предпочтительное соотношение сторон box и помогает резервировать место. `object-fit` определяет,
 как replaced content вроде image или video вписывается в заданный box: `contain` сохраняет весь content, `cover`
 заполняет область с crop.
@@ -1922,6 +2969,14 @@ date/number formatting и screenshots основных экранов.
 <summary>Что делают <code>overscroll-behavior</code> и <code>scrollbar-gutter</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+overscroll-behavior управляет scroll chaining и browser overscroll actions на границах container. scrollbar-gutter может
+заранее резервировать место под scrollbar, предотвращая layout shift. Оба свойства применяют точечно, не ломая ожидаемую
+прокрутку страницы.
+
+**Полный ответ**
+
 `overscroll-behavior` управляет scroll chaining и browser overscroll actions на границах container. `scrollbar-gutter`
 может заранее резервировать место под scrollbar, предотвращая layout shift. Оба свойства применяют точечно, не ломая
 ожидаемую прокрутку страницы.
@@ -1933,6 +2988,13 @@ date/number formatting и screenshots основных экранов.
 <details>
 <summary>Когда использовать subgrid?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+subgrid позволяет вложенному grid наследовать tracks родителя по строкам или колонкам. Это полезно для карточек,
+табличных layouts и форм, где внутренние элементы разных карточек должны выровняться по общей сетке.
+
+**Полный ответ**
 
 `subgrid` позволяет вложенному grid наследовать tracks родителя по строкам или колонкам. Это полезно для карточек,
 табличных layouts и форм, где внутренние элементы разных карточек должны выровняться по общей сетке.
@@ -1961,6 +3023,13 @@ date/number formatting и screenshots основных экранов.
 <details>
 <summary>Практическая задача: сделайте CSS-only star rating display.</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Если нужен только display, можно использовать custom property и overlay. Для интерактивного rating нужны настоящие
+controls, keyboard support и доступное имя.
+
+**Полный ответ**
 
 Если нужен только display, можно использовать custom property и overlay. Для интерактивного rating нужны настоящие
 controls, keyboard support и доступное имя.
@@ -1992,6 +3061,12 @@ controls, keyboard support и доступное имя.
 <details>
 <summary>Практическая задача: сверстайте responsive card grid без JavaScript.</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Что проверяет: Grid, responsive layout, минимальные размеры, отсутствие layout shift.
+
+**Полный ответ**
 
 **Что проверяет:** Grid, responsive layout, минимальные размеры, отсутствие layout shift.
 

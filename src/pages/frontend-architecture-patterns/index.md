@@ -20,6 +20,14 @@ order: 145
 <summary>Что такое feature-first структура и почему она обычно лучше папок по типу файлов?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Feature-first группирует код по пользовательской возможности: orders, profile, checkout. Внутри feature живут его UI,
+маршруты, state, API-клиент и тесты. Папки components, services, models на весь проект кажутся простыми в начале, но со
+временем смешивают несвязанные домены и делают ownership неясным.
+
+**Полный ответ**
+
 Feature-first группирует код по пользовательской возможности: `orders`, `profile`, `checkout`. Внутри feature живут его
 UI, маршруты, state, API-клиент и тесты. Папки `components`, `services`, `models` на весь проект кажутся простыми в
 начале, но со временем смешивают несвязанные домены и делают ownership неясным.
@@ -48,6 +56,15 @@ src/
 <details>
 <summary>Как разделить presentational и container components?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Presentational component получает данные и callbacks через API, отображает UI и не знает, откуда пришли данные.
+Container связывает route, use case, состояние и presentational UI. Это не жесткое правило: маленький component может
+содержать оба слоя. Разделение окупается, когда UI переиспользуется, загрузка усложняется или component становится
+трудно тестировать.
+
+**Полный ответ**
 
 Presentational component получает данные и callbacks через API, отображает UI и не знает, откуда пришли данные.
 Container связывает route, use case, состояние и presentational UI. Это не жесткое правило: маленький component может
@@ -114,6 +131,14 @@ export class OrdersPageComponent {
 <summary>Что означает правило dependency direction?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Зависимости должны идти от внешних деталей к более стабильному коду: UI зависит от application use case, use case
+зависит от domain-контракта, а HTTP-клиент реализует этот контракт. Тогда изменение React component, Angular template
+или REST endpoint не заставляет менять business rule.
+
+**Полный ответ**
+
 Зависимости должны идти от внешних деталей к более стабильному коду: UI зависит от application use case, use case
 зависит от domain-контракта, а HTTP-клиент реализует этот контракт. Тогда изменение React component, Angular template
 или REST endpoint не заставляет менять business rule.
@@ -129,6 +154,14 @@ export class OrdersPageComponent {
 <details>
 <summary>Что такое facade pattern во frontend и чем он отличается от state manager?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Facade дает UI маленький API предметной области: данные для отображения и операции вроде load(), approve() или retry().
+Она скрывает cache, store, HTTP и детали преобразования DTO. State manager хранит и изменяет состояние; facade может
+использовать state manager, но не обязана.
+
+**Полный ответ**
 
 Facade дает UI маленький API предметной области: данные для отображения и операции вроде `load()`, `approve()` или
 `retry()`. Она скрывает cache, store, HTTP и детали преобразования DTO. State manager хранит и изменяет состояние;
@@ -162,6 +195,14 @@ export class OrdersFacade {
 <details>
 <summary>Как отделить DTO от domain model?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+DTO повторяет контракт транспорта и может содержать строки дат, nullable-поля или неудачные названия backend. Domain
+model описывает данные, удобные и безопасные для приложения. Адаптер в data-access слое валидирует и преобразует DTO;
+остальной код не зависит от формы ответа API.
+
+**Полный ответ**
 
 DTO повторяет контракт транспорта и может содержать строки дат, nullable-поля или неудачные названия backend. Domain
 model описывает данные, удобные и безопасные для приложения. Адаптер в data-access слое валидирует и преобразует DTO;
@@ -199,6 +240,14 @@ const toOrder = (dto: OrderDto): Order => ({
 <summary>Когда выбирать composition вместо множества boolean props?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Если API component разрастается до isCompact, showHeader, hasActions, isEditable и комбинации флагов создают разные
+layouts, лучше передавать части интерфейса как children, slots или отдельные components. Composition делает допустимые
+комбинации видимыми в месте использования и уменьшает число неявных режимов.
+
+**Полный ответ**
+
 Если API component разрастается до `isCompact`, `showHeader`, `hasActions`, `isEditable` и комбинации флагов создают
 разные layouts, лучше передавать части интерфейса как children, slots или отдельные components. Composition делает
 допустимые комбинации видимыми в месте использования и уменьшает число неявных режимов.
@@ -229,6 +278,13 @@ React использует `children` и compound components. Angular испол
 <details>
 <summary>Что такое custom hook в React и какой его аналог в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Custom hook повторно использует stateful логику React: например, debounce, загрузку или взаимодействие с браузерным API.
+Он подчиняется rules of hooks и вызывается только из React component или другого hook.
+
+**Полный ответ**
 
 Custom hook повторно использует stateful логику React: например, debounce, загрузку или взаимодействие с браузерным API.
 Он подчиняется rules of hooks и вызывается только из React component или другого hook.
@@ -279,6 +335,14 @@ export class SearchComponent {
 <summary>Когда нужен compound component pattern?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Compound components делят один составной виджет на согласованные части: Tabs.List, Tabs.Panel, Select.Option. Родитель
+владеет общим состоянием и accessibility-правилами, а вложенные части получают контекст. Паттерн полезен для
+переиспользуемых UI primitives, но избыточен для одноразовой разметки feature.
+
+**Полный ответ**
+
 Compound components делят один составной виджет на согласованные части: `Tabs.List`, `Tabs.Panel`, `Select.Option`.
 Родитель владеет общим состоянием и accessibility-правилами, а вложенные части получают контекст. Паттерн полезен для
 переиспользуемых UI primitives, но избыточен для одноразовой разметки feature.
@@ -296,6 +360,14 @@ element injector и directives. Особенно важно централизо
 <details>
 <summary>Что такое layered architecture и когда она достаточна?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В простой layered architecture UI обращается к application/service слою, тот использует data-access, а domain содержит
+типы и чистые правила. Она достаточно хороша для большинства frontend-приложений, если границы feature понятны и слои не
+обходятся импортами.
+
+**Полный ответ**
 
 В простой layered architecture UI обращается к application/service слою, тот использует data-access, а domain содержит
 типы и чистые правила. Она достаточно хороша для большинства frontend-приложений, если границы feature понятны и слои не
@@ -320,6 +392,14 @@ orders/
 <summary>Что такое clean architecture во frontend и какой ее trade-off?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Clean architecture отделяет domain и use cases от фреймворка, UI и инфраструктуры. Например, use case placeOrder зависит
+от OrdersRepository, а Angular service или React API client реализует его через HTTP. Это упрощает тесты и замену
+интеграций, когда правила действительно сложны и долгоживущи.
+
+**Полный ответ**
+
 Clean architecture отделяет domain и use cases от фреймворка, UI и инфраструктуры. Например, use case `placeOrder`
 зависит от `OrdersRepository`, а Angular service или React API client реализует его через HTTP. Это упрощает тесты и
 замену интеграций, когда правила действительно сложны и долгоживущи.
@@ -336,6 +416,14 @@ Trade-off — дополнительные interfaces, adapters и перехо�
 <summary>Как организовать server state и client state в React и Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Server state принадлежит backend и требует cache, invalidation, retry и работы со stale-данными. В React для него часто
+используют TanStack Query; локальный UI state оставляют в useState, reducer или небольшом store. В Angular server state
+можно держать в service с resource или RxJS/query layer, а локальный UI state — в signal() рядом с component.
+
+**Полный ответ**
+
 Server state принадлежит backend и требует cache, invalidation, retry и работы со stale-данными. В React для него часто
 используют TanStack Query; локальный UI state оставляют в `useState`, reducer или небольшом store. В Angular server
 state можно держать в service с `resource` или RxJS/query layer, а локальный UI state — в `signal()` рядом с component.
@@ -350,6 +438,14 @@ state можно держать в service с `resource` или RxJS/query layer
 <details>
 <summary>Когда оправданы micro frontends?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Micro frontends оправданы при независимых командах, релизных циклах и доменах, когда организационная граница важнее
+стоимости интеграции. Они не являются способом автоматически разделить большой monolith: добавляют versioning,
+наблюдаемость, design system, routing, shared auth, performance budget и контракт между host и remote.
+
+**Полный ответ**
 
 Micro frontends оправданы при независимых командах, релизных циклах и доменах, когда организационная граница важнее
 стоимости интеграции. Они не являются способом автоматически разделить большой monolith: добавляют versioning,
@@ -386,6 +482,13 @@ Angular и React можно объединить через host, Web Components
 <summary>Как аргументировать архитектурный выбор на интервью?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Начните с контекста: размер команды, число feature, сложность domain-правил, независимость релизов, требования к SSR,
+кешу и тестированию. Затем назовите простое решение и критерии роста.
+
+**Полный ответ**
+
 Начните с контекста: размер команды, число feature, сложность domain-правил, независимость релизов, требования к SSR,
 кешу и тестированию. Затем назовите простое решение и критерии роста.
 
@@ -411,6 +514,14 @@ signals. DTO останутся в data-access. Если появятся сло
 <summary>Что такое Atomic Design?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Atomic Design делит design system на atoms (Button, Input), molecules (SearchField), organisms (Header), templates и
+pages. Паттерн удобен для общего языка дизайнеров и разработчиков, но категории не должны влиять на domain boundaries:
+ProductCard может быть organism в design system и одновременно частью feature catalog.
+
+**Полный ответ**
+
 Atomic Design делит design system на atoms (`Button`, `Input`), molecules (`SearchField`), organisms (`Header`),
 templates и pages. Паттерн удобен для общего языка дизайнеров и разработчиков, но категории не должны влиять на domain
 boundaries: `ProductCard` может быть organism в design system и одновременно частью feature `catalog`.
@@ -435,6 +546,14 @@ pages часто соответствуют routed components.
 <details>
 <summary>Как устроены Flux и Redux?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Flux задает однонаправленный цикл: пользовательское событие создает action, dispatcher передает его store, store
+вычисляет новое состояние, view отображает результат. Redux сводит идею к одному store, readonly state и чистым
+reducers.
+
+**Полный ответ**
 
 Flux задает однонаправленный цикл: пользовательское событие создает action, dispatcher передает его store, store
 вычисляет новое состояние, view отображает результат. Redux сводит идею к одному store, readonly state и чистым
@@ -475,6 +594,14 @@ export class CounterStore {
 <details>
 <summary>Чем React Context + Hooks отличается от Angular DI + signals?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В React provider передает значение через component tree, а custom hook инкапсулирует чтение context и проверку наличия
+provider. В Angular эту задачу решают DI hierarchy и service. Provider на component или route дает scoped instance, а
+providedIn: 'root' — application-wide instance.
+
+**Полный ответ**
 
 В React provider передает значение через component tree, а custom hook инкапсулирует чтение context и проверку наличия
 provider. В Angular эту задачу решают DI hierarchy и service. Provider на component или route дает scoped instance, а
@@ -521,6 +648,13 @@ layer, чтобы не провоцировать широкие rerenders.
 <summary>Как реализовать state machine без набора противоречивых flags?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Состояние описывают discriminated union, а переходы — явной функцией. XState полезен для nested и parallel states,
+guards, actors и визуализации; для небольшого flow достаточно TypeScript reducer.
+
+**Полный ответ**
+
 Состояние описывают discriminated union, а переходы — явной функцией. XState полезен для nested и parallel states,
 guards, actors и визуализации; для небольшого flow достаточно TypeScript reducer.
 
@@ -549,6 +683,13 @@ type FetchEvent<T> =
 <summary>Как Observer pattern проявляется в React и Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Observer подписывает потребителей на изменения source. DOM events, RxJS Observable, store subscriptions и signals —
+разные реализации этой идеи. Вручную писать mutable массив observers обычно не нужно: важны teardown и lifetime.
+
+**Полный ответ**
+
 Observer подписывает потребителей на изменения source. DOM events, RxJS Observable, store subscriptions и signals —
 разные реализации этой идеи. Вручную писать mutable массив observers обычно не нужно: важны teardown и lifetime.
 
@@ -569,6 +710,14 @@ const searchResults$ = queryControl.valueChanges.pipe(
 <details>
 <summary>Когда нужен Factory pattern?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Factory централизует выбор реализации по type или configuration. В React это может быть mapping типа поля на component;
+в Angular — mapping на dynamic component type или DI factory provider. Большой switch стоит заменить registry, если
+варианты добавляют независимые модули.
+
+**Полный ответ**
 
 Factory централизует выбор реализации по type или configuration. В React это может быть mapping типа поля на component;
 в Angular — mapping на dynamic component type или DI factory provider. Большой `switch` стоит заменить registry, если
@@ -595,6 +744,13 @@ function getFieldComponent(kind: FieldKind): Type<unknown> {
 <summary>Почему Singleton лучше получать через dependency injection?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Ручной getInstance() создает скрытый global state и усложняет тесты. В React singleton module допустим для stateless API
+client, но зависимости проще передавать через provider. В Angular lifecycle singleton-а контролирует injector.
+
+**Полный ответ**
+
 Ручной `getInstance()` создает скрытый global state и усложняет тесты. В React singleton module допустим для stateless
 API client, но зависимости проще передавать через provider. В Angular lifecycle singleton-а контролирует injector.
 
@@ -618,6 +774,13 @@ export class ApiClient {
 <details>
 <summary>Что дает Module pattern в современном TypeScript?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Исторически IIFE скрывал mutable variables в closure и возвращал public API. ES modules дают encapsulation напрямую:
+неэкспортированные значения остаются private для файла.
+
+**Полный ответ**
 
 Исторически IIFE скрывал mutable variables в closure и возвращал public API. ES modules дают encapsulation напрямую:
 неэкспортированные значения остаются private для файла.
@@ -649,6 +812,13 @@ export function getHistory(): ReadonlyArray<string> {
 <summary>Чем MVC и MVVM полезны для понимания современного frontend?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+MVC отделяет Model, View и Controller. MVVM добавляет ViewModel — подготовленное для binding состояние и команды view.
+Современные React и Angular приложения редко реализуют эти паттерны буквально, но идея границ остается полезной.
+
+**Полный ответ**
+
 MVC отделяет Model, View и Controller. MVVM добавляет ViewModel — подготовленное для binding состояние и команды view.
 Современные React и Angular приложения редко реализуют эти паттерны буквально, но идея границ остается полезной.
 
@@ -674,6 +844,13 @@ const toUserViewModel = (user: User, permissions: Permissions): UserViewModel =>
 <summary>Что такое Jamstack?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Jamstack отделяет заранее сгенерированный markup от динамических API и раздает static assets через CDN. Подходит для
+контентных сайтов, документации и marketing pages; authenticated dashboard обычно требует CSR или hybrid rendering.
+
+**Полный ответ**
+
 Jamstack отделяет заранее сгенерированный markup от динамических API и раздает static assets через CDN. Подходит для
 контентных сайтов, документации и marketing pages; authenticated dashboard обычно требует CSR или hybrid rendering.
 
@@ -692,6 +869,13 @@ render modes.
 <details>
 <summary>Что такое Islands Architecture?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Страница в основном состоит из static HTML, а независимые интерактивные islands гидратируются отдельно. В Astro это
+выражают directives client:load, client:idle и client:visible.
+
+**Полный ответ**
 
 Страница в основном состоит из static HTML, а независимые интерактивные islands гидратируются отдельно. В Astro это
 выражают directives `client:load`, `client:idle` и `client:visible`.
@@ -721,6 +905,13 @@ Angular не является islands framework, но incremental hydration и `
 <summary>Как работает Module Federation?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Host загружает exposed modules независимо развернутого remote в build time или runtime. Shared dependencies требуют
+совместимых версий; singleton: true снижает риск двух runtime framework, но не заменяет контракт версий.
+
+**Полный ответ**
+
 Host загружает exposed modules независимо развернутого remote в build time или runtime. Shared dependencies требуют
 совместимых версий; `singleton: true` снижает риск двух runtime framework, но не заменяет контракт версий.
 
@@ -745,6 +936,14 @@ state remote-модулем создает сильную runtime coupling; пр
 <summary>Чем SPA отличается от MPA?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SPA загружает application shell и переключает routes на клиенте; последующая навигация быстрая, но initial bundle,
+JavaScript availability и client state становятся критичными. MPA получает новый HTML document для каждого перехода; она
+проще, надежнее без JavaScript и естественно индексируется, но теряет in-memory state между страницами.
+
+**Полный ответ**
+
 SPA загружает application shell и переключает routes на клиенте; последующая навигация быстрая, но initial bundle,
 JavaScript availability и client state становятся критичными. MPA получает новый HTML document для каждого перехода; она
 проще, надежнее без JavaScript и естественно индексируется, но теряет in-memory state между страницами.
@@ -758,6 +957,13 @@ client navigation, поэтому реальный продукт часто я�
 <details>
 <summary>Из чего состоит PWA?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+PWA использует Web App Manifest для installability и service worker для offline cache, update и background behavior.
+Cache strategy выбирают по типу ресурса; бездумный cache-first для API может показывать устаревшие данные.
+
+**Полный ответ**
 
 PWA использует Web App Manifest для installability и service worker для offline cache, update и background behavior.
 Cache strategy выбирают по типу ресурса; бездумный cache-first для API может показывать устаревшие данные.
@@ -779,6 +985,13 @@ self.addEventListener('fetch', (event) => {
 <details>
 <summary>Какие бывают hybrid applications?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Capacitor помещает web app в native shell и дает bridge к Camera, Filesystem и другим platform APIs. Ionic добавляет
+mobile-oriented UI components. React Native использует JavaScript/TypeScript, но рендерит native views, а не DOM.
+
+**Полный ответ**
 
 Capacitor помещает web app в native shell и дает bridge к Camera, Filesystem и другим platform APIs. Ionic добавляет
 mobile-oriented UI components. React Native использует JavaScript/TypeScript, но рендерит native views, а не DOM.
@@ -803,6 +1016,14 @@ browser tests могли подставить fake implementation.
 <summary>Как выбирать между CSR, SSR и SSG?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSR рендерит после загрузки JavaScript и подходит authenticated applications с высокой интерактивностью. SSR создает
+HTML на каждый initial request и подходит динамическим индексируемым страницам. SSG генерирует HTML на build time и
+лучше всего работает для стабильного контента.
+
+**Полный ответ**
+
 CSR рендерит после загрузки JavaScript и подходит authenticated applications с высокой интерактивностью. SSR создает
 HTML на каждый initial request и подходит динамическим индексируемым страницам. SSG генерирует HTML на build time и
 лучше всего работает для стабильного контента.
@@ -825,6 +1046,13 @@ React выбирает эти режимы через framework вроде Next.
 <summary>Что такое ISR и какой аналог есть вне Next.js?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ISR сохраняет производительность static page, но периодически или по событию регенерирует ее. Во время regeneration
+пользователь может получить предыдущую версию, поэтому система допускает окно stale content.
+
+**Полный ответ**
+
 ISR сохраняет производительность static page, но периодически или по событию регенерирует ее. Во время regeneration
 пользователь может получить предыдущую версию, поэтому система допускает окно stale content.
 
@@ -846,6 +1074,13 @@ prerender + deployment rebuild/webhook, CDN stale-while-revalidate или server
 <details>
 <summary>Чем React Server Components отличаются от Angular SSR?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+RSC остаются server-only и не добавляют свой code в client bundle; client components нужны для state, events и browser
+APIs. Angular SSR обычно выполняет те же components на server для initial HTML, а затем гидратирует их на client.
+
+**Полный ответ**
 
 RSC остаются server-only и не добавляют свой code в client bundle; client components нужны для state, events и browser
 APIs. Angular SSR обычно выполняет те же components на server для initial HTML, а затем гидратирует их на client.
@@ -873,6 +1108,13 @@ RSC protocol один к одному.
 <summary>Что такое Edge Rendering?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Edge function выполняет SSR или personalization в CDN location рядом с пользователем. Это уменьшает network latency, но
+runtime часто ограничивает Node.js APIs, execution time и package size.
+
+**Полный ответ**
+
 Edge function выполняет SSR или personalization в CDN location рядом с пользователем. Это уменьшает network latency, но
 runtime часто ограничивает Node.js APIs, execution time и package size.
 
@@ -896,6 +1138,13 @@ adapter и hosting provider, поэтому этот runtime нужно пров
 <details>
 <summary>Когда нужен Backend for Frontend?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+BFF агрегирует backend services и возвращает DTO, оптимизированный под конкретный UI. Например, web dashboard одним
+запросом получает user, последние orders и recommendations, а mobile BFF возвращает более компактную модель.
+
+**Полный ответ**
 
 BFF агрегирует backend services и возвращает DTO, оптимизированный под конкретный UI. Например, web dashboard одним
 запросом получает user, последние orders и recommendations, а mobile BFF возвращает более компактную модель.
@@ -922,6 +1171,14 @@ React и Angular его контракт одинаков; frontend data-access 
 <details>
 <summary>Чем GraphQL Gateway отличается от API Gateway?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+GraphQL Gateway дает typed schema и позволяет client выбрать поля. Resolvers агрегируют data sources, но требуют защиты
+от дорогих queries, DataLoader против N+1 и отдельной cache strategy. API Gateway маршрутизирует REST/gRPC/ WebSocket,
+централизует auth, rate limits, observability и иногда response aggregation.
+
+**Полный ответ**
 
 GraphQL Gateway дает typed schema и позволяет client выбрать поля. Resolvers агрегируют data sources, но требуют защиты
 от дорогих queries, DataLoader против N+1 и отдельной cache strategy. API Gateway маршрутизирует REST/gRPC/ WebSocket,
@@ -954,6 +1211,13 @@ provider/hook; schema types лучше генерировать, а не дуб�
 <details>
 <summary>Как реализовать code splitting?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Route-based splitting выносит feature в отдельный chunk. Component-based splitting откладывает тяжелый editor, chart или
+dialog до момента использования.
+
+**Полный ответ**
 
 Route-based splitting выносит feature в отдельный chunk. Component-based splitting откладывает тяжелый editor, chart или
 dialog до момента использования.
@@ -989,6 +1253,13 @@ export const routes: Routes = [
 <summary>Чем lazy loading ресурсов отличается от code splitting?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Code splitting создает chunks, lazy loading определяет момент их загрузки. Изображения лениво загружаются нативным
+loading="lazy", scripts используют defer или async, а произвольный resource можно связать с Intersection Observer.
+
+**Полный ответ**
+
 Code splitting создает chunks, lazy loading определяет момент их загрузки. Изображения лениво загружаются нативным
 `loading="lazy"`, scripts используют `defer` или `async`, а произвольный resource можно связать с Intersection Observer.
 
@@ -1023,6 +1294,14 @@ Code splitting создает chunks, lazy loading определяет моме
 <summary>Когда memoization улучшает производительность?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Memoization полезна для измеримо дорогого pure calculation или стабильного selector. В React используют useMemo,
+useCallback и memo; React Compiler может оптимизировать часть случаев автоматически. В Angular computed() лениво
+кеширует значение до изменения зависимых signals, а pure pipe кеширует последний набор arguments.
+
+**Полный ответ**
+
 Memoization полезна для измеримо дорогого pure calculation или стабильного selector. В React используют `useMemo`,
 `useCallback` и `memo`; React Compiler может оптимизировать часть случаев автоматически. В Angular `computed()` лениво
 кеширует значение до изменения зависимых signals, а pure pipe кеширует последний набор arguments.
@@ -1049,6 +1328,13 @@ Memoization имеет стоимость сравнения, cache и усло�
 <details>
 <summary>Как работает virtualization больших списков?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Virtualization оставляет в DOM только видимое окно элементов и небольшой overscan. React использует react-window или
+React Virtuoso; Angular — CDK virtual scrolling. Fixed item height проще и дешевле variable-height measurement.
+
+**Полный ответ**
 
 Virtualization оставляет в DOM только видимое окно элементов и небольшой overscan. React использует react-window или
 React Virtuoso; Angular — CDK virtual scrolling. Fixed item height проще и дешевле variable-height measurement.
@@ -1083,6 +1369,13 @@ React Virtuoso; Angular — CDK virtual scrolling. Fixed item height проще 
 <summary>Какие бывают prefetch и preload?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+dns-prefetch заранее резолвит host, preconnect устанавливает DNS/TCP/TLS, prefetch получает вероятный будущий resource с
+низким priority, а preload сообщает о critical resource текущей страницы.
+
+**Полный ответ**
+
 `dns-prefetch` заранее резолвит host, `preconnect` устанавливает DNS/TCP/TLS, `prefetch` получает вероятный будущий
 resource с низким priority, а `preload` сообщает о critical resource текущей страницы.
 
@@ -1115,6 +1408,14 @@ lazy routes; data можно prefetch через resolver или query cache. Ag
 <summary>Что такое progressive и incremental hydration?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Server сначала присылает готовый HTML, затем framework постепенно подключает event handlers и client state. Critical UI
+гидратируется раньше, below-the-fold — при viewport/idle/interaction. React использует streaming и Suspense boundaries;
+Astro — islands; Angular — incremental hydration с hydrate triggers у @defer.
+
+**Полный ответ**
+
 Server сначала присылает готовый HTML, затем framework постепенно подключает event handlers и client state. Critical UI
 гидратируется раньше, below-the-fold — при viewport/idle/interaction. React использует streaming и Suspense boundaries;
 Astro — islands; Angular — incremental hydration с hydrate triggers у `@defer`.
@@ -1138,6 +1439,13 @@ Astro — islands; Angular — incremental hydration с hydrate triggers у `@de
 <details>
 <summary>Когда выбирать monorepo?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Monorepo хранит несколько applications и libraries в одном repository. Он полезен для atomic changes, общего design
+system, shared types и единых CI rules. Цена — tooling, dependency graph, access control и необходимость affected cache.
+
+**Полный ответ**
 
 Monorepo хранит несколько applications и libraries в одном repository. Он полезен для atomic changes, общего design
 system, shared types и единых CI rules. Цена — tooling, dependency graph, access control и необходимость affected cache.
@@ -1163,6 +1471,13 @@ Nx хорошо работает и с Angular, и с React; pnpm workspaces/Tur
 <details>
 <summary>Чем Vertical Slice отличается от feature-based structure?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Feature-based structure группирует связанный код по domain. Vertical Slice идет дальше: use case содержит все нужные
+presentation, application и data-access части и минимально зависит от соседних slices.
+
+**Полный ответ**
 
 Feature-based structure группирует связанный код по domain. Vertical Slice идет дальше: use case содержит все нужные
 presentation, application и data-access части и минимально зависит от соседних slices.
@@ -1190,6 +1505,14 @@ rules.
 <summary>Когда layer-based architecture полезна, а когда мешает?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Папки presentation, business, data, infrastructure хорошо показывают техническое направление зависимостей и подходят
+небольшому приложению. В большом продукте одна feature оказывается разбросана по всему repository, а изменения
+затрагивают несколько команд.
+
+**Полный ответ**
+
 Папки `presentation`, `business`, `data`, `infrastructure` хорошо показывают техническое направление зависимостей и
 подходят небольшому приложению. В большом продукте одна feature оказывается разбросана по всему repository, а изменения
 затрагивают несколько команд.
@@ -1203,6 +1526,13 @@ data-access реализует ports; presentation зависит от applicati
 <details>
 <summary>Почему shared state через Module Federation опасен?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Remote store технически можно expose и подключить в нескольких applications, но это связывает release versions,
+framework runtime и state schema. Ошибка загрузки remote блокирует всех consumers.
+
+**Полный ответ**
 
 Remote store технически можно expose и подключить в нескольких applications, но это связывает release versions,
 framework runtime и state schema. Ошибка загрузки remote блокирует всех consumers.
@@ -1227,6 +1557,14 @@ contract. Общий store допустим только при едином own
 <summary>Что такое Testing Trophy?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Testing Trophy делает foundation из static checks, затем использует unit tests для pure logic, больше integration tests
+для взаимодействия частей и немного E2E для критических flows. Проценты не являются правилом: распределение зависит от
+риска.
+
+**Полный ответ**
+
 Testing Trophy делает foundation из static checks, затем использует unit tests для pure logic, больше integration tests
 для взаимодействия частей и немного E2E для критических flows. Проценты не являются правилом: распределение зависит от
 риска.
@@ -1247,6 +1585,13 @@ Playwright — для настоящего routing, browser APIs и integration 
 <details>
 <summary>Как применять Arrange-Act-Assert в Angular и React?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Arrange готовит данные и dependencies, Act выполняет одно значимое действие, Assert проверяет observable result. В
+zoneless Angular после действия нужно дождаться scheduled rendering.
+
+**Полный ответ**
 
 Arrange готовит данные и dependencies, Act выполняет одно значимое действие, Assert проверяет observable result. В
 zoneless Angular после действия нужно дождаться scheduled rendering.
@@ -1271,6 +1616,13 @@ it('shows the updated title', async () => {
 <details>
 <summary>Чем stub, mock, spy и fake отличаются друг от друга?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В Angular fake подставляют через {provide: UsersRepository, useClass: FakeUsersRepository} или InjectionToken. В React
+его передают provider-у/hook dependency. Проверять state/result предпочтительнее, чем каждый внутренний вызов.
+
+**Полный ответ**
 
 - Stub возвращает заранее заданное значение.
 - Mock записывает interaction и проверяет protocol вызовов.
@@ -1301,6 +1653,13 @@ class FakeUsersRepository implements UsersRepository {
 <details>
 <summary>Что такое Page Object Model?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Page Object скрывает selectors и повторяемые действия E2E page. Он должен описывать user intent, а не превращаться в
+копию всей DOM structure.
+
+**Полный ответ**
 
 Page Object скрывает selectors и повторяемые действия E2E page. Он должен описывать user intent, а не превращаться в
 копию всей DOM structure.
@@ -1333,6 +1692,13 @@ framework internals.
 <summary>Как применять SOLID во frontend без over-engineering?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В React зависимость можно передать через props/context, в Angular — через DI. Не следует создавать interface для каждой
+class: abstraction нужна на настоящей границе или при нескольких implementations.
+
+**Полный ответ**
+
 - SRP: component отображает profile, facade загружает user, formatter форматирует данные.
 - OCP: новый variant добавляется через mapping или composition без переписывания consumers.
 - LSP: API и cache repositories соблюдают одинаковый contract.
@@ -1358,6 +1724,13 @@ class: abstraction нужна на настоящей границе или пр
 <summary>Как Separation of Concerns выглядит на практике?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Data-access получает DTO, domain pure function сортирует и фильтрует products, application facade координирует loading,
+а component отображает готовый view model.
+
+**Полный ответ**
+
 Data-access получает DTO, domain pure function сортирует и фильтрует products, application facade координирует loading,
 а component отображает готовый view model.
 
@@ -1382,6 +1755,13 @@ framework-neutral и тестируется без DOM/TestBed.
 <summary>Где проходит граница DRY?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+DRY устраняет повторение одного знания, а не похожий syntax. Универсальный useFetch(url) или DataService быстро теряет
+cancellation, validation, cache keys и domain semantics. Абстракция полезна, когда повторился стабильный protocol.
+
+**Полный ответ**
+
 DRY устраняет повторение одного знания, а не похожий syntax. Универсальный `useFetch(url)` или `DataService<T>` быстро
 теряет cancellation, validation, cache keys и domain semantics. Абстракция полезна, когда повторился стабильный
 protocol.
@@ -1400,6 +1780,13 @@ const loadProducts = () => http.get<ReadonlyArray<ProductDto>>('/api/products').
 <details>
 <summary>Как реализовать Progressive Enhancement?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Базовый HTML flow работает через browser navigation/form submit, JavaScript добавляет inline validation, optimistic UI и
+submission без reload. Server остается источником проверки данных.
+
+**Полный ответ**
 
 Базовый HTML flow работает через browser navigation/form submit, JavaScript добавляет inline validation, optimistic UI и
 submission без reload. Server остается источником проверки данных.
@@ -1436,6 +1823,13 @@ authenticated SPA, полноценный no-JS fallback может быть н�
 <summary>Что входит в performance budget?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Budget задает проверяемые пределы для initial JavaScript/CSS, изображений, LCP, CLS, INP и server latency. Он должен
+проверяться в CI и на real-user monitoring, потому что Lighthouse lab run не отражает всех устройств и сетей.
+
+**Полный ответ**
+
 Budget задает проверяемые пределы для initial JavaScript/CSS, изображений, LCP, CLS, INP и server latency. Он должен
 проверяться в CI и на real-user monitoring, потому что Lighthouse lab run не отражает всех устройств и сетей.
 
@@ -1460,6 +1854,14 @@ Angular CLI поддерживает budgets в `angular.json`; React setup за
 <details>
 <summary>Что означает Accessibility First для component architecture?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Semantic element, accessible name, keyboard interaction, focus management и visible focus проектируются как часть API
+component. Одного role="dialog" недостаточно: modal должен управлять initial focus, trap, Escape, background inert и
+возвратом focus.
+
+**Полный ответ**
 
 Semantic element, accessible name, keyboard interaction, focus management и visible focus проектируются как часть API
 component. Одного `role="dialog"` недостаточно: modal должен управлять initial focus, trap, Escape, background inert и
@@ -1493,6 +1895,13 @@ Angular Aria directives, которые реализуют focus и keyboard pro
 <summary>Как выглядит decision matrix из gist с поправкой на реальные ограничения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Количество страниц само по себе не требует micro frontends. Главные сигналы — organizational ownership, coupling,
+release cadence, performance profile и domain complexity.
+
+**Полный ответ**
+
 | Контекст                            | Стартовый выбор                                                                                 |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Маленький продукт, 1–3 разработчика | feature folders, local state, CSR или SSG                                                       |
@@ -1512,6 +1921,14 @@ release cadence, performance profile и domain complexity.
 <details>
 <summary>Какие комбинации паттернов подходят типовым продуктам?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В Angular набор может выглядеть как standalone lazy routes + signals facade + HttpClient/RxJS + SSR/prerender. В React —
+framework routes + hooks/query cache + server/client component boundaries. Паттерны выбирают независимо от бренда
+framework.
+
+**Полный ответ**
 
 - E-commerce: component architecture, SSG/SSR для catalog, CSR для checkout, BFF, query cache и feature structure.
 - SaaS dashboard: container/presentational, CSR, lazy routes, query layer, virtualization и vertical slices.
