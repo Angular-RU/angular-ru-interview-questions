@@ -100,8 +100,8 @@ Shell — отдельная программа, которая работает
 4. находит executable через `PATH`;
 5. запускает процессы и возвращает их exit code.
 
-Например, одно окно iTerm2 может запускать `zsh`, а другое — `bash`. Terminal останется тем же, но syntax, startup files,
-completion и некоторые возможности shell будут отличаться.
+Например, одно окно iTerm2 может запускать `zsh`, а другое — `bash`. Terminal останется тем же, но syntax, startup
+files, completion и некоторые возможности shell будут отличаться.
 
 Shell может работать и без визуального terminal: CI запускает non-interactive shell для выполнения scripts. Поэтому
 команда, которая работает в интерактивной сессии, иногда ломается в CI: там могут не загружаться `.zshrc`, aliases или
@@ -375,8 +375,8 @@ rg --files | rg "index\.md$"
 Ripgrep обычно быстрее рекурсивного `grep`, пропускает ignored и hidden files, но это поведение можно изменить flags.
 `find` лучше подходит, когда условие связано не с текстом, а с типом, размером, временем или permissions файла.
 
-Для scripts полезны exit codes: `0` означает, что совпадение найдено, `1` — совпадений нет, а больше `1` — ошибка. Отсутствие
-совпадений не всегда должно считаться падением бизнес-сценария.
+Для scripts полезны exit codes: `0` означает, что совпадение найдено, `1` — совпадений нет, а больше `1` — ошибка.
+Отсутствие совпадений не всегда должно считаться падением бизнес-сценария.
 
 </td></tr></table>
 
@@ -532,8 +532,8 @@ sudo chown maxim:developers file.txt
 sudo chgrp developers file.txt
 ```
 
-Обычный пользователь обычно не может произвольно передать файл другому owner. Recursive flags нужно применять
-осторожно: ошибка в target directory может изменить ownership большого участка filesystem.
+Обычный пользователь обычно не может произвольно передать файл другому owner. Recursive flags нужно применять осторожно:
+ошибка в target directory может изменить ownership большого участка filesystem.
 
 Для frontend-разработчика частый случай — сохранить executable bit у shell script в Git. Если локально выполнить
 `chmod +x script.sh` и закоммитить изменение mode, script сможет запускаться в Linux CI.
@@ -554,7 +554,8 @@ sudo chgrp developers file.txt
 **Полный ответ**
 
 `sudo` проверяет policy, а затем запускает конкретную команду от другого пользователя, чаще всего `root`. Это не то же
-самое, что постоянно работать в root shell: повышенные права применяются к ограниченной операции и могут журналироваться.
+самое, что постоянно работать в root shell: повышенные права применяются к ограниченной операции и могут
+журналироваться.
 
 Типичные случаи:
 
@@ -610,7 +611,8 @@ kill -9 12345     # SIGKILL
 `SIGTERM` дает приложению возможность закрыть connections и записать данные. `SIGKILL` обрабатывается kernel немедленно,
 поэтому cleanup выполнить нельзя. Его используют только когда корректное завершение не работает.
 
-PID может быть переиспользован после завершения процесса, поэтому перед `kill` нужно убедиться, что выбран нужный process.
+PID может быть переиспользован после завершения процесса, поэтому перед `kill` нужно убедиться, что выбран нужный
+process.
 
 </td></tr></table>
 
@@ -641,8 +643,8 @@ fuser 3000/tcp
 Socket привязан не только к port, но и к address. Процесс, слушающий `127.0.0.1:3000`, доступен только локально, а
 `0.0.0.0:3000` принимает connections на всех IPv4 interfaces.
 
-После нахождения PID можно проверить команду и owner процесса, затем корректно остановить его через `SIGTERM`. Не следует
-автоматически применять `kill -9`: занятый port может принадлежать database, proxy или другому нужному service.
+После нахождения PID можно проверить команду и owner процесса, затем корректно остановить его через `SIGTERM`. Не
+следует автоматически применять `kill -9`: занятый port может принадлежать database, proxy или другому нужному service.
 
 </td></tr></table>
 
@@ -729,8 +731,8 @@ Environment может содержать tokens и passwords, поэтому е
 
 **Короткий ответ**
 
-`ping` проверяет ICMP-доступность host, `curl` выполняет network requests и показывает response, а `wget` ориентирован на
-скачивание files.
+`ping` проверяет ICMP-доступность host, `curl` выполняет network requests и показывает response, а `wget` ориентирован
+на скачивание files.
 
 **Полный ответ**
 
@@ -812,8 +814,8 @@ ip link
 ip route
 ```
 
-`ip addr` показывает addresses interfaces, `ip link` — состояние network links, `ip route` — routing table.
-`ifconfig` покрывает часть этих задач, но развивается значительно меньше и может быть не установлен.
+`ip addr` показывает addresses interfaces, `ip link` — состояние network links, `ip route` — routing table. `ifconfig`
+покрывает часть этих задач, но развивается значительно меньше и может быть не установлен.
 
 На macOS `ifconfig` остается стандартной командой, а Linux-вариант `ip` обычно отсутствует. Поэтому инструкции нужно
 адаптировать под target OS.
@@ -833,8 +835,8 @@ ip route
 
 **Короткий ответ**
 
-Package manager зависит от дистрибутива: Debian/Ubuntu используют `apt`, Fedora/RHEL — `dnf`, Arch — `pacman`, openSUSE —
-`zypper`.
+Package manager зависит от дистрибутива: Debian/Ubuntu используют `apt`, Fedora/RHEL — `dnf`, Arch — `pacman`, openSUSE
+— `zypper`.
 
 **Полный ответ**
 
@@ -916,8 +918,8 @@ Dockerfile.
 Обе команды работают поверх той же package management системы Debian. `apt` объединяет часто используемые возможности
 `apt-get` и `apt-cache`, показывает progress и предоставляет более дружелюбный output.
 
-`apt-get` исторически ориентирован на автоматизацию. Его output и options меньше зависят от interactive terminal, поэтому
-он чаще встречается в CI и Dockerfile:
+`apt-get` исторически ориентирован на автоматизацию. Его output и options меньше зависят от interactive terminal,
+поэтому он чаще встречается в CI и Dockerfile:
 
 ```bash
 apt-get update
@@ -1142,8 +1144,8 @@ brew install ripgrep
 Homebrew находит formula, выбирает совместимый bottle для OS и architecture, скачивает dependencies и устанавливает
 package в Cellar. Затем executable связывается с Homebrew prefix.
 
-Если bottle недоступен, package может собираться из source, что дольше и требует build tools. После установки `brew info`
-показывает version, dependencies и caveats.
+Если bottle недоступен, package может собираться из source, что дольше и требует build tools. После установки
+`brew info` показывает version, dependencies и caveats.
 
 `brew install` без version policy может поставить новую major version после обновления formula. Для project runtime,
 например Node.js, часто надежнее version manager, который привязывает version к repository.
