@@ -27,7 +27,7 @@
     font: inherit;
 }
 
-.content details[open] summary {
+.content details[open] > summary {
     border-bottom: 1px solid var(--border);
     background: #f8fafc;
 }
@@ -44,6 +44,67 @@
 }
 
 .content details .answer > :last-child {
+    margin-bottom: 0;
+}
+
+.content details .answer-short {
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.content details .answer-title {
+    margin: 0 0 8px;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.content details .answer-short-text {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.content details.answer-full {
+    margin: 18px 0 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+}
+
+.content details.answer-full > summary {
+    padding: 0;
+    color: #2563eb;
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.4;
+    list-style-position: inside;
+}
+
+.content details.answer-full > summary:hover {
+    color: #1d4ed8;
+}
+
+.content details.answer-full[open] > summary {
+    border: 0;
+    background: transparent;
+}
+
+.content details .answer-full-content {
+    padding-top: 18px;
+}
+
+.content details .answer-full-content > :first-child {
+    margin-top: 0;
+}
+
+.content details .answer-full-content > :last-child {
     margin-bottom: 0;
 }
 
