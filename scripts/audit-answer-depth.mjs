@@ -35,23 +35,41 @@ function cleanAnswer(value) {
 }
 
 function extractQuestions(markdown) {
-    return [...markdown.matchAll(/<details>[\s\S]*?<\/details>/g)].flatMap(([block]) => {
-        const question = block.match(/<summary>([\s\S]*?)<\/summary>/)?.[1]?.trim();
-        const shortMarker = '**Короткий ответ**';
-        const fullMarker = '**Полный ответ**';
-        const shortStart = block.indexOf(shortMarker);
-        const fullStart = block.indexOf(fullMarker);
+    return [...markdown.matchAll(/<details>[\s\S]*?<\/details>/g)].flatMap(
+        ([block]) => {
+            const question = block
+                .match(/<summary>([\s\S]*?)<\/summary>/)?.[1]
+                ?.trim();
+            const shortMarker = '**Короткий ответ**';
+            const fullMarker = '**Полный ответ**';
+            const shortStart = block.indexOf(shortMarker);
+            const fullStart = block.indexOf(fullMarker);
 
-        if (!question || shortStart === -1 || fullStart === -1 || fullStart <= shortStart) {
-            return [];
-        }
+            if (
+                !question ||
+                shortStart === -1 ||
+                fullStart === -1 ||
+                fullStart <= shortStart
+            ) {
+                return [];
+            }
 
-        const shortAnswer = block.slice(shortStart + shortMarker.length, fullStart);
-        const fullEnd = block.indexOf('</td>', fullStart);
-        const fullAnswer = block.slice(fullStart + fullMarker.length, fullEnd);
+            const shortAnswer = block.slice(shortStart + shortMarker.length, fullStart);
+            const fullEnd = block.indexOf('</td>', fullStart);
+            const fullAnswer = block.slice(
+                fullStart + fullMarker.length,
+                fullEnd === -1 ? undefined : fullEnd,
+            );
 
-        return [{question, shortAnswer: cleanAnswer(shortAnswer), fullAnswer: cleanAnswer(fullAnswer)}];
-    });
+            return [
+                {
+                    question,
+                    shortAnswer: cleanAnswer(shortAnswer),
+                    fullAnswer: cleanAnswer(fullAnswer),
+                },
+            ];
+        },
+    );
 }
 
 function diagnose({shortAnswer, fullAnswer}) {
@@ -93,24 +111,35 @@ for (const file of files) {
         const reason = diagnose(question);
 
         if (reason) {
-            findings.push({file: relative(process.cwd(), file), question: question.question, reason});
+            findings.push({
+                file: relative(process.cwd(), file),
+                question: question.question,
+                reason,
+            });
         }
     }
 }
 
 if (findings.length === 0) {
-    console.log(`Checked ${questionCount} questions in ${files.length} files: no shallow full answers found.`);
+    console.log(
+        `Checked ${questionCount} questions in ${files.length} files: ` +
+            'no shallow full answers found.',
+    );
     process.exit(0);
 }
 
-console.log(`Found ${findings.length} shallow full answers in ${questionCount} questions:\n`);
+console.log(
+    `Found ${findings.length} shallow full answers in ${questionCount} questions:\n`,
+);
 
 for (const finding of findings) {
     console.log(`- ${finding.file}: ${finding.question}`);
     console.log(`  ${finding.reason}`);
 }
 
-console.log('\nA full answer should add reasoning, trade-offs, edge cases or a practical example.');
+console.log(
+    '\nA full answer should add reasoning, trade-offs, edge cases or a practical example.',
+);
 
 if (STRICT) {
     process.exitCode = 1;
