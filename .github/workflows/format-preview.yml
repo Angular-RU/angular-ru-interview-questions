@@ -1,14 +1,14 @@
-name: Format preview
+name: Answer audit preview
 
 on:
   pull_request:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  format:
+  audit:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,47 +26,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Polish wording
-        run: |
-          python <<'PY'
-          from pathlib import Path
+      - name: Check formatting
+        run: npm run format:check
 
-          path = Path('src/pages/operating-systems/index.md')
-          content = path.read_text()
-          replacements = {
-              'JavaScript страницы обычно выполняется': 'JavaScript-код страницы обычно выполняется',
-              'три стандартных stream': 'три стандартных потока',
-              'чтобы runtime корректно завершил pending synchronous cleanup, вместо\nнемедленного':
-                  'чтобы event loop завершился естественно и buffered output успел записаться, вместо\nнемедленного',
-              'физическим разьемом': 'физическим разъемом',
-              'Options вроде': 'Опции вроде',
-              'обращается к hierarchy DNS servers.': 'обращается к иерархии DNS-серверов.',
-              'DNS только помогает найти network data.':
-                  'DNS только помогает найти сетевой адрес и другие records.',
-              'хотя browser window уже закрыто.': 'хотя вкладка браузера уже закрыта.',
-          }
+      - name: Audit answer depth
+        run: npm run audit:answers | tee answer-audit.txt
 
-          for source, target in replacements.items():
-              if source not in content:
-                  raise RuntimeError(f'Missing text: {source}')
-              content = content.replace(source, target)
-
-          path.write_text(content)
-          PY
-
-      - name: Format files
-        run: npm run format
-
-      - name: Commit changes
-        run: |
-          if git diff --quiet; then
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CONTRIBUTING.md package.json scripts/audit-answer-depth.mjs \
-            src/pages/computer-science/index.md \
-            src/pages/operating-systems/index.md
-          git commit -m "docs: polish expanded answers"
-          git push origin HEAD:${{ github.head_ref || github.ref_name }}
+      - name: Archive audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: answer-audit
+          path: answer-audit.txt
+          if-no-files-found: error
