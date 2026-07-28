@@ -135,19 +135,24 @@ const transformQuestion = (block, stats) => {
         return block;
     }
 
+    const answerStart = tableStartIndex + tableStart.length;
+    const answer = block.slice(answerStart, tableEndIndex);
+    const directShortAnswerPattern = /^\s*\*\*Короткий ответ\*\*/u;
+    const directFullAnswerPattern = /^\s*\*\*Короткий ответ\*\*[\s\S]*?\n\s*\*\*Полный ответ\*\*/u;
+    const hasShortAnswer = directShortAnswerPattern.test(answer);
+    const hasFullAnswer = directFullAnswerPattern.test(answer);
+
     stats.questions += 1;
 
-    if (block.includes(SHORT_ANSWER_LABEL) && block.includes(FULL_ANSWER_LABEL)) {
+    if (hasShortAnswer && hasFullAnswer) {
         stats.alreadyMigrated += 1;
         return block;
     }
 
-    if (block.includes(SHORT_ANSWER_LABEL) || block.includes(FULL_ANSWER_LABEL)) {
+    if (hasShortAnswer || hasFullAnswer) {
         throw new Error('Вопрос содержит только одну из двух обязательных подписей ответа.');
     }
 
-    const answerStart = tableStartIndex + tableStart.length;
-    const answer = block.slice(answerStart, tableEndIndex);
     const shortAnswer = createShortAnswer(answer);
     const answerSeparator = answer.startsWith('\n') ? '' : '\n\n';
     const replacement = `${tableStart}\n\n${SHORT_ANSWER_LABEL}\n\n${shortAnswer}\n\n${FULL_ANSWER_LABEL}${answerSeparator}${answer}`;
