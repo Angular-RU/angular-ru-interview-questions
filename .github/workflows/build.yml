@@ -28,17 +28,30 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Add explicit answer sections
-        run: node .github/scripts/add-short-full-answers.mjs
-
       - name: Install dependencies
         run: npm ci
 
       - name: Format Markdown
         run: npm run format
 
-      - name: Validate migration
-        run: node .github/scripts/add-short-full-answers.mjs --check
+      - name: Validate explicit answers
+        shell: bash
+        run: |
+          questions=$(grep -Roh '<table><tr><td>' src/pages --include='*.md' | wc -l)
+          short_answers=$(grep -Roh '\*\*Короткий ответ\*\*' src/pages --include='*.md' | wc -l)
+          full_answers=$(grep -Roh '\*\*Полный ответ\*\*' src/pages --include='*.md' | wc -l)
+          open_details=$(grep -Roh '<details\b' src/pages --include='*.md' | wc -l)
+          close_details=$(grep -Roh '</details>' src/pages --include='*.md' | wc -l)
+
+          echo "Questions: $questions"
+          echo "Short answers: $short_answers"
+          echo "Full answers: $full_answers"
+          echo "Details: $open_details/$close_details"
+
+          test "$questions" -gt 0
+          test "$questions" -eq "$short_answers"
+          test "$questions" -eq "$full_answers"
+          test "$open_details" -eq "$close_details"
 
       - name: Build
         run: npm run build
