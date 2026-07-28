@@ -1,0 +1,40 @@
+name: Format preview
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format files
+        run: npm run format
+
+      - name: Archive formatted files
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatted-files
+          path: |
+            CONTRIBUTING.md
+            package.json
+            scripts/audit-answer-depth.mjs
+            src/pages/computer-science/index.md
+            src/pages/operating-systems/index.md
+          if-no-files-found: error
