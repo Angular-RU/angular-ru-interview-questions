@@ -58,8 +58,8 @@ jobs:
 
       - name: Remove temporary migration files
         run: |
-          rm .github/scripts/add-short-full-answers.mjs
-          rm .github/workflows/migrate-short-full-answers.yml
+          rm -f .github/scripts/add-short-full-answers.mjs
+          rm -f .github/workflows/migrate-short-full-answers.yml
           git fetch origin main
           git show origin/main:.github/workflows/build.yml > .github/workflows/build.yml
 
