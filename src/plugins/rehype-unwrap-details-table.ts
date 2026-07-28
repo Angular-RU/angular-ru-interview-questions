@@ -2,19 +2,10 @@ import type {Element, ElementContent, Root, RootContent} from 'hast';
 
 type Node = Root | RootContent | ElementContent;
 
-const SHORT_ANSWER_MAX_LENGTH = 320;
-const SHORT_ANSWER_MIN_SENTENCE_LENGTH = 80;
-
 const isElement = (node: Node): node is Element => node.type === 'element';
 
 const isTag = (node: Node, tagName: string): node is Element =>
     isElement(node) && node.tagName === tagName;
-
-const hasClass = (element: Element, className: string): boolean => {
-    const classes = element.properties.className;
-
-    return Array.isArray(classes) ? classes.includes(className) : classes === className;
-};
 
 const getElementChildren = (node: Element, tagName?: string): Element[] =>
     node.children.filter(
@@ -54,138 +45,6 @@ const getTextContent = (node: Node): string => {
     return node.children.map((child) => getTextContent(child)).join('');
 };
 
-const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim();
-
-const findFirstTextBlock = (children: readonly ElementContent[]): Element | null => {
-    for (const child of children) {
-        if (!isElement(child)) {
-            continue;
-        }
-
-        if (
-            (child.tagName === 'p' || child.tagName === 'li') &&
-            normalizeText(getTextContent(child))
-        ) {
-            return child;
-        }
-
-        if (['code', 'details', 'figure', 'pre'].includes(child.tagName)) {
-            continue;
-        }
-
-        const nestedBlock = findFirstTextBlock(child.children);
-
-        if (nestedBlock) {
-            return nestedBlock;
-        }
-    }
-
-    return null;
-};
-
-const shortenText = (value: string): string => {
-    const text = normalizeText(value);
-
-    if (text.length <= SHORT_ANSWER_MAX_LENGTH) {
-        return text;
-    }
-
-    let sentenceEnd = 0;
-
-    for (const match of text.matchAll(/[.!?](?:[»”"')\]]*)\s+/gu)) {
-        const end = (match.index ?? 0) + match[0].trimEnd().length;
-
-        if (end > SHORT_ANSWER_MAX_LENGTH) {
-            break;
-        }
-
-        if (end >= SHORT_ANSWER_MIN_SENTENCE_LENGTH) {
-            sentenceEnd = end;
-        }
-    }
-
-    if (sentenceEnd > 0) {
-        return text.slice(0, sentenceEnd);
-    }
-
-    const clippedText = text.slice(0, SHORT_ANSWER_MAX_LENGTH + 1);
-    const lastSpace = clippedText.lastIndexOf(' ');
-    const end = lastSpace > 0 ? lastSpace : SHORT_ANSWER_MAX_LENGTH;
-
-    return `${text.slice(0, end).trimEnd()}…`;
-};
-
-const createShortAnswer = (children: readonly ElementContent[]): string => {
-    const textBlock = findFirstTextBlock(children);
-
-    if (!textBlock) {
-        return 'Ответ приведен в виде практического примера. Подробности доступны в полном ответе.';
-    }
-
-    return shortenText(getTextContent(textBlock));
-};
-
-const createAnswer = (children: ElementContent[]): Element => ({
-    type: 'element',
-    tagName: 'div',
-    properties: {
-        className: ['answer'],
-    },
-    children: [
-        {
-            type: 'element',
-            tagName: 'section',
-            properties: {
-                className: ['answer-short'],
-                dataPagefindIgnore: true,
-            },
-            children: [
-                {
-                    type: 'element',
-                    tagName: 'h5',
-                    properties: {
-                        className: ['answer-title'],
-                    },
-                    children: [{type: 'text', value: 'Короткий ответ'}],
-                },
-                {
-                    type: 'element',
-                    tagName: 'p',
-                    properties: {
-                        className: ['answer-short-text'],
-                    },
-                    children: [{type: 'text', value: createShortAnswer(children)}],
-                },
-            ],
-        },
-        {
-            type: 'element',
-            tagName: 'details',
-            properties: {
-                className: ['answer-full'],
-            },
-            children: [
-                {
-                    type: 'element',
-                    tagName: 'summary',
-                    properties: {
-                        dataPagefindIgnore: true,
-                    },
-                    children: [{type: 'text', value: 'Полный ответ'}],
-                },
-                {
-                    type: 'element',
-                    tagName: 'div',
-                    properties: {
-                        className: ['answer-full-content'],
-                    },
-                    children,
-                },
-            ],
-        },
-    ],
-});
-
 const createSlug = (value: string): string =>
     value
         .toLocaleLowerCase('ru')
@@ -210,7 +69,7 @@ const createUniqueId = (baseId: string, usedIds: Set<string>): string => {
 };
 
 const indexSummary = (details: Element, usedIds: Set<string>): void => {
-    if (details.tagName !== 'details' || hasClass(details, 'answer-full')) {
+    if (details.tagName !== 'details') {
         return;
     }
 
@@ -252,7 +111,7 @@ const indexSummary = (details: Element, usedIds: Set<string>): void => {
 };
 
 const unwrapDetailsTable = (details: Element): void => {
-    if (details.tagName !== 'details' || hasClass(details, 'answer-full')) {
+    if (details.tagName !== 'details') {
         return;
     }
 
@@ -267,7 +126,15 @@ const unwrapDetailsTable = (details: Element): void => {
                 continue;
             }
 
-            nextChildren.push(createAnswer(cellChildren));
+            nextChildren.push({
+                type: 'element',
+                tagName: 'div',
+                properties: {
+                    className: ['answer'],
+                },
+                children: cellChildren,
+            });
+
             continue;
         }
 
