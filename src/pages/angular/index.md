@@ -15,6 +15,13 @@ order: 120
 <summary>Что такое Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Angular — TypeScript-платформа для создания web-приложений. Она включает compiler, declarative templates, components,
+signals, DI, Router, forms, HttpClient, SSR/SSG/hydration, service worker, CLI и testing APIs.
+
+**Полный ответ**
+
 Angular — TypeScript-платформа для создания web-приложений. Она включает compiler, declarative templates, components,
 signals, DI, Router, forms, HttpClient, SSR/SSG/hydration, service worker, CLI и testing APIs.
 
@@ -41,6 +48,15 @@ signals, DI, Router, forms, HttpClient, SSR/SSG/hydration, service worker, CLI �
 <details>
 <summary>В чем разница между AngularJS и Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+AngularJS является фреймворком, который может помочь вам в разработке Single Page Application. Он появился в 2009 году и
+с годами выяснилось, что имел много проблем. Angular (Angular 2+) же в свою очередь направлен на тоже самое, но дает
+больше преимуществ по сравнению с AngularJS 1.x, включая лучшую производительность, ленивую загрузку, более простой API,
+более легкую отладку.
+
+**Полный ответ**
 
 **AngularJS** является фреймворком, который может помочь вам в разработке Single Page Application. Он появился в 2009
 году и с годами выяснилось, что имел много проблем. **Angular** (Angular 2+) же в свою очередь направлен на тоже самое,
@@ -75,6 +91,13 @@ signals, DI, Router, forms, HttpClient, SSR/SSG/hydration, service worker, CLI �
 <summary>Что такое TypeScript и зачем он нужен Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+TypeScript — надмножество JavaScript со статической типизацией. Angular использует TypeScript для описания компонентов,
+DI-контрактов, маршрутов, forms, HTTP DTO и strict template checking.
+
+**Полный ответ**
+
 TypeScript — надмножество JavaScript со статической типизацией. Angular использует TypeScript для описания компонентов,
 DI-контрактов, маршрутов, forms, HTTP DTO и strict template checking.
 
@@ -96,6 +119,13 @@ TypeScript не заменяет runtime-валидацию данных с back
 <details>
 <summary>Что такое Angular CLI?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Angular CLI — официальный инструмент для создания, сборки, разработки и обновления Angular-проектов. Через CLI обычно
+запускают dev server, production build, schematics, migrations и тесты.
+
+**Полный ответ**
 
 Angular CLI — официальный инструмент для создания, сборки, разработки и обновления Angular-проектов. Через CLI обычно
 запускают dev server, production build, schematics, migrations и тесты.
@@ -119,6 +149,13 @@ production optimizations, assets, styles и migrations под единым API.
 <details>
 <summary>Что такое component, directive, template и metadata?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Компонент — директива с собственным шаблоном. Он описывает часть UI, принимает данные через inputs, сообщает события
+через outputs и может иметь локальные providers.
+
+**Полный ответ**
 
 Компонент — директива с собственным шаблоном. Он описывает часть UI, принимает данные через inputs, сообщает события
 через outputs и может иметь локальные providers.
@@ -153,6 +190,13 @@ export class UserCardComponent {
 <summary>Что такое platform, declarable и bootstrapped component?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Platform — слой Angular, который связывает приложение с окружением выполнения: browser, server, tests или custom
+renderer. В browser-приложении bootstrapApplication() поднимает browser platform и создает root EnvironmentInjector.
+
+**Полный ответ**
+
 Platform — слой Angular, который связывает приложение с окружением выполнения: browser, server, tests или custom
 renderer. В browser-приложении `bootstrapApplication()` поднимает browser platform и создает root `EnvironmentInjector`.
 
@@ -171,6 +215,12 @@ Bootstrapped component — корневой компонент, с которо�
 <summary>Что такое MVVM и в чем разница перед MVC?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+MVVM - шаблон проектирования архитектуры приложения. Состоит из 3 ключевых блоков: Model, View, ViewModel.
+
+**Полный ответ**
+
 **MVVM** - шаблон проектирования архитектуры приложения. Состоит из 3 ключевых блоков: Model, View, ViewModel.
 
 Отличие от MVС заключаются в:
@@ -188,6 +238,12 @@ Bootstrapped component — корневой компонент, с которо�
 <details>
 <summary>Какая базовая архитектура Angular-приложения?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Современное Angular-приложение обычно состоит из:
+
+**Полный ответ**
 
 Современное Angular-приложение обычно состоит из:
 
@@ -216,6 +272,13 @@ legacy/enterprise-compatible моделью: они встречаются в с
 <details>
 <summary>Какой должна быть структура каталогов компонентов любого Angular приложения и почему?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Универсальной структуры нет: она зависит от размера продукта и команды. Для приложения обычно лучше группировка по
+feature/domain, а не один глобальный каталог components, services, models.
+
+**Полный ответ**
 
 Универсальной структуры нет: она зависит от размера продукта и команды. Для приложения обычно лучше группировка по
 feature/domain, а не один глобальный каталог `components`, `services`, `models`.
@@ -259,6 +322,15 @@ src/app/
 <summary>Что такое DI в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Angular DI — это система, через которую Angular создает и передает зависимости компонентам, директивам, сервисам и
+другим сущностям. Сервисы можно регистрировать через providedIn, ApplicationConfig.providers, route providers или
+component/directive providers; Angular DI при этом иерархическая, то есть ближайший injector может переопределить
+зависимость для части дерева.
+
+**Полный ответ**
+
 Angular DI — это система, через которую Angular создает и передает зависимости компонентам, директивам, сервисам и
 другим сущностям. Сервисы можно регистрировать через `providedIn`, `ApplicationConfig.providers`, route providers или
 component/directive providers; Angular DI при этом иерархическая, то есть ближайший injector может переопределить
@@ -292,6 +364,12 @@ initializer, provider factory, guard, resolver или interceptor.
 <summary>Что такое provider и чем отличаются useClass, useValue, useFactory и useExisting?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Provider связывает DI token со способом получения значения:
+
+**Полный ответ**
+
 Provider связывает DI token со способом получения значения:
 
 ```ts
@@ -321,6 +399,12 @@ providers: [
 <summary>Что делает <code>providedIn: 'root'</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+providedIn: "root" регистрирует сервис в корневом EnvironmentInjector.
+
+**Полный ответ**
+
 `providedIn: "root"` регистрирует сервис в корневом `EnvironmentInjector`.
 
 ```ts
@@ -342,6 +426,13 @@ export class AuthService {}
 <details>
 <summary>Чем отличается providedIn: 'root' от providers в компоненте?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+providedIn: "root" создает провайдер на уровне приложения, а providers компонента создает локальный провайдер в
+ElementInjector.
+
+**Полный ответ**
 
 `providedIn: "root"` создает провайдер на уровне приложения, а `providers` компонента создает локальный провайдер в
 `ElementInjector`.
@@ -369,6 +460,13 @@ export class EditorComponent {}
 <details>
 <summary>Что будет, если один сервис есть и в root, и в providers компонента?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Будут существовать разные экземпляры сервиса. Angular начинает поиск с ближайшего инжектора, поэтому компонент и его
+потомки получат локальный экземпляр, а остальные части приложения продолжат использовать root-экземпляр.
+
+**Полный ответ**
 
 Будут существовать разные экземпляры сервиса. Angular начинает поиск с ближайшего инжектора, поэтому компонент и его
 потомки получат локальный экземпляр, а остальные части приложения продолжат использовать root-экземпляр.
@@ -398,6 +496,13 @@ singleton.
 <summary>Что такое InjectionToken и когда он нужен?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+TypeScript interface отсутствует в runtime и не может быть DI token. InjectionToken используют для конфигураций,
+функций, primitives и абстрактных контрактов:
+
+**Полный ответ**
+
 TypeScript interface отсутствует в runtime и не может быть DI token. `InjectionToken<T>` используют для конфигураций,
 функций, primitives и абстрактных контрактов:
 
@@ -418,6 +523,12 @@ export const ANALYTICS_CONFIG = new InjectionToken<AnalyticsConfig>('ANALYTICS_C
 <details>
 <summary>Что такое inject() и injection context?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+inject() получает dependency без constructor parameter. Он работает только внутри injection context:
+
+**Полный ответ**
 
 `inject()` получает dependency без constructor parameter. Он работает только внутри injection context:
 
@@ -443,6 +554,12 @@ export class UserStore {
 <summary>Как избежать circular dependency в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Сначала проверяют архитектуру: циклическая DI или import-зависимость часто означает смешение ответственности.
+
+**Полный ответ**
+
 Сначала проверяют архитектуру: циклическая DI или import-зависимость часто означает смешение ответственности.
 
 Варианты исправления:
@@ -462,6 +579,13 @@ Import cycles проверяют инструментами dependency graph и 
 <details>
 <summary>Как подменять dependencies в Angular-тестах?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Предпочтительны небольшие fake/stub реализации с типом Pick . Не нужно мокать каждую внутреннюю функцию: подменяют
+внешние границы и проверяют observable behavior.
+
+**Полный ответ**
 
 ```ts
 TestBed.configureTestingModule({
@@ -483,6 +607,13 @@ TestBed.overrideProvider(APP_CONFIG, {
 <details>
 <summary>Объясните как работает Dependency Injection на примере SOLID</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Как мы помним Dependency Injection в Angular это механизм, при котором класс не создает зависимости сам, а получает их
+снаружи.
+
+**Полный ответ**
 
 Как мы помним Dependency Injection в Angular это механизм, при котором класс не создает зависимости сам, а получает их
 снаружи.
@@ -947,6 +1078,13 @@ DI в Angular — это не просто “удобно получить се
 <summary>Как разделять API service, state service и facade?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для маленькой feature три класса могут быть лишними. Разделение вводят, когда обязанности действительно различаются.
+Компонент отвечает за rendering и UI events, а бизнес-правила не должны зависеть от DOM.
+
+**Полный ответ**
+
 - API service знает HTTP DTO и endpoints, но не UI.
 - State service хранит feature state и pure transitions.
 - Facade координирует use cases и предоставляет удобный API компонентам.
@@ -961,6 +1099,12 @@ DI в Angular — это не просто “удобно получить се
 <details>
 <summary>Как диагностировать provider scope и случайные разные instances?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Если сервис неожиданно хранит разное состояние в разных частях приложения, сначала проверяют, где он зарегистрирован:
+
+**Полный ответ**
 
 Если сервис неожиданно хранит разное состояние в разных частях приложения, сначала проверяют, где он зарегистрирован:
 
@@ -994,6 +1138,13 @@ token.
 <summary>Что такое интерполяция в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Разметка интерполяции с внедренными выражениями используется в Angular для присвоения данных текстовым нодам и значения
+аттрибутов. Например:
+
+**Полный ответ**
+
 Разметка интерполяции с внедренными выражениями используется в Angular для присвоения данных текстовым нодам и значения
 аттрибутов. Например:
 
@@ -1008,6 +1159,12 @@ token.
 <details>
 <summary>Что такое template expression, template statement и какие операторы доступны?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Template expression вычисляет значение для interpolation, property binding, class/style binding или pipe:
+
+**Полный ответ**
 
 Template expression вычисляет значение для interpolation, property binding, class/style binding или pipe:
 
@@ -1039,6 +1196,12 @@ Pipe имеет более низкий приоритет, чем ternary, по
 <summary>Какие способы использования шаблонов в Angular вы знаете?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Шаблон можно задать:
+
+**Полный ответ**
+
 Шаблон можно задать:
 
 - внешним файлом через `templateUrl`;
@@ -1060,6 +1223,12 @@ reference variables и content projection через `<ng-content>`.
 <details>
 <summary>Как работают @if, @for, @switch и @let?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Built-in control flow не требует CommonModule и лучше анализируется компилятором, чем legacy ngIf/ngFor.
+
+**Полный ответ**
 
 - `@if` условно создает view и поддерживает `@else`.
 - `@for` повторяет view и требует `track`.
@@ -1092,6 +1261,13 @@ Built-in control flow не требует `CommonModule` и лучше анал�
 <summary>Для чего нужен track в @for?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+track связывает элемент данных с DOM-view. При изменении массива Angular переиспользует существующие nodes и component
+instances вместо пересоздания списка.
+
+**Полный ответ**
+
 `track` связывает элемент данных с DOM-view. При изменении массива Angular переиспользует существующие nodes и component
 instances вместо пересоздания списка.
 
@@ -1112,6 +1288,13 @@ instances вместо пересоздания списка.
 <details>
 <summary>В чем разница между структурной и атрибутной директивой, назовите встроенные директивы?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Структурные директивы управляют структурой представления: создают, удаляют или повторяют embedded views. Классические
+примеры — NgIf, NgFor, NgSwitch, пользовательская директива на .
+
+**Полный ответ**
 
 **Структурные директивы** управляют структурой представления: создают, удаляют или повторяют embedded views.
 Классические примеры — `NgIf`, `NgFor`, `NgSwitch`, пользовательская директива на `<ng-template>`.
@@ -1158,6 +1341,13 @@ instances вместо пересоздания списка.
 <summary>Чем hidden отличается от @if или *ngIf?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+[hidden] оставляет элемент в DOM и обычно скрывает его CSS-правилом display: none. Компоненты, директивы, forms,
+listeners и состояние внутри такого элемента продолжают существовать.
+
+**Полный ответ**
+
 `[hidden]` оставляет элемент в DOM и обычно скрывает его CSS-правилом `display: none`. Компоненты, директивы, forms,
 listeners и состояние внутри такого элемента продолжают существовать.
 
@@ -1174,6 +1364,12 @@ providers уничтожаются, а `ngOnDestroy`/cleanup выполняют�
 <details>
 <summary>Для чего нужны директивы ng-template, ng-container, ng-content?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В современном Angular:
+
+**Полный ответ**
 
 В современном Angular:
 
@@ -1406,6 +1602,12 @@ app.component.html
 <summary>Что такое standalone component и чем он отличается от NgModule-подхода?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Standalone-компонент напрямую импортирует зависимости шаблона через imports и не требует объявления в NgModule.
+
+**Полный ответ**
+
 Standalone-компонент напрямую импортирует зависимости шаблона через `imports` и не требует объявления в `NgModule`.
 
 ```ts
@@ -1429,6 +1631,13 @@ export class ProfileComponent {}
 <details>
 <summary>Что такое template reference variable?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Template reference variable объявляется через #name и дает доступ к DOM-элементу, директиве, компоненту или
+экспортированному API директивы внутри текущего шаблона.
+
+**Полный ответ**
 
 Template reference variable объявляется через `#name` и дает доступ к DOM-элементу, директиве, компоненту или
 экспортированному API директивы внутри текущего шаблона.
@@ -1454,6 +1663,13 @@ Template reference variable объявляется через `#name` и дае�
 <summary>Чем property binding отличается от interpolation?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Interpolation {{ value }} удобна для текста и строковых значений. Property binding [property]="value" передает значение
+в DOM property, directive input или component input без обязательного приведения к строке.
+
+**Полный ответ**
+
 Interpolation `{{ value }}` удобна для текста и строковых значений. Property binding `[property]="value"` передает
 значение в DOM property, directive input или component input без обязательного приведения к строке.
 
@@ -1472,6 +1688,13 @@ Interpolation `{{ value }}` удобна для текста и строковы
 <summary>Чем property binding отличается от attribute binding?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Property binding меняет runtime-свойство элемента или input директивы. Attribute binding [attr.name] меняет HTML
+attribute и нужен там, где нет DOM property или важна именно строка атрибута, например ARIA и SVG.
+
+**Полный ответ**
+
 Property binding меняет runtime-свойство элемента или input директивы. Attribute binding `[attr.name]` меняет HTML
 attribute и нужен там, где нет DOM property или важна именно строка атрибута, например ARIA и SVG.
 
@@ -1489,6 +1712,13 @@ attribute и нужен там, где нет DOM property или важна и�
 <details>
 <summary>Как использовать input/output aliasing?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Alias меняет публичное имя binding-а в шаблоне, но не имя свойства в классе. Это полезно для совместимости, более
+понятного template API или директив, где input совпадает с selector.
+
+**Полный ответ**
 
 Alias меняет публичное имя binding-а в шаблоне, но не имя свойства в классе. Это полезно для совместимости, более
 понятного template API или директив, где input совпадает с selector.
@@ -1521,6 +1751,13 @@ Alias не стоит использовать без причины: разны
 <summary>Чем ng-content, ng-container и ng-template отличаются друг от друга?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ng-content проецирует внешний контент в компонент и не создает runtime-шаблон. ng-container группирует узлы без лишнего
+DOM-элемента. ng-template хранит неотрендеренный TemplateRef, который можно создать позднее.
+
+**Полный ответ**
+
 `ng-content` проецирует внешний контент в компонент и не создает runtime-шаблон. `ng-container` группирует узлы без
 лишнего DOM-элемента. `ng-template` хранит неотрендеренный `TemplateRef`, который можно создать позднее.
 
@@ -1533,6 +1770,12 @@ Alias не стоит использовать без причины: разны
 <details>
 <summary>Как выбрать элемент внутри template и как работают ViewChild / ContentChild?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для доступа к элементу внутри шаблона можно использовать template reference variable:
+
+**Полный ответ**
 
 Для доступа к элементу внутри шаблона можно использовать template reference variable:
 
@@ -1564,6 +1807,13 @@ export class SearchComponent {
 <summary>Почему вызов функции в template может быть проблемой?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Template expression может выполняться много раз при проверках. Если функция тяжелая, создает новые объекты или имеет
+побочные эффекты, UI станет медленнее и поведение будет непредсказуемым.
+
+**Полный ответ**
+
 Template expression может выполняться много раз при проверках. Если функция тяжелая, создает новые объекты или имеет
 побочные эффекты, UI станет медленнее и поведение будет непредсказуемым.
 
@@ -1577,6 +1827,13 @@ Template expression может выполняться много раз при �
 <details>
 <summary>Что будет, если несколько раз использовать async pipe на одном cold Observable?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Каждый async pipe создает отдельную подписку. Для cold Observable, например HttpClient, это может означать несколько
+одинаковых запросов.
+
+**Полный ответ**
 
 Каждый `async` pipe создает отдельную подписку. Для cold Observable, например `HttpClient`, это может означать несколько
 одинаковых запросов.
@@ -1594,6 +1851,15 @@ Template expression может выполняться много раз при �
 <summary>Что такое директива, компонент, модуль, сервис, пайп в Angular и для чего они нужны?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Компонент — директива с собственным шаблоном. В Angular 19+ компоненты standalone по умолчанию и напрямую импортируют
+зависимости шаблона в imports. - Директива добавляет поведение существующему элементу или шаблону. - Сервис
+инкапсулирует состояние, бизнес-логику, data access или интеграцию и обычно получается через inject(). - Pipe выполняет
+чистое преобразование значения для отображения в шаблоне.
+
+**Полный ответ**
+
 - **Компонент** — директива с собственным шаблоном. В Angular 19+ компоненты standalone по умолчанию и напрямую
   импортируют зависимости шаблона в `imports`.
 - **Директива** добавляет поведение существующему элементу или шаблону.
@@ -1609,6 +1875,12 @@ Template expression может выполняться много раз при �
 <details>
 <summary>Что такое директива и как создать собственную?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Директивы бывают трех видов: компонент, структурные и атрибутные (см. выше).
+
+**Полный ответ**
 
 Директивы бывают трех видов: компонент, структурные и атрибутные (см. выше).
 
@@ -1672,6 +1944,13 @@ ng generate directive shared/highlight
 <summary>Расскажите об основных параметрах @NgModule, @Component, @Directive, @Injectable, @Pipe</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В Angular 19–22 основной подход — standalone. Компоненты, директивы и pipes standalone по умолчанию; standalone: true
+обычно не пишут.
+
+**Полный ответ**
+
 В Angular 19–22 основной подход — standalone. Компоненты, директивы и pipes standalone по умолчанию; `standalone: true`
 обычно не пишут.
 
@@ -1714,6 +1993,13 @@ export class UserCardComponent {
 <details>
 <summary>Что такое динамические компоненты и как их можно использовать в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Динамические компоненты создаются во время выполнения. Типичные случаи: dialogs, overlays, notifications и
+конфигурируемые widgets.
+
+**Полный ответ**
 
 Динамические компоненты создаются во время выполнения. Типичные случаи: dialogs, overlays, notifications и
 конфигурируемые widgets.
@@ -1761,6 +2047,12 @@ export class UserDialogComponent {
 <summary>Как применить анимацию к компонентам?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В Angular 20.2+ для нового кода рекомендуются CSS-анимации и compiler APIs animate.enter / animate.leave.
+
+**Полный ответ**
+
 В Angular 20.2+ для нового кода рекомендуются CSS-анимации и compiler APIs `animate.enter` / `animate.leave`.
 
 <!-- prettier-ignore -->
@@ -1798,6 +2090,12 @@ Legacy DSL из `@angular/animations` с `trigger`, `state` и `transition` depr
 <summary>Что такое TemplateRef?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+TemplateRef представляет неотрендеренный фрагмент шаблона, обычно содержимое . Сам по себе он ничего не показывает.
+
+**Полный ответ**
+
 `TemplateRef` представляет неотрендеренный фрагмент шаблона, обычно содержимое `<ng-template>`. Сам по себе он ничего не
 показывает.
 
@@ -1811,6 +2109,13 @@ view через `ViewContainerRef`.
 <details>
 <summary>Что такое ViewContainerRef?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ViewContainerRef - контейнер для динамических views. Через него создают embedded views из TemplateRef или компоненты
+через createComponent().
+
+**Полный ответ**
 
 `ViewContainerRef` - контейнер для динамических views. Через него создают embedded views из `TemplateRef` или компоненты
 через `createComponent()`.
@@ -1826,6 +2131,13 @@ view через `ViewContainerRef`.
 <summary>Чем ViewChild отличается от ContentChild?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ViewChild ищет элемент, директиву или компонент внутри собственного view шаблона компонента. ContentChild ищет в
+контенте, который родитель спроецировал через .
+
+**Полный ответ**
+
 `ViewChild` ищет элемент, директиву или компонент внутри собственного view шаблона компонента. `ContentChild` ищет в
 контенте, который родитель спроецировал через `<ng-content>`.
 
@@ -1839,6 +2151,13 @@ View queries доступны после инициализации view, conten
 <details>
 <summary>Когда можно использовать ElementRef?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ElementRef дает ссылку на host DOM node. Его используют для интеграции с browser API, focus management, измерений или
+сторонней библиотекой.
+
+**Полный ответ**
 
 `ElementRef` дает ссылку на host DOM node. Его используют для интеграции с browser API, focus management, измерений или
 сторонней библиотекой.
@@ -1854,6 +2173,13 @@ View queries доступны после инициализации view, conten
 <summary>Для чего нужен Renderer2?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Renderer2 - low-level API для создания элементов, установки свойств, классов, стилей и слушателей через абстракцию
+Angular renderer.
+
+**Полный ответ**
+
 `Renderer2` - low-level API для создания элементов, установки свойств, классов, стилей и слушателей через абстракцию
 Angular renderer.
 
@@ -1867,6 +2193,13 @@ Angular renderer.
 <details>
 <summary>Зачем нужен Renderer2 и чем он помогает в отличие от ElementRef.nativeElement или declarative binding в host?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В большинстве host-взаимодействий лучше начинать с declarative bindings в host: они читаются как часть контракта
+директивы, обновляются Angular и хорошо подходят для class, style, attributes, properties и событий host-элемента.
+
+**Полный ответ**
 
 В большинстве host-взаимодействий лучше начинать с declarative bindings в `host`: они читаются как часть контракта
 директивы, обновляются Angular и хорошо подходят для class, style, attributes, properties и событий host-элемента.
@@ -1927,6 +2260,13 @@ export class AutofocusDirective {
 <summary>Что такое HostBinding и почему это legacy API?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+@HostBinding связывает свойство класса со свойством, атрибутом, class или style host-элемента директивы/компонента. API
+поддерживается, но для нового кода предпочтителен объект host в metadata.
+
+**Полный ответ**
+
 `@HostBinding` связывает свойство класса со свойством, атрибутом, class или style host-элемента директивы/компонента.
 API поддерживается, но для нового кода предпочтителен объект `host` в metadata.
 
@@ -1951,6 +2291,13 @@ export class BusyDirective {
 <summary>Что такое HostListener и почему это legacy API?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+@HostListener подписывает директиву или компонент на событие host-элемента. API остается рабочим, но для нового кода
+обычно используют host: {'(event)': 'handler($event)'} или обычные template listeners.
+
+**Полный ответ**
+
 `@HostListener` подписывает директиву или компонент на событие host-элемента. API остается рабочим, но для нового кода
 обычно используют `host: {'(event)': 'handler($event)'}` или обычные template listeners.
 
@@ -1965,6 +2312,13 @@ interaction.
 <summary>Для чего нужен NgZone?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+NgZone связывает Angular change detection с ZoneJS в zone-based приложениях. runOutsideAngular() выносит частые события
+наружу, а run() возвращает выполнение в Angular zone.
+
+**Полный ответ**
+
 `NgZone` связывает Angular change detection с ZoneJS в zone-based приложениях. `runOutsideAngular()` выносит частые
 события наружу, а `run()` возвращает выполнение в Angular zone.
 
@@ -1978,6 +2332,15 @@ interaction.
 <details>
 <summary>Зачем использовать queueMicrotask внутри Angular host listener?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+queueMicrotask() ставит callback в очередь microtasks. Он выполнится после текущего call stack, но до следующего
+setTimeout(..., 0) и других tasks. В Angular это иногда полезно, когда на один DOM event подписано несколько директив
+или компонентов через host listeners, а код должен прочитать итоговое состояние после завершения всех синхронных
+обработчиков текущего события.
+
+**Полный ответ**
 
 `queueMicrotask()` ставит callback в очередь microtasks. Он выполнится после текущего call stack, но до следующего
 `setTimeout(..., 0)` и других tasks. В Angular это иногда полезно, когда на один DOM event подписано несколько директив
@@ -2113,6 +2476,14 @@ it('closes dropdown after click microtask', fakeAsync(() => {
 <summary>Зачем раньше был нужен NgModule?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+NgModule был основной единицей сборки Angular: группировал components, directives, pipes, providers и bootstrap.
+Standalone APIs заменили большую часть этих сценариев локальными imports, route-level providers и
+bootstrapApplication().
+
+**Полный ответ**
+
 `NgModule` был основной единицей сборки Angular: группировал components, directives, pipes, providers и bootstrap.
 Standalone APIs заменили большую часть этих сценариев локальными `imports`, route-level providers и
 `bootstrapApplication()`.
@@ -2126,6 +2497,13 @@ Standalone APIs заменили большую часть этих сценар
 <details>
 <summary>Что означают declarations, imports, exports и providers в NgModule?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+declarations объявлял компоненты, директивы и pipes модуля. imports подключал другие modules. exports делал часть
+declarations/imports доступной внешним modules. providers регистрировал зависимости в injector.
+
+**Полный ответ**
 
 `declarations` объявлял компоненты, директивы и pipes модуля. `imports` подключал другие modules. `exports` делал часть
 declarations/imports доступной внешним modules. `providers` регистрировал зависимости в injector.
@@ -2141,6 +2519,12 @@ route.
 <summary>Для чего использовали SharedModule?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SharedModule собирал общие components, directives и pipes, чтобы feature modules могли импортировать их одним модулем.
+
+**Полный ответ**
+
 `SharedModule` собирал общие components, directives и pipes, чтобы feature modules могли импортировать их одним модулем.
 
 В standalone-подходе чаще импортируют конкретные зависимости прямо в компонент или route. Это делает связи явнее и
@@ -2153,6 +2537,13 @@ route.
 <details>
 <summary>Чем forRoot отличается от forChild?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+forRoot() регистрировал singleton providers и глобальную конфигурацию один раз в root module. forChild() подключал
+директивы/routes без повторной регистрации singleton providers.
+
+**Полный ответ**
 
 `forRoot()` регистрировал singleton providers и глобальную конфигурацию один раз в root module. `forChild()` подключал
 директивы/routes без повторной регистрации singleton providers.
@@ -2168,6 +2559,13 @@ route-level providers.
 <summary>Почему SharedModule не должен провайдить singleton services для lazy modules?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Lazy module может получить собственный child injector. Если SharedModule содержит providers и импортируется в разных
+lazy modules, сервис может создаться несколько раз вместо одного singleton.
+
+**Полный ответ**
+
 Lazy module может получить собственный child injector. Если `SharedModule` содержит providers и импортируется в разных
 lazy modules, сервис может создаться несколько раз вместо одного singleton.
 
@@ -2181,6 +2579,13 @@ providers, если нужен scoped instance.
 <details>
 <summary>Как standalone components заменили часть NgModule-сценариев?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Standalone component сам объявляет template dependencies через imports. Routes могут lazy-load компонент напрямую и
+иметь собственные providers.
+
+**Полный ответ**
 
 Standalone component сам объявляет template dependencies через `imports`. Routes могут lazy-load компонент напрямую и
 иметь собственные providers.
@@ -2206,6 +2611,13 @@ export const routes: Routes = [
 <summary>Что такое pure pipe?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Pure pipe пересчитывается только когда меняется ссылка на input или primitive value. Это режим по умолчанию и лучший
+выбор для чистых форматирований.
+
+**Полный ответ**
+
 Pure pipe пересчитывается только когда меняется ссылка на input или primitive value. Это режим по умолчанию и лучший
 выбор для чистых форматирований.
 
@@ -2218,6 +2630,13 @@ Pipe должен быть без side effects: одинаковый input да�
 <details>
 <summary>Что такое impure pipe?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Impure pipe (pure: false) вызывается при каждой проверке change detection, даже если ссылка не изменилась. Он может быть
+очень дорогим.
+
+**Полный ответ**
 
 Impure pipe (`pure: false`) вызывается при каждой проверке change detection, даже если ссылка не изменилась. Он может
 быть очень дорогим.
@@ -2233,6 +2652,13 @@ Impure pipe (`pure: false`) вызывается при каждой прове�
 <summary>Что делает async pipe?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+AsyncPipe подписывается на Observable или Promise, возвращает последнее значение, помечает view для проверки при новом
+значении и отписывается при уничтожении view.
+
+**Полный ответ**
+
 `AsyncPipe` подписывается на Observable или Promise, возвращает последнее значение, помечает view для проверки при новом
 значении и отписывается при уничтожении view.
 
@@ -2245,6 +2671,13 @@ Impure pipe (`pure: false`) вызывается при каждой прове�
 <details>
 <summary>Как создать custom pipe?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Pipe объявляют через @Pipe и метод transform. В Angular 19+ pipe standalone по умолчанию и импортируется туда, где
+используется.
+
+**Полный ответ**
 
 Pipe объявляют через `@Pipe` и метод `transform`. В Angular 19+ pipe standalone по умолчанию и импортируется туда, где
 используется.
@@ -2270,6 +2703,13 @@ export class InitialsPipe implements PipeTransform {
 <summary>Когда pipe лучше computed() или helper function?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Pipe хорош для отображения значения в шаблоне: форматирование даты, валюты, имени, статуса, короткого текста. Pure pipe
+кеширует результат относительно входных значений и не смешивает rendering с бизнес-логикой.
+
+**Полный ответ**
+
 Pipe хорош для отображения значения в шаблоне: форматирование даты, валюты, имени, статуса, короткого текста. Pure pipe
 кеширует результат относительно входных значений и не смешивает rendering с бизнес-логикой.
 
@@ -2291,6 +2731,13 @@ Impure pipe почти всегда сигнал, что состояние ил
 <summary>Как pipes влияют на performance?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Pure pipes помогают не выполнять одно и то же форматирование на каждом render, если input references стабильны. Impure
+pipes и тяжелые преобразования в больших списках могут стать hot path.
+
+**Полный ответ**
+
 Pure pipes помогают не выполнять одно и то же форматирование на каждом render, если input references стабильны. Impure
 pipes и тяжелые преобразования в больших списках могут стать hot path.
 
@@ -2306,6 +2753,12 @@ pipes и тяжелые преобразования в больших спис�
 <details>
 <summary>Объясните механизм загрузки (bootstrap) Angular-приложения в браузере?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Современное standalone-приложение запускается через bootstrapApplication():
+
+**Полный ответ**
 
 Современное standalone-приложение запускается через `bootstrapApplication()`:
 
@@ -2338,6 +2791,14 @@ legacy-приложений, но не является подходом по у
 <summary>Что происходит после загрузки Angular bundle?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Браузер загружает, парсит и выполняет JavaScript bundle. Entry point вызывает bootstrapApplication() или legacy
+bootstrapModule(), после чего Angular создает root injector (EnvironmentInjector), регистрирует root providers,
+инициализирует platform services и создает root component.
+
+**Полный ответ**
+
 Браузер загружает, парсит и выполняет JavaScript bundle. Entry point вызывает `bootstrapApplication()` или legacy
 `bootstrapModule()`, после чего Angular создает root injector (`EnvironmentInjector`), регистрирует root providers,
 инициализирует platform services и создает root component.
@@ -2357,6 +2818,12 @@ blocking guards или hydration mismatch задерживают интерак�
 <details>
 <summary>Как происходит взаимодействие компонентов в Angular (опишите components view)?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Основные способы взаимодействия:
+
+**Полный ответ**
 
 Основные способы взаимодействия:
 
@@ -2424,6 +2891,12 @@ export class QuantityComponent {
 <summary>Что такое Data Binding и какие проблемы связанные с ним вы знаете?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Data Binding связывает template expression со свойством, атрибутом, классом, стилем или событием.
+
+**Полный ответ**
+
 Data Binding связывает template expression со свойством, атрибутом, классом, стилем или событием.
 
 ```html
@@ -2471,6 +2944,12 @@ readonly value = model("");
 <summary>Как вы используете одностороннюю и двухстороннюю привязку данных?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Односторонняя привязка имеет явное направление:
+
+**Полный ответ**
+
 Односторонняя привязка имеет явное направление:
 
 ```html
@@ -2509,6 +2988,12 @@ readonly value = model("");
 <summary>Что такое output(), EventEmitter и как подписываться на события?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для нового компонента custom event объявляют через output():
+
+**Полный ответ**
+
 Для нового компонента custom event объявляют через `output()`:
 
 ```ts
@@ -2544,6 +3029,12 @@ Angular автоматически очищает подписки при уни
 <details>
 <summary>Каков жизненный цикл у компонентов?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Angular 19–22 поддерживает классические lifecycle hooks и render callbacks.
+
+**Полный ответ**
 
 Angular 19–22 поддерживает классические lifecycle hooks и render callbacks.
 
@@ -2595,6 +3086,13 @@ export class SearchComponent {
 <summary>В каком порядке вызываются lifecycle hooks?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+При первом render порядок обычно такой: ngOnChanges, ngOnInit, ngDoCheck, ngAfterContentInit, ngAfterContentChecked,
+ngAfterViewInit, ngAfterViewChecked. При последующих проверках вызываются check hooks, а при уничтожении - ngOnDestroy.
+
+**Полный ответ**
+
 При первом render порядок обычно такой: `ngOnChanges`, `ngOnInit`, `ngDoCheck`, `ngAfterContentInit`,
 `ngAfterContentChecked`, `ngAfterViewInit`, `ngAfterViewChecked`. При последующих проверках вызываются check hooks, а
 при уничтожении - `ngOnDestroy`.
@@ -2608,6 +3106,13 @@ Render callbacks вроде `afterNextRender()` выполняются посл�
 <details>
 <summary>Для чего нужен ngOnChanges?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ngOnChanges вызывается, когда Angular устанавливает или изменяет decorator inputs, и передает SimpleChanges с
+previous/current values.
+
+**Полный ответ**
 
 `ngOnChanges` вызывается, когда Angular устанавливает или изменяет decorator inputs, и передает `SimpleChanges` с
 previous/current values.
@@ -2623,6 +3128,13 @@ previous/current values.
 <summary>Чем view lifecycle отличается от content lifecycle?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Content lifecycle относится к projected content, который родитель передал внутрь компонента. View lifecycle относится к
+собственному шаблону компонента и его view children.
+
+**Полный ответ**
+
 Content lifecycle относится к projected content, который родитель передал внутрь компонента. View lifecycle относится к
 собственному шаблону компонента и его view children.
 
@@ -2635,6 +3147,13 @@ Content lifecycle относится к projected content, который род
 <details>
 <summary>Когда использовать ngAfterContentInit?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ngAfterContentInit вызывается после инициализации контента, спроецированного через . Он подходит для работы с
+contentChild() и contentChildren().
+
+**Полный ответ**
 
 `ngAfterContentInit` вызывается после инициализации контента, спроецированного через `<ng-content>`. Он подходит для
 работы с `contentChild()` и `contentChildren()`.
@@ -2649,6 +3168,13 @@ Content lifecycle относится к projected content, который род
 <summary>Когда использовать ngAfterViewInit?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ngAfterViewInit вызывается после создания view компонента и его view children. Его используют для логики, которой нужны
+view queries, DOM-элементы или child components.
+
+**Полный ответ**
+
 `ngAfterViewInit` вызывается после создания view компонента и его view children. Его используют для логики, которой
 нужны view queries, DOM-элементы или child components.
 
@@ -2662,6 +3188,13 @@ Content lifecycle относится к projected content, который род
 <details>
 <summary>Как lifecycle связан с subscriptions, effects и cleanup?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Все, что живет дольше одного synchronous render, должно иметь понятный lifetime: подписки, DOM listeners, timers,
+WebSocket, observer APIs и effects.
+
+**Полный ответ**
 
 Все, что живет дольше одного synchronous render, должно иметь понятный lifetime: подписки, DOM listeners, timers,
 WebSocket, observer APIs и effects.
@@ -2698,6 +3231,13 @@ export class LiveSearchComponent {
 <summary>Что такое ngZone?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+NgZone — сервис интеграции Angular с ZoneJS. В zone-based приложении ZoneJS патчит асинхронные browser APIs и помогает
+Angular определить момент, когда может потребоваться синхронизация представления.
+
+**Полный ответ**
+
 `NgZone` — сервис интеграции Angular с ZoneJS. В zone-based приложении ZoneJS патчит асинхронные browser APIs и помогает
 Angular определить момент, когда может потребоваться синхронизация представления.
 
@@ -2720,6 +3260,12 @@ Angular определить момент, когда может потребо�
 <details>
 <summary>Как обновлять представление, если ваша модель данных обновляется вне 'зоны'?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В современном Angular предпочтительно записать новое значение в signal. Это работает и в zoneless-приложении:
+
+**Полный ответ**
 
 В современном Angular предпочтительно записать новое значение в signal. Это работает и в zoneless-приложении:
 
@@ -2845,6 +3391,13 @@ export class AppComponent {
 <summary>Что такое Shadow DOM и как с ним работать в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Shadow DOM — браузерный механизм инкапсуляции DOM-поддерева и стилей web component. Внешние стили по умолчанию не
+проникают внутрь shadow tree, а внутренние не влияют на остальную страницу.
+
+**Полный ответ**
+
 Shadow DOM — браузерный механизм инкапсуляции DOM-поддерева и стилей web component. Внешние стили по умолчанию не
 проникают внутрь shadow tree, а внутренние не влияют на остальную страницу.
 
@@ -2874,6 +3427,13 @@ export class PlayerComponent {}
 <details>
 <summary>В чем преимущества и недостатки Regular DOM (Angular) перед Virtual DOM (React)?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Формулировка упрощает реальность: и Angular, и React в итоге обновляют настоящий DOM, но используют разные модели
+определения изменений.
+
+**Полный ответ**
 
 Формулировка упрощает реальность: и Angular, и React в итоге обновляют настоящий DOM, но используют разные модели
 определения изменений.
@@ -2907,6 +3467,13 @@ startup, memory и стоимость обновления.
 <summary>Что такое ViewEncapsulation?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ViewEncapsulation управляет областью действия component styles: Emulated эмулирует изоляцию атрибутами, ShadowDom
+использует настоящий shadow root, None делает стили глобальными.
+
+**Полный ответ**
+
 `ViewEncapsulation` управляет областью действия component styles: `Emulated` эмулирует изоляцию атрибутами, `ShadowDom`
 использует настоящий shadow root, `None` делает стили глобальными.
 
@@ -2919,6 +3486,13 @@ startup, memory и стоимость обновления.
 <details>
 <summary>Для чего нужен :host в стилях компонента?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+:host выбирает host-элемент текущего компонента. Это удобно для layout, display, CSS custom properties и состояний,
+которые принадлежат самому компоненту.
+
+**Полный ответ**
 
 `:host` выбирает host-элемент текущего компонента. Это удобно для layout, display, CSS custom properties и состояний,
 которые принадлежат самому компоненту.
@@ -2941,6 +3515,13 @@ startup, memory и стоимость обновления.
 <summary>Для чего нужен :host-context?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+:host-context(.theme-dark) применяет стиль компонента, если один из предков host-элемента соответствует selector. Его
+используют для theme flags и интеграции с внешним layout context.
+
+**Полный ответ**
+
 `:host-context(.theme-dark)` применяет стиль компонента, если один из предков host-элемента соответствует selector. Его
 используют для theme flags и интеграции с внешним layout context.
 
@@ -2955,6 +3536,13 @@ startup, memory и стоимость обновления.
 <summary>Как стилизовать projected content?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Projected content принадлежит родительскому view, поэтому стили дочернего компонента с encapsulation не всегда
+применяются к внутренним элементам projection.
+
+**Полный ответ**
+
 Projected content принадлежит родительскому view, поэтому стили дочернего компонента с encapsulation не всегда
 применяются к внутренним элементам projection.
 
@@ -2968,6 +3556,13 @@ properties или дать родителю управлять разметко�
 <details>
 <summary>Почему ::ng-deep считают legacy escape hatch?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+::ng-deep пробивает style encapsulation и влияет на вложенные компоненты. Это legacy escape hatch для сложных
+интеграций, а не основной инструмент дизайна.
+
+**Полный ответ**
 
 `::ng-deep` пробивает style encapsulation и влияет на вложенные компоненты. Это legacy escape hatch для сложных
 интеграций, а не основной инструмент дизайна.
@@ -2984,6 +3579,13 @@ properties или дать родителю управлять разметко�
 <details>
 <summary>Что такое trigger в Angular animations?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Trigger объединяет имя анимации, список состояний и переходов. В template его привязывали к элементу, а значение binding
+определяло текущее состояние:
+
+**Полный ответ**
 
 Trigger объединяет имя анимации, список состояний и переходов. В template его привязывали к элементу, а значение binding
 определяло текущее состояние:
@@ -3004,6 +3606,13 @@ Trigger объединяет имя анимации, список состоя�
 <summary>Что такое wildcard-состояние в Angular animations?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Wildcard означает любое состояние. Его использовали, когда анимация должна сработать независимо от конкретного
+начального или конечного значения:
+
+**Полный ответ**
+
 Wildcard `*` означает любое состояние. Его использовали, когда анимация должна сработать независимо от конкретного
 начального или конечного значения:
 
@@ -3023,6 +3632,14 @@ transition('* => *', animate('120ms'));
 <details>
 <summary>Как в legacy Angular animations определить переход между двумя состояниями?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В старом DSL из @angular/animations состояния описывали через state(), а переходы между ними через transition(). Такой
+код все еще встречается в legacy-проектах, хотя для нового кода в Angular 20.2+ предпочтительнее CSS-анимации и
+animate.enter / animate.leave.
+
+**Полный ответ**
 
 В старом DSL из `@angular/animations` состояния описывали через `state()`, а переходы между ними через `transition()`.
 Такой код все еще встречается в legacy-проектах, хотя для нового кода в Angular 20.2+ предпочтительнее CSS-анимации и
@@ -3049,6 +3666,13 @@ trigger('panel', [
 <summary>Чем DI-паттерн отличается от Angular DI?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Dependency Injection как паттерн означает, что класс не создает зависимости сам, а получает их снаружи. Это уменьшает
+связанность и упрощает тестирование.
+
+**Полный ответ**
+
 Dependency Injection как паттерн означает, что класс не создает зависимости сам, а получает их снаружи. Это уменьшает
 связанность и упрощает тестирование.
 
@@ -3063,6 +3687,12 @@ token и управляет lifetime экземпляров. Базовый пр
 <details>
 <summary>Что такое Singleton Service и с какой целью его используют в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это сервисы, объявленные в приложении и имеющие один экземпляр на все приложение. Его можно объявить двумя способами:
+
+**Полный ответ**
 
 Это сервисы, объявленные в приложении и имеющие один экземпляр на все приложение. Его можно объявить двумя способами:
 
@@ -3089,6 +3719,12 @@ NgModule `providers` остается legacy-вариантом.
 <details>
 <summary>Как можно определить свой обработчик ErrorHandler, Logging, Cache в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Глобальные необработанные ошибки можно направить в собственный ErrorHandler:
+
+**Полный ответ**
 
 Глобальные необработанные ошибки можно направить в собственный `ErrorHandler`:
 
@@ -3127,6 +3763,13 @@ HTTP-ошибки, logging и HTTP-cache удобно централизоват
 <summary>Что такое Change Detection, как работает Change Detection Mechanism?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Change Detection — синхронизация состояния приложения с DOM. Angular выполняет скомпилированные инструкции шаблона и
+обновляет bindings, значения которых изменились.
+
+**Полный ответ**
+
 Change Detection — синхронизация состояния приложения с DOM. Angular выполняет скомпилированные инструкции шаблона и
 обновляет bindings, значения которых изменились.
 
@@ -3152,6 +3795,12 @@ Angular должен получить уведомление, что view мож
 <details>
 <summary>Какие существуют стратегии обнаружения изменений?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Есть две стратегии:
+
+**Полный ответ**
 
 Есть две стратегии:
 
@@ -3188,6 +3837,14 @@ export class UserCardComponent {
 <summary>Сколько Change Detector(ов) может быть во всем приложении?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+У каждого component view есть собственное представление change detection, связанное в дерево views. Ivy как отдельная
+тема является historical topic: сегодня это обычный runtime Angular, а его внутренние структуры LView/TView не являются
+публичным API. AbstractChangeDetector не является актуальной моделью публичного API.
+
+**Полный ответ**
+
 У каждого component view есть собственное представление change detection, связанное в дерево views. Ivy как отдельная
 тема является historical topic: сегодня это обычный runtime Angular, а его внутренние структуры `LView`/`TView` не
 являются публичным API. `AbstractChangeDetector` не является актуальной моделью публичного API.
@@ -3202,6 +3859,13 @@ export class UserCardComponent {
 <details>
 <summary>Основное отличие constructor от ngOnInit?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Конструктор — механизм JavaScript/TypeScript. Angular создает экземпляр класса и предоставляет injection context,
+поэтому зависимости можно получать через inject() в инициализаторах полей.
+
+**Полный ответ**
 
 Конструктор — механизм JavaScript/TypeScript. Angular создает экземпляр класса и предоставляет injection context,
 поэтому зависимости можно получать через `inject()` в инициализаторах полей.
@@ -3222,6 +3886,13 @@ Signal inputs можно читать в `ngOnInit`, `computed()` и `effect()`.
 <summary>Чем markForCheck() отличается от detectChanges(), detach() и reattach()?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для OnPush обычно нужен markForCheck(). detectChanges() используют на узких интеграционных границах. detach() оправдан
+для редко обновляемых тяжелых views, если команда явно управляет их обновлением.
+
+**Полный ответ**
+
 - `markForCheck()` помечает view и предков для проверки в следующем scheduled change detection.
 - `detectChanges()` немедленно проверяет текущую view и ее дочерние views.
 - `detach()` исключает view из обычного дерева проверок.
@@ -3237,6 +3908,13 @@ Signal inputs можно читать в `ngOnInit`, `computed()` и `effect()`.
 <details>
 <summary>Что такое coalescing Change Detection и как найти лишние проверки?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Coalescing объединяет несколько событий или вызовов NgZone.run() в одну проверку, уменьшая повторную работу в zone-based
+приложении.
+
+**Полный ответ**
 
 Coalescing объединяет несколько событий или вызовов `NgZone.run()` в одну проверку, уменьшая повторную работу в
 zone-based приложении.
@@ -3258,6 +3936,13 @@ zone-based приложении.
 <details>
 <summary>Что такое zoneless Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Zoneless Angular — режим, в котором Angular не полагается на ZoneJS для глобального перехвата async APIs. Вместо этого
+view помечается dirty точными уведомлениями:
+
+**Полный ответ**
 
 Zoneless Angular — режим, в котором Angular не полагается на ZoneJS для глобального перехвата async APIs. Вместо этого
 view помечается dirty точными уведомлениями:
@@ -3285,6 +3970,13 @@ view помечается dirty точными уведомлениями:
 <details>
 <summary>Что такое Signals и когда их использовать?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Signal — реактивный контейнер для значения. Angular отслеживает чтение signal и обновляет зависящие от него вычисления и
+представления при изменении.
+
+**Полный ответ**
 
 Signal — реактивный контейнер для значения. Angular отслеживает чтение signal и обновляет зависящие от него вычисления и
 представления при изменении.
@@ -3332,6 +4024,13 @@ Signals подходят для локального синхронного со
 <summary>В чем разница между input(), output() и model()?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+input() поддерживает required inputs, aliases и transforms. model() используют, когда ребенок действительно должен
+изменять связанное значение; для обычного события достаточно output().
+
+**Полный ответ**
+
 - `input()` принимает данные от родителя и возвращает readonly `InputSignal`.
 - `output()` объявляет custom event и возвращает `OutputEmitterRef`.
 - `model()` создает writable input для two-way binding и автоматически добавляет output `<name>Change`.
@@ -3374,6 +4073,12 @@ export class QuantityComponent {
 <summary>В чем разница между computed(), effect() и linkedSignal()?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+computed() создает readonly производное значение. Вычисление lazy, memoized и не должно иметь side effects:
+
+**Полный ответ**
+
 `computed()` создает readonly производное значение. Вычисление lazy, memoized и не должно иметь side effects:
 
 ```ts
@@ -3408,6 +4113,13 @@ readonly selected = linkedSignal(() => this.options()[0] ?? null);
 <summary>Когда использовать resource(), httpResource() и RxJS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+resource() связывает async loader с signal-параметрами и предоставляет value, status, error и loading state.
+httpResource() делает похожую модель для HttpClient.
+
+**Полный ответ**
+
 `resource()` связывает async loader с signal-параметрами и предоставляет `value`, `status`, `error` и loading state.
 `httpResource()` делает похожую модель для `HttpClient`.
 
@@ -3441,6 +4153,12 @@ backpressure-подобные сценарии и явная композици�
 <summary>Для чего нужен RxJS и какую проблему он решает?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+RxJS предоставляет модель потоков для асинхронных значений и событий. Он помогает декларативно описывать:
+
+**Полный ответ**
+
 RxJS предоставляет модель потоков для асинхронных значений и событий. Он помогает декларативно описывать:
 
 - HTTP-запросы и их отмену;
@@ -3470,6 +4188,13 @@ readonly users$ = this.search.valueChanges.pipe(
 <summary>Что такое Observable?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Observable - ленивый поток значений. Он начинает работу при подписке и может передать ноль, одно или несколько значений,
+ошибку и сигнал завершения.
+
+**Полный ответ**
+
 Observable - ленивый поток значений. Он начинает работу при подписке и может передать ноль, одно или несколько значений,
 ошибку и сигнал завершения.
 
@@ -3480,6 +4205,12 @@ Observable - ленивый поток значений. Он начинает �
 <details>
 <summary>Что такое Observer, subscription и обработка ошибок в Observable?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Observer — объект или набор callbacks, который получает уведомления Observable:
+
+**Полный ответ**
 
 Observer — объект или набор callbacks, который получает уведомления Observable:
 
@@ -3510,6 +4241,13 @@ subscription.unsubscribe();
 <summary>В чем разница между Observable и Promise?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Promise возвращает один будущий результат и начинает выполнение сразу после создания. Observable ленивый, может передать
+несколько значений и предоставляет операторы для композиции, повторов и отмены через отписку.
+
+**Полный ответ**
+
 Promise возвращает один будущий результат и начинает выполнение сразу после создания. Observable ленивый, может передать
 несколько значений и предоставляет операторы для композиции, повторов и отмены через отписку.
 
@@ -3523,6 +4261,13 @@ Promise возвращает один будущий результат и на�
 <details>
 <summary>Чем cold Observable отличается от hot Observable?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Cold Observable запускает producer отдельно для каждой подписки. HttpClient возвращает cold Observable: каждый
+subscribe() отправляет новый запрос.
+
+**Полный ответ**
 
 Cold Observable запускает producer отдельно для каждой подписки. `HttpClient` возвращает cold Observable: каждый
 `subscribe()` отправляет новый запрос.
@@ -3540,6 +4285,13 @@ Hot Observable имеет общий producer для подписчиков. П�
 <summary>Чем Observable отличается от Subject?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Subject одновременно является Observable и observer: в него можно передавать значения через next(), а один экземпляр
+рассылает их нескольким подписчикам.
+
+**Полный ответ**
+
 `Subject` одновременно является Observable и observer: в него можно передавать значения через `next()`, а один экземпляр
 рассылает их нескольким подписчикам.
 
@@ -3553,6 +4305,13 @@ Hot Observable имеет общий producer для подписчиков. П�
 <details>
 <summary>В чем разница между Subject, BehaviorSubject, ReplaySubject, AsyncSubject?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для состояния Angular-компонента чаще используют signals. Subject остается полезен на RxJS-границах и для потоков
+событий.
+
+**Полный ответ**
 
 - `Subject` передает только новые значения после подписки.
 - `BehaviorSubject` хранит текущее значение и сразу отдает его новому подписчику.
@@ -3569,6 +4328,13 @@ Hot Observable имеет общий producer для подписчиков. П�
 <details>
 <summary>Для чего нужны map, tap и filter в RxJS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+map преобразует значение, filter пропускает только подходящие значения, tap выполняет побочный эффект без изменения
+значения.
+
+**Полный ответ**
 
 `map` преобразует значение, `filter` пропускает только подходящие значения, `tap` выполняет побочный эффект без
 изменения значения.
@@ -3592,6 +4358,14 @@ readonly activeUserNames$ = this.users$.pipe(
 <summary>Чем отличаются switchMap, mergeMap и concatMap?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+switchMap отменяет предыдущий внутренний stream при новом значении. Подходит для поиска. - mergeMap выполняет внутренние
+streams параллельно. Подходит для независимых операций. - concatMap ставит внутренние streams в очередь и сохраняет
+порядок.
+
+**Полный ответ**
+
 - `switchMap` отменяет предыдущий внутренний stream при новом значении. Подходит для поиска.
 - `mergeMap` выполняет внутренние streams параллельно. Подходит для независимых операций.
 - `concatMap` ставит внутренние streams в очередь и сохраняет порядок.
@@ -3603,6 +4377,12 @@ readonly activeUserNames$ = this.users$.pipe(
 <details>
 <summary>Как выбрать switchMap, mergeMap, concatMap или exhaustMap?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для mutation-запросов switchMap опасен, если отмена предыдущей операции нарушает ожидания пользователя.
+
+**Полный ответ**
 
 - `switchMap` отменяет предыдущую inner subscription: autocomplete, route params.
 - `mergeMap` выполняет параллельно: независимые uploads или writes.
@@ -3619,6 +4399,12 @@ readonly activeUserNames$ = this.users$.pipe(
 <summary>Чем combineLatest, withLatestFrom и forkJoin отличаются?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+forkJoin подходит для параллельных finite HTTP-запросов, но никогда не завершится с бесконечным stream.
+
+**Полный ответ**
+
 - `combineLatest` после initial values эмитит при изменении любого источника.
 - `withLatestFrom` эмитит только когда срабатывает основной source, добавляя последние значения других streams.
 - `forkJoin` ждет завершения всех источников и один раз возвращает их последние значения.
@@ -3632,6 +4418,13 @@ readonly activeUserNames$ = this.users$.pipe(
 <details>
 <summary>Чем debounceTime, throttleTime и auditTime отличаются?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для resize/scroll часто подходит auditTime, для autocomplete — debounceTime, для ограничения частых действий —
+throttleTime.
+
+**Полный ответ**
 
 - `debounceTime` ждет паузу: поиск после остановки ввода.
 - `throttleTime` пропускает первое значение и ограничивает частоту следующих.
@@ -3647,6 +4440,13 @@ readonly activeUserNames$ = this.users$.pipe(
 <details>
 <summary>Когда нужна ручная отписка и что делает takeUntilDestroyed()?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+От finite streams (HttpClient, first(), take(1)) вручную отписываться не нужно. AsyncPipe и toSignal() управляют
+подпиской автоматически.
+
+**Полный ответ**
 
 От finite streams (`HttpClient`, `first()`, `take(1)`) вручную отписываться не нужно. `AsyncPipe` и `toSignal()`
 управляют подпиской автоматически.
@@ -3672,6 +4472,13 @@ ngOnInit(): void {
 <details>
 <summary>Как построить autocomplete с отменой запроса?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+switchMap отписывается от прошлого HTTP Observable, а Angular отменяет запрос. catchError находится внутри switchMap,
+поэтому ошибка одного запроса не завершает поток пользовательского ввода.
+
+**Полный ответ**
 
 ```ts
 readonly results$ = this.search.valueChanges.pipe(
@@ -3699,6 +4506,12 @@ readonly results$ = this.search.valueChanges.pipe(
 <summary>Где ставить catchError: внутри или снаружи switchMap?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Внутри — если ошибка относится к одной inner operation и внешний поток должен продолжить работать:
+
+**Полный ответ**
+
 Внутри — если ошибка относится к одной inner operation и внешний поток должен продолжить работать:
 
 ```ts
@@ -3715,6 +4528,12 @@ source$.pipe(switchMap((value) => request(value).pipe(catchError(() => of(fallba
 <details>
 <summary>Какие проблемы возможны у shareReplay()?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+shareReplay({bufferSize: 1, refCount: true}) часто используют для дедупликации чтения.
+
+**Полный ответ**
 
 `shareReplay({bufferSize: 1, refCount: true})` часто используют для дедупликации чтения.
 
@@ -3735,6 +4554,13 @@ source$.pipe(switchMap((value) => request(value).pipe(catchError(() => of(fallba
 <details>
 <summary>Как бы вы кешировали наблюдаемые данные из потоков (stream)?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Способ зависит от срока жизни, ключа и политики инвалидирования кеша. Для совместного использования результата
+HTTP-запроса часто применяют shareReplay.
+
+**Полный ответ**
 
 Способ зависит от срока жизни, ключа и политики инвалидирования кеша. Для совместного использования результата
 HTTP-запроса часто применяют `shareReplay`.
@@ -3767,6 +4593,13 @@ private readonly users$ = this.http.get<ReadonlyArray<User>>("/api/users").pipe(
 <summary>Что такое Observable высшего порядка?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Observable высшего порядка эмитит другие Observable. Это часто появляется, когда событие запускает async operation:
+route param загружает HTTP-запрос, input value запускает search request, click запускает save.
+
+**Полный ответ**
+
 Observable высшего порядка эмитит другие Observable. Это часто появляется, когда событие запускает async operation:
 route param загружает HTTP-запрос, input value запускает search request, click запускает save.
 
@@ -3784,6 +4617,13 @@ const requests$ = this.query.valueChanges.pipe(map((query) => this.api.search(qu
 <details>
 <summary>Что такое multicasting в RxJS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Multicasting позволяет нескольким subscribers разделять один source execution. Без этого cold Observable, например
+HttpClient request, может выполниться заново для каждой подписки.
+
+**Полный ответ**
 
 Multicasting позволяет нескольким subscribers разделять один source execution. Без этого cold Observable, например
 `HttpClient` request, может выполниться заново для каждой подписки.
@@ -3805,6 +4645,13 @@ template-facing stream.
 <summary>В чем разница между of и from в RxJS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+of(value) эмитит переданные значения как есть. from(source) превращает iterable, Promise или Observable-like source в
+Observable.
+
+**Полный ответ**
+
 `of(value)` эмитит переданные значения как есть. `from(source)` превращает iterable, Promise или Observable-like source
 в Observable.
 
@@ -3825,6 +4672,13 @@ pipeline.
 <summary>Чем scan отличается от reduce в RxJS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+scan накапливает состояние и эмитит промежуточный результат на каждое входящее значение. Он подходит для UI state,
+progress и event reducers.
+
+**Полный ответ**
+
 `scan` накапливает состояние и эмитит промежуточный результат на каждое входящее значение. Он подходит для UI state,
 progress и event reducers.
 
@@ -3838,6 +4692,13 @@ WebSocket он не отдаст значение, пока stream не заве
 <details>
 <summary>Когда использовать zip в RxJS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+zip объединяет emissions по порядковому номеру: первое значение первого stream с первым значением второго, второе со
+вторым и так далее. Он ждет, пока каждый source отдаст значение для текущей позиции.
+
+**Полный ответ**
 
 `zip` объединяет emissions по порядковому номеру: первое значение первого stream с первым значением второго, второе со
 вторым и так далее. Он ждет, пока каждый source отдаст значение для текущей позиции.
@@ -3859,6 +4720,12 @@ zip(userIds$, permissions$).subscribe(([userId, permissions]) => {
 <summary>Как выполнить API-запросы строго по порядку?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Используйте concatMap: он ставит inner Observables в очередь и запускает следующий только после завершения предыдущего.
+
+**Полный ответ**
+
 Используйте `concatMap`: он ставит inner Observables в очередь и запускает следующий только после завершения
 предыдущего.
 
@@ -3875,6 +4742,13 @@ readonly saved$ = this.saveClicks.pipe(concatMap((draft) => this.api.save(draft)
 <details>
 <summary>Как объединить route params и UI events?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Route params и UI events превращают в streams и объединяют через combineLatest или withLatestFrom, затем загружают
+данные через подходящий flattening operator.
+
+**Полный ответ**
 
 Route params и UI events превращают в streams и объединяют через `combineLatest` или `withLatestFrom`, затем загружают
 данные через подходящий flattening operator.
@@ -3896,6 +4770,13 @@ readonly page$ = combineLatest([
 <summary>Как переиспользовать результат запроса между routes?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Вынесите загрузку и кеш в сервис, который живет дольше конкретного route component: root service, feature provider или
+route-level provider на общем parent route.
+
+**Полный ответ**
+
 Вынесите загрузку и кеш в сервис, который живет дольше конкретного route component: root service, feature provider или
 route-level provider на общем parent route.
 
@@ -3909,6 +4790,13 @@ route-level provider на общем parent route.
 <details>
 <summary>Как избежать race condition в RxJS-загрузке данных?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Race condition возникает, когда более старый async result приходит позже нового и перезаписывает актуальное состояние.
+Для route params, поиска и фильтров обычно используют switchMap, чтобы отменять прошлый запрос.
+
+**Полный ответ**
 
 Race condition возникает, когда более старый async result приходит позже нового и перезаписывает актуальное состояние.
 Для route params, поиска и фильтров обычно используют `switchMap`, чтобы отменять прошлый запрос.
@@ -3925,6 +4813,13 @@ Race condition возникает, когда более старый async resu
 <details>
 <summary>Что такое реактивные формы в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Reactive Forms — стабильный model-driven API на основе AbstractControl. Модель формы создается в TypeScript, имеет
+синхронный доступ к value/status и Observable-потоки valueChanges/statusChanges.
+
+**Полный ответ**
 
 Reactive Forms — стабильный model-driven API на основе `AbstractControl`. Модель формы создается в TypeScript, имеет
 синхронный доступ к value/status и Observable-потоки `valueChanges`/`statusChanges`.
@@ -3963,6 +4858,12 @@ production-приложений strictly typed Reactive Forms остаются �
 <summary>Что такое FormGroup и FormControl и для чего они используются?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В strictly typed Reactive Forms:
+
+**Полный ответ**
+
 В strictly typed Reactive Forms:
 
 - `FormControl<T>` хранит значение, validation status и interaction state одного поля.
@@ -3991,6 +4892,12 @@ readonly form = new FormGroup({
 <summary>Что такое NgForm?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+NgForm - директива template-driven forms, которая автоматически создает form model для и собирает controls с ngModel.
+
+**Полный ответ**
+
 `NgForm` - директива template-driven forms, которая автоматически создает form model для `<form>` и собирает controls с
 `ngModel`.
 
@@ -4004,6 +4911,13 @@ Forms или Signal Forms в новых версиях Angular.
 <details>
 <summary>Чем Reactive Forms отличаются от template-driven forms?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Reactive Forms создают model в TypeScript, дают typed controls, synchronous state и удобное тестирование. Они подходят
+сложным формам и динамической структуре.
+
+**Полный ответ**
 
 Reactive Forms создают model в TypeScript, дают typed controls, synchronous state и удобное тестирование. Они подходят
 сложным формам и динамической структуре.
@@ -4022,6 +4936,13 @@ Template-driven forms создают model преимущественно чер
 <summary>Для чего нужен FormBuilder?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+FormBuilder сокращает boilerplate при создании Reactive Forms. В строго типизированных формах часто используют
+NonNullableFormBuilder, чтобы controls не получали null без явной причины.
+
+**Полный ответ**
+
 `FormBuilder` сокращает boilerplate при создании Reactive Forms. В строго типизированных формах часто используют
 `NonNullableFormBuilder`, чтобы controls не получали `null` без явной причины.
 
@@ -4039,6 +4960,12 @@ readonly form = this.formBuilder.nonNullable.group({
 <summary>Чем setValue отличается от patchValue и что делают emitEvent/onlySelf?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Эти флаги используют осторожно: подавленное событие может оставить derived state несинхронизированным.
+
+**Полный ответ**
+
 - `setValue()` требует полную структуру control tree.
 - `patchValue()` обновляет только переданные поля.
 - `{emitEvent: false}` подавляет `valueChanges`, `statusChanges` и unified events.
@@ -4054,6 +4981,13 @@ readonly form = this.formBuilder.nonNullable.group({
 <summary>Что означают dirty, touched и pristine в Angular Forms?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+pristine означает, что пользователь еще не менял значение control. dirty - значение было изменено пользователем.
+touched - control потерял focus после взаимодействия.
+
+**Полный ответ**
+
 `pristine` означает, что пользователь еще не менял значение control. `dirty` - значение было изменено пользователем.
 `touched` - control потерял focus после взаимодействия.
 
@@ -4066,6 +5000,12 @@ readonly form = this.formBuilder.nonNullable.group({
 <details>
 <summary>Как применять валидацию для простых и сложных форм?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В Reactive Forms валидаторы передают control при создании или через setValidators/addValidators.
+
+**Полный ответ**
 
 В Reactive Forms валидаторы передают control при создании или через `setValidators`/`addValidators`.
 
@@ -4096,6 +5036,13 @@ Backend всегда повторно валидирует данные: fronten
 <summary>Как показывать validation errors в template?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Показывайте ошибку, когда control invalid и пользователь уже взаимодействовал с полем или отправил форму. Условие лучше
+держать простым и не вызывать тяжелые функции в template.
+
+**Полный ответ**
+
 Показывайте ошибку, когда control invalid и пользователь уже взаимодействовал с полем или отправил форму. Условие лучше
 держать простым и не вызывать тяжелые функции в template.
 
@@ -4118,6 +5065,13 @@ Backend всегда повторно валидирует данные: fronten
 <summary>Как работают async validators?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Async validator возвращает Promise или Observable с ValidationErrors | null. Angular запускает его после успешных
+синхронных validators и переводит control в статус PENDING до результата.
+
+**Полный ответ**
+
 Async validator возвращает Promise или Observable с `ValidationErrors | null`. Angular запускает его после успешных
 синхронных validators и переводит control в статус `PENDING` до результата.
 
@@ -4131,6 +5085,13 @@ frontend-валидацию границей безопасности.
 <details>
 <summary>Что такое ControlValueAccessor и когда писать свой CVA?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ControlValueAccessor связывает Angular Forms с кастомным UI-контролом. Его пишут для date picker, rich editor, slider
+или составного input, который должен работать с formControl, formControlName и ngModel.
+
+**Полный ответ**
 
 `ControlValueAccessor` связывает Angular Forms с кастомным UI-контролом. Его пишут для date picker, rich editor, slider
 или составного input, который должен работать с `formControl`, `formControlName` и `ngModel`.
@@ -4153,6 +5114,12 @@ frontend-валидацию границей безопасности.
 <summary>Как правильно реализовать disabled, touched и dirty в кастомном контроле?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для составного контрола нужно определить, когда группа считается touched и какое значение считается атомарным.
+
+**Полный ответ**
+
 - `setDisabledState()` меняет доступность внутренних элементов.
 - `onTouched()` вызывают при первом осмысленном blur/interaction.
 - `onChange(value)` вызывают только при пользовательском изменении.
@@ -4168,6 +5135,13 @@ frontend-валидацию границей безопасности.
 <details>
 <summary>Как строить nested и reusable forms без лишних подписок?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Родитель может передать дочернему компоненту typed FormGroup, отдельные controls или доменную model. Дочерний reusable
+control не должен искать родительскую форму через хрупкий DOM hierarchy без необходимости.
+
+**Полный ответ**
 
 Родитель может передать дочернему компоненту typed `FormGroup`, отдельные controls или доменную model. Дочерний reusable
 control не должен искать родительскую форму через хрупкий DOM hierarchy без необходимости.
@@ -4185,6 +5159,12 @@ Derived validation и UI state лучше получать из control state и
 <details>
 <summary>Как Angular-приложение взаимодействует с backend API?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Взаимодействие с API
+
+**Полный ответ**
 
 **Взаимодействие с API**
 
@@ -4222,6 +5202,12 @@ Derived validation и UI state лучше получать из control state и
 <summary>Как проектировать API layer и типизировать backend contracts?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Data-access слой инкапсулирует endpoints, DTO, mapping и transport errors:
+
+**Полный ответ**
+
 Data-access слой инкапсулирует endpoints, DTO, mapping и transport errors:
 
 ```ts
@@ -4245,6 +5231,12 @@ OpenAPI может генерировать DTO/client, но generated layer о�
 <summary>Как моделировать loading, error и data state HTTP-запроса?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Состояния должны быть взаимоисключающими:
+
+**Полный ответ**
+
 Состояния должны быть взаимоисключающими:
 
 ```ts
@@ -4266,6 +5258,12 @@ type RemoteData<T> =
 <details>
 <summary>Что такое HTTP Interceptors?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Interceptor — middleware для общих правил HTTP: auth headers, logging, timeout, retry, caching и индикаторы загрузки.
+
+**Полный ответ**
 
 Interceptor — middleware для общих правил HTTP: auth headers, logging, timeout, retry, caching и индикаторы загрузки.
 
@@ -4306,6 +5304,12 @@ DI-based `HttpInterceptor` и `HTTP_INTERCEPTORS` остаются поддер�
 <summary>Как делать retry и отмену HTTP-запросов?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+HttpClient отменяет запрос при unsubscribe. Поэтому switchMap подходит поиску и route-driven loading.
+
+**Полный ответ**
+
 `HttpClient` отменяет запрос при unsubscribe. Поэтому `switchMap` подходит поиску и route-driven loading.
 
 Retry применяют только для временных и безопасных ошибок:
@@ -4328,6 +5332,13 @@ request$.pipe(
 <details>
 <summary>Как мокать HTTP в Angular-тестах?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Тест проверяет method, URL, body, headers, mapping и error handling. Для development mocks используют отдельный mock
+server, service worker mocking или proxy, не production interceptor.
+
+**Полный ответ**
 
 ```ts
 TestBed.configureTestingModule({
@@ -4354,6 +5365,13 @@ server, service worker mocking или proxy, не production interceptor.
 <summary>Что такое авторизация через токены?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+После аутентификации сервер выдает credential, например access token. Клиент прикладывает его к запросам, а сервер
+проверяет подпись, срок действия и права.
+
+**Полный ответ**
+
 После аутентификации сервер выдает credential, например access token. Клиент прикладывает его к запросам, а сервер
 проверяет подпись, срок действия и права.
 
@@ -4368,6 +5386,13 @@ Access token обычно живет недолго. Refresh token позвол�
 <summary>Что такое Authorization header?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Header передает credentials или token по выбранной схеме. Пример: Authorization: Bearer . Его отправляют только по HTTPS
+доверенному origin и не выводят в логи.
+
+**Полный ответ**
+
 Header передает credentials или token по выбранной схеме. Пример: `Authorization: Bearer <token>`. Его отправляют только
 по HTTPS доверенному origin и не выводят в логи.
 
@@ -4379,6 +5404,13 @@ Header передает credentials или token по выбранной схе�
 <summary>Что такое Bearer token?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это token, право использования которого получает любой владелец значения. Он не доказывает владение отдельным ключом,
+поэтому утечка дает доступ до истечения или отзыва. Scope и срок жизни должны быть минимальными.
+
+**Полный ответ**
+
 Это token, право использования которого получает любой владелец значения. Он не доказывает владение отдельным ключом,
 поэтому утечка дает доступ до истечения или отзыва. Scope и срок жизни должны быть минимальными.
 
@@ -4389,6 +5421,14 @@ Header передает credentials или token по выбранной схе�
 <details>
 <summary>Что такое cookie?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Cookie — небольшая пара name/value, которую browser хранит для domain/path и автоматически отправляет подходящим
+requests. Флаги HttpOnly, Secure и SameSite снижают часть рисков. Cookies имеют ограничения размера и требуют
+продуманной CSRF-защиты.
+
+**Полный ответ**
 
 Cookie — небольшая пара name/value, которую browser хранит для domain/path и автоматически отправляет подходящим
 requests. Флаги `HttpOnly`, `Secure` и `SameSite` снижают часть рисков. Cookies имеют ограничения размера и требуют
@@ -4402,6 +5442,13 @@ requests. Флаги `HttpOnly`, `Secure` и `SameSite` снижают част�
 <summary>Чем cookie отличается от localStorage?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Cookie автоматически участвует в HTTP и может быть HttpOnly; localStorage доступен JavaScript и не отправляется
+автоматически. Оба механизма привязаны к origin/domain rules. Секретный token в localStorage уязвим при XSS.
+
+**Полный ответ**
+
 Cookie автоматически участвует в HTTP и может быть `HttpOnly`; `localStorage` доступен JavaScript и не отправляется
 автоматически. Оба механизма привязаны к origin/domain rules. Секретный token в localStorage уязвим при XSS.
 
@@ -4412,6 +5459,12 @@ Cookie автоматически участвует в HTTP и может бы�
 <details>
 <summary>Где хранить access token и refresh token?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Универсального ответа нет. Частый browser-подход:
+
+**Полный ответ**
 
 Универсального ответа нет. Частый browser-подход:
 
@@ -4428,6 +5481,12 @@ Cookie автоматически участвует в HTTP и может бы�
 <details>
 <summary>Как реализовать refresh token без бесконечного цикла?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Auth interceptor:
+
+**Полный ответ**
 
 Auth interceptor:
 
@@ -4447,6 +5506,13 @@ Auth interceptor:
 <summary>Что такое preflight request?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Browser отправляет OPTIONS перед некоторыми cross-origin requests, чтобы проверить разрешенные method и headers. Server
+отвечает CORS headers. Preflight может кешироваться, но неправильная конфигурация блокирует основной запрос.
+
+**Полный ответ**
+
 Browser отправляет `OPTIONS` перед некоторыми cross-origin requests, чтобы проверить разрешенные method и headers.
 Server отвечает CORS headers. Preflight может кешироваться, но неправильная конфигурация блокирует основной запрос.
 
@@ -4457,6 +5523,13 @@ Server отвечает CORS headers. Preflight может кешировать�
 <details>
 <summary>Почему CORS preflight может стать performance-проблемой?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Preflight - дополнительный OPTIONS запрос перед небезопасным cross-origin запросом. Он появляется из-за некоторых
+methods, headers или content types. На плохой сети лишний round trip заметен, особенно для частых API-вызовов.
+
+**Полный ответ**
 
 Preflight - дополнительный `OPTIONS` запрос перед небезопасным cross-origin запросом. Он появляется из-за некоторых
 methods, headers или content types. На плохой сети лишний round trip заметен, особенно для частых API-вызовов.
@@ -4478,6 +5551,14 @@ Access-Control-Max-Age: 600
 <summary>Что делает <code>X-Frame-Options</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+X-Frame-Options запрещает или ограничивает встраивание страницы во frame, защищая от clickjacking. Современная
+альтернатива — CSP directive frame-ancestors, она гибче и позволяет точнее задать разрешенные origins. Для Angular SPA
+header обычно настраивают на уровне web server или CDN.
+
+**Полный ответ**
+
 `X-Frame-Options` запрещает или ограничивает встраивание страницы во frame, защищая от clickjacking. Современная
 альтернатива — CSP directive `frame-ancestors`, она гибче и позволяет точнее задать разрешенные origins. Для Angular SPA
 header обычно настраивают на уровне web server или CDN.
@@ -4489,6 +5570,14 @@ header обычно настраивают на уровне web server или C
 <details>
 <summary>Что такое CDN и зачем он нужен?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CDN хранит копии статических или кешируемых ресурсов ближе к пользователям и снижает latency, нагрузку на origin и риск
+перегрузки. Для Angular deployment CDN особенно полезен для content-hashed assets, HTML delivery, security headers,
+invalidation и rollback. Важно понимать, какие responses кешируются browser cache, а какие CDN cache.
+
+**Полный ответ**
 
 CDN хранит копии статических или кешируемых ресурсов ближе к пользователям и снижает latency, нагрузку на origin и риск
 перегрузки. Для Angular deployment CDN особенно полезен для content-hashed assets, HTML delivery, security headers,
@@ -4503,6 +5592,12 @@ invalidation и rollback. Важно понимать, какие responses ке
 <details>
 <summary>Что такое роутинг и как его создать в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Angular Router связывает URL с деревом активированных routes и компонентов. Современная standalone-конфигурация:
+
+**Полный ответ**
 
 Angular Router связывает URL с деревом активированных routes и компонентов. Современная standalone-конфигурация:
 
@@ -4544,6 +5639,12 @@ export const appConfig: ApplicationConfig = {
 <summary>Что такое RouterOutlet?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+RouterOutlet - placeholder в template, куда Angular Router вставляет component активного route.
+
+**Полный ответ**
+
 `RouterOutlet` - placeholder в template, куда Angular Router вставляет component активного route.
 
 ```html
@@ -4562,6 +5663,13 @@ export const appConfig: ApplicationConfig = {
 <summary>Чем RouterLink, navigate() и navigateByUrl() отличаются?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для обычной ссылки используют , сохраняя browser semantics. Programmatic navigation нужна после command: submit, login,
+wizard step.
+
+**Полный ответ**
+
 - `RouterLink` — декларативная доступная навигация в шаблоне.
 - `navigate(commands, extras)` строит URL из command segments относительно route.
 - `navigateByUrl(url, extras)` принимает готовый URL или `UrlTree`.
@@ -4576,6 +5684,13 @@ submit, login, wizard step.
 <details>
 <summary>Чем ActivatedRoute отличается от RouterState?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ActivatedRoute описывает конкретный активированный route segment рядом с компонентом: params, query params, data,
+fragment, parent/children. Его используют внутри route component.
+
+**Полный ответ**
 
 `ActivatedRoute` описывает конкретный активированный route segment рядом с компонентом: params, query params, data,
 fragment, parent/children. Его используют внутри route component.
@@ -4594,6 +5709,13 @@ analytics, breadcrumbs, debug tooling или инфраструктурный ro
 <summary>Чем route params, query params и data отличаются?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+snapshot подходит, если component instance гарантированно создается заново. При reuse одного компонента для другого
+param значения подписываются на paramMap/queryParamMap или преобразуют их в signals.
+
+**Полный ответ**
+
 - Path params идентифицируют ресурс: `/users/:id`.
 - Query params описывают фильтр, сортировку и pagination.
 - Static `data` хранит route metadata.
@@ -4610,6 +5732,12 @@ param значения подписываются на `paramMap`/`queryParamMap
 <summary>Что такое nested, auxiliary routes и RouteReuseStrategy?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Nested routes отображаются во вложенных и наследуют часть route tree.
+
+**Полный ответ**
+
 Nested routes отображаются во вложенных `<router-outlet>` и наследуют часть route tree.
 
 Auxiliary routes используют named outlets для независимых UI-областей, например persistent chat или side panel.
@@ -4624,6 +5752,12 @@ Auxiliary routes используют named outlets для независимы�
 <details>
 <summary>Каков жизненный цикл у Angular Router?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Основные этапы успешной навигации:
+
+**Полный ответ**
 
 Основные этапы успешной навигации:
 
@@ -4663,6 +5797,12 @@ Guard должен вернуть `boolean`, `UrlTree`, `RedirectCommand`, Promi
 <summary>Что такое preloading strategy?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Preloading загружает lazy chunks после initial navigation, чтобы будущий переход был быстрее.
+
+**Полный ответ**
+
 Preloading загружает lazy chunks после initial navigation, чтобы будущий переход был быстрее.
 
 - `NoPreloading` ничего не загружает заранее.
@@ -4678,6 +5818,13 @@ Preloading не активирует route и не должен бесконтр
 <details>
 <summary>Когда resolver лучше загрузки внутри компонента?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Resolver полезен, если route нельзя корректно показать без критических данных или redirect должен произойти до
+активации.
+
+**Полный ответ**
 
 Resolver полезен, если route нельзя корректно показать без критических данных или redirect должен произойти до
 активации.
@@ -4699,6 +5846,12 @@ Resolver полезен, если route нельзя корректно пока
 <details>
 <summary>Как тестировать Angular Router?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для integration-теста используют RouterTestingHarness:
+
+**Полный ответ**
 
 Для integration-теста используют `RouterTestingHarness`:
 
@@ -4726,6 +5879,13 @@ expect(harness.routeNativeElement?.textContent).toContain('Ada');
 <summary>В чем разница между Routing и Navigation?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Routing — конфигурация соответствия URL и состояния приложения: routes, параметры, guards, resolvers, outlets, redirects
+и lazy-loading.
+
+**Полный ответ**
+
 **Routing** — конфигурация соответствия URL и состояния приложения: routes, параметры, guards, resolvers, outlets,
 redirects и lazy-loading.
 
@@ -4743,6 +5903,13 @@ redirects и lazy-loading.
 <details>
 <summary>Что такое ленивая загрузка (Lazy-loading) и для чего она используется?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Lazy-loading откладывает загрузку кода feature до момента, когда пользователь переходит на соответствующий route. Это
+уменьшает initial bundle и ускоряет первую загрузку.
+
+**Полный ответ**
 
 Lazy-loading откладывает загрузку кода feature до момента, когда пользователь переходит на соответствующий route. Это
 уменьшает initial bundle и ускоряет первую загрузку.
@@ -4772,6 +5939,12 @@ Lazy-loading не означает, что каждый маленький ко�
 <details>
 <summary>Как загрузить данные до того как активируется роут?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для этого используется resolver. Современный вариант — функция ResolveFn.
+
+**Полный ответ**
 
 Для этого используется resolver. Современный вариант — функция `ResolveFn`.
 
@@ -4808,6 +5981,13 @@ Resolver подходит, когда экран нельзя корректно
 <details>
 <summary>Как в Angular организовать login/logout и router guard для защищенных страниц?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В Angular frontend обычно не "логинит пользователя сам", а вызывает backend или Identity Provider и хранит только
+клиентское состояние сессии: кто пользователь, идет ли проверка сессии, можно ли открыть protected route.
+
+**Полный ответ**
 
 В Angular frontend обычно не "логинит пользователя сам", а вызывает backend или Identity Provider и хранит только
 клиентское состояние сессии: кто пользователь, идет ли проверка сессии, можно ли открыть protected route.
@@ -5023,6 +6203,13 @@ login/logout/session state.
 <summary>Что такое SSO и как оно обычно работает в frontend-приложении?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SSO, или Single Sign-On, — подход, при котором пользователь проходит аутентификацию один раз у доверенного Identity
+Provider, а затем получает доступ к нескольким приложениям без отдельного логина в каждом из них.
+
+**Полный ответ**
+
 SSO, или Single Sign-On, — подход, при котором пользователь проходит аутентификацию один раз у доверенного Identity
 Provider, а затем получает доступ к нескольким приложениям без отдельного логина в каждом из них.
 
@@ -5083,6 +6270,12 @@ callback, не хранить секреты в bundle, аккуратно ра�
 <summary>Как использовать feature toggle в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Сервис может хранить загруженные флаги в signal и предоставлять узкий API проверки:
+
+**Полный ответ**
+
 Сервис может хранить загруженные флаги в signal и предоставлять узкий API проверки:
 
 ```ts
@@ -5116,6 +6309,12 @@ export class FeatureFlagsService {
 <summary>Как использовать feature toggle в Angular-шаблоне?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Компонент может предоставить вычисляемое состояние:
+
+**Полный ответ**
+
 Компонент может предоставить вычисляемое состояние:
 
 ```ts
@@ -5148,6 +6347,12 @@ export class CheckoutComponent {
 <summary>Как защитить route через feature toggle?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Функциональный CanMatchFn не даст Router выбрать route с выключенной фичей:
+
+**Полный ответ**
+
 Функциональный `CanMatchFn` не даст Router выбрать route с выключенной фичей:
 
 ```ts
@@ -5169,6 +6374,12 @@ Flags config должен быть загружен до первой навиг
 <details>
 <summary>Что такое управление состоянием приложения?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Управление состоянием — правила хранения, чтения и изменения данных, от которых зависит UI.
+
+**Полный ответ**
 
 Управление состоянием — правила хранения, чтения и изменения данных, от которых зависит UI.
 
@@ -5195,6 +6406,14 @@ effects, devtools, event history и единые правила большой �
 <summary>Когда достаточно component state?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Когда состояние принадлежит одному component subtree: open/closed, выбранная вкладка, черновик формы. Оно легко
+уничтожается вместе с UI и не создает глобальных зависимостей. При необходимости state можно поднять к ближайшему общему
+владельцу.
+
+**Полный ответ**
+
 Когда состояние принадлежит одному component subtree: open/closed, выбранная вкладка, черновик формы. Оно легко
 уничтожается вместе с UI и не создает глобальных зависимостей. При необходимости state можно поднять к ближайшему общему
 владельцу.
@@ -5207,6 +6426,13 @@ effects, devtools, event history и единые правила большой �
 <summary>Когда достаточно сервиса с signal?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для синхронного feature state с несколькими consumers и понятными methods обновления. Сервис владеет writable signals и
+наружу отдает readonly state/computed values. Scope provider определяет lifetime.
+
+**Полный ответ**
+
 Для синхронного feature state с несколькими consumers и понятными methods обновления. Сервис владеет writable signals и
 наружу отдает readonly state/computed values. Scope provider определяет lifetime.
 
@@ -5217,6 +6443,13 @@ effects, devtools, event history и единые правила большой �
 <details>
 <summary>Когда signal в сервисе перестает быть достаточным?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Сервис с signal хорош, пока state небольшой, ownership понятен, а transitions легко держать в нескольких methods.
+Проблемы начинаются, когда появляются:
+
+**Полный ответ**
 
 Сервис с signal хорош, пока state небольшой, ownership понятен, а transitions легко держать в нескольких methods.
 Проблемы начинаются, когда появляются:
@@ -5238,6 +6471,13 @@ state и methods без полного Redux-style boilerplate. Classic NgRx в�
 <summary>Когда использовать RxJS store service?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Когда состояние строится из HTTP, WebSocket, cancellation, debounce и нескольких async streams. RxJS хорошо выражает
+время, конкуренцию и backpressure. Следует избегать ручных nested subscriptions и скрытого mutable state.
+
+**Полный ответ**
+
 Когда состояние строится из HTTP, WebSocket, cancellation, debounce и нескольких async streams. RxJS хорошо выражает
 время, конкуренцию и backpressure. Следует избегать ручных nested subscriptions и скрытого mutable state.
 
@@ -5249,6 +6489,13 @@ state и methods без полного Redux-style boilerplate. Classic NgRx в�
 <summary>Что такое facade pattern в Angular state management?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Facade предоставляет компонентам узкий API чтения состояния и выполнения use cases, скрывая store/RxJS/HTTP details. Это
+уменьшает связанность UI с выбранной библиотекой. Facade не должна становиться механическим proxy без domain value.
+
+**Полный ответ**
+
 Facade предоставляет компонентам узкий API чтения состояния и выполнения use cases, скрывая store/RxJS/HTTP details. Это
 уменьшает связанность UI с выбранной библиотекой. Facade не должна становиться механическим proxy без domain value.
 
@@ -5259,6 +6506,14 @@ Facade предоставляет компонентам узкий API чтен
 <details>
 <summary>Разница между smart и presentational компонентом?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Smart component координирует use case: читает route, вызывает facade/API, управляет loading/error state и передает
+готовые данные вниз. Presentational component получает inputs, отправляет outputs и отвечает за rendering и локальное UI
+поведение.
+
+**Полный ответ**
 
 Smart component координирует use case: читает route, вызывает facade/API, управляет loading/error state и передает
 готовые данные вниз. Presentational component получает inputs, отправляет outputs и отвечает за rendering и локальное UI
@@ -5285,6 +6540,12 @@ UserCardComponent
 <summary>В чем отличие между NGRX, NGXS, Akita и какую проблему они решают?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Все эти решения помогают организовать общее состояние и предсказуемые изменения, но используют разные модели.
+
+**Полный ответ**
+
 Все эти решения помогают организовать общее состояние и предсказуемые изменения, но используют разные модели.
 
 - **NgRx** следует Redux-подходу: actions, reducers, selectors, effects. Самый строгий и многословный вариант, с сильной
@@ -5305,6 +6566,13 @@ State manager не нужен автоматически. Для небольш�
 <summary>Когда в Angular действительно нужен NgRx/store?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+NgRx/store оправдан, когда приложение имеет сложное общее состояние, много независимых writers, эффекты, optimistic
+updates, rollback, audit/debug history или несколько команд, которым нужны одинаковые правила изменений.
+
+**Полный ответ**
+
 NgRx/store оправдан, когда приложение имеет сложное общее состояние, много независимых writers, эффекты, optimistic
 updates, rollback, audit/debug history или несколько команд, которым нужны одинаковые правила изменений.
 
@@ -5322,6 +6590,13 @@ updates, rollback, audit/debug history или несколько команд, �
 <summary>Как не превратить сервис состояния в god object?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Разделять state по feature/domain ownership, держать commands узкими и выносить data access отдельно. Не смешивать
+несвязанные формы, router, HTTP и analytics в одном singleton. Public API должен быть меньше внутренней реализации.
+
+**Полный ответ**
+
 Разделять state по feature/domain ownership, держать commands узкими и выносить data access отдельно. Не смешивать
 несвязанные формы, router, HTTP и analytics в одном singleton. Public API должен быть меньше внутренней реализации.
 
@@ -5332,6 +6607,12 @@ updates, rollback, audit/debug history или несколько команд, �
 <details>
 <summary>Как спроектировать слои Angular feature при использовании Signals?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Практичная схема:
+
+**Полный ответ**
 
 Практичная схема:
 
@@ -5352,6 +6633,12 @@ updates, rollback, audit/debug history или несколько команд, �
 <summary>Как мигрировать Angular feature с @Input/@Output и RxJS к Signals без переписывания всего сразу?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Миграцию делают по границам, а не большим взрывом:
+
+**Полный ответ**
+
 Миграцию делают по границам, а не большим взрывом:
 
 1. Оставить публичный contract компонента стабильным.
@@ -5371,6 +6658,12 @@ updates, rollback, audit/debug history или несколько команд, �
 <details>
 <summary>Какие анти-паттерны Signals часто встречаются в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Частые ошибки:
+
+**Полный ответ**
 
 Частые ошибки:
 
@@ -5393,6 +6686,13 @@ updates, rollback, audit/debug history или несколько команд, �
 <summary>Что такое OWASP?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+OWASP - открытое сообщество и набор практических материалов по безопасности приложений. Frontend-разработчику полезны
+OWASP Top 10, ASVS и Cheat Sheet Series.
+
+**Полный ответ**
+
 OWASP - открытое сообщество и набор практических материалов по безопасности приложений. Frontend-разработчику полезны
 OWASP Top 10, ASVS и Cheat Sheet Series.
 
@@ -5405,6 +6705,14 @@ OWASP Top 10, ASVS и Cheat Sheet Series.
 <details>
 <summary>Что такое XSS и как Angular защищает от XSS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+XSS, или Cross-Site Scripting, - атака, при которой злоумышленник добивается выполнения своего JavaScript в контексте
+чужого сайта. Если такой код запустился, он выполняется как код этого сайта: может читать данные страницы, вызывать API
+от имени пользователя и использовать обычные browser-возможности текущего origin.
+
+**Полный ответ**
 
 XSS, или Cross-Site Scripting, - атака, при которой злоумышленник добивается выполнения своего JavaScript в контексте
 чужого сайта. Если такой код запустился, он выполняется как код этого сайта: может читать данные страницы, вызывать API
@@ -5542,6 +6850,13 @@ Backend тоже обязан участвовать в защите:
 <summary>Что такое CSRF?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSRF, или Cross-Site Request Forgery, - атака, при которой злоумышленник заставляет браузер авторизованного пользователя
+отправить запрос на доверенный сайт.
+
+**Полный ответ**
+
 CSRF, или Cross-Site Request Forgery, - атака, при которой злоумышленник заставляет браузер авторизованного пользователя
 отправить запрос на доверенный сайт.
 
@@ -5568,6 +6883,12 @@ origin. Он не гарантирует, что state-changing request вооб
 <details>
 <summary>Когда создается CSRF-token?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CSRF-token создает backend. Обычно token появляется в один из моментов:
+
+**Полный ответ**
 
 CSRF-token создает backend. Обычно token появляется в один из моментов:
 
@@ -5605,6 +6926,13 @@ rotation, session lifecycle и edge cases.
 <summary>Как CSRF-защита выглядит в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Angular HttpClient умеет читать CSRF-token из cookie и отправлять его в отдельном header. В standalone-конфигурации это
+настраивается через provideHttpClient и withXsrfConfiguration.
+
+**Полный ответ**
+
 Angular `HttpClient` умеет читать CSRF-token из cookie и отправлять его в отдельном header. В standalone-конфигурации
 это настраивается через `provideHttpClient` и `withXsrfConfiguration`.
 
@@ -5641,6 +6969,14 @@ export const appConfig = {
 <summary>Что такое CSP?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CSP, или Content Security Policy, - HTTP header, который сообщает браузеру, откуда можно загружать scripts, styles,
+images, fonts, frames и другие ресурсы. CSP снижает риск XSS: даже если в HTML попал вредоносный fragment, строгая
+policy может запретить inline script или загрузку script с неизвестного домена.
+
+**Полный ответ**
+
 CSP, или Content Security Policy, - HTTP header, который сообщает браузеру, откуда можно загружать scripts, styles,
 images, fonts, frames и другие ресурсы. CSP снижает риск XSS: даже если в HTML попал вредоносный fragment, строгая
 policy может запретить inline script или загрузку script с неизвестного домена.
@@ -5662,6 +6998,12 @@ Content-Security-Policy: default-src 'self'; script-src 'self'
 <details>
 <summary>Как использовать Json Web Tokens для аутентификации при разработке на Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+После входа сервер выдает access token, а клиент прикладывает его к API-запросам:
+
+**Полный ответ**
 
 После входа сервер выдает access token, а клиент прикладывает его к API-запросам:
 
@@ -5694,6 +7036,13 @@ Route guard улучшает UX, но не является границей б�
 <summary>Чем cookie, HttpOnly cookie и LocalStorage отличаются с точки зрения безопасности?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+localStorage доступен JavaScript-коду страницы. Это удобно для простого persistence, но опасно для секретов: при XSS
+вредоносный script сможет прочитать token и отправить его злоумышленнику.
+
+**Полный ответ**
+
 `localStorage` доступен JavaScript-коду страницы. Это удобно для простого persistence, но опасно для секретов: при XSS
 вредоносный script сможет прочитать token и отправить его злоумышленнику.
 
@@ -5716,6 +7065,14 @@ CSRF-token cookie часто делают не `HttpOnly`, потому что A
 <details>
 <summary>Что такое authorization check на backend?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Authorization check - серверная проверка, имеет ли текущий пользователь право выполнить действие или прочитать ресурс.
+Frontend guards, скрытые кнопки и disabled controls улучшают UX, но не являются защитой: пользователь может вызвать API
+напрямую через browser devtools, curl или измененный frontend.
+
+**Полный ответ**
 
 Authorization check - серверная проверка, имеет ли текущий пользователь право выполнить действие или прочитать ресурс.
 Frontend guards, скрытые кнопки и disabled controls улучшают UX, но не являются защитой: пользователь может вызвать API
@@ -5752,6 +7109,14 @@ app.get('/api/users/:id', requireAuth, async (request, response) => {
 <summary>Почему CORS не является authentication и authorization?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CORS, или Cross-Origin Resource Sharing, - browser mechanism, который определяет, может ли JavaScript с одного origin
+прочитать ответ от другого origin. Сервер управляет этим через Access-Control-Allow-Origin,
+Access-Control-Allow-Methods, Access-Control-Allow-Headers и связанные headers.
+
+**Полный ответ**
+
 CORS, или Cross-Origin Resource Sharing, - browser mechanism, который определяет, может ли JavaScript с одного origin
 прочитать ответ от другого origin. Сервер управляет этим через `Access-Control-Allow-Origin`,
 `Access-Control-Allow-Methods`, `Access-Control-Allow-Headers` и связанные headers.
@@ -5778,6 +7143,13 @@ app.enableCors({
 <details>
 <summary>Что такое SQL Injection?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+SQL Injection - атака, при которой пользовательский ввод становится частью SQL-команды. Проблема возникает, когда запрос
+собирают строкой:
+
+**Полный ответ**
 
 SQL Injection - атака, при которой пользовательский ввод становится частью SQL-команды. Проблема возникает, когда запрос
 собирают строкой:
@@ -5818,6 +7190,13 @@ Raw SQL в ORM все равно требует параметров. Нельз
 <summary>Какие меры защиты должен знать frontend-разработчик?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Frontend-разработчику важно понимать, где заканчивается клиентская ответственность и начинается обязательная серверная
+проверка. Клиентская validation нужна для UX, но доверять можно только backend validation.
+
+**Полный ответ**
+
 Frontend-разработчику важно понимать, где заканчивается клиентская ответственность и начинается обязательная серверная
 проверка. Клиентская validation нужна для UX, но доверять можно только backend validation.
 
@@ -5847,6 +7226,12 @@ Frontend-разработчику важно понимать, где закан
 <summary>Что такое initial bundle и как уменьшить bundle size?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Initial bundle — JavaScript/CSS, необходимые для первой загрузки route.
+
+**Полный ответ**
+
 Initial bundle — JavaScript/CSS, необходимые для первой загрузки route.
 
 Способы уменьшения:
@@ -5869,6 +7254,12 @@ Initial bundle — JavaScript/CSS, необходимые для первой з
 <summary>Как анализировать Angular bundle?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Используют:
+
+**Полный ответ**
+
 Используют:
 
 - CLI bundle budgets;
@@ -5888,6 +7279,15 @@ Initial bundle — JavaScript/CSS, необходимые для первой з
 <summary>Как уменьшать размер frontend assets в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Основные способы: lazy routes, @defer, tree shaking, удаление неиспользуемых dependencies, аккуратные standalone
+imports, image optimization, font subsetting, compression и перенос необязательных scripts из startup path. Изменение
+нужно измерять до и после, потому что новый chunk или library могут ухудшить не только bundle size, но и parse/execute
+time.
+
+**Полный ответ**
+
 Основные способы: lazy routes, `@defer`, tree shaking, удаление неиспользуемых dependencies, аккуратные standalone
 imports, image optimization, font subsetting, compression и перенос необязательных scripts из startup path. Изменение
 нужно измерять до и после, потому что новый chunk или library могут ухудшить не только bundle size, но и parse/execute
@@ -5901,6 +7301,14 @@ time.
 <summary>Как lazy loading влияет на performance Angular-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Lazy routes и @defer уменьшают initial bundle, parse/compile time и работу на startup path. Цена — дополнительные
+chunks, network latency при первом переходе и необходимость хороших loading/error states. Хороший результат проверяют по
+LCP, INP, route transition timing и production bundle stats, а не только по числу файлов.
+
+**Полный ответ**
+
 Lazy routes и `@defer` уменьшают initial bundle, parse/compile time и работу на startup path. Цена — дополнительные
 chunks, network latency при первом переходе и необходимость хороших loading/error states. Хороший результат проверяют по
 LCP, INP, route transition timing и production bundle stats, а не только по числу файлов.
@@ -5912,6 +7320,13 @@ LCP, INP, route transition timing и production bundle stats, а не тольк
 <details>
 <summary>Что такое @defer и чем он отличается от lazy route?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Lazy route откладывает целую route feature до навигации. @defer откладывает dependencies части текущего шаблона и
+создает отдельный chunk.
+
+**Полный ответ**
 
 Lazy route откладывает целую route feature до навигации. `@defer` откладывает dependencies части текущего шаблона и
 создает отдельный chunk.
@@ -5940,6 +7355,12 @@ standalone и не использоваться eager в том же файле.
 <summary>Почему в performance-аудите проверяют <code>sideEffects</code> библиотек?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+sideEffects влияет на то, сможет ли bundler удалить неиспользуемые файлы пакета из production bundle.
+
+**Полный ответ**
+
 `sideEffects` влияет на то, сможет ли bundler удалить неиспользуемые файлы пакета из production bundle.
 
 Если библиотека не публикует ESM, содержит широкий entry point или неправильно описывает side effects, unused code может
@@ -5957,6 +7378,14 @@ production bundle stats.
 <summary>Как Angular-приложение может создавать лишние render и change detection cycles?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Частые причины: частые events без ограничения, timers, подписки без фильтрации, template methods с тяжелой логикой,
+изменение global state и обновления сигналов слишком высоко в дереве. В zone-based приложении async tasks могут
+провоцировать широкую синхронизацию, а в zoneless код должен явно обновлять реактивные источники.
+
+**Полный ответ**
+
 Частые причины: частые events без ограничения, timers, подписки без фильтрации, template methods с тяжелой логикой,
 изменение global state и обновления сигналов слишком высоко в дереве. В zone-based приложении async tasks могут
 провоцировать широкую синхронизацию, а в zoneless код должен явно обновлять реактивные источники. Диагностируют это
@@ -5970,6 +7399,13 @@ scroll или меняют архитектуру потока данных.
 <details>
 <summary>Как оптимизировать большие списки?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Virtual scroll нужен, когда DOM и rendering, а не загрузка данных, являются bottleneck. Для переменной высоты элементов
+он сложнее и требует измерений.
+
+**Полный ответ**
 
 - стабильный `track item.id`;
 - immutable updates;
@@ -5990,6 +7426,15 @@ Virtual scroll нужен, когда DOM и rendering, а не загрузка
 <summary>Как virtual scroll помогает большим спискам в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Virtual scroll держит в DOM только видимую часть списка и небольшой buffer, поэтому уменьшаются layout, paint, memory
+usage и change detection work. Он полезен для сотен или тысяч однотипных строк, но усложняет variable height, focus,
+keyboard navigation и screen reader experience. Если bottleneck в API или фильтрации данных, virtual scroll не решит
+корневую проблему.
+
+**Полный ответ**
+
 Virtual scroll держит в DOM только видимую часть списка и небольшой buffer, поэтому уменьшаются layout, paint, memory
 usage и change detection work. Он полезен для сотен или тысяч однотипных строк, но усложняет variable height, focus,
 keyboard navigation и screen reader experience. Если bottleneck в API или фильтрации данных, virtual scroll не решит
@@ -6003,6 +7448,15 @@ keyboard navigation и screen reader experience. Если bottleneck в API ил
 <summary>Как performance budget применяется в Angular-проекте?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В Angular performance budget обычно включает размер initial bundle, lazy chunks, CSS, LCP, CLS, INP и время до
+интерактивности. Angular CLI поддерживает budgets для build artifacts, но этого недостаточно: нужно также измерять Web
+Vitals на реальных страницах, следить за lazy routes, standalone imports, third-party dependencies и SSR/hydration
+поведением.
+
+**Полный ответ**
+
 В Angular performance budget обычно включает размер initial bundle, lazy chunks, CSS, LCP, CLS, INP и время до
 интерактивности. Angular CLI поддерживает budgets для build artifacts, но этого недостаточно: нужно также измерять Web
 Vitals на реальных страницах, следить за lazy routes, standalone imports, third-party dependencies и SSR/hydration
@@ -6015,6 +7469,12 @@ Vitals на реальных страницах, следить за lazy routes
 <details>
 <summary>Как искать проблему производительности в Angular-приложении?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Порядок работы:
+
+**Полный ответ**
 
 Порядок работы:
 
@@ -6037,6 +7497,13 @@ template methods, layout thrashing и лишние запросы.
 <summary>Чем CSR, SSR и SSG отличаются?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SSR подходит динамическим SEO-страницам, SSG — статичному контенту, CSR — внутренним приложениям без SEO. Angular
+поддерживает hybrid route-level render modes.
+
+**Полный ответ**
+
 - CSR рендерит приложение в браузере после загрузки JavaScript.
 - SSR генерирует HTML на сервере для каждого запроса.
 - SSG/prerender генерирует HTML во время build.
@@ -6052,6 +7519,14 @@ SSR подходит динамическим SEO-страницам, SSG — с
 <summary>Как SSR, hydration и prerender помогают Angular-приложению?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SSR отдает HTML на каждый запрос и помогает динамическим SEO-страницам, previews и first paint. Prerender генерирует
+статические routes заранее и хорошо подходит для документации, landing pages и публичного контента. Hydration сохраняет
+server-rendered DOM и подключает к нему Angular на клиенте, уменьшая flicker и риск лишней перерисовки.
+
+**Полный ответ**
+
 SSR отдает HTML на каждый запрос и помогает динамическим SEO-страницам, previews и first paint. Prerender генерирует
 статические routes заранее и хорошо подходит для документации, landing pages и публичного контента. Hydration сохраняет
 server-rendered DOM и подключает к нему Angular на клиенте, уменьшая flicker и риск лишней перерисовки.
@@ -6063,6 +7538,14 @@ server-rendered DOM и подключает к нему Angular на клиен�
 <details>
 <summary>Что такое hydration в Angular и какие проблемы она решает?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Hydration подключает Angular к уже существующему server-rendered DOM вместо полного пересоздания. Сервер отдает HTML,
+пользователь видит содержимое до полной загрузки JavaScript, а Angular на клиенте сопоставляет этот DOM со своими
+компонентами, восстанавливает bindings и подключает обработчики событий.
+
+**Полный ответ**
 
 Hydration подключает Angular к уже существующему server-rendered DOM вместо полного пересоздания. Сервер отдает HTML,
 пользователь видит содержимое до полной загрузки JavaScript, а Angular на клиенте сопоставляет этот DOM со своими
@@ -6115,6 +7598,12 @@ HTML сервера и клиента должен быть детерминир
 <summary>Что такое TransferState и HTTP transfer cache?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+TransferState передает сериализованные данные из server render клиенту, чтобы не повторять запрос сразу после hydration.
+
+**Полный ответ**
+
 TransferState передает сериализованные данные из server render клиенту, чтобы не повторять запрос сразу после hydration.
 
 Angular SSR интегрирует transfer cache с `HttpClient` для подходящих GET/HEAD запросов. Нужно учитывать персональные
@@ -6127,6 +7616,12 @@ Angular SSR интегрирует transfer cache с `HttpClient` для под�
 <details>
 <summary>Почему browser-only код нельзя выполнять на сервере?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+На сервере browser globals отсутствуют. Безопасные варианты:
+
+**Полный ответ**
 
 На сервере browser globals отсутствуют. Безопасные варианты:
 
@@ -6146,6 +7641,15 @@ Angular SSR интегрирует transfer cache с `HttpClient` для под�
 <summary>Какие проблемы могут возникать при hydration в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Основная проблема — hydration mismatch, когда server HTML не совпадает с первым client render. Причины: browser-only
+globals во время render, случайные значения, даты и timezone, разные данные на сервере и клиенте, direct DOM mutation
+или third-party widget до завершения hydration. Такие места изолируют, делают rendering детерминированным или переносят
+browser-only работу в безопасную client-only фазу.
+
+**Полный ответ**
+
 Основная проблема — hydration mismatch, когда server HTML не совпадает с первым client render. Причины: browser-only
 globals во время render, случайные значения, даты и timezone, разные данные на сервере и клиенте, direct DOM mutation
 или third-party widget до завершения hydration. Такие места изолируют, делают rendering детерминированным или переносят
@@ -6159,6 +7663,15 @@ browser-only работу в безопасную client-only фазу.
 <summary>Как Angular-приложение может избежать FOUC или плохого first render?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Нужны server-rendered или prerendered HTML, critical CSS, стабильные fallback fonts, корректные размеры media, ранняя
+загрузка LCP resource и отсутствие базовых стилей, которые приезжают только после JavaScript. Для Angular также важно,
+чтобы global styles и component styles были доступны при первом render, а placeholders для @defer имели стабильные
+размеры.
+
+**Полный ответ**
+
 Нужны server-rendered или prerendered HTML, critical CSS, стабильные fallback fonts, корректные размеры media, ранняя
 загрузка LCP resource и отсутствие базовых стилей, которые приезжают только после JavaScript. Для Angular также важно,
 чтобы global styles и component styles были доступны при первом render, а placeholders для `@defer` имели стабильные
@@ -6171,6 +7684,12 @@ browser-only работу в безопасную client-only фазу.
 <details>
 <summary>Когда SSR не нужен?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+SSR может не окупиться для:
+
+**Полный ответ**
 
 SSR может не окупиться для:
 
@@ -6190,6 +7709,14 @@ SSR улучшает delivery HTML, но не уменьшает автомат�
 <summary>Как frontend guidelines помогают SSR, hydration и SEO в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Guidelines фиксируют, какие страницы рендерятся через SSR или prerender, как подключаются critical CSS, fonts и media,
+какие browser-only API нельзя вызывать во время server rendering и как проверяется hydration. Это снижает риск пустого
+first render, layout shifts, hydration mismatch и случайного ухудшения SEO.
+
+**Полный ответ**
+
 Guidelines фиксируют, какие страницы рендерятся через SSR или prerender, как подключаются critical CSS, fonts и media,
 какие browser-only API нельзя вызывать во время server rendering и как проверяется hydration. Это снижает риск пустого
 first render, layout shifts, hydration mismatch и случайного ухудшения SEO.
@@ -6201,6 +7728,13 @@ first render, layout shifts, hydration mismatch и случайного ухуд
 <details>
 <summary>Что такое JIT и AOT, в чем их отличия и каковы сферы применения?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+AOT компилирует templates и decorators во время сборки. В современных Angular CLI проектах AOT является стандартным
+режимом и для ng build, и для development server.
+
+**Полный ответ**
 
 **AOT** компилирует templates и decorators во время сборки. В современных Angular CLI проектах AOT является стандартным
 режимом и для `ng build`, и для development server.
@@ -6225,6 +7759,13 @@ tooling или legacy-конфигураций. Для обычной разра
 <details>
 <summary>В чем разница между Angular CLI и Webpack Development Environment?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Angular CLI — официальный интерфейс для создания, запуска, тестирования, обновления и сборки Angular-проектов. Он
+управляет workspace-конфигурацией и вызывает настроенный builder.
+
+**Полный ответ**
 
 Angular CLI — официальный интерфейс для создания, запуска, тестирования, обновления и сборки Angular-проектов. Он
 управляет workspace-конфигурацией и вызывает настроенный builder.
@@ -6252,6 +7793,12 @@ Angular-проекте сначала используют возможност�
 <details>
 <summary>Для чего нужен PWA и какие плюсы?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+PWA — это сайт, который ведет себя почти как приложение
+
+**Полный ответ**
 
 PWA — это сайт, который ведет себя почти как приложение
 
@@ -6343,6 +7890,12 @@ PWA хуже подходит, если нужны:
 <summary>Для чего нужны service worker?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Service Worker — это фоновый слой между сайтом и сетью.
+
+**Полный ответ**
+
 Service Worker — это фоновый слой между сайтом и сетью.
 
 Service Worker — это JavaScript-файл, который браузер запускает отдельно от страницы. Он может перехватывать сетевые
@@ -6355,6 +7908,13 @@ Service Worker — это JavaScript-файл, который браузер з�
 <details>
 <summary>Какую роль в PWA играет Service Worker?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Service Worker — это JS-файл, который браузер запускает отдельно от страницы и который стоит “между” приложением и
+сетью.
+
+**Полный ответ**
 
 Service Worker — это JS-файл, который браузер запускает отдельно от страницы и который стоит “между” приложением и
 сетью.
@@ -6411,6 +7971,14 @@ push-уведомления.
 <summary>Как Angular помогает с localization?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Angular предоставляет i18n-инструменты для извлечения и подстановки переводов, а также pipes для дат, чисел и валют с
+учетом locale. Но команда все равно должна решить, где хранятся переводы, нужен ли runtime или build-time localization,
+как тестируются языки и как компоненты переживают длинные строки, pluralization и RTL.
+
+**Полный ответ**
+
 Angular предоставляет i18n-инструменты для извлечения и подстановки переводов, а также pipes для дат, чисел и валют с
 учетом locale. Но команда все равно должна решить, где хранятся переводы, нужен ли runtime или build-time localization,
 как тестируются языки и как компоненты переживают длинные строки, pluralization и RTL.
@@ -6422,6 +7990,14 @@ Angular предоставляет i18n-инструменты для извле
 <details>
 <summary>Почему RTL нужно учитывать в layout и компонентах?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+RTL меняет направление текста и часто влияет на icons, arrows, spacing, alignment, keyboard navigation и animations.
+Нельзя просто перевести строки и считать интерфейс готовым. Компоненты design system должны явно поддерживать LTR/RTL, а
+CSS должен использовать logical properties там, где это упрощает поддержку.
+
+**Полный ответ**
 
 RTL меняет направление текста и часто влияет на icons, arrows, spacing, alignment, keyboard navigation и animations.
 Нельзя просто перевести строки и считать интерфейс готовым. Компоненты design system должны явно поддерживать LTR/RTL, а
@@ -6437,6 +8013,14 @@ CSS должен использовать logical properties там, где эт
 <summary>Какие плюсы у тестирования frontend-кода?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Тесты быстро ловят regressions, фиксируют ожидания компонента или сервиса и помогают безопасно менять код. В Angular они
+особенно полезны для forms, routing, DI, HTTP mapping, guards, pipes и сложных states. Хорошие тесты уменьшают страх
+перед refactoring, но не заменяют ручную проверку UX и accessibility.
+
+**Полный ответ**
+
 Тесты быстро ловят regressions, фиксируют ожидания компонента или сервиса и помогают безопасно менять код. В Angular они
 особенно полезны для forms, routing, DI, HTTP mapping, guards, pipes и сложных states. Хорошие тесты уменьшают страх
 перед refactoring, но не заменяют ручную проверку UX и accessibility.
@@ -6449,6 +8033,14 @@ CSS должен использовать logical properties там, где эт
 <summary>Какие минусы и trade-offs у тестов?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Тесты требуют времени на написание и поддержку, могут быть хрупкими и иногда закрепляют плохую архитектуру. Избыточные
+mocks проверяют реализацию вместо поведения, а слишком много E2E замедляет feedback. Зрелый подход выбирает уровень
+теста по риску: чистую функцию проверять unit-тестом, пользовательский сценарий — integration или E2E.
+
+**Полный ответ**
+
 Тесты требуют времени на написание и поддержку, могут быть хрупкими и иногда закрепляют плохую архитектуру. Избыточные
 mocks проверяют реализацию вместо поведения, а слишком много E2E замедляет feedback. Зрелый подход выбирает уровень
 теста по риску: чистую функцию проверять unit-тестом, пользовательский сценарий — integration или E2E.
@@ -6460,6 +8052,13 @@ mocks проверяют реализацию вместо поведения, �
 <details>
 <summary>Какие виды тестирования используют в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В Angular unit/integration-тесты обычно используют TestBed, spies/fakes, HTTP testing utilities и Router testing
+harness. E2E выполняют Playwright или Cypress.
+
+**Полный ответ**
 
 - **Unit-тест** проверяет небольшую единицу: функцию, pipe, service или компонент с изолированными зависимостями. Он
   быстрый и точно локализует ошибку.
@@ -6482,6 +8081,14 @@ checkout, создание сущности. Тестируют наблюдае
 <summary>Чем unit test отличается от integration test?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Unit test проверяет небольшую единицу с изолированными зависимостями: функцию, pipe, mapping или сервис. Integration
+test проверяет совместную работу нескольких частей: компонент с template, DI, Router, forms или HTTP testing layer. В
+Angular многие полезные component tests фактически являются integration tests, и это нормально.
+
+**Полный ответ**
+
 Unit test проверяет небольшую единицу с изолированными зависимостями: функцию, pipe, mapping или сервис. Integration
 test проверяет совместную работу нескольких частей: компонент с template, DI, Router, forms или HTTP testing layer. В
 Angular многие полезные component tests фактически являются integration tests, и это нормально.
@@ -6493,6 +8100,14 @@ Angular многие полезные component tests фактически яв�
 <details>
 <summary>Чем integration test отличается от e2e test?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Integration test запускает часть приложения в тестовой среде и контролирует зависимости. E2E test открывает приложение в
+реальном браузере и проверяет пользовательский путь через UI, часто с network layer, auth и routing. E2E дает больше
+уверенности в сценарии, но медленнее и дороже в поддержке.
+
+**Полный ответ**
 
 Integration test запускает часть приложения в тестовой среде и контролирует зависимости. E2E test открывает приложение в
 реальном браузере и проверяет пользовательский путь через UI, часто с network layer, auth и routing. E2E дает больше
@@ -6506,6 +8121,14 @@ Integration test запускает часть приложения в тест�
 <summary>Какие testing best practices важны во frontend?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Проверять observable behavior, использовать role/label/test id selectors, избегать sleeps, стабилизировать данные и
+тестировать loading/error/empty states. Не стоит проверять private methods, случайные CSS classes и внутреннее число
+signals. Тест должен падать по понятной причине и помогать найти regression.
+
+**Полный ответ**
+
 Проверять observable behavior, использовать role/label/test id selectors, избегать sleeps, стабилизировать данные и
 тестировать loading/error/empty states. Не стоит проверять private methods, случайные CSS classes и внутреннее число
 signals. Тест должен падать по понятной причине и помогать найти regression.
@@ -6517,6 +8140,12 @@ signals. Тест должен падать по понятной причине
 <details>
 <summary>Что тестировать в Angular-компоненте, а что не нужно?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Тестируют публичное поведение:
+
+**Полный ответ**
 
 Тестируют публичное поведение:
 
@@ -6537,6 +8166,14 @@ signals. Тест должен падать по понятной причине
 <summary>Когда тестировать компонент через DOM, а когда тестировать чистую функцию?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Если контракт виден пользователю или другому компоненту через template, events, forms или accessibility, лучше проверять
+через DOM. Если логика является чистым преобразованием данных, ее проще и быстрее тестировать как функцию. Хороший
+дизайн часто выносит сложные вычисления из компонента, оставляя DOM-тесту только интеграцию.
+
+**Полный ответ**
+
 Если контракт виден пользователю или другому компоненту через template, events, forms или accessibility, лучше проверять
 через DOM. Если логика является чистым преобразованием данных, ее проще и быстрее тестировать как функцию. Хороший
 дизайн часто выносит сложные вычисления из компонента, оставляя DOM-тесту только интеграцию.
@@ -6549,6 +8186,14 @@ signals. Тест должен падать по понятной причине
 <summary>Что лучше тестировать в Angular service?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В service тестируют mapping DTO в domain model, обработку ошибок, cache/invalidation, retries, guards against invalid
+input и взаимодействие с HTTP или storage через контролируемые fakes. Не нужно тестировать сам HttpClient; достаточно
+проверить URL, method, body, headers и реакцию на response.
+
+**Полный ответ**
+
 В service тестируют mapping DTO в domain model, обработку ошибок, cache/invalidation, retries, guards against invalid
 input и взаимодействие с HTTP или storage через контролируемые fakes. Не нужно тестировать сам `HttpClient`; достаточно
 проверить URL, method, body, headers и реакцию на response.
@@ -6560,6 +8205,15 @@ input и взаимодействие с HTTP или storage через конт
 <details>
 <summary>Какие инструменты использовать для тестирования Angular-кода?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для Angular обычно используют TestBed, Angular testing utilities, provideHttpClientTesting(), HttpTestingController,
+Router testing harness, Component Harnesses и spies/fakes тестового раннера. Для пользовательских сценариев подходят
+Playwright или Cypress, а Angular Testing Library удобна, когда команда предпочитает DOM-first проверки. Инструмент
+выбирают по контракту, который нужно проверить.
+
+**Полный ответ**
 
 Для Angular обычно используют TestBed, Angular testing utilities, `provideHttpClientTesting()`, `HttpTestingController`,
 Router testing harness, Component Harnesses и spies/fakes тестового раннера. Для пользовательских сценариев подходят
@@ -6574,6 +8228,15 @@ Playwright или Cypress, а Angular Testing Library удобна, когда �
 <summary>Когда использовать Angular Testing Library, TestBed, Component Harness, Cypress или Playwright?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+TestBed — базовый инструмент Angular для DI, components и services. Angular Testing Library удобна для behavior-first
+component tests через DOM queries. Component Harness нужен для стабильного тестового API reusable UI components. Cypress
+и Playwright используют для browser-level сценариев; Playwright особенно силен в multi-browser, tracing и parallel
+execution.
+
+**Полный ответ**
+
 TestBed — базовый инструмент Angular для DI, components и services. Angular Testing Library удобна для behavior-first
 component tests через DOM queries. Component Harness нужен для стабильного тестового API reusable UI components. Cypress
 и Playwright используют для browser-level сценариев; Playwright особенно силен в multi-browser, tracing и parallel
@@ -6587,6 +8250,13 @@ execution.
 <summary>Чем spy, fake, stub и mock отличаются?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Spy записывает вызовы и может подменять реализацию. Stub возвращает заранее заданные значения. Fake имеет упрощенную
+рабочую реализацию. Mock обычно содержит ожидания по взаимодействию.
+
+**Полный ответ**
+
 `Spy` записывает вызовы и может подменять реализацию. `Stub` возвращает заранее заданные значения. `Fake` имеет
 упрощенную рабочую реализацию. `Mock` обычно содержит ожидания по взаимодействию.
 
@@ -6599,6 +8269,13 @@ execution.
 <details>
 <summary>Как тестировать standalone component и мокать service?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Standalone component добавляют в imports. При необходимости dependency собственного import компонента заменяют через
+TestBed.overrideComponent().
+
+**Полный ответ**
 
 ```ts
 TestBed.configureTestingModule({
@@ -6617,6 +8294,12 @@ Standalone component добавляют в `imports`. При необходим�
 <details>
 <summary>Как протестировать входные параметры и всплывающие события компонентов?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Лучше тестировать компонент через его публичный API и DOM.
+
+**Полный ответ**
 
 Лучше тестировать компонент через его публичный API и DOM.
 
@@ -6651,6 +8334,13 @@ it('renders the input and emits selection', () => {
 <summary>Как тестировать content projection?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Создайте host test component, который использует тестируемый компонент как реальный потребитель и передает projected
+content между tags.
+
+**Полный ответ**
+
 Создайте host test component, который использует тестируемый компонент как реальный потребитель и передает projected
 content между tags.
 
@@ -6664,6 +8354,12 @@ content между tags.
 <details>
 <summary>Как тестировать CVA и формы?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CVA лучше тестировать через host form:
+
+**Полный ответ**
 
 CVA лучше тестировать через host form:
 
@@ -6683,6 +8379,13 @@ CVA лучше тестировать через host form:
 <summary>Как тестировать сервис с async dependency?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Async dependency заменяют stub/fake, который возвращает контролируемый Promise или Observable. Тест должен явно
+дождаться результата через await, firstValueFrom, fakeAsync/tick или testing utilities.
+
+**Полный ответ**
+
 Async dependency заменяют stub/fake, который возвращает контролируемый Promise или Observable. Тест должен явно
 дождаться результата через `await`, `firstValueFrom`, `fakeAsync/tick` или testing utilities.
 
@@ -6696,6 +8399,12 @@ Async dependency заменяют stub/fake, который возвращает
 <details>
 <summary>Чем fakeAsync/tick отличается от waitForAsync?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+fakeAsync() виртуализирует timers и microtasks; tick() продвигает время, flush() очищает очередь.
+
+**Полный ответ**
 
 `fakeAsync()` виртуализирует timers и microtasks; `tick()` продвигает время, `flush()` очищает очередь.
 
@@ -6712,6 +8421,13 @@ Async dependency заменяют stub/fake, который возвращает
 <summary>Как мокать Angular module в тесте?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Если тестируемый компонент зависит от NgModule-based library, можно импортировать настоящий testing module или заменить
+тяжелую зависимость lightweight stub component/directive/pipe.
+
+**Полный ответ**
+
 Если тестируемый компонент зависит от NgModule-based library, можно импортировать настоящий testing module или заменить
 тяжелую зависимость lightweight stub component/directive/pipe.
 
@@ -6726,6 +8442,14 @@ Async dependency заменяют stub/fake, который возвращает
 <summary>Какие тесты чаще всего получаются хрупкими?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Хрупкими становятся тесты на CSS classes, внутреннюю структуру DOM, private methods, точные timers, реальные внешние
+API, порядок независимых async events и snapshots больших компонентов. Их чинят через стабильные locators, ожидание
+видимого состояния, deterministic data, fakes и перенос логики в тестируемые чистые функции.
+
+**Полный ответ**
+
 Хрупкими становятся тесты на CSS classes, внутреннюю структуру DOM, private methods, точные timers, реальные внешние
 API, порядок независимых async events и snapshots больших компонентов. Их чинят через стабильные locators, ожидание
 видимого состояния, deterministic data, fakes и перенос логики в тестируемые чистые функции.
@@ -6737,6 +8461,12 @@ API, порядок независимых async events и snapshots больш�
 <details>
 <summary>Почему E2E-тесты флакают и как уменьшить flaky tests?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Причины: sleeps, нестабильные данные, race conditions, animation, зависимость от порядка, слабые selectors.
+
+**Полный ответ**
 
 Причины: sleeps, нестабильные данные, race conditions, animation, зависимость от порядка, слабые selectors.
 
@@ -6759,6 +8489,12 @@ Behavioral assertions важнее screenshot tests; screenshots полезны 
 <summary>Как организовать frontend tests в CI?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Обычно:
+
+**Полный ответ**
+
 Обычно:
 
 1. Type check, lint и unit tests.
@@ -6778,6 +8514,15 @@ suite.
 <summary>Какие вопросы задать про тестирование Angular-кода в команде?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Нужно понять, какие уровни тестов используются: unit, integration, component, e2e и visual regression. Также важно
+выяснить, какие инструменты приняты: TestBed, Angular Testing Library, Component Harness, Cypress, Playwright, Jest,
+Vitest или Karma. Хороший ответ объясняет не только инструменты, но и что именно ими проверяют и где проходит граница
+между тестом, lint и ручной проверкой.
+
+**Полный ответ**
+
 Нужно понять, какие уровни тестов используются: unit, integration, component, e2e и visual regression. Также важно
 выяснить, какие инструменты приняты: TestBed, Angular Testing Library, Component Harness, Cypress, Playwright, Jest,
 Vitest или Karma. Хороший ответ объясняет не только инструменты, но и что именно ими проверяют и где проходит граница
@@ -6790,6 +8535,12 @@ Vitest или Karma. Хороший ответ объясняет не толь�
 <details>
 <summary>Что такое Karma, Jasmine (зачем их используют совместно при разработке на Angular)?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это разные части тестового стека:
+
+**Полный ответ**
 
 Это разные части тестового стека:
 
@@ -6810,6 +8561,12 @@ CI.
 <summary>В чем разница между Jest и Karma?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Сравнение не полностью симметрично:
+
+**Полный ответ**
+
 Сравнение не полностью симметрично:
 
 - Karma — runner для запуска тестов в реальных браузерах.
@@ -6828,6 +8585,13 @@ integration и E2E-тесты в реальном браузере для пов
 <details>
 <summary>В чем разница между Protractor и Cypress?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Protractor был Angular-ориентированным E2E-инструментом поверх WebDriver и умел автоматически ожидать Angular stability.
+Проект Protractor снят с поддержки и не должен выбираться для новых приложений.
+
+**Полный ответ**
 
 Protractor был Angular-ориентированным E2E-инструментом поверх WebDriver и умел автоматически ожидать Angular stability.
 Проект Protractor снят с поддержки и не должен выбираться для новых приложений.
@@ -6851,6 +8615,12 @@ stubbing и хорошую диагностику. Его модель выпо�
 <details>
 <summary>Что отрендерит компонент с ContentChildren, Directive, QueryList, *ngIf и projected content?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ngIf здесь использован как legacy structural syntax, который все еще часто встречается в проектах.
+
+**Полный ответ**
 
 `*ngIf` здесь использован как legacy structural syntax, который все еще часто встречается в проектах.
 
@@ -6910,6 +8680,13 @@ export class PanelComponent {
 <summary>Какие архитектурные подходы применяются в Angular-приложениях?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Angular не предписывает единственную архитектуру приложения. Он предоставляет components, Router, DI и reactive APIs, а
+команда выбирает границы и правила зависимостей под продукт:
+
+**Полный ответ**
+
 Angular не предписывает единственную архитектуру приложения. Он предоставляет components, Router, DI и reactive APIs, а
 команда выбирает границы и правила зависимостей под продукт:
 
@@ -6938,6 +8715,15 @@ Clean Architecture только в доменах со сложными прав
 <details>
 <summary>Чем feature-first отличается от route-first?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Feature-first группирует код по пользовательской возможности независимо от способа входа в неё. Route-first использует
+маршруты как основные границы загрузки и lifetime. Поэтому route-first часто является частным случаем feature-first, но
+не каждая feature обязана иметь URL: reusable picker или сценарий редактирования может подключаться обычным standalone
+component.
+
+**Полный ответ**
 
 Feature-first группирует код по пользовательской возможности независимо от способа входа в неё. Route-first использует
 маршруты как основные границы загрузки и lifetime. Поэтому route-first часто является частным случаем feature-first, но
@@ -6994,6 +8780,12 @@ export const EMPLOYEES_ROUTES: Routes = [
 <summary>Что должно находиться в core Angular-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+core — application-wide infrastructure и bootstrap concerns:
+
+**Полный ответ**
+
 `core` — application-wide infrastructure и bootstrap concerns:
 
 - authentication/session;
@@ -7030,6 +8822,15 @@ initial bundle независимо от реального сценария.
 <summary>Что должно находиться в shared Angular-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В shared помещают код без конкретного бизнес-владельца, с несколькими реальными consumers и стабильным публичным API: UI
+primitives, общие pipes/directives, маленькие framework-neutral utilities и технические types. Standalone component
+импортируется напрямую; создавать SharedModule ради re-export всех declarables не нужно. Такой module допустим как
+legacy-граница старого NgModule-приложения.
+
+**Полный ответ**
+
 В `shared` помещают код без конкретного бизнес-владельца, с несколькими реальными consumers и стабильным публичным API:
 UI primitives, общие pipes/directives, маленькие framework-neutral utilities и технические types. Standalone component
 импортируется напрямую; создавать `SharedModule` ради re-export всех declarables не нужно. Такой module допустим как
@@ -7054,6 +8855,12 @@ models, HTTP clients, UI и случайные helpers; изменение «о�
 <details>
 <summary>Что в Nx означает domain, а что означает feature?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В Nx обычно полезно классифицировать project двумя независимыми координатами:
+
+**Полный ответ**
 
 В Nx обычно полезно классифицировать project двумя независимыми координатами:
 
@@ -7086,6 +8893,13 @@ libs/
 <summary>Где должен находиться общий код двух feature?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Применяют принцип ближайшего общего владельца: поднимают код настолько высоко, насколько нужно реальным consumers, но не
+выше.
+
+**Полный ответ**
+
 Применяют принцип ближайшего общего владельца: поднимают код настолько высоко, насколько нужно реальным consumers, но не
 выше.
 
@@ -7111,6 +8925,12 @@ libs/
 <details>
 <summary>Где хранить состояние, используемое несколькими feature?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Сначала определяют владельца и lifetime, а затем библиотеку или папку:
+
+**Полный ответ**
 
 Сначала определяют владельца и lifetime, а затем библиотеку или папку:
 
@@ -7163,6 +8983,12 @@ Server state нельзя автоматически считать workflow sta
 <summary>Как организовать зависимости между слоями Angular-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Практичное базовое направление imports:
+
+**Полный ответ**
+
 Практичное базовое направление imports:
 
 ```text
@@ -7196,6 +9022,13 @@ storage, DTO и adapters. `domain/model` содержит стабильные t
 <summary>Нужны ли папки ui, data-access, model и util в каждой feature?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Нет. Структура должна следовать появившимся ответственностям, а не создавать пустые слои заранее. Для небольшого CRUD
+экрана достаточно:
+
+**Полный ответ**
+
 Нет. Структура должна следовать появившимся ответственностям, а не создавать пустые слои заранее. Для небольшого CRUD
 экрана достаточно:
 
@@ -7228,6 +9061,12 @@ project/library оправдан, если нужны отдельный public 
 <summary>Как соотносятся Store, Repository и Facade?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это роли, а не обязательный комплект классов:
+
+**Полный ответ**
+
 Это роли, а не обязательный комплект классов:
 
 - **Repository** работает с внешним источником, transport errors и DTO, возвращая model, понятную приложению.
@@ -7252,6 +9091,15 @@ state transitions или несколько use cases, а не потому, ч�
 <details>
 <summary>Что такое Angular Enterprise Architecture Tomas Trajan?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это opinionated architecture и набор tooling practices от Tomas Trajan, а не официальный стандарт Angular. Современная
+версия подхода ориентирована на standalone APIs, изоляцию features и автоматическую проверку boundaries. В связанных
+материалах встречаются building blocks core, layouts, features, ui и patterns, а routes выделяют lazy feature
+boundaries.
+
+**Полный ответ**
 
 Это opinionated architecture и набор tooling practices от Tomas Trajan, а не официальный стандарт Angular. Современная
 версия подхода ориентирована на standalone APIs, изоляцию features и автоматическую проверку boundaries. В связанных
@@ -7286,6 +9134,12 @@ boundaries.
 <summary>Как выбрать архитектуру для нового Angular-проекта?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Начинают с минимальной структуры и усложняют её по наблюдаемым причинам:
+
+**Полный ответ**
+
 Начинают с минимальной структуры и усложняют её по наблюдаемым причинам:
 
 | Контекст                      | Практичный старт                                                                                                                        |
@@ -7315,6 +9169,14 @@ boilerplate, но сами по себе не выбирают архитект�
 <summary>Какие архитектурные ошибки часто встречаются в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Также опасно считать любой lazy route независимой feature: lazy loading описывает момент загрузки, но не ownership и
+разрешённые dependencies. Обратная ошибка — сделать всё root-scoped ради переиспользования и затем вручную очищать state
+при каждой навигации. Обычно корректный DI scope выражает lifecycle надёжнее такого cleanup protocol.
+
+**Полный ответ**
+
 - Глобальные каталоги `components`, `services`, `models`, скрывающие domain ownership.
 - Core Dump и Shared Dump.
 - `providedIn: 'root'` для любого состояния, из-за чего фильтры и drafts переживают feature и конфликтуют между tabs.
@@ -7338,6 +9200,14 @@ boilerplate, но сами по себе не выбирают архитект�
 <summary>Когда выбирать microfrontends для Angular-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Размер кодовой базы сам по себе недостаточен. Microfrontends оправданы, когда устойчивые product/domain boundaries
+совпадают с независимыми командами, ownership, release cycles и необходимостью отдельных deployments. Если команды всё
+равно синхронно тестируют и выпускают продукт, modular monolith с Nx boundaries обычно проще.
+
+**Полный ответ**
+
 Размер кодовой базы сам по себе недостаточен. Microfrontends оправданы, когда устойчивые product/domain boundaries
 совпадают с независимыми командами, ownership, release cycles и необходимостью отдельных deployments. Если команды всё
 равно синхронно тестируют и выпускают продукт, modular monolith с Nx boundaries обычно проще.
@@ -7357,6 +9227,12 @@ authentication, observability, rollback и согласованность UI. Mo
 <details>
 <summary>Какую практическую задачу по архитектуре Angular можно дать на интервью?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Условие
+
+**Полный ответ**
 
 **Условие**
 
@@ -7425,6 +9301,13 @@ export const REVIEW_ROUTES: Routes = [
 <summary>Чем library code отличается от application code?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Application знает конкретный продукт, routes, backend и окружение. Library должна работать в разных приложениях и
+версиях конфигурации.
+
+**Полный ответ**
+
 Application знает конкретный продукт, routes, backend и окружение. Library должна работать в разных приложениях и
 версиях конфигурации.
 
@@ -7445,6 +9328,14 @@ Application знает конкретный продукт, routes, backend и �
 <summary>Что такое pattern library и зачем она нужна?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Pattern library описывает повторяемые UI patterns, компоненты, states, accessibility rules и примеры использования. В
+Angular-мире эту роль часто выполняют Storybook, Docusaurus, documentation site design system или собственные examples.
+Она помогает продуктовым командам не изобретать один и тот же интерфейс заново.
+
+**Полный ответ**
+
 Pattern library описывает повторяемые UI patterns, компоненты, states, accessibility rules и примеры использования. В
 Angular-мире эту роль часто выполняют Storybook, Docusaurus, documentation site design system или собственные examples.
 Она помогает продуктовым командам не изобретать один и тот же интерфейс заново.
@@ -7456,6 +9347,12 @@ Angular-мире эту роль часто выполняют Storybook, Docusa
 <details>
 <summary>Что такое public API Angular library и почему нельзя экспортировать все?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Public API — imports, components, directives, tokens и types, которые библиотека обещает поддерживать.
+
+**Полный ответ**
 
 Public API — imports, components, directives, tokens и types, которые библиотека обещает поддерживать.
 
@@ -7476,6 +9373,13 @@ Public API — imports, components, directives, tokens и types, которые 
 <summary>Почему Angular должен быть peerDependency библиотеки?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+peerDependencies сообщает, что библиотека использует Angular instance приложения. Если положить Angular в обычные
+dependencies, потребитель может получить дубли framework packages, DI/runtime incompatibility и больший bundle.
+
+**Полный ответ**
+
 `peerDependencies` сообщает, что библиотека использует Angular instance приложения. Если положить Angular в обычные
 `dependencies`, потребитель может получить дубли framework packages, DI/runtime incompatibility и больший bundle.
 
@@ -7489,6 +9393,12 @@ Public API — imports, components, directives, tokens и types, которые 
 <details>
 <summary>Что такое secondary entry points и когда они нужны?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Secondary entry point позволяет импортировать отдельную область:
+
+**Полный ответ**
 
 Secondary entry point позволяет импортировать отдельную область:
 
@@ -7509,6 +9419,13 @@ Entry points не должны образовывать cycles и импорти
 <summary>Что такое breaking change и как версионировать библиотеку?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Breaking change требует изменения кода потребителя: удаление export, изменение selector/input, поведения, CSS contract
+или поддерживаемых версий.
+
+**Полный ответ**
+
 Breaking change требует изменения кода потребителя: удаление export, изменение selector/input, поведения, CSS contract
 или поддерживаемых версий.
 
@@ -7527,6 +9444,13 @@ Semantic Versioning:
 <details>
 <summary>Как проектировать конфигурируемый Angular-компонент?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Локальные параметры передают inputs. Общую конфигурацию библиотеки предоставляют через typed InjectionToken и provider
+factory:
+
+**Полный ответ**
 
 Локальные параметры передают inputs. Общую конфигурацию библиотеки предоставляют через typed `InjectionToken` и provider
 factory:
@@ -7547,6 +9471,12 @@ Defaults должны быть явными, config — readonly, а локал�
 <summary>Как проектировать theme, icon и overlay API?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для overlay primitives предпочтителен Angular CDK, если библиотека не решает более низкоуровневую задачу.
+
+**Полный ответ**
+
 - Theme API опирается на semantic CSS custom properties/tokens, а не внутренние selectors.
 - Icon API принимает понятный identifier или injectable registry и поддерживает tree shaking.
 - Overlay API разделяет content, position, lifecycle, focus management и escape/outside click.
@@ -7562,6 +9492,14 @@ Defaults должны быть явными, config — readonly, а локал�
 <summary>Как guidelines помогают design system в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Guidelines связывают компоненты design system с реальным использованием в продуктах: naming, inputs/outputs,
+accessibility, theming, tokens, layout patterns и правила расширения. Это снижает количество кастомных fork-like решений
+и помогает разным командам использовать UI kit одинаково.
+
+**Полный ответ**
+
 Guidelines связывают компоненты design system с реальным использованием в продуктах: naming, inputs/outputs,
 accessibility, theming, tokens, layout patterns и правила расширения. Это снижает количество кастомных fork-like решений
 и помогает разным командам использовать UI kit одинаково.
@@ -7573,6 +9511,14 @@ accessibility, theming, tokens, layout patterns и правила расшире
 <details>
 <summary>Почему Angular-команде важно документировать отклонения от UI kit или framework?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Отклонения появляются из-за нестандартных требований, legacy-кода или ограничений продукта. Если их не документировать,
+новые разработчики будут копировать workaround как норму. Хорошая документация объясняет причину, область применения и
+условия, при которых workaround можно удалить.
+
+**Полный ответ**
 
 Отклонения появляются из-за нестандартных требований, legacy-кода или ограничений продукта. Если их не документировать,
 новые разработчики будут копировать workaround как норму. Хорошая документация объясняет причину, область применения и
@@ -7588,6 +9534,13 @@ accessibility, theming, tokens, layout patterns и правила расшире
 <summary>Что такое tree shaking?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Tree shaking — это оптимизация сборки, при которой bundler удаляет неиспользуемый код из итогового bundle. Лучше всего
+это работает с ES modules, потому что import и export можно анализировать статически.
+
+**Полный ответ**
+
 Tree shaking — это оптимизация сборки, при которой bundler удаляет неиспользуемый код из итогового bundle. Лучше всего
 это работает с ES modules, потому что `import` и `export` можно анализировать статически.
 
@@ -7601,6 +9554,12 @@ Tree shaking — это оптимизация сборки, при которо
 <details>
 <summary>Что такое side effect в JavaScript-модуле?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Side effect — это действие, которое происходит просто при импорте модуля, даже если его exports не используются.
+
+**Полный ответ**
 
 Side effect — это действие, которое происходит просто при импорте модуля, даже если его exports не используются.
 
@@ -7640,6 +9599,13 @@ export const DEFAULT_SIZE = 16;
 <summary>Что делает <code>"sideEffects": false</code> в <code>package.json</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+"sideEffects": false сообщает bundler, что модули пакета не выполняют важных side effects при импорте. Если exports
+модуля не используются, bundler может удалить такой код из production bundle.
+
+**Полный ответ**
+
 `"sideEffects": false` сообщает bundler, что модули пакета не выполняют важных side effects при импорте. Если exports
 модуля не используются, bundler может удалить такой код из production bundle.
 
@@ -7660,6 +9626,13 @@ export const DEFAULT_SIZE = 16;
 <summary>Почему <code>"sideEffects": false</code> помогает уменьшить bundle size?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Bundler не всегда может сам понять, безопасно ли удалить импортируемый модуль. Флаг "sideEffects": false дает подсказку:
+если exports не используются, сам импорт модуля не нужен. Это помогает выкидывать лишний код из production build.
+
+**Полный ответ**
+
 Bundler не всегда может сам понять, безопасно ли удалить импортируемый модуль. Флаг `"sideEffects": false` дает
 подсказку: если exports не используются, сам импорт модуля не нужен. Это помогает выкидывать лишний код из production
 build.
@@ -7674,6 +9647,14 @@ helpers и optional integrations.
 <details>
 <summary>Почему этот флаг особенно важен для библиотек?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Библиотеки часто содержат много независимых компонентов, функций и entry points. Потребитель может импортировать только
+одну часть библиотеки, и bundler должен иметь возможность удалить остальное. sideEffects помогает сделать package более
+tree-shakable.
+
+**Полный ответ**
 
 Библиотеки часто содержат много независимых компонентов, функций и entry points. Потребитель может импортировать только
 одну часть библиотеки, и bundler должен иметь возможность удалить остальное. `sideEffects` помогает сделать package
@@ -7690,6 +9671,14 @@ exports.
 <summary>Чем опасен неправильный <code>"sideEffects": false</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Если пакет помечен как side-effect-free, но внутри есть важные side effects, bundler может удалить нужный код. Ошибка
+может проявиться только в production build: например, пропадут стили, не зарегистрируется polyfill или не выполнится
+initialization logic.
+
+**Полный ответ**
+
 Если пакет помечен как side-effect-free, но внутри есть важные side effects, bundler может удалить нужный код. Ошибка
 может проявиться только в production build: например, пропадут стили, не зарегистрируется polyfill или не выполнится
 initialization logic.
@@ -7704,6 +9693,12 @@ CSS import.
 <details>
 <summary>Какие файлы нельзя бездумно считать side-effect-free?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Осторожно с файлами, которые:
+
+**Полный ответ**
 
 Осторожно с файлами, которые:
 
@@ -7740,6 +9735,12 @@ Array.prototype.first = function <T>(this: T[]): T | undefined {
 <summary>Что делать, если в пакете есть и pure modules, и файлы с side effects?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Можно указать не false, а массив файлов, которые имеют side effects.
+
+**Полный ответ**
+
 Можно указать не `false`, а массив файлов, которые имеют side effects.
 
 Пример:
@@ -7760,6 +9761,13 @@ Array.prototype.first = function <T>(this: T[]): T | undefined {
 <details>
 <summary>Почему CSS imports часто указывают в <code>sideEffects</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CSS import нужен не ради JavaScript export, а ради самого факта подключения стилей. Если bundler удалит такой import, UI
+может сломаться.
+
+**Полный ответ**
 
 CSS import нужен не ради JavaScript export, а ради самого факта подключения стилей. Если bundler удалит такой import, UI
 может сломаться.
@@ -7782,6 +9790,12 @@ CSS import нужен не ради JavaScript export, а ради самого 
 <details>
 <summary>Как выглядит пример pure package?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Pure package экспортирует функции или значения и не выполняет важный код при импорте.
+
+**Полный ответ**
 
 Pure package экспортирует функции или значения и не выполняет важный код при импорте.
 
@@ -7813,6 +9827,12 @@ export function multiply(a: number, b: number): number {
 <summary>Как выглядит package с CSS side effect?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Если поставить "sideEffects": false, bundler может удалить CSS import в некоторых сценариях.
+
+**Полный ответ**
+
 ```ts filename="src/index.ts"
 import './global-styles.css';
 
@@ -7839,6 +9859,12 @@ export {Input} from './input';
 <summary>Почему barrel file может неожиданно иметь side effect?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Barrel file выглядит как простой public API, но любой top-level import в нем выполняется при импорте entry point.
+
+**Полный ответ**
+
 Barrel file выглядит как простой public API, но любой top-level import в нем выполняется при импорте entry point.
 
 ```ts filename="src/index.ts"
@@ -7862,6 +9888,13 @@ globalThis.__MY_LIBRARY_READY__ = true;
 <details>
 <summary>Как <code>sideEffects</code> связан с Angular providers?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Фабрики providers обычно не являются side effects, если они просто экспортируются из файла. Side effect появляется, если
+код выполняется сразу при импорте модуля, а не тогда, когда Angular реально использует provider.
+
+**Полный ответ**
 
 Фабрики providers обычно не являются side effects, если они просто экспортируются из файла. Side effect появляется, если
 код выполняется сразу при импорте модуля, а не тогда, когда Angular реально использует provider.
@@ -7887,6 +9920,13 @@ export function provideFeature(options: FeatureOptions): Provider[] {
 <details>
 <summary>Почему важно не выполнять тяжелую логику на top-level в Angular library?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Top-level код выполняется сразу при импорте модуля. Это может мешать tree shaking, SSR и тестам. Для библиотек лучше
+экспортировать функции, providers, классы и components, а выполнение логики оставлять приложению.
+
+**Полный ответ**
 
 Top-level код выполняется сразу при импорте модуля. Это может мешать tree shaking, SSR и тестам. Для библиотек лучше
 экспортировать функции, providers, классы и components, а выполнение логики оставлять приложению.
@@ -7921,6 +9961,12 @@ export function provideAnalytics(config: AnalyticsConfig): Provider[] {
 <summary>Почему пакет может попадать в bundle, хотя его компонент напрямую не используется?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Возможные причины:
+
+**Полный ответ**
+
 Возможные причины:
 
 - пакет импортируется через barrel file;
@@ -7940,6 +9986,12 @@ export function provideAnalytics(config: AnalyticsConfig): Provider[] {
 <details>
 <summary>Как проверить, что <code>"sideEffects": false</code> реально уменьшает bundle?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно собрать production build и сравнить bundle stats до и после изменения.
+
+**Полный ответ**
 
 Нужно собрать production build и сравнить bundle stats до и после изменения.
 
@@ -7962,6 +10014,12 @@ logic.
 <summary>Как проектировать библиотеку, чтобы она хорошо tree-shaking-илась?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+"sideEffects": false помогает, но не исправляет архитектуру пакета, если public API тянет лишние imports.
+
+**Полный ответ**
+
 - использовать ES modules;
 - избегать top-level side effects;
 - не смешивать initialization logic и public exports;
@@ -7980,6 +10038,12 @@ logic.
 <details>
 <summary>Как secondary entry points помогают bundle size?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Secondary entry points позволяют импортировать отдельные части библиотеки:
+
+**Полный ответ**
 
 Secondary entry points позволяют импортировать отдельные части библиотеки:
 
@@ -8001,6 +10065,12 @@ Secondary entry points полезны, когда части пакета нез
 <summary>Как безопасно добавить <code>"sideEffects": false</code> в библиотеку?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Главная идея: сначала доказать, какие файлы действительно pure, и только потом менять package.json.
+
+**Полный ответ**
+
 - Проверить, что модули не выполняют важный код на top-level.
 - Найти CSS, polyfill и registration файлы.
 - Если side effects есть, указать их массивом.
@@ -8019,6 +10089,12 @@ Secondary entry points полезны, когда части пакета нез
 <details>
 <summary>Что спросить на code review, если в PR добавляют <code>"sideEffects": false</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Стоит проверить не только уменьшение bundle size, но и безопасность изменения:
+
+**Полный ответ**
 
 Стоит проверить не только уменьшение bundle size, но и безопасность изменения:
 
@@ -8042,6 +10118,14 @@ Secondary entry points полезны, когда части пакета нез
 <summary>Какой короткий вывод по <code>sideEffects</code> и tree shaking?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+sideEffects — это contract между package author и bundler. Он может заметно уменьшить bundle size, но неправильная
+настройка ломает production build. Для библиотек безопасная стратегия такая: ESM, маленькие entry points, минимум
+top-level логики, явный список side-effect files и проверка результата в consumer-приложении.
+
+**Полный ответ**
+
 `sideEffects` — это contract между package author и bundler. Он может заметно уменьшить bundle size, но неправильная
 настройка ломает production build. Для библиотек безопасная стратегия такая: ESM, маленькие entry points, минимум
 top-level логики, явный список side-effect files и проверка результата в consumer-приложении.
@@ -8053,6 +10137,13 @@ top-level логики, явный список side-effect files и прове�
 <details>
 <summary>Зачем Angular library нужны migrations и schematics?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Schematics автоматизируют изменения workspace и consumer code. Migration нужна, когда новая версия меняет API,
+selectors, imports или конфигурацию.
+
+**Полный ответ**
 
 Schematics автоматизируют изменения workspace и consumer code. Migration нужна, когда новая версия меняет API,
 selectors, imports или конфигурацию.
@@ -8073,6 +10164,12 @@ selectors, imports или конфигурацию.
 <summary>Как документировать и тестировать component library?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для каждого public component нужны:
+
+**Полный ответ**
+
 Для каждого public component нужны:
 
 - назначение и ограничения;
@@ -8092,6 +10189,14 @@ selectors, imports или конфигурацию.
 <details>
 <summary>Почему <code>"sideEffects": false</code> не заменяет хорошую архитектуру пакета?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Этот флаг только дает bundler подсказку. Если пакет устроен как один большой entry point с тяжелыми imports,
+неаккуратными barrels и top-level initialization, tree shaking все равно может быть хуже. Хорошая библиотека должна быть
+спроектирована для статического анализа.
+
+**Полный ответ**
 
 Этот флаг только дает bundler подсказку. Если пакет устроен как один большой entry point с тяжелыми imports,
 неаккуратными barrels и top-level initialization, tree shaking все равно может быть хуже. Хорошая библиотека должна быть
@@ -8125,6 +10230,14 @@ selectors, imports или конфигурацию.
 <summary>Что такое микрофронтенды и какую проблему они решают?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Микрофронтенды разделяют frontend на автономные части, за которые могут отвечать разные команды. Они помогают независимо
+разрабатывать и выпускать крупные продуктовые области, но добавляют распределенные контракты, инфраструктуру и риски
+времени выполнения.
+
+**Полный ответ**
+
 Микрофронтенды разделяют frontend на автономные части, за которые могут отвечать разные команды. Они помогают независимо
 разрабатывать и выпускать крупные продуктовые области, но добавляют распределенные контракты, инфраструктуру и риски
 времени выполнения.
@@ -8137,6 +10250,13 @@ selectors, imports или конфигурацию.
 <summary>Что такое shell/host application?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Host — приложение-контейнер. Оно задает общий layout, навигацию, интеграционные контракты и загружает remote-модули или
+виджеты, а также обрабатывает их loading и error states.
+
+**Полный ответ**
+
 Host — приложение-контейнер. Оно задает общий layout, навигацию, интеграционные контракты и загружает remote-модули или
 виджеты, а также обрабатывает их loading и error states.
 
@@ -8147,6 +10267,13 @@ Host — приложение-контейнер. Оно задает общий
 <details>
 <summary>Что такое remote application?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Remote — отдельно собираемое приложение, которое публикует доступные host части через federation metadata. Оно должно
+иметь явный публичный контракт и по возможности не зависеть от внутренних деталей host.
+
+**Полный ответ**
 
 Remote — отдельно собираемое приложение, которое публикует доступные host части через federation metadata. Оно должно
 иметь явный публичный контракт и по возможности не зависеть от внутренних деталей host.
@@ -8159,6 +10286,13 @@ Remote — отдельно собираемое приложение, кото�
 <summary>Что такое independent deployment?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это возможность выпустить remote без обязательной пересборки и публикации host или других remote. Для этого нужны
+совместимые контракты, отдельные pipelines, контролируемые URL и стратегия rollback.
+
+**Полный ответ**
+
 Это возможность выпустить remote без обязательной пересборки и публикации host или других remote. Для этого нужны
 совместимые контракты, отдельные pipelines, контролируемые URL и стратегия rollback.
 
@@ -8169,6 +10303,13 @@ Remote — отдельно собираемое приложение, кото�
 <details>
 <summary>Чем микрофронтенд отличается от обычного lazy-loaded Angular route?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Lazy route остается частью одной сборки и одного release-процесса. Микрофронтенд может собираться, размещаться и
+загружаться отдельно, поэтому его версия и доступность не обязательно совпадают с host.
+
+**Полный ответ**
 
 Lazy route остается частью одной сборки и одного release-процесса. Микрофронтенд может собираться, размещаться и
 загружаться отдельно, поэтому его версия и доступность не обязательно совпадают с host.
@@ -8181,6 +10322,13 @@ Lazy route остается частью одной сборки и одного
 <summary>Какие границы микрофронтендов бывают: route-level, widget-level, domain-level?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Route-level делит приложение по страницам, widget-level встраивает независимые блоки в одну страницу, domain-level
+следует бизнес-областям. Domain boundary описывает ответственность, а route и widget — способ композиции UI.
+
+**Полный ответ**
+
 Route-level делит приложение по страницам, widget-level встраивает независимые блоки в одну страницу, domain-level
 следует бизнес-областям. Domain boundary описывает ответственность, а route и widget — способ композиции UI.
 
@@ -8191,6 +10339,13 @@ Route-level делит приложение по страницам, widget-leve
 <details>
 <summary>Чем route-level federation отличается от widget-level federation?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Route-level загружает крупный экран при навигации и обычно проще изолирует команды. Widget-level компонует несколько
+remote на одной странице, поэтому требует более точной оркестрации, layout-контрактов и независимых состояний ошибки.
+
+**Полный ответ**
 
 Route-level загружает крупный экран при навигации и обычно проще изолирует команды. Widget-level компонует несколько
 remote на одной странице, поэтому требует более точной оркестрации, layout-контрактов и независимых состояний ошибки.
@@ -8203,6 +10358,13 @@ remote на одной странице, поэтому требует боле�
 <summary>Когда микрофронтенды оправданы, а когда это лишнее усложнение?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Они оправданы при нескольких автономных командах, независимых release cycles и устойчивых domain boundaries. Для
+небольшой команды, единого продукта и общего деплоя modular monolith обычно дешевле и надежнее.
+
+**Полный ответ**
+
 Они оправданы при нескольких автономных командах, независимых release cycles и устойчивых domain boundaries. Для
 небольшой команды, единого продукта и общего деплоя modular monolith обычно дешевле и надежнее.
 
@@ -8214,6 +10376,13 @@ remote на одной странице, поэтому требует боле�
 <summary>Почему микрофронтенды часто сложнее монолита?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В монолите компилятор и единая сборка проверяют большую часть связей заранее. В микрофронтендах часть ошибок проявляется
+только при интеграции конкретных независимо развернутых версий через сеть.
+
+**Полный ответ**
+
 В монолите компилятор и единая сборка проверяют большую часть связей заранее. В микрофронтендах часть ошибок проявляется
 только при интеграции конкретных независимо развернутых версий через сеть.
 
@@ -8224,6 +10393,13 @@ remote на одной странице, поэтому требует боле�
 <details>
 <summary>Какие минусы есть у микрофронтенд-архитектуры?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Основные минусы: сложнее локальная разработка, тестирование, наблюдаемость, versioning, shared state, согласование UX,
+SSR и rollback. Также возможны дубли dependencies и дополнительная задержка runtime-загрузки.
+
+**Полный ответ**
 
 Основные минусы: сложнее локальная разработка, тестирование, наблюдаемость, versioning, shared state, согласование UX,
 SSR и rollback. Также возможны дубли dependencies и дополнительная задержка runtime-загрузки.
@@ -8238,6 +10414,13 @@ SSR и rollback. Также возможны дубли dependencies и допо
 <summary>Что такое Native Federation?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Native Federation — подход к runtime-композиции приложений на основе стандартных ES modules и import maps. Инструменты
+генерируют metadata и согласуют shared dependencies, а браузер загружает модули без webpack runtime.
+
+**Полный ответ**
+
 Native Federation — подход к runtime-композиции приложений на основе стандартных ES modules и import maps. Инструменты
 генерируют metadata и согласуют shared dependencies, а браузер загружает модули без webpack runtime.
 
@@ -8248,6 +10431,13 @@ Native Federation — подход к runtime-композиции прилож�
 <details>
 <summary>Что такое <code>remoteEntry.json</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это сгенерированный entry-файл remote с описанием exposed modules, shared packages и связанных chunks. Host читает его,
+чтобы понять, откуда загрузить запрошенный export.
+
+**Полный ответ**
 
 Это сгенерированный entry-файл remote с описанием exposed modules, shared packages и связанных chunks. Host читает его,
 чтобы понять, откуда загрузить запрошенный export.
@@ -8260,6 +10450,13 @@ Native Federation — подход к runtime-композиции прилож�
 <summary>Что такое federation manifest?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Manifest — карта логических имен remote на URL их remoteEntry.json. Она отделяет код host от адресов окружения и
+позволяет менять расположение remote без пересборки host, если manifest поставляется отдельно.
+
+**Полный ответ**
+
 Manifest — карта логических имен remote на URL их `remoteEntry.json`. Она отделяет код host от адресов окружения и
 позволяет менять расположение remote без пересборки host, если manifest поставляется отдельно.
 
@@ -8270,6 +10467,13 @@ Manifest — карта логических имен remote на URL их `remo
 <details>
 <summary>Зачем host-приложению нужен manifest remote-приложений?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Host использует manifest для разрешения имени remote в конкретный URL. Один и тот же build host может получать разные
+адреса для local, stage, production или canary окружений.
+
+**Полный ответ**
 
 Host использует manifest для разрешения имени remote в конкретный URL. Один и тот же build host может получать разные
 адреса для local, stage, production или canary окружений.
@@ -8282,6 +10486,13 @@ Host использует manifest для разрешения имени remote
 <summary>Что делает <code>initFederation()</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+initFederation() загружает federation metadata, подготавливает shared dependencies и import maps до bootstrap
+приложения. После инициализации host может обращаться к remote по логическому имени.
+
+**Полный ответ**
+
 `initFederation()` загружает federation metadata, подготавливает shared dependencies и import maps до bootstrap
 приложения. После инициализации host может обращаться к remote по логическому имени.
 
@@ -8292,6 +10503,13 @@ Host использует manifest для разрешения имени remote
 <details>
 <summary>Что делает <code>loadRemoteModule()</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+loadRemoteModule() находит remote через ранее загруженную конфигурацию, загружает его entry и exposed module, затем
+возвращает namespace ES module. Наличие ожидаемого export приложение проверяет отдельно.
+
+**Полный ответ**
 
 `loadRemoteModule()` находит remote через ранее загруженную конфигурацию, загружает его entry и exposed module, затем
 возвращает namespace ES module. Наличие ожидаемого export приложение проверяет отдельно.
@@ -8304,6 +10522,13 @@ Host использует manifest для разрешения имени remote
 <summary>Чем runtime-загрузка remote отличается от обычного static import?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Static import известен во время сборки и попадает в dependency graph общего bundle. Runtime-загрузка разрешает модуль
+после запуска приложения, поэтому требует сетевой обработки ошибок и runtime-проверки контракта.
+
+**Полный ответ**
+
 Static import известен во время сборки и попадает в dependency graph общего bundle. Runtime-загрузка разрешает модуль
 после запуска приложения, поэтому требует сетевой обработки ошибок и runtime-проверки контракта.
 
@@ -8314,6 +10539,13 @@ Static import известен во время сборки и попадает 
 <details>
 <summary>Что такое shared dependencies?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это packages, которые host и remotes договариваются использовать совместно вместо загрузки отдельных копий. Sharing
+уменьшает bundle, но требует совместимых версий и корректной настройки singleton-пакетов.
+
+**Полный ответ**
 
 Это packages, которые host и remotes договариваются использовать совместно вместо загрузки отдельных копий. Sharing
 уменьшает bundle, но требует совместимых версий и корректной настройки singleton-пакетов.
@@ -8326,6 +10558,13 @@ Static import известен во время сборки и попадает 
 <summary>Зачем нужны <code>singleton</code>, <code>strictVersion</code> и <code>requiredVersion</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+singleton требует один runtime instance package, requiredVersion задает допустимую версию, а strictVersion запрещает
+несовместимый fallback. Вместе они делают конфликт версий явной ошибкой вместо скрытого повреждения runtime.
+
+**Полный ответ**
+
 `singleton` требует один runtime instance package, `requiredVersion` задает допустимую версию, а `strictVersion`
 запрещает несовместимый fallback. Вместе они делают конфликт версий явной ошибкой вместо скрытого повреждения runtime.
 
@@ -8336,6 +10575,13 @@ Static import известен во время сборки и попадает 
 <details>
 <summary>Почему Angular и RxJS обычно шарят как singleton?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Angular ожидает согласованный framework runtime и injector graph, а разделяемые RxJS-контракты проще поддерживать с
+одной совместимой копией. Несколько версий увеличивают bundle и риск несовместимости типов и поведения.
+
+**Полный ответ**
 
 Angular ожидает согласованный framework runtime и injector graph, а разделяемые RxJS-контракты проще поддерживать с
 одной совместимой копией. Несколько версий увеличивают bundle и риск несовместимости типов и поведения.
@@ -8348,6 +10594,13 @@ Angular ожидает согласованный framework runtime и injector 
 <summary>Что может пойти не так, если host и remote используют разные версии Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Возможны несовместимые runtime contracts, несколько Angular instances, ошибки DI, rendering и signals. Допустимость
+версий должна проверяться federation-конфигурацией, CI и integration tests.
+
+**Полный ответ**
+
 Возможны несовместимые runtime contracts, несколько Angular instances, ошибки DI, rendering и signals. Допустимость
 версий должна проверяться federation-конфигурацией, CI и integration tests.
 
@@ -8358,6 +10611,13 @@ Angular ожидает согласованный framework runtime и injector 
 <details>
 <summary>Что такое import map?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Import map сопоставляет bare module specifiers с URL ES modules в браузере. Native Federation может формировать такую
+карту для shared packages и remote-зависимостей.
+
+**Полный ответ**
 
 Import map сопоставляет bare module specifiers с URL ES modules в браузере. Native Federation может формировать такую
 карту для shared packages и remote-зависимостей.
@@ -8370,6 +10630,13 @@ Import map сопоставляет bare module specifiers с URL ES modules в 
 <summary>Почему браузер может не зарезолвить bare specifier вроде <code>@softarc/native-federation-orchestrator</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Браузер не знает npm resolution. Для bare specifier должен существовать import map или bundler-преобразование; иначе
+возникает ошибка разрешения модуля. Также import map должна быть загружена до первого import.
+
+**Полный ответ**
+
 Браузер не знает npm resolution. Для bare specifier должен существовать import map или bundler-преобразование; иначе
 возникает ошибка разрешения модуля. Также import map должна быть загружена до первого import.
 
@@ -8380,6 +10647,13 @@ Import map сопоставляет bare module specifiers с URL ES modules в 
 <details>
 <summary>Почему deprecated API не всегда означает, что код немедленно сломан?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Deprecated API пока может оставаться совместимым, но больше не рекомендуется и может быть удален позже. Нужно проверить
+версию, migration path и фактическое поведение, а не заменять API вслепую.
+
+**Полный ответ**
 
 Deprecated API пока может оставаться совместимым, но больше не рекомендуется и может быть удален позже. Нужно проверить
 версию, migration path и фактическое поведение, а не заменять API вслепую.
@@ -8394,6 +10668,13 @@ Deprecated API пока может оставаться совместимым, 
 <summary>Что такое <code>ComponentRef</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ComponentRef — ссылка на созданный экземпляр компонента и его host view. Через нее доступны instance, setInput(),
+changeDetectorRef, lifecycle callback onDestroy() и метод destroy().
+
+**Полный ответ**
+
 `ComponentRef` — ссылка на созданный экземпляр компонента и его host view. Через нее доступны `instance`, `setInput()`,
 `changeDetectorRef`, lifecycle callback `onDestroy()` и метод `destroy()`.
 
@@ -8404,6 +10685,13 @@ Deprecated API пока может оставаться совместимым, 
 <details>
 <summary>Как динамически создать Angular-компонент через <code>ViewContainerRef.createComponent()</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно получить ViewContainerRef, загрузить Type компонента и вызвать container.createComponent(componentType). Метод
+вставит host view в контейнер и вернет ComponentRef для дальнейшей настройки.
+
+**Полный ответ**
 
 Нужно получить `ViewContainerRef`, загрузить `Type<T>` компонента и вызвать `container.createComponent(componentType)`.
 Метод вставит host view в контейнер и вернет `ComponentRef<T>` для дальнейшей настройки.
@@ -8416,6 +10704,13 @@ Deprecated API пока может оставаться совместимым, 
 <summary>Как передать input в динамически созданный компонент?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+После создания вызывают componentRef.setInput('inputName', value). Имя должно совпадать с публичным input или его alias,
+а передаваемое значение — с интеграционным контрактом remote.
+
+**Полный ответ**
+
 После создания вызывают `componentRef.setInput('inputName', value)`. Имя должно совпадать с публичным input или его
 alias, а передаваемое значение — с интеграционным контрактом remote.
 
@@ -8426,6 +10721,13 @@ alias, а передаваемое значение — с интеграцио�
 <details>
 <summary>Почему <code>ComponentRef.setInput()</code> лучше прямого присваивания свойства?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+setInput() проходит через Angular input pipeline, корректно обновляет signal inputs, учитывает transforms и помечает
+view для проверки. Прямое присваивание обходит этот контракт и может не запустить ожидаемое обновление.
+
+**Полный ответ**
 
 `setInput()` проходит через Angular input pipeline, корректно обновляет signal inputs, учитывает transforms и помечает
 view для проверки. Прямое присваивание обходит этот контракт и может не запустить ожидаемое обновление.
@@ -8438,6 +10740,13 @@ view для проверки. Прямое присваивание обходи
 <summary>Как подписаться на output динамически созданного компонента?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Нужно получить публичный output с componentRef.instance и вызвать subscribe(). Подписку следует связать с lifecycle
+компонента или host, например отписаться в callback componentRef.onDestroy().
+
+**Полный ответ**
+
 Нужно получить публичный output с `componentRef.instance` и вызвать `subscribe()`. Подписку следует связать с lifecycle
 компонента или host, например отписаться в callback `componentRef.onDestroy()`.
 
@@ -8448,6 +10757,13 @@ view для проверки. Прямое присваивание обходи
 <details>
 <summary>Зачем хранить <code>ComponentRef</code> и вызывать <code>destroy()</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Ссылка нужна для последующих inputs, подписки на outputs и явного lifecycle management. Без уничтожения могут остаться
+view, subscriptions и ссылки на данные, что приводит к утечкам и повторной обработке событий.
+
+**Полный ответ**
 
 Ссылка нужна для последующих inputs, подписки на outputs и явного lifecycle management. Без уничтожения могут остаться
 view, subscriptions и ссылки на данные, что приводит к утечкам и повторной обработке событий.
@@ -8460,6 +10776,13 @@ view, subscriptions и ссылки на данные, что приводит �
 <summary>Как правильно уничтожать динамически созданные компоненты?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Компонент уничтожают через ComponentRef.destroy() или очистку владеющего ViewContainerRef. Одновременно нужно освободить
+внешние subscriptions, listeners и другие ресурсы, которые Angular не контролирует.
+
+**Полный ответ**
+
 Компонент уничтожают через `ComponentRef.destroy()` или очистку владеющего `ViewContainerRef`. Одновременно нужно
 освободить внешние subscriptions, listeners и другие ресурсы, которые Angular не контролирует.
 
@@ -8471,6 +10794,13 @@ view, subscriptions и ссылки на данные, что приводит �
 <summary>Почему <code>viewChild.required()</code> нельзя вызывать слишком рано?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Query signal получает значение только после создания соответствующего элемента view. Чтение до завершения render
+приведет к ошибке required query, поэтому DOM-зависимую работу откладывают до подходящей render phase.
+
+**Полный ответ**
+
 Query signal получает значение только после создания соответствующего элемента view. Чтение до завершения render
 приведет к ошибке required query, поэтому DOM-зависимую работу откладывают до подходящей render phase.
 
@@ -8481,6 +10811,13 @@ Query signal получает значение только после созд�
 <details>
 <summary>Зачем иногда передают <code>getContainer: () => ViewContainerRef</code>, а не сам <code>ViewContainerRef</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Функция откладывает чтение query до момента фактического монтирования. Это полезно, когда loader настраивается раньше,
+чем Angular создал template container.
+
+**Полный ответ**
 
 Функция откладывает чтение query до момента фактического монтирования. Это полезно, когда loader настраивается раньше,
 чем Angular создал template container.
@@ -8495,6 +10832,13 @@ Query signal получает значение только после созд�
 <summary>Как remote-приложения могут общаться между собой?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Через host orchestration, URL, backend, shared event bus или browser events. Выбор зависит от lifetime состояния,
+необходимости deep link, надежности и допустимой связанности между командами.
+
+**Полный ответ**
+
 Через host orchestration, URL, backend, shared event bus или browser events. Выбор зависит от lifetime состояния,
 необходимости deep link, надежности и допустимой связанности между командами.
 
@@ -8505,6 +10849,13 @@ Query signal получает значение только после созд�
 <details>
 <summary>Что такое host orchestration?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Host принимает события remote, применяет общую бизнес-навигацию и передает данные другим remote через их публичные
+контракты. Remote при этом не импортируют и не ищут друг друга напрямую.
+
+**Полный ответ**
 
 Host принимает события remote, применяет общую бизнес-навигацию и передает данные другим remote через их публичные
 контракты. Remote при этом не импортируют и не ищут друг друга напрямую.
@@ -8517,6 +10868,13 @@ Host принимает события remote, применяет общую б�
 <summary>Как host может связать output одного remote с input другого remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Host подписывается на output первого ComponentRef, а в обработчике вызывает setInput() второго. В демо movieSelected
+передает выбранный фильм в input movie виджета доступности билетов.
+
+**Полный ответ**
+
 Host подписывается на output первого `ComponentRef`, а в обработчике вызывает `setInput()` второго. В демо
 `movieSelected` передает выбранный фильм в input `movie` виджета доступности билетов.
 
@@ -8527,6 +10885,13 @@ Host подписывается на output первого `ComponentRef`, а в
 <details>
 <summary>Чем <code>CustomEvent</code> отличается от Angular <code>output()</code> / <code>input()</code> через host?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Angular inputs/outputs типизированы и привязаны к component lifecycle. CustomEvent распространяется через DOM или
+window, доступен вне Angular, но использует строковые имена и требует ручного listener management.
+
+**Полный ответ**
 
 Angular inputs/outputs типизированы и привязаны к component lifecycle. `CustomEvent` распространяется через DOM или
 `window`, доступен вне Angular, но использует строковые имена и требует ручного listener management.
@@ -8539,6 +10904,13 @@ Angular inputs/outputs типизированы и привязаны к compone
 <summary>Какие плюсы и минусы у коммуникации через <code>window.dispatchEvent()</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Плюсы — слабая технологическая связанность и простой межфреймворковый transport. Минусы — глобальное пространство имен,
+слабая типизация, неявный поток данных, ручная очистка listeners и отсутствие browser globals при SSR.
+
+**Полный ответ**
+
 Плюсы — слабая технологическая связанность и простой межфреймворковый transport. Минусы — глобальное пространство имен,
 слабая типизация, неявный поток данных, ручная очистка listeners и отсутствие browser globals при SSR.
 
@@ -8549,6 +10921,13 @@ Angular inputs/outputs типизированы и привязаны к compone
 <details>
 <summary>Почему <code>window.addEventListener()</code> может быть проблемой при SSR?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+На сервере window отсутствует, поэтому регистрация listener во время server render завершится ошибкой. Ее выполняют
+только в browser phase и обязательно снимают при уничтожении владельца.
+
+**Полный ответ**
 
 На сервере `window` отсутствует, поэтому регистрация listener во время server render завершится ошибкой. Ее выполняют
 только в browser phase и обязательно снимают при уничтожении владельца.
@@ -8561,6 +10940,13 @@ Angular inputs/outputs типизированы и привязаны к compone
 <summary>Когда стоит использовать shared event bus?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Когда нескольким независимо загружаемым частям нужен ограниченный набор асинхронных domain events. Bus должен иметь
+версионированные типы, владельца и правила lifecycle, иначе он быстро превращается в неявное глобальное состояние.
+
+**Полный ответ**
+
 Когда нескольким независимо загружаемым частям нужен ограниченный набор асинхронных domain events. Bus должен иметь
 версионированные типы, владельца и правила lifecycle, иначе он быстро превращается в неявное глобальное состояние.
 
@@ -8571,6 +10957,13 @@ Angular inputs/outputs типизированы и привязаны к compone
 <details>
 <summary>Когда лучше использовать URL/query params для состояния?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для состояния навигации, фильтров и выбранных сущностей, которое должно поддерживать deep link, back/forward и
+перезагрузку страницы. Секретные или большие данные в URL помещать не следует.
+
+**Полный ответ**
 
 Для состояния навигации, фильтров и выбранных сущностей, которое должно поддерживать deep link, back/forward и
 перезагрузку страницы. Секретные или большие данные в URL помещать не следует.
@@ -8583,6 +10976,13 @@ Angular inputs/outputs типизированы и привязаны к compone
 <summary>Когда состояние лучше хранить на backend?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Когда оно должно переживать сессии, быть общим для устройств или пользователей, участвовать в транзакциях и иметь
+серверную авторизацию. Frontend тогда хранит только идентификатор и локальное представление.
+
+**Полный ответ**
+
 Когда оно должно переживать сессии, быть общим для устройств или пользователей, участвовать в транзакциях и иметь
 серверную авторизацию. Frontend тогда хранит только идентификатор и локальное представление.
 
@@ -8594,6 +10994,13 @@ Angular inputs/outputs типизированы и привязаны к compone
 <summary>Почему для микрофронтендов важны явные контракты?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Remote выпускаются независимо, поэтому inputs, outputs, exposed modules и payload schemas заменяют compile-time связь.
+Явные контракты можно версионировать, тестировать и сохранять совместимыми.
+
+**Полный ответ**
+
 Remote выпускаются независимо, поэтому inputs, outputs, exposed modules и payload schemas заменяют compile-time связь.
 Явные контракты можно версионировать, тестировать и сохранять совместимыми.
 
@@ -8604,6 +11011,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <details>
 <summary>Почему прямое общение remote-to-remote может быть проблемой?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Один remote начинает знать API и lifecycle другого, из-за чего их нельзя независимо заменить или загрузить. Такая связь
+также усложняет versioning, тестирование и обработку частичной недоступности.
+
+**Полный ответ**
 
 Один remote начинает знать API и lifecycle другого, из-за чего их нельзя независимо заменить или загрузить. Такая связь
 также усложняет versioning, тестирование и обработку частичной недоступности.
@@ -8618,6 +11032,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <summary>Чем required remote отличается от optional remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Без required remote основной сценарий не имеет смысла, поэтому host может показать page-level error. Optional remote
+дополняет сценарий: при сбое его slot скрывают или заменяют fallback, сохраняя остальную страницу.
+
+**Полный ответ**
+
 Без required remote основной сценарий не имеет смысла, поэтому host может показать page-level error. Optional remote
 дополняет сценарий: при сбое его slot скрывают или заменяют fallback, сохраняя остальную страницу.
 
@@ -8628,6 +11049,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <details>
 <summary>Что произойдет, если один remote недоступен?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Его entry или chunks не загрузятся, и операция вернет ошибку. Host должен локализовать сбой в соответствующем slot,
+показать fallback и не блокировать независимые части страницы.
+
+**Полный ответ**
 
 Его entry или chunks не загрузятся, и операция вернет ошибку. Host должен локализовать сбой в соответствующем slot,
 показать fallback и не блокировать независимые части страницы.
@@ -8640,6 +11068,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <summary>Почему <code>Promise.all()</code> может быть опасен при загрузке нескольких независимых remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Он отклоняется после первой ошибки и не возвращает успешные результаты остальных promises. Если виджеты независимы,
+общая операция может ошибочно превратить частичный сбой в отказ всей композиции.
+
+**Полный ответ**
+
 Он отклоняется после первой ошибки и не возвращает успешные результаты остальных promises. Если виджеты независимы,
 общая операция может ошибочно превратить частичный сбой в отказ всей композиции.
 
@@ -8650,6 +11085,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <details>
 <summary>Когда лучше использовать <code>Promise.allSettled()</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Когда каждый remote имеет собственный loading/error state и успешные виджеты должны продолжить работу. Результаты
+fulfilled и rejected обрабатывают по отдельности.
+
+**Полный ответ**
 
 Когда каждый remote имеет собственный loading/error state и успешные виджеты должны продолжить работу. Результаты
 `fulfilled` и `rejected` обрабатывают по отдельности.
@@ -8662,6 +11104,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <summary>Почему у каждого remote widget должен быть свой status: <code>idle</code>, <code>loading</code>, <code>ready</code>, <code>error</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Явная state machine исключает неоднозначные комбинации boolean flags и упрощает template control flow. Она также
+позволяет отдельно измерять время загрузки, ошибки и повторные попытки каждого remote.
+
+**Полный ответ**
+
 Явная state machine исключает неоднозначные комбинации boolean flags и упрощает template control flow. Она также
 позволяет отдельно измерять время загрузки, ошибки и повторные попытки каждого remote.
 
@@ -8672,6 +11121,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <details>
 <summary>Как host должен показывать loading/error state для каждого remote slot?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Каждый slot имеет стабильный контейнер, собственный индикатор загрузки, доступное сообщение об ошибке и при
+необходимости retry. Ошибка одного slot не должна визуально маскировать состояние другого.
+
+**Полный ответ**
 
 Каждый slot имеет стабильный контейнер, собственный индикатор загрузки, доступное сообщение об ошибке и при
 необходимости retry. Ошибка одного slot не должна визуально маскировать состояние другого.
@@ -8684,6 +11140,13 @@ Remote выпускаются независимо, поэтому inputs, outpu
 <summary>Что должен делать host, если <code>movies</code> загрузился, а <code>ticket-availability</code> нет?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Показать список фильмов и fallback в slot доступности. Выбор фильма можно сохранить, но действие, зависящее от второго
+remote, нужно отключить или объяснить пользователю.
+
+**Полный ответ**
+
 Показать список фильмов и fallback в slot доступности. Выбор фильма можно сохранить, но действие, зависящее от второго
 remote, нужно отключить или объяснить пользователю.
 
@@ -8694,6 +11157,13 @@ remote, нужно отключить или объяснить пользова
 <details>
 <summary>Что должен делать host, если <code>ticket-availability</code> загрузился, а <code>movies</code> нет?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Показать fallback списка фильмов. Виджет доступности может остаться в empty state, если без выбранного фильма он не
+имеет самостоятельного сценария.
+
+**Полный ответ**
 
 Показать fallback списка фильмов. Виджет доступности может остаться в empty state, если без выбранного фильма он не
 имеет самостоятельного сценария.
@@ -8706,6 +11176,13 @@ remote, нужно отключить или объяснить пользова
 <summary>Как добавить retry для недоступного remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Host повторно переводит конкретный slot в loading и запускает его mount после действия пользователя или ограниченного
+backoff. Перед retry нужно очистить прежний ComponentRef, error и незавершенные subscriptions.
+
+**Полный ответ**
+
 Host повторно переводит конкретный slot в `loading` и запускает его mount после действия пользователя или ограниченного
 backoff. Перед retry нужно очистить прежний `ComponentRef`, error и незавершенные subscriptions.
 
@@ -8717,6 +11194,13 @@ backoff. Перед retry нужно очистить прежний `ComponentR
 <summary>Где лучше хранить статусы remote-виджетов: в компоненте, сервисе или store?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Локальный slot state удобно хранить в host component или scoped loader service. Общий store нужен только если статус
+используют удаленные части приложения, аналитика или централизованная recovery-логика.
+
+**Полный ответ**
+
 Локальный slot state удобно хранить в host component или scoped loader service. Общий store нужен только если статус
 используют удаленные части приложения, аналитика или централизованная recovery-логика.
 
@@ -8727,6 +11211,13 @@ backoff. Перед retry нужно очистить прежний `ComponentR
 <details>
 <summary>Почему сервис загрузки remote не должен знать бизнес-логику приложения?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Loader отвечает за разрешение модуля, создание компонента и технический lifecycle. Решения о фильмах, бронировании и
+доступности принадлежат host orchestration или domain services, иначе loader нельзя переиспользовать.
+
+**Полный ответ**
 
 Loader отвечает за разрешение модуля, создание компонента и технический lifecycle. Решения о фильмах, бронировании и
 доступности принадлежат host orchestration или domain services, иначе loader нельзя переиспользовать.
@@ -8741,6 +11232,13 @@ Loader отвечает за разрешение модуля, создание
 <summary>Могут ли remote-приложения быть SSR?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Да, но server renderer должен уметь разрешить remote, загрузить совместимый server bundle и согласовать HTML с
+последующей hydration. Это заметно сложнее browser-only композиции.
+
+**Полный ответ**
+
 Да, но server renderer должен уметь разрешить remote, загрузить совместимый server bundle и согласовать HTML с
 последующей hydration. Это заметно сложнее browser-only композиции.
 
@@ -8751,6 +11249,13 @@ Loader отвечает за разрешение модуля, создание
 <details>
 <summary>Какие дополнительные сложности появляются при SSR и micro frontends?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно согласовать server и browser entries, сетевую доступность remote с сервера, shared dependencies, latency,
+кеширование, ошибки частичного render и детерминированный HTML для hydration.
+
+**Полный ответ**
 
 Нужно согласовать server и browser entries, сетевую доступность remote с сервера, shared dependencies, latency,
 кеширование, ошибки частичного render и детерминированный HTML для hydration.
@@ -8763,6 +11268,13 @@ Loader отвечает за разрешение модуля, создание
 <summary>Чем <code>main.ts</code> отличается от <code>main.server.ts</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Browser entry инициализирует приложение в DOM и может настраивать client federation. Server entry экспортирует bootstrap
+для renderer, принимает BootstrapContext и не должен выполнять browser-only код.
+
+**Полный ответ**
+
 Browser entry инициализирует приложение в DOM и может настраивать client federation. Server entry экспортирует bootstrap
 для renderer, принимает `BootstrapContext` и не должен выполнять browser-only код.
 
@@ -8773,6 +11285,13 @@ Browser entry инициализирует приложение в DOM и мож
 <details>
 <summary>Что такое <code>BootstrapContext</code> в server bootstrap?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+BootstrapContext передает Angular server bootstrap контекст конкретного запроса, включая platform injector. Он нужен для
+корректной изоляции и настройки server-rendered приложения.
+
+**Полный ответ**
 
 `BootstrapContext` передает Angular server bootstrap контекст конкретного запроса, включая platform injector. Он нужен
 для корректной изоляции и настройки server-rendered приложения.
@@ -8785,6 +11304,13 @@ Browser entry инициализирует приложение в DOM и мож
 <summary>Почему <code>bootstrapApplication</code> на сервере требует <code>BootstrapContext</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Server renderer создает контекст для запроса и ожидает, что bootstrap использует его. Без контекста приложение может
+создать неподходящую platform instance или потерять request-scoped providers.
+
+**Полный ответ**
+
 Server renderer создает контекст для запроса и ожидает, что bootstrap использует его. Без контекста приложение может
 создать неподходящую platform instance или потерять request-scoped providers.
 
@@ -8795,6 +11321,13 @@ Server renderer создает контекст для запроса и ожи�
 <details>
 <summary>Почему при SSR возникает ошибка <code>window is not defined</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Server runtime не предоставляет browser global window. Ошибка возникает, если код обращается к нему при import, создании
+компонента или server render до проверки платформы.
+
+**Полный ответ**
 
 Server runtime не предоставляет browser global `window`. Ошибка возникает, если код обращается к нему при import,
 создании компонента или server render до проверки платформы.
@@ -8807,6 +11340,13 @@ Server runtime не предоставляет browser global `window`. Ошиб
 <summary>Почему при SSR возникает ошибка <code>document is not defined</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Node server не имеет browser DOM document. Прямой DOM-код и browser-only libraries нужно изолировать от server path или
+запускать после перехода в browser render phase.
+
+**Полный ответ**
+
 Node server не имеет browser DOM `document`. Прямой DOM-код и browser-only libraries нужно изолировать от server path
 или запускать после перехода в browser render phase.
 
@@ -8817,6 +11357,13 @@ Node server не имеет browser DOM `document`. Прямой DOM-код и b
 <details>
 <summary>Почему <code>ngOnInit</code> не всегда подходит для загрузки remote widgets?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ngOnInit выполняется и при SSR, а view containers могут быть еще не готовы. Browser-only remote лучше монтировать после
+первого client render, когда доступны DOM и view queries.
+
+**Полный ответ**
 
 `ngOnInit` выполняется и при SSR, а view containers могут быть еще не готовы. Browser-only remote лучше монтировать
 после первого client render, когда доступны DOM и view queries.
@@ -8829,6 +11376,13 @@ Node server не имеет browser DOM `document`. Прямой DOM-код и b
 <summary>Когда использовать <code>afterNextRender()</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Когда интеграция требует созданного DOM, browser APIs или доступного ViewContainerRef после следующего render. Render
+callbacks не выполняются на сервере, поэтому подходят для browser-only монтирования.
+
+**Полный ответ**
+
 Когда интеграция требует созданного DOM, browser APIs или доступного `ViewContainerRef` после следующего render. Render
 callbacks не выполняются на сервере, поэтому подходят для browser-only монтирования.
 
@@ -8839,6 +11393,13 @@ callbacks не выполняются на сервере, поэтому под
 <details>
 <summary>Почему remote widgets часто монтируют только на клиенте, даже если shell поддерживает SSR?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Так shell сохраняет SEO и быстрый initial HTML, а remote integration избегает server federation, browser globals и
+hydration mismatch. Цена — placeholder до client mount и более поздняя готовность виджета.
+
+**Полный ответ**
 
 Так shell сохраняет SEO и быстрый initial HTML, а remote integration избегает server federation, browser globals и
 hydration mismatch. Цена — placeholder до client mount и более поздняя готовность виджета.
@@ -8851,6 +11412,13 @@ hydration mismatch. Цена — placeholder до client mount и более п�
 <summary>Как сделать SSR-safe код в Angular?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Не обращаться к browser globals на уровне модуля, использовать platform-neutral APIs, изолировать browser services и
+выполнять DOM-интеграции в render callbacks или после явной проверки платформы.
+
+**Полный ответ**
+
 Не обращаться к browser globals на уровне модуля, использовать platform-neutral APIs, изолировать browser services и
 выполнять DOM-интеграции в render callbacks или после явной проверки платформы.
 
@@ -8862,6 +11430,13 @@ hydration mismatch. Цена — placeholder до client mount и более п�
 <summary>Почему manifest может открываться в браузере, но не загружаться во время SSR?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+URL localhost с точки зрения server process, container или cloud runtime может указывать не туда, куда в браузере. Также
+мешают DNS, CORS-подобные gateway rules, TLS, network policy и отсутствие запущенного remote.
+
+**Полный ответ**
+
 URL `localhost` с точки зрения server process, container или cloud runtime может указывать не туда, куда в браузере.
 Также мешают DNS, CORS-подобные gateway rules, TLS, network policy и отсутствие запущенного remote.
 
@@ -8872,6 +11447,13 @@ URL `localhost` с точки зрения server process, container или clou
 <details>
 <summary>Что такое hydration mismatch и как микрофронтенды могут его спровоцировать?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Mismatch возникает, когда client ожидает DOM, отличный от server HTML. Remote может изменить разметку до hydration,
+отрендерить разные данные или создать browser-only элементы в server-rendered области.
+
+**Полный ответ**
 
 Mismatch возникает, когда client ожидает DOM, отличный от server HTML. Remote может изменить разметку до hydration,
 отрендерить разные данные или создать browser-only элементы в server-rendered области.
@@ -8886,6 +11468,13 @@ Mismatch возникает, когда client ожидает DOM, отличн�
 <summary>Какие артефакты деплоит remote-приложение?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+remoteEntry.json, JavaScript chunks, styles, assets и при необходимости server bundle. Все ссылки из entry должны
+оставаться доступными как единый согласованный release.
+
+**Полный ответ**
+
 `remoteEntry.json`, JavaScript chunks, styles, assets и при необходимости server bundle. Все ссылки из entry должны
 оставаться доступными как единый согласованный release.
 
@@ -8896,6 +11485,13 @@ Mismatch возникает, когда client ожидает DOM, отличн�
 <details>
 <summary>Где должен лежать <code>remoteEntry.json</code> после деплоя?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+По стабильному HTTPS URL, доступному host и разрешенному security policy. Часто это CDN path, связанный с приложением
+или версией, например /movies/1.4.2/remoteEntry.json.
+
+**Полный ответ**
 
 По стабильному HTTPS URL, доступному host и разрешенному security policy. Часто это CDN path, связанный с приложением
 или версией, например `/movies/1.4.2/remoteEntry.json`.
@@ -8908,6 +11504,13 @@ Mismatch возникает, когда client ожидает DOM, отличн�
 <summary>Где хранить manifest для dev/stage/prod?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В environment-specific конфигурации или config service, управляемом deployment pipeline. Не следует вручную менять
+production manifest без истории, валидации и возможности быстрого rollback.
+
+**Полный ответ**
+
 В environment-specific конфигурации или config service, управляемом deployment pipeline. Не следует вручную менять
 production manifest без истории, валидации и возможности быстрого rollback.
 
@@ -8918,6 +11521,13 @@ production manifest без истории, валидации и возможн�
 <details>
 <summary>Как деплоить host и remote-приложения независимо?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+У каждого приложения должен быть отдельный build и release pipeline. Remote сначала публикует versioned assets, затем
+контролируемо обновляется manifest; host выпускается отдельно и сохраняет совместимость с доступными версиями remote.
+
+**Полный ответ**
 
 У каждого приложения должен быть отдельный build и release pipeline. Remote сначала публикует versioned assets, затем
 контролируемо обновляется manifest; host выпускается отдельно и сохраняет совместимость с доступными версиями remote.
@@ -8930,6 +11540,13 @@ production manifest без истории, валидации и возможн�
 <summary>Как host узнает URL нового remote-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Из manifest, который загружается при старте или встраивается для конкретного окружения. Обновление mapping переключает
+host на новый remote без изменения его application code.
+
+**Полный ответ**
+
 Из manifest, который загружается при старте или встраивается для конкретного окружения. Обновление mapping переключает
 host на новый remote без изменения его application code.
 
@@ -8940,6 +11557,13 @@ host на новый remote без изменения его application code.
 <details>
 <summary>Как версионировать контракты между host и remote?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Версионируют exposed modules, TypeScript/schema package или capability metadata по SemVer. Breaking change получает
+новую major-версию или новый параллельный contract identifier.
+
+**Полный ответ**
 
 Версионируют exposed modules, TypeScript/schema package или capability metadata по SemVer. Breaking change получает
 новую major-версию или новый параллельный contract identifier.
@@ -8952,6 +11576,13 @@ host на новый remote без изменения его application code.
 <summary>Как организовать backward compatibility между host и remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Сначала remote добавляет новый API, сохраняя старый, затем обновляются consumers, и только после измеренного перехода
+удаляется legacy contract. Полезны defaults, optional fields и tolerant readers.
+
+**Полный ответ**
+
 Сначала remote добавляет новый API, сохраняя старый, затем обновляются consumers, и только после измеренного перехода
 удаляется legacy contract. Полезны defaults, optional fields и tolerant readers.
 
@@ -8962,6 +11593,13 @@ host на новый remote без изменения его application code.
 <details>
 <summary>Как безопасно изменить <code>exposedModule</code> или <code>exportName</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Временно публиковать старое и новое имя, обновить host, проверить production usage и только затем удалить alias.
+Изменение должно проходить contract и integration tests.
+
+**Полный ответ**
 
 Временно публиковать старое и новое имя, обновить host, проверить production usage и только затем удалить alias.
 Изменение должно проходить contract и integration tests.
@@ -8974,6 +11612,13 @@ host на новый remote без изменения его application code.
 <summary>Почему нельзя бездумно переименовывать exposed module?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Его имя — часть runtime API, записанная в host configuration. В отличие от внутреннего refactoring, компилятор remote не
+найдет внешних consumers и не предупредит об их поломке.
+
+**Полный ответ**
+
 Его имя — часть runtime API, записанная в host configuration. В отличие от внутреннего refactoring, компилятор remote не
 найдет внешних consumers и не предупредит об их поломке.
 
@@ -8984,6 +11629,13 @@ host на новый remote без изменения его application code.
 <details>
 <summary>Что будет, если host старый, а remote новый?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Все продолжит работать только при backward-compatible remote contract. Удаленный export, переименованный input или
+измененная payload schema приведут к runtime-ошибке старого host.
+
+**Полный ответ**
 
 Все продолжит работать только при backward-compatible remote contract. Удаленный export, переименованный input или
 измененная payload schema приведут к runtime-ошибке старого host.
@@ -8996,6 +11648,13 @@ host на новый remote без изменения его application code.
 <summary>Что будет, если remote старый, а host новый?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Новый host может запросить отсутствующий export или передать неподдерживаемые данные. Поэтому host должен либо
+поддерживать старый контракт, либо проверять capability/version до использования новой функции.
+
+**Полный ответ**
+
 Новый host может запросить отсутствующий export или передать неподдерживаемые данные. Поэтому host должен либо
 поддерживать старый контракт, либо проверять capability/version до использования новой функции.
 
@@ -9006,6 +11665,13 @@ host на новый remote без изменения его application code.
 <details>
 <summary>Нужно ли кешировать federation manifest?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Да, но обычно с коротким TTL, revalidation или управляемым versioned URL. Стратегия зависит от того, насколько быстро
+нужно переключать remote и отключать аварийный release.
+
+**Полный ответ**
 
 Да, но обычно с коротким TTL, revalidation или управляемым versioned URL. Стратегия зависит от того, насколько быстро
 нужно переключать remote и отключать аварийный release.
@@ -9018,6 +11684,13 @@ host на новый remote без изменения его application code.
 <summary>Какие риски есть у кеширования <code>remoteEntry.json</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Устаревший entry может ссылаться на удаленные chunks или старый контракт. Смешивание entry одного release с assets
+другого вызывает ошибки импорта, которые трудно воспроизвести локально.
+
+**Полный ответ**
+
 Устаревший entry может ссылаться на удаленные chunks или старый контракт. Смешивание entry одного release с assets
 другого вызывает ошибки импорта, которые трудно воспроизвести локально.
 
@@ -9028,6 +11701,13 @@ host на новый remote без изменения его application code.
 <details>
 <summary>Почему <code>remoteEntry.json</code> часто кешируют осторожнее, чем JS chunks?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Entry является изменяемой картой текущего release, а content-hashed chunks immutable. Chunks можно кешировать надолго,
+тогда как entry должен достаточно быстро указывать на актуальный набор файлов.
+
+**Полный ответ**
 
 Entry является изменяемой картой текущего release, а content-hashed chunks immutable. Chunks можно кешировать надолго,
 тогда как entry должен достаточно быстро указывать на актуальный набор файлов.
@@ -9040,6 +11720,13 @@ Entry является изменяемой картой текущего releas
 <summary>Как CDN влияет на деплой микрофронтендов?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CDN снижает latency и распределяет assets, но добавляет cache keys, propagation delay, CORS/CSP настройки и
+invalidation. Release должен учитывать согласованность entry и chunks во всех edge locations.
+
+**Полный ответ**
+
 CDN снижает latency и распределяет assets, но добавляет cache keys, propagation delay, CORS/CSP настройки и
 invalidation. Release должен учитывать согласованность entry и chunks во всех edge locations.
 
@@ -9050,6 +11737,13 @@ invalidation. Release должен учитывать согласованнос
 <details>
 <summary>Как CDN cache может сломать загрузку remote?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Очистка устаревшего entry может быстро переключить клиентов на исправление. Но удаление старых chunks или
+несогласованная invalidation оставит открытые сессии с entry, ссылки которого больше не работают.
+
+**Полный ответ**
 
 Очистка устаревшего entry может быстро переключить клиентов на исправление. Но удаление старых chunks или
 несогласованная invalidation оставит открытые сессии с entry, ссылки которого больше не работают.
@@ -9062,6 +11756,13 @@ invalidation. Release должен учитывать согласованнос
 <summary>Что такое canary deployment для remote-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это направление небольшой доли пользователей или внутренних сотрудников на новую версию remote. Manifest или edge
+routing выбирает версию, а метрики сравниваются до полного rollout.
+
+**Полный ответ**
+
 Это направление небольшой доли пользователей или внутренних сотрудников на новую версию remote. Manifest или edge
 routing выбирает версию, а метрики сравниваются до полного rollout.
 
@@ -9072,6 +11773,13 @@ routing выбирает версию, а метрики сравниваютс�
 <details>
 <summary>Как feature flags помогают деплоить микрофронтенды?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Flag может включить новый remote, contract path или функцию для выбранной аудитории без повторной сборки. Нужны
+предсказуемый fallback, владелец flag и удаление завершенных флагов.
+
+**Полный ответ**
 
 Flag может включить новый remote, contract path или функцию для выбранной аудитории без повторной сборки. Нужны
 предсказуемый fallback, владелец flag и удаление завершенных флагов.
@@ -9084,6 +11792,13 @@ Flag может включить новый remote, contract path или фун�
 <summary>Как организовать rollback remote-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Хранить предыдущие immutable releases и атомарно вернуть manifest mapping на проверенный remoteEntry.json. Старые entry
+и chunks нельзя удалять до завершения cache TTL и активных сессий.
+
+**Полный ответ**
+
 Хранить предыдущие immutable releases и атомарно вернуть manifest mapping на проверенный `remoteEntry.json`. Старые
 entry и chunks нельзя удалять до завершения cache TTL и активных сессий.
 
@@ -9094,6 +11809,13 @@ entry и chunks нельзя удалять до завершения cache TTL 
 <details>
 <summary>Как организовать rollback host-приложения?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Повторно активировать предыдущий host release и соответствующую конфигурацию manifest. Rollback должен учитывать, что
+remote уже могли перейти вперед, поэтому их контракты обязаны быть backward-compatible.
+
+**Полный ответ**
 
 Повторно активировать предыдущий host release и соответствующую конфигурацию manifest. Rollback должен учитывать, что
 remote уже могли перейти вперед, поэтому их контракты обязаны быть backward-compatible.
@@ -9106,6 +11828,13 @@ remote уже могли перейти вперед, поэтому их кон
 <summary>Как откатить сломанный remote без деплоя host?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Изменить управляемый manifest/config или remote feature flag так, чтобы host не монтировал виджет либо использовал
+резервную версию. Host должен заранее поддерживать отсутствие optional remote.
+
+**Полный ответ**
+
 Изменить управляемый manifest/config или remote feature flag так, чтобы host не монтировал виджет либо использовал
 резервную версию. Host должен заранее поддерживать отсутствие optional remote.
 
@@ -9116,6 +11845,13 @@ remote уже могли перейти вперед, поэтому их кон
 <details>
 <summary>Что должен показывать host, если remote не загрузился после деплоя?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Локальный доступный fallback с понятным сообщением и retry, если повтор может помочь. Критический remote может
+переводить весь сценарий в error state, но не должен оставлять пустой экран без объяснения.
+
+**Полный ответ**
 
 Локальный доступный fallback с понятным сообщением и retry, если повтор может помочь. Критический remote может
 переводить весь сценарий в error state, но не должен оставлять пустой экран без объяснения.
@@ -9128,6 +11864,13 @@ remote уже могли перейти вперед, поэтому их кон
 <summary>Какие метрики и алерты нужны для микрофронтендов в production?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Успешность и latency загрузки entry/chunks, mount time, ошибки по remote/version, fallback rate, contract errors и
+влияние на Core Web Vitals. Алерт должен указывать конкретный remote и release.
+
+**Полный ответ**
+
 Успешность и latency загрузки entry/chunks, mount time, ошибки по remote/version, fallback rate, contract errors и
 влияние на Core Web Vitals. Алерт должен указывать конкретный remote и release.
 
@@ -9138,6 +11881,13 @@ remote уже могли перейти вперед, поэтому их кон
 <details>
 <summary>Как логировать ошибки загрузки remote-приложений?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Добавлять remote name, entry URL, exposed module, host/remote versions, environment, этап загрузки и correlation ID.
+Секреты и персональные payloads в client logs отправлять нельзя.
+
+**Полный ответ**
 
 Добавлять remote name, entry URL, exposed module, host/remote versions, environment, этап загрузки и correlation ID.
 Секреты и персональные payloads в client logs отправлять нельзя.
@@ -9150,6 +11900,13 @@ remote уже могли перейти вперед, поэтому их кон
 <summary>Как проверять совместимость host и remote в CI?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Собирать каждый remote, поднимать его artifacts и запускать contract/integration tests поддерживаемых host versions.
+Также проверять shared dependency ranges и наличие всех exposed exports.
+
+**Полный ответ**
+
 Собирать каждый remote, поднимать его artifacts и запускать contract/integration tests поддерживаемых host versions.
 Также проверять shared dependency ranges и наличие всех exposed exports.
 
@@ -9161,6 +11918,13 @@ remote уже могли перейти вперед, поэтому их кон
 <summary>Какие contract tests нужны для host и remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это автоматическая проверка публичного соглашения между producer remote и consumer host: имен exports, inputs, outputs,
+payload schemas и обязательного поведения без полного E2E всех реализаций.
+
+**Полный ответ**
+
 Это автоматическая проверка публичного соглашения между producer remote и consumer host: имен exports, inputs, outputs,
 payload schemas и обязательного поведения без полного E2E всех реализаций.
 
@@ -9171,6 +11935,13 @@ payload schemas и обязательного поведения без полн
 <details>
 <summary>Какие e2e-сценарии нужны перед выкладкой host и remotes?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Загрузка каждого remote, основной cross-remote flow, partial failure, retry, старая/новая совместимая версия,
+navigation, auth и rollback configuration. Проверяют также отсутствие блокировки host при optional remote failure.
+
+**Полный ответ**
 
 Загрузка каждого remote, основной cross-remote flow, partial failure, retry, старая/новая совместимая версия,
 navigation, auth и rollback configuration. Проверяют также отсутствие блокировки host при optional remote failure.
@@ -9185,6 +11956,13 @@ navigation, auth и rollback configuration. Проверяют также отс
 <summary>Кто должен отвечать за layout: host или remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Host отвечает за page layout, размеры и расположение slots. Remote отвечает за содержимое внутри выделенной области и
+должен корректно работать в явно документированных responsive constraints.
+
+**Полный ответ**
+
 Host отвечает за page layout, размеры и расположение slots. Remote отвечает за содержимое внутри выделенной области и
 должен корректно работать в явно документированных responsive constraints.
 
@@ -9195,6 +11973,13 @@ Host отвечает за page layout, размеры и расположени
 <details>
 <summary>Кто должен отвечать за внутренние стили виджета: host или remote?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Remote владеет своей внутренней разметкой и component styles. Host может передавать semantic design tokens и параметры
+контейнера, но не должен зависеть от внутренних selectors remote.
+
+**Полный ответ**
 
 Remote владеет своей внутренней разметкой и component styles. Host может передавать semantic design tokens и параметры
 контейнера, но не должен зависеть от внутренних selectors remote.
@@ -9207,6 +11992,13 @@ Remote владеет своей внутренней разметкой и comp
 <summary>Почему host не должен глубоко стилизовать внутренности remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Внутренний DOM не является публичным контрактом и может измениться при независимом release. Deep selectors создают
+скрытую связанность и ломают encapsulation, тестирование и безопасный rollout.
+
+**Полный ответ**
+
 Внутренний DOM не является публичным контрактом и может измениться при независимом release. Deep selectors создают
 скрытую связанность и ломают encapsulation, тестирование и безопасный rollout.
 
@@ -9217,6 +12009,13 @@ Remote владеет своей внутренней разметкой и comp
 <details>
 <summary>Какие проблемы со стилями бывают в микрофронтендах?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Конфликты global selectors, разный reset, несовместимые tokens, дубли fonts/styles, различия responsive behavior и
+z-index систем. Виджеты также могут менять layout после поздней загрузки.
+
+**Полный ответ**
 
 Конфликты global selectors, разный reset, несовместимые tokens, дубли fonts/styles, различия responsive behavior и
 z-index систем. Виджеты также могут менять layout после поздней загрузки.
@@ -9229,6 +12028,13 @@ z-index систем. Виджеты также могут менять layout �
 <summary>Как избежать конфликта глобальных CSS-стилей между remote-приложениями?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Минимизировать globals, использовать Angular style encapsulation, scoped naming и согласованный reset в host. Общие
+tokens публиковать через CSS custom properties, а не через selectors внутренних элементов.
+
+**Полный ответ**
+
 Минимизировать globals, использовать Angular style encapsulation, scoped naming и согласованный reset в host. Общие
 tokens публиковать через CSS custom properties, а не через selectors внутренних элементов.
 
@@ -9240,6 +12046,13 @@ tokens публиковать через CSS custom properties, а не чере
 <summary>Как микрофронтенды могут использовать общую design system?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Через versioned package компонентов и semantic tokens с документированным compatibility range. Angular package часто
+настраивают как shared dependency, если все remote способны использовать совместимую runtime-версию.
+
+**Полный ответ**
+
 Через versioned package компонентов и semantic tokens с документированным compatibility range. Angular package часто
 настраивают как shared dependency, если все remote способны использовать совместимую runtime-версию.
 
@@ -9250,6 +12063,13 @@ tokens публиковать через CSS custom properties, а не чере
 <details>
 <summary>Какие риски есть у разных версий design system в разных remote?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Визуальная несогласованность, разные accessibility fixes, duplicated code и конфликт global assets. При singleton
+sharing несовместимые версии могут также привести к runtime-ошибке вместо изолированной копии.
+
+**Полный ответ**
 
 Визуальная несогласованность, разные accessibility fixes, duplicated code и конфликт global assets. При singleton
 sharing несовместимые версии могут также привести к runtime-ошибке вместо изолированной копии.
@@ -9264,6 +12084,13 @@ sharing несовместимые версии могут также приве
 <summary>Как тестировать remote-приложение отдельно?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Проверять компоненты и domain logic unit/integration-тестами, а exposed contract — через standalone harness или test
+host. Remote также должен собираться и запускаться независимо от production host.
+
+**Полный ответ**
+
 Проверять компоненты и domain logic unit/integration-тестами, а exposed contract — через standalone harness или test
 host. Remote также должен собираться и запускаться независимо от production host.
 
@@ -9274,6 +12101,13 @@ host. Remote также должен собираться и запускать�
 <details>
 <summary>Как тестировать host без реальных remote?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Подменить abstraction загрузчика и вернуть локальные test components с теми же inputs/outputs. Так host orchestration и
+fallback states тестируются детерминированно без сети и federation runtime.
+
+**Полный ответ**
 
 Подменить abstraction загрузчика и вернуть локальные test components с теми же inputs/outputs. Так host orchestration и
 fallback states тестируются детерминированно без сети и federation runtime.
@@ -9286,6 +12120,13 @@ fallback states тестируются детерминированно без �
 <summary>Как мокать remote widgets в тестах host-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Создать минимальные standalone components, реализующие нужный публичный контракт, и настроить loader stub возвращать их
+Type. Не нужно копировать внутренний UI настоящего remote.
+
+**Полный ответ**
+
 Создать минимальные standalone components, реализующие нужный публичный контракт, и настроить loader stub возвращать их
 `Type`. Не нужно копировать внутренний UI настоящего remote.
 
@@ -9296,6 +12137,13 @@ fallback states тестируются детерминированно без �
 <details>
 <summary>Как проверить fallback UI, если remote недоступен?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Настроить loader mock на rejected promise или null, запустить mount и проверить доступное сообщение, status error,
+наличие retry и сохранение работоспособности независимых slots.
+
+**Полный ответ**
 
 Настроить loader mock на rejected promise или `null`, запустить mount и проверить доступное сообщение, status `error`,
 наличие retry и сохранение работоспособности независимых slots.
@@ -9308,6 +12156,13 @@ fallback states тестируются детерминированно без �
 <summary>Как тестировать контракты между host и remote?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Проверять наличие exposed export, совместимость input/output payloads и ожидаемую реакцию на события. Эти тесты
+запускают как в producer pipeline, так и на матрице поддерживаемых consumer versions.
+
+**Полный ответ**
+
 Проверять наличие exposed export, совместимость input/output payloads и ожидаемую реакцию на события. Эти тесты
 запускают как в producer pipeline, так и на матрице поддерживаемых consumer versions.
 
@@ -9318,6 +12173,13 @@ fallback states тестируются детерминированно без �
 <details>
 <summary>Что такое supply chain risk в микрофронтендах?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это риск компрометации dependency, build pipeline, registry, artifact storage или CDN одного remote. Из-за композиции во
+время выполнения вредоносный release попадает в host без изменения его репозитория.
+
+**Полный ответ**
 
 Это риск компрометации dependency, build pipeline, registry, artifact storage или CDN одного remote. Из-за композиции во
 время выполнения вредоносный release попадает в host без изменения его репозитория.
@@ -9330,6 +12192,13 @@ fallback states тестируются детерминированно без �
 <summary>Какие security-риски появляются при runtime-загрузке remote-кода?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Host исполняет JavaScript с правами своего origin: remote может читать доступные данные, менять DOM и выполнять запросы.
+Компрометация remote pipeline или CDN становится компрометацией host session.
+
+**Полный ответ**
+
 Host исполняет JavaScript с правами своего origin: remote может читать доступные данные, менять DOM и выполнять запросы.
 Компрометация remote pipeline или CDN становится компрометацией host session.
 
@@ -9340,6 +12209,13 @@ Host исполняет JavaScript с правами своего origin: remote
 <details>
 <summary>Почему host должен доверять только известным remoteEntry URL?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+URL определяет исполняемый код. Разрешение произвольного адреса из query params или пользовательского ввода превращает
+federation loader в механизм удаленного выполнения недоверенного JavaScript.
+
+**Полный ответ**
 
 URL определяет исполняемый код. Разрешение произвольного адреса из query params или пользовательского ввода превращает
 federation loader в механизм удаленного выполнения недоверенного JavaScript.
@@ -9352,6 +12228,13 @@ federation loader в механизм удаленного выполнения 
 <summary>Что может пойти не так, если manifest можно изменить без контроля?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Злоумышленник или ошибочная автоматизация может перенаправить host на вредоносный или несовместимый remote. Нужны
+ограниченный доступ, audit log, validation, approvals и rollback.
+
+**Полный ответ**
+
 Злоумышленник или ошибочная автоматизация может перенаправить host на вредоносный или несовместимый remote. Нужны
 ограниченный доступ, audit log, validation, approvals и rollback.
 
@@ -9363,6 +12246,13 @@ federation loader в механизм удаленного выполнения 
 <summary>Как CSP влияет на загрузку remote-приложений?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+script-src, connect-src и связанные directives должны разрешать доверенные CDN и способы загрузки модулей. Слишком
+широкая CSP ослабляет защиту, а слишком узкая блокирует entry, chunks или source maps.
+
+**Полный ответ**
+
 `script-src`, `connect-src` и связанные directives должны разрешать доверенные CDN и способы загрузки модулей. Слишком
 широкая CSP ослабляет защиту, а слишком узкая блокирует entry, chunks или source maps.
 
@@ -9373,6 +12263,14 @@ federation loader в механизм удаленного выполнения 
 <details>
 <summary>Как ограничить влияние сломанного или небезопасного remote?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Использовать allowlist URL, CSP, независимые permissions, минимальные публичные данные, мониторинг и аварийное
+отключение. Для недоверенного кода нужна более сильная изоляция, например iframe с sandbox, а не обычный Angular
+component.
+
+**Полный ответ**
 
 Использовать allowlist URL, CSP, независимые permissions, минимальные публичные данные, мониторинг и аварийное
 отключение. Для недоверенного кода нужна более сильная изоляция, например iframe с sandbox, а не обычный Angular
@@ -9391,6 +12289,14 @@ Feature toggles в Angular часто реализуют через service, gua
 <summary>Что такое TypeScript program?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Program — модель набора source files, compiler options и module graph, которую создает TypeScript compiler API. Compiler
+выполняет type checking только для файлов, входящих в этот graph. Angular compiler расширяет его анализом decorators и
+templates.
+
+**Полный ответ**
+
 `Program` — модель набора source files, compiler options и module graph, которую создает TypeScript compiler API.
 Compiler выполняет type checking только для файлов, входящих в этот graph. Angular compiler расширяет его анализом
 decorators и templates.
@@ -9403,6 +12309,13 @@ decorators и templates.
 <summary>Зачем нужен <code>tsconfig.app.json</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Он задает compiler options и roots именно application build, отделяя их от tests, tools и base tsconfig.json. Angular
+builder получает его из angular.json. Разные targets могут использовать разные типы и entry files.
+
+**Полный ответ**
+
 Он задает compiler options и roots именно application build, отделяя их от tests, tools и base `tsconfig.json`. Angular
 builder получает его из `angular.json`. Разные targets могут использовать разные типы и entry files.
 
@@ -9413,6 +12326,13 @@ builder получает его из `angular.json`. Разные targets мог
 <details>
 <summary>Чем <code>files</code> отличается от <code>include</code> в tsconfig?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+files перечисляет точные root files, а include выбирает их glob patterns. Imports из root files также входят в program,
+если не исключены resolution rules. Узкий files легко случайно оставить без нового entry.
+
+**Полный ответ**
 
 `files` перечисляет точные root files, а `include` выбирает их glob patterns. Imports из root files также входят в
 program, если не исключены resolution rules. Узкий `files` легко случайно оставить без нового entry.
@@ -9425,6 +12345,13 @@ program, если не исключены resolution rules. Узкий `files` �
 <summary>Почему файл может физически существовать, но не входить в TypeScript compilation?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Он может не совпадать с files/include, быть исключен или не импортироваться ни одним root file. Также builder может
+использовать другой tsconfig, чем ожидает разработчик. Проверить состав помогает tsc --listFiles.
+
+**Полный ответ**
+
 Он может не совпадать с `files`/`include`, быть исключен или не импортироваться ни одним root file. Также builder может
 использовать другой tsconfig, чем ожидает разработчик. Проверить состав помогает `tsc --listFiles`.
 
@@ -9435,6 +12362,13 @@ program, если не исключены resolution rules. Узкий `files` �
 <details>
 <summary>Почему Angular compiler требует, чтобы файл с <code>@Component</code> входил в TypeScript compilation?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Angular анализирует component metadata в рамках TypeScript program. Если файл не является root и не достижим через
+imports, compiler не создаст для него Angular definitions. Физического наличия файла в directory недостаточно.
+
+**Полный ответ**
 
 Angular анализирует component metadata в рамках TypeScript program. Если файл не является root и не достижим через
 imports, compiler не создаст для него Angular definitions. Физического наличия файла в directory недостаточно.
@@ -9447,6 +12381,13 @@ imports, compiler не создаст для него Angular definitions. Фи�
 <summary>Что такое Angular builder?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Builder — реализация target вроде build, serve или test, настроенная в angular.json. Она получает options, запускает
+compiler/bundler и возвращает результат CLI. Custom builder позволяет заменить или обернуть build pipeline.
+
+**Полный ответ**
+
 Builder — реализация target вроде `build`, `serve` или `test`, настроенная в `angular.json`. Она получает options,
 запускает compiler/bundler и возвращает результат CLI. Custom builder позволяет заменить или обернуть build pipeline.
 
@@ -9457,6 +12398,14 @@ Builder — реализация target вроде `build`, `serve` или `test
 <details>
 <summary>Что такое Vite dev server в Angular?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Современный Angular development server использует Vite для быстрой раздачи и обновления приложения, оставаясь под
+управлением Angular builder. Angular CLI настраивает compilation, assets и framework integration. Это не означает, что
+проект обязан иметь ручной vite.config.
+
+**Полный ответ**
 
 Современный Angular development server использует Vite для быстрой раздачи и обновления приложения, оставаясь под
 управлением Angular builder. Angular CLI настраивает compilation, assets и framework integration. Это не означает, что
@@ -9470,6 +12419,14 @@ Builder — реализация target вроде `build`, `serve` или `test
 <summary>Какие frontend guidelines особенно важны для Angular-проекта?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для Angular-проекта важны соглашения о структуре standalone components, signals и RxJS, smart/presentational components,
+forms, HTTP services, error handling, lazy loading, testing и naming. Без таких правил разные части приложения начинают
+выглядеть как разные frameworks внутри одного репозитория.
+
+**Полный ответ**
+
 Для Angular-проекта важны соглашения о структуре standalone components, signals и RxJS, smart/presentational components,
 forms, HTTP services, error handling, lazy loading, testing и naming. Без таких правил разные части приложения начинают
 выглядеть как разные frameworks внутри одного репозитория.
@@ -9481,6 +12438,14 @@ forms, HTTP services, error handling, lazy loading, testing и naming. Без т
 <details>
 <summary>Что стоит фиксировать в Angular coding guidelines?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Стоит фиксировать структуру feature folders, правила для components, services, directives и pipes, подход к state
+management, forms, error handling, loading states и тестированию. Также полезно описать, когда использовать signals,
+когда RxJS, а когда обычные class fields или pure functions.
+
+**Полный ответ**
 
 Стоит фиксировать структуру feature folders, правила для components, services, directives и pipes, подход к state
 management, forms, error handling, loading states и тестированию. Также полезно описать, когда использовать signals,
@@ -9495,6 +12460,14 @@ management, forms, error handling, loading states и тестированию. �
 <details>
 <summary>Требования к написанию кода на TypeScript</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+На самом деле требования бывают разные и зависят от команды к команде. Самые эффективные для себя считаю использование
+модификаторов доступа и принудительного указания типов данных для всех переменных, методов и членов класса, которые вы
+используете в коде. Желательно все необходимые правила конвенции кода настраивать в ESLint.
+
+**Полный ответ**
 
 На самом деле требования бывают разные и зависят от команды к команде. Самые эффективные для себя считаю использование
 модификаторов доступа и принудительного указания типов данных для всех переменных, методов и членов класса, которые вы
@@ -9531,6 +12504,13 @@ export class MyImp implements My {
 <summary>Зачем нужен ESLint (TSLint) и Prettier?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ESLint анализирует код и находит потенциальные ошибки, небезопасные конструкции и нарушения соглашений. С TypeScript он
+работает через typescript-eslint, а Angular-правила предоставляет angular-eslint.
+
+**Полный ответ**
+
 **ESLint** анализирует код и находит потенциальные ошибки, небезопасные конструкции и нарушения соглашений. С TypeScript
 он работает через typescript-eslint, а Angular-правила предоставляет angular-eslint.
 
@@ -9557,6 +12537,13 @@ export class MyImp implements My {
 <summary>Что такое esbuild?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+esbuild — быстрый bundler и transformer на Go. Angular application builder использует его как часть build pipeline для
+bundling и оптимизаций вместе с Angular compiler. Он не заменяет template type checking.
+
+**Полный ответ**
+
 esbuild — быстрый bundler и transformer на Go. Angular application builder использует его как часть build pipeline для
 bundling и оптимизаций вместе с Angular compiler. Он не заменяет template type checking.
 
@@ -9567,6 +12554,14 @@ bundling и оптимизаций вместе с Angular compiler. Он не �
 <details>
 <summary>Что такое SSR entry?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это server-side entry, из которого builder создает bundle для обработки HTTP requests или prerender. Он подключает
+server providers и экспортирует bootstrap/handler, а не монтирует приложение в browser DOM. Конкретное имя задается
+workspace configuration.
+
+**Полный ответ**
 
 Это server-side entry, из которого builder создает bundle для обработки HTTP requests или prerender. Он подключает
 server providers и экспортирует bootstrap/handler, а не монтирует приложение в browser DOM. Конкретное имя задается
@@ -9579,6 +12574,13 @@ workspace configuration.
 <details>
 <summary>Как тестировать Angular-компонент с async data fetching?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Проверяют не внутренний вызов метода, а observable behavior: loading state, успешный render, empty state, error state и
+отмену устаревшего запроса, если она является частью контракта.
+
+**Полный ответ**
 
 Проверяют не внутренний вызов метода, а observable behavior: loading state, успешный render, empty state, error state и
 отмену устаревшего запроса, если она является частью контракта.
@@ -9613,6 +12615,14 @@ expect(fixture.nativeElement.textContent).toContain('Загрузка');
 <summary>Как объяснить Angular PWA cache strategies на интервью?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Нужно разделить app shell, static assets и data requests. App shell и versioned assets можно кешировать агрессивнее,
+потому что их имена меняются при build. API data требует отдельной стратегии: freshness, performance, timeout, maxAge,
+fallback и правила инвалидирования.
+
+**Полный ответ**
+
 Нужно разделить app shell, static assets и data requests. App shell и versioned assets можно кешировать агрессивнее,
 потому что их имена меняются при build. API data требует отдельной стратегии: freshness, performance, timeout, maxAge,
 fallback и правила инвалидирования.
@@ -9646,6 +12656,12 @@ fallback, риски stale data и то, что Service Worker не заменя
 <summary>Практическая задача: перенесите autocomplete в Angular.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: typed forms, RxJS cancellation, состояния загрузки, accessibility.
+
+**Полный ответ**
+
 **Что проверяет:** typed forms, RxJS cancellation, состояния загрузки, accessibility.
 
 В Angular autocomplete обычно раскладывают на typed form/control state, поток поиска, отмену запросов и доступный UI.
@@ -9678,6 +12694,12 @@ combobox/listbox contract.
 <summary>Практическая задача: упростите RxJS-chain, который только переключает boolean.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: умение не использовать RxJS по привычке.
+
+**Полный ответ**
+
 **Что проверяет:** умение не использовать RxJS по привычке.
 
 Условие: в компоненте есть 30 строк RxJS, которые по click меняют `expanded` с `true` на `false` и обратно.
@@ -9703,6 +12725,12 @@ RxJS стоит оставить, если click участвует во вре�
 <summary>Практическая задача: выберите RxJS operators для поиска и сохранения формы.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: выбор switchMap, concatMap, mergeMap, exhaustMap по бизнес-смыслу.
+
+**Полный ответ**
+
 **Что проверяет:** выбор `switchMap`, `concatMap`, `mergeMap`, `exhaustMap` по бизнес-смыслу.
 
 Условие: на странице есть autocomplete search и кнопка Save. Пользователь быстро печатает и может несколько раз нажать
@@ -9724,6 +12752,12 @@ Save.
 <details>
 <summary>Практическая задача: спроектируйте компонент для показа ошибок формы.</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Что проверяет: forms, reusable UI, accessibility, presentational component boundaries.
+
+**Полный ответ**
 
 **Что проверяет:** forms, reusable UI, accessibility, presentational component boundaries.
 
@@ -9748,6 +12782,12 @@ Save.
 <summary>Практическая задача: смоделируйте detail panel с выбором элемента и локальным редактированием.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: linkedSignal(), resource()/httpResource(), draft state.
+
+**Полный ответ**
+
 **Что проверяет:** `linkedSignal()`, `resource()`/`httpResource()`, draft state.
 
 Условие: пользователь выбирает элемент в списке. Справа открывается detail panel. Данные подгружаются с API, но до Save
@@ -9771,6 +12811,12 @@ Save.
 <details>
 <summary>Практическая задача: исправьте stale view в OnPush-компоненте.</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Что проверяет: reference identity, immutable updates, OnPush и signals.
+
+**Полный ответ**
 
 **Что проверяет:** reference identity, immutable updates, OnPush и signals.
 
@@ -9805,6 +12851,12 @@ immutable update contract.
 <summary>Практическая задача: найдите утечки в долгоживущем dashboard.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: lifecycle, takeUntilDestroyed(), WebSocket/polling cleanup, partial failure handling.
+
+**Полный ответ**
+
 **Что проверяет:** lifecycle, `takeUntilDestroyed()`, WebSocket/polling cleanup, partial failure handling.
 
 Условие: dashboard живет всю пользовательскую сессию. Внутри есть три WebSocket stream, два polling interval и ручные
@@ -9829,6 +12881,12 @@ subscriptions в обработчиках. Через 20 минут вкладк
 <summary>Практическая задача: решите, где использовать lazy route, а где @defer.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: bundle splitting, startup path, waterfall loading.
+
+**Полный ответ**
+
 **Что проверяет:** bundle splitting, startup path, waterfall loading.
 
 Условие: на странице заказа есть основной checkout, тяжелый график аналитики ниже fold и route `/admin`, доступный
@@ -9852,6 +12910,12 @@ Lazy loading не равно performance автоматически. Оно по
 <summary>Практическая задача: оптимизируйте таблицу на 10 000 строк.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: profiling, rendering cost, track, virtual scroll, template hot paths.
+
+**Полный ответ**
+
 **Что проверяет:** profiling, rendering cost, `track`, virtual scroll, template hot paths.
 
 План:
@@ -9874,6 +12938,12 @@ Lazy loading не равно performance автоматически. Оно по
 <summary>Практическая задача: подготовьте feature к zoneless Angular.</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Что проверяет: понимание Zone.js-era кода, signals, third-party integrations.
+
+**Полный ответ**
+
 **Что проверяет:** понимание Zone.js-era кода, signals, third-party integrations.
 
 План проверки:
@@ -9894,6 +12964,12 @@ change detection boundaries.
 <details>
 <summary>Практическая задача: разделите Angular-приложение между двумя командами.</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Что проверяет: feature boundaries, lazy routes, public API, ownership.
+
+**Полный ответ**
 
 **Что проверяет:** feature boundaries, lazy routes, public API, ownership.
 

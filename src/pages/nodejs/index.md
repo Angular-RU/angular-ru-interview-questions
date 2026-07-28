@@ -15,6 +15,13 @@ order: 75
 <summary>Что такое Node.js?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Node.js — JavaScript runtime вне браузера, построенный вокруг V8 и системных API. Он используется для servers, CLI,
+build tools и automation. Node предоставляет filesystem, processes и network APIs, которых нет в browser sandbox.
+
+**Полный ответ**
+
 Node.js — JavaScript runtime вне браузера, построенный вокруг V8 и системных API. Он используется для servers, CLI,
 build tools и automation. Node предоставляет filesystem, processes и network APIs, которых нет в browser sandbox.
 
@@ -25,6 +32,13 @@ build tools и automation. Node предоставляет filesystem, processes
 <details>
 <summary>Что такое ES Modules в Node.js?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это стандартная система import/export, включаемая расширением .mjs или "type": "module". Она поддерживает static
+analysis, top-level await и browser-compatible syntax. Resolution и interop с CommonJS имеют отдельные правила.
+
+**Полный ответ**
 
 Это стандартная система `import`/`export`, включаемая расширением `.mjs` или `"type": "module"`. Она поддерживает static
 analysis, top-level await и browser-compatible syntax. Resolution и interop с CommonJS имеют отдельные правила.
@@ -37,6 +51,13 @@ analysis, top-level await и browser-compatible syntax. Resolution и interop с
 <summary>Что такое <code>process.env</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это объект environment variables текущего процесса. Значения являются строками или undefined, поэтому их нужно
+валидировать и преобразовывать. Секреты server process нельзя автоматически встраивать во frontend bundle.
+
+**Полный ответ**
+
 Это объект environment variables текущего процесса. Значения являются строками или `undefined`, поэтому их нужно
 валидировать и преобразовывать. Секреты server process нельзя автоматически встраивать во frontend bundle.
 
@@ -47,6 +68,13 @@ analysis, top-level await и browser-compatible syntax. Resolution и interop с
 <details>
 <summary>Что такое child process?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это отдельный процесс операционной системы, запущенный из Node через spawn, exec или fork. Он имеет отдельную память и
+может выполнять внешнюю команду. Нужно обрабатывать exit code, stderr, signals и размер output.
+
+**Полный ответ**
 
 Это отдельный процесс операционной системы, запущенный из Node через `spawn`, `exec` или `fork`. Он имеет отдельную
 память и может выполнять внешнюю команду. Нужно обрабатывать exit code, stderr, signals и размер output.
@@ -59,6 +87,13 @@ analysis, top-level await и browser-compatible syntax. Resolution и interop с
 <summary>Чем Node.js отличается от браузера?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В Node нет DOM, window и browser security model, но доступны process, filesystem и server sockets. Browser имеет UI, Web
+APIs и origin restrictions. Общий JavaScript syntax не гарантирует совместимость окружений.
+
+**Полный ответ**
+
 В Node нет DOM, `window` и browser security model, но доступны `process`, filesystem и server sockets. Browser имеет UI,
 Web APIs и origin restrictions. Общий JavaScript syntax не гарантирует совместимость окружений.
 
@@ -69,6 +104,14 @@ Web APIs и origin restrictions. Общий JavaScript syntax не гарант�
 <details>
 <summary>Почему Node.js называют event-driven runtime?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Программа регистрирует handlers, а runtime вызывает их при событиях I/O, timers или завершении задач. Это позволяет
+обслуживать много соединений без отдельного JavaScript thread на каждое. CPU-bound handler все равно блокирует event
+loop.
+
+**Полный ответ**
 
 Программа регистрирует handlers, а runtime вызывает их при событиях I/O, timers или завершении задач. Это позволяет
 обслуживать много соединений без отдельного JavaScript thread на каждое. CPU-bound handler все равно блокирует event
@@ -82,6 +125,13 @@ loop.
 <summary>Чем <code>require</code> отличается от <code>import</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+require() — CommonJS function с синхронной загрузкой и runtime-вызовом. Static import анализируется до выполнения и
+работает в ESM. Dynamic import() асинхронен и доступен в обоих современных контекстах.
+
+**Полный ответ**
+
 `require()` — CommonJS function с синхронной загрузкой и runtime-вызовом. Static `import` анализируется до выполнения и
 работает в ESM. Dynamic `import()` асинхронен и доступен в обоих современных контекстах.
 
@@ -92,6 +142,13 @@ loop.
 <details>
 <summary>Что такое V8?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+V8 — JavaScript engine от Chromium, который парсит, интерпретирует и JIT-компилирует код. Node использует V8 для
+выполнения ECMAScript. Browser APIs и Node APIs находятся вокруг engine, а не внутри языка.
+
+**Полный ответ**
 
 V8 — JavaScript engine от Chromium, который парсит, интерпретирует и JIT-компилирует код. Node использует V8 для
 выполнения ECMAScript. Browser APIs и Node APIs находятся вокруг engine, а не внутри языка.
@@ -104,6 +161,13 @@ V8 — JavaScript engine от Chromium, который парсит, интер�
 <summary>Что такое libuv?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+libuv — библиотека Node для event loop, async I/O, timers, filesystem и thread pool. Она скрывает различия операционных
+систем. Не все операции выполняются на главном JavaScript thread.
+
+**Полный ответ**
+
 libuv — библиотека Node для event loop, async I/O, timers, filesystem и thread pool. Она скрывает различия операционных
 систем. Не все операции выполняются на главном JavaScript thread.
 
@@ -114,6 +178,13 @@ libuv — библиотека Node для event loop, async I/O, timers, filesy
 <details>
 <summary>Что такое event loop в Node.js?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Event loop проходит фазы timers, pending callbacks, poll, check и close callbacks, обрабатывая готовые задачи.
+Microtasks выполняются между соответствующими этапами. Детали важны при диагностике starvation и порядка callbacks.
+
+**Полный ответ**
 
 Event loop проходит фазы timers, pending callbacks, poll, check и close callbacks, обрабатывая готовые задачи.
 Microtasks выполняются между соответствующими этапами. Детали важны при диагностике starvation и порядка callbacks.
@@ -126,6 +197,13 @@ Microtasks выполняются между соответствующими э
 <summary>Чем event loop в Node.js отличается от browser event loop?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Оба координируют tasks и microtasks, но источники событий и фазы различаются. Browser привязан к rendering frames и Web
+APIs, Node — к libuv phases и server I/O. Нельзя механически переносить весь порядок callbacks между окружениями.
+
+**Полный ответ**
+
 Оба координируют tasks и microtasks, но источники событий и фазы различаются. Browser привязан к rendering frames и Web
 APIs, Node — к libuv phases и server I/O. Нельзя механически переносить весь порядок callbacks между окружениями.
 
@@ -136,6 +214,13 @@ APIs, Node — к libuv phases и server I/O. Нельзя механическ�
 <details>
 <summary>Что такое CommonJS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CommonJS — историческая module system Node с require() и module.exports. Модули загружаются синхронно и имеют
+собственный wrapper scope. Экосистема постепенно переходит на стандартные ES Modules.
+
+**Полный ответ**
 
 CommonJS — историческая module system Node с `require()` и `module.exports`. Модули загружаются синхронно и имеют
 собственный wrapper scope. Экосистема постепенно переходит на стандартные ES Modules.
@@ -148,6 +233,13 @@ CommonJS — историческая module system Node с `require()` и `modu
 <summary>Что такое <code>__dirname</code> и почему его нет в ESM?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В CommonJS это directory текущего module file. ESM использует стандартный import.meta.url, из которого путь получают
+через fileURLToPath. Отсутствие dirname связано с другой module model, а не с невозможностью работать с путями.
+
+**Полный ответ**
+
 В CommonJS это directory текущего module file. ESM использует стандартный `import.meta.url`, из которого путь получают
 через `fileURLToPath`. Отсутствие `__dirname` связано с другой module model, а не с невозможностью работать с путями.
 
@@ -158,6 +250,13 @@ CommonJS — историческая module system Node с `require()` и `modu
 <details>
 <summary>Что такое stream?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Stream обрабатывает данные частями вместо загрузки всего объема в память. Бывают readable, writable, duplex и transform
+streams. Backpressure предотвращает переполнение медленного consumer.
+
+**Полный ответ**
 
 Stream обрабатывает данные частями вместо загрузки всего объема в память. Бывают readable, writable, duplex и transform
 streams. Backpressure предотвращает переполнение медленного consumer.
@@ -170,6 +269,13 @@ streams. Backpressure предотвращает переполнение мед
 <summary>Что такое Buffer?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Buffer представляет последовательность bytes в Node и используется для файлов, sockets и binary protocols. Encoding
+нужно задавать явно при преобразовании в строку. В browser близкие primitives — ArrayBuffer и typed arrays.
+
+**Полный ответ**
+
 `Buffer` представляет последовательность bytes в Node и используется для файлов, sockets и binary protocols. Encoding
 нужно задавать явно при преобразовании в строку. В browser близкие primitives — `ArrayBuffer` и typed arrays.
 
@@ -180,6 +286,13 @@ streams. Backpressure предотвращает переполнение мед
 <details>
 <summary>Что такое worker_threads?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Worker threads выполняют JavaScript параллельно внутри одного Node process с отдельными isolates. Они подходят для
+CPU-bound вычислений, а не обычного async I/O. Обмен сообщениями и shared memory добавляют overhead.
+
+**Полный ответ**
 
 Worker threads выполняют JavaScript параллельно внутри одного Node process с отдельными isolates. Они подходят для
 CPU-bound вычислений, а не обычного async I/O. Обмен сообщениями и shared memory добавляют overhead.
@@ -194,6 +307,13 @@ CPU-bound вычислений, а не обычного async I/O. Обмен �
 <summary>Однопоточен ли Node.js?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+JavaScript-код внутри одного Node.js isolate обычно выполняется в одном потоке с одним event loop. Но сам runtime не
+является полностью однопоточным: V8, libuv, операционная система и thread pool могут выполнять работу в других потоках.
+
+**Полный ответ**
+
 JavaScript-код внутри одного Node.js isolate обычно выполняется в одном потоке с одним event loop. Но сам runtime не
 является полностью однопоточным: V8, libuv, операционная система и thread pool могут выполнять работу в других потоках.
 
@@ -206,6 +326,13 @@ JavaScript-поток однопоточен, но Node.js умеет испол
 <details>
 <summary>Чем concurrency отличается от parallelism?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Concurrency означает, что несколько задач находятся в работе одновременно и переключаются во времени. Например, один
+event loop может ожидать несколько HTTP-запросов, не блокируя выполнение программы.
+
+**Полный ответ**
 
 Concurrency означает, что несколько задач находятся в работе одновременно и переключаются во времени. Например, один
 event loop может ожидать несколько HTTP-запросов, не блокируя выполнение программы.
@@ -221,6 +348,13 @@ JavaScript-кода в Node.js обычно используют `worker_threads
 <details>
 <summary>Чем <code>worker_threads</code> отличаются от <code>child_process</code> и <code>cluster</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для CPU-bound вычислений внутри приложения обычно подходит pool из workerthreads. Для сильной изоляции и масштабирования
+HTTP server по CPU cores часто используют несколько процессов или внешний process manager.
+
+**Полный ответ**
 
 - `worker_threads` запускают JavaScript параллельно внутри одного процесса. У каждого worker свой V8 isolate и event
   loop, но workers могут обмениваться сообщениями и использовать общую память через `SharedArrayBuffer`.
@@ -238,6 +372,12 @@ JavaScript-кода в Node.js обычно используют `worker_threads
 <details>
 <summary>Как выполнить CPU-bound задачу в отдельном Worker Thread?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Основной поток создает Worker, передает входные данные и получает результат через message channel.
+
+**Полный ответ**
 
 Основной поток создает `Worker`, передает входные данные и получает результат через message channel.
 
@@ -292,6 +432,12 @@ console.log(await runFibonacci(42));
 <summary>Как Worker Threads обмениваются данными?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Основные варианты:
+
+**Полный ответ**
+
 Основные варианты:
 
 1. `postMessage()` копирует данные по правилам structured clone.
@@ -307,6 +453,14 @@ Message passing обычно безопаснее и проще. Shared memory �
 <details>
 <summary>Что такое race condition в Node.js?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Race condition возникает, когда результат зависит от порядка параллельного доступа к общему состоянию. Например,
+операция counter[0] += 1 состоит из чтения, вычисления и записи. Два workers могут прочитать одно значение и потерять
+одно из увеличений.
+
+**Полный ответ**
 
 Race condition возникает, когда результат зависит от порядка параллельного доступа к общему состоянию. Например,
 операция `counter[0] += 1` состоит из чтения, вычисления и записи. Два workers могут прочитать одно значение и потерять
@@ -332,6 +486,12 @@ Atomics.add(counter, 0, 1);
 <summary>Что такое <code>Atomics</code> и зачем он нужен?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Atomics предоставляет неделимые операции над integer typed arrays, созданными поверх SharedArrayBuffer. Например:
+
+**Полный ответ**
+
 `Atomics` предоставляет неделимые операции над integer typed arrays, созданными поверх `SharedArrayBuffer`. Например:
 
 - `Atomics.load()` и `Atomics.store()` читают и записывают значение;
@@ -349,6 +509,13 @@ Atomics.add(counter, 0, 1);
 <details>
 <summary>Чем mutex отличается от semaphore?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Mutex разрешает вход в критическую секцию только одному участнику. Обычно освободить mutex должен тот же участник,
+который его захватил.
+
+**Полный ответ**
 
 Mutex разрешает вход в критическую секцию только одному участнику. Обычно освободить mutex должен тот же участник,
 который его захватил.
@@ -369,6 +536,13 @@ Binary semaphore со значением `1` похож на mutex, но сем�
 <details>
 <summary>Как реализовать асинхронный semaphore для ограничения Promise-задач?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Такой semaphore ограничивает concurrency внутри одного event loop. Он полезен для HTTP requests, файловых операций или
+доступа к connection pool, но не делает CPU-bound JavaScript параллельным.
+
+**Полный ответ**
 
 Такой semaphore ограничивает concurrency внутри одного event loop. Он полезен для HTTP requests, файловых операций или
 доступа к connection pool, но не делает CPU-bound JavaScript параллельным.
@@ -447,6 +621,13 @@ const responses = await Promise.all(urls.map((url) => semaphore.run(() => fetch(
 <details>
 <summary>Как реализовать semaphore между Worker Threads через <code>SharedArrayBuffer</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В общей памяти можно хранить количество доступных permits. Захват выполняется через compare-and-swap, а ожидающие
+workers блокируются через Atomics.wait().
+
+**Полный ответ**
 
 В общей памяти можно хранить количество доступных permits. Захват выполняется через compare-and-swap, а ожидающие
 workers блокируются через `Atomics.wait()`.
@@ -531,6 +712,13 @@ try {
 <summary>Какие ошибки часто допускают при работе с многопоточностью в Node.js?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+По умолчанию лучше использовать message passing и изолированное состояние. Shared memory и низкоуровневые primitives
+нужны только после измерений и при понятной модели владения ресурсами.
+
+**Полный ответ**
+
 - отправляют обычный async I/O в workers, хотя event loop уже эффективно обрабатывает его;
 - создают новый worker для каждой маленькой задачи вместо worker pool;
 - копируют большие данные между threads и теряют выигрыш на serialization;
@@ -552,6 +740,13 @@ try {
 <summary>Что такое npm package?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это directory или опубликованный artifact с package.json и кодом. Package может быть библиотекой, CLI или приложением.
+Имя и version определяют его identity в registry.
+
+**Полный ответ**
+
 Это directory или опубликованный artifact с `package.json` и кодом. Package может быть библиотекой, CLI или приложением.
 Имя и version определяют его identity в registry.
 
@@ -562,6 +757,13 @@ try {
 <details>
 <summary>Что такое <code>package.json</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Manifest проекта описывает metadata, scripts, dependencies, package exports и настройки tools. Он не фиксирует точное
+дерево transitive dependencies. Для этого нужен lock-файл.
+
+**Полный ответ**
 
 Manifest проекта описывает metadata, scripts, dependencies, package exports и настройки tools. Он не фиксирует точное
 дерево transitive dependencies. Для этого нужен lock-файл.
@@ -574,6 +776,13 @@ Manifest проекта описывает metadata, scripts, dependencies, pack
 <summary>Что такое peerDependencies?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Они объявляют, что package ожидает совместимую dependency от host-проекта. Это важно для frameworks и plugins, которым
+нужен общий runtime instance. Например, Angular library обычно указывает Angular как peer dependency.
+
+**Полный ответ**
+
 Они объявляют, что package ожидает совместимую dependency от host-проекта. Это важно для frameworks и plugins, которым
 нужен общий runtime instance. Например, Angular library обычно указывает Angular как peer dependency.
 
@@ -584,6 +793,14 @@ Manifest проекта описывает metadata, scripts, dependencies, pack
 <details>
 <summary>Что такое npm scripts?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это именованные shell-команды в поле scripts, запускаемые через npm run. npm добавляет локальные binaries из
+nodemodules/.bin в PATH. Lifecycle scripts могут запускаться автоматически, поэтому dependencies должны быть
+доверенными.
+
+**Полный ответ**
 
 Это именованные shell-команды в поле `scripts`, запускаемые через `npm run`. npm добавляет локальные binaries из
 `node_modules/.bin` в `PATH`. Lifecycle scripts могут запускаться автоматически, поэтому dependencies должны быть
@@ -597,6 +814,14 @@ Manifest проекта описывает metadata, scripts, dependencies, pack
 <summary>Что такое semantic versioning?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SemVer использует major.minor.patch: major для breaking changes, minor для совместимой функциональности, patch для
+совместимых fixes. До 1.0.0 гарантии часто трактуются осторожнее. Versioning полезно только при честном публичном
+контракте.
+
+**Полный ответ**
+
 SemVer использует `major.minor.patch`: major для breaking changes, minor для совместимой функциональности, patch для
 совместимых fixes. До `1.0.0` гарантии часто трактуются осторожнее. Versioning полезно только при честном публичном
 контракте.
@@ -609,6 +834,13 @@ SemVer использует `major.minor.patch`: major для breaking changes, 
 <summary>Что значит <code>^</code>, <code>~</code> и exact version в package.json?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Exact устанавливает только указанную version. 1.2.3 допускает patch updates, ^1.2.3 — compatible minor и patch до
+следующего major. Фактическую установленную версию фиксирует lock-файл.
+
+**Полный ответ**
+
 Exact устанавливает только указанную version. `~1.2.3` допускает patch updates, `^1.2.3` — compatible minor и patch до
 следующего major. Фактическую установленную версию фиксирует lock-файл.
 
@@ -619,6 +851,13 @@ Exact устанавливает только указанную version. `~1.2.
 <details>
 <summary>Чем dependencies отличаются от devDependencies?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+dependencies нужны package во время runtime потребителя, devDependencies — для разработки, тестов и сборки. Для frontend
+application обе группы обычно устанавливаются перед build. Для library правильная классификация влияет на потребителя.
+
+**Полный ответ**
 
 `dependencies` нужны package во время runtime потребителя, `devDependencies` — для разработки, тестов и сборки. Для
 frontend application обе группы обычно устанавливаются перед build. Для library правильная классификация влияет на
@@ -632,6 +871,13 @@ frontend application обе группы обычно устанавливают
 <summary>Что такое package-lock.json?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Lock-файл фиксирует точные версии и integrity всего установленного dependency tree. Он делает installs воспроизводимыми.
+Ручное редактирование обычно не требуется.
+
+**Полный ответ**
+
 Lock-файл фиксирует точные версии и integrity всего установленного dependency tree. Он делает installs воспроизводимыми.
 Ручное редактирование обычно не требуется.
 
@@ -642,6 +888,13 @@ Lock-файл фиксирует точные версии и integrity всег
 <details>
 <summary>Почему lock-файл важно коммитить?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+CI и разработчики получают одно и то же разрешенное дерево, а изменения dependencies видны в review. Без lock-файла
+compatible ranges могут установить разные transitive versions. Это усложняет debugging и supply-chain audit.
+
+**Полный ответ**
 
 CI и разработчики получают одно и то же разрешенное дерево, а изменения dependencies видны в review. Без lock-файла
 compatible ranges могут установить разные transitive versions. Это усложняет debugging и supply-chain audit.
@@ -654,6 +907,13 @@ compatible ranges могут установить разные transitive versio
 <summary>Что делает <code>npm install</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Разрешает dependencies, устанавливает их в nodemodules и обновляет lock-файл при необходимости. Он подходит для
+локальной разработки и добавления packages. Результат может изменить lock при рассинхронизации manifest.
+
+**Полный ответ**
+
 Разрешает dependencies, устанавливает их в `node_modules` и обновляет lock-файл при необходимости. Он подходит для
 локальной разработки и добавления packages. Результат может изменить lock при рассинхронизации manifest.
 
@@ -664,6 +924,13 @@ compatible ranges могут установить разные transitive versio
 <details>
 <summary>Что делает <code>npm ci</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Удаляет существующий nodemodules и устанавливает точно по lock-файлу. Команда завершится ошибкой, если package.json и
+lock не согласованы. Она не переписывает dependency tree.
+
+**Полный ответ**
 
 Удаляет существующий `node_modules` и устанавливает точно по lock-файлу. Команда завершится ошибкой, если `package.json`
 и lock не согласованы. Она не переписывает dependency tree.
@@ -676,6 +943,13 @@ compatible ranges могут установить разные transitive versio
 <summary>Чем <code>npm ci</code> лучше для CI?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Дает чистую, воспроизводимую установку и быстро обнаруживает незакоммиченный lock update. Поведение меньше зависит от
+предыдущего workspace state. Кеш npm downloads можно использовать отдельно от nodemodules.
+
+**Полный ответ**
+
 Дает чистую, воспроизводимую установку и быстро обнаруживает незакоммиченный lock update. Поведение меньше зависит от
 предыдущего workspace state. Кеш npm downloads можно использовать отдельно от `node_modules`.
 
@@ -687,6 +961,13 @@ compatible ranges могут установить разные transitive versio
 <summary>Как npm scripts используются во frontend-проектах?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для start, build, test, lint, format, code generation и deployment wrappers. Они дают команде единый interface поверх
+Angular CLI, Vite и других tools. Scripts должны оставаться понятными и composable.
+
+**Полный ответ**
+
 Для `start`, `build`, `test`, `lint`, `format`, code generation и deployment wrappers. Они дают команде единый interface
 поверх Angular CLI, Vite и других tools. Scripts должны оставаться понятными и composable.
 
@@ -697,6 +978,14 @@ compatible ranges могут установить разные transitive versio
 <details>
 <summary>Чем task runner отличается от package scripts?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Task runner вроде Gulp или Grunt описывает pipeline через отдельный инструмент и плагины. Package scripts запускают
+команды напрямую через npm, pnpm, Yarn или Bun. В современных frontend-проектах многие задачи закрываются framework CLI,
+bundler и package scripts, но legacy-проекты могут все еще использовать task runners для сборки assets или интеграции.
+
+**Полный ответ**
 
 Task runner вроде Gulp или Grunt описывает pipeline через отдельный инструмент и плагины. Package scripts запускают
 команды напрямую через npm, pnpm, Yarn или Bun. В современных frontend-проектах многие задачи закрываются framework CLI,
@@ -712,6 +1001,13 @@ bundler и package scripts, но legacy-проекты могут все еще 
 <summary>Что такое dev server?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Локальный HTTP server для разработки с module transforms, source maps, watch и hot reload. Он оптимизирован для
+feedback, а не безопасности, кеширования и production traffic. Его нельзя использовать как production hosting.
+
+**Полный ответ**
+
 Локальный HTTP server для разработки с module transforms, source maps, watch и hot reload. Он оптимизирован для
 feedback, а не безопасности, кеширования и production traffic. Его нельзя использовать как production hosting.
 
@@ -722,6 +1018,13 @@ feedback, а не безопасности, кеширования и production
 <details>
 <summary>Почему frontend-проекту нужен Node.js?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Node запускает package manager, compiler, linter, tests, dev server и production build. Результат затем выполняется в
+browser и может не зависеть от Node. SSR-приложение дополнительно использует Node во время runtime.
+
+**Полный ответ**
 
 Node запускает package manager, compiler, linter, tests, dev server и production build. Результат затем выполняется в
 browser и может не зависеть от Node. SSR-приложение дополнительно использует Node во время runtime.
@@ -734,6 +1037,13 @@ browser и может не зависеть от Node. SSR-приложение 
 <summary>Как Node.js используется в Angular CLI?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+CLI запускается как Node program, читает workspace config и вызывает builders. TypeScript/Angular compiler, dev server и
+test runner также работают в Node. Поддерживаемая Node version зависит от Angular version.
+
+**Полный ответ**
+
 CLI запускается как Node program, читает workspace config и вызывает builders. TypeScript/Angular compiler, dev server и
 test runner также работают в Node. Поддерживаемая Node version зависит от Angular version.
 
@@ -744,6 +1054,14 @@ test runner также работают в Node. Поддерживаемая No
 <details>
 <summary>Как Node.js используется в Vite/Webpack/esbuild?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Он запускает bundler process, читает файлы, разрешает modules и обслуживает plugins. Vite предоставляет dev server,
+Webpack строит module graph, esbuild выполняет быстрые transforms/bundling. Production output предназначен для browser
+или server target.
+
+**Полный ответ**
 
 Он запускает bundler process, читает файлы, разрешает modules и обслуживает plugins. Vite предоставляет dev server,
 Webpack строит module graph, esbuild выполняет быстрые transforms/bundling. Production output предназначен для browser
@@ -757,6 +1075,13 @@ Webpack строит module graph, esbuild выполняет быстрые tra
 <summary>Чем dev server отличается от production build?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Dev server часто преобразует modules по запросу и хранит часть данных в памяти. Production build минифицирует, хеширует,
+оптимизирует и записывает deployable artifacts. Поведение окружения нужно проверять production build.
+
+**Полный ответ**
+
 Dev server часто преобразует modules по запросу и хранит часть данных в памяти. Production build минифицирует, хеширует,
 оптимизирует и записывает deployable artifacts. Поведение окружения нужно проверять production build.
 
@@ -767,6 +1092,13 @@ Dev server часто преобразует modules по запросу и хр
 <details>
 <summary>Почему код, который работает в Node.js, может не работать в браузере?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Browser не предоставляет fs, process, CommonJS resolution и unrestricted sockets. Также действуют CORS, CSP и sandbox.
+Bundler polyfills не следует считать автоматическими или бесплатными.
+
+**Полный ответ**
 
 Browser не предоставляет `fs`, `process`, CommonJS resolution и unrestricted sockets. Также действуют CORS, CSP и
 sandbox. Bundler polyfills не следует считать автоматическими или бесплатными.
@@ -779,6 +1111,13 @@ sandbox. Bundler polyfills не следует считать автоматич
 <summary>Почему код, который работает в браузере, может не работать в Node.js?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+В Node обычно нет window, document, DOM, layout и browser storage. SSR-код должен изолировать browser-only API.
+Некоторые Web APIs появляются в новых Node versions, но их поддержку нужно проверять.
+
+**Полный ответ**
+
 В Node обычно нет `window`, `document`, DOM, layout и browser storage. SSR-код должен изолировать browser-only API.
 Некоторые Web APIs появляются в новых Node versions, но их поддержку нужно проверять.
 
@@ -789,6 +1128,14 @@ sandbox. Bundler polyfills не следует считать автоматич
 <details>
 <summary>Когда scaffolding tools полезны, а когда вредят?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Scaffolding tools полезны, когда создают повторяемую структуру components, features, libraries или tests по текущим
+командным conventions. Они вредят, если генерируют много непонятного boilerplate или закрепляют устаревшую архитектуру.
+Генератор должен отражать живую codebase, а не исторические привычки.
+
+**Полный ответ**
 
 Scaffolding tools полезны, когда создают повторяемую структуру components, features, libraries или tests по текущим
 командным conventions. Они вредят, если генерируют много непонятного boilerplate или закрепляют устаревшую архитектуру.
@@ -804,6 +1151,14 @@ Scaffolding tools полезны, когда создают повторяему
 <summary>Что такое idempotency?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Операция идемпотентна, если повтор одного и того же запроса имеет тот же ожидаемый итоговый эффект. Это важно для
+retries при сетевой неопределенности. API может использовать idempotency key для безопасного повторения создания
+платежа.
+
+**Полный ответ**
+
 Операция идемпотентна, если повтор одного и того же запроса имеет тот же ожидаемый итоговый эффект. Это важно для
 retries при сетевой неопределенности. API может использовать idempotency key для безопасного повторения создания
 платежа.
@@ -815,6 +1170,14 @@ retries при сетевой неопределенности. API может �
 <details>
 <summary>Что такое HSTS и зачем браузер проверяет HSTS list?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+HSTS (HTTP Strict Transport Security) говорит браузеру обращаться к сайту только по HTTPS. Если domain есть в preloaded
+HSTS list или браузер уже получил Strict-Transport-Security, попытка http:// будет локально повышена до https:// до
+сетевого запроса.
+
+**Полный ответ**
 
 HSTS (HTTP Strict Transport Security) говорит браузеру обращаться к сайту только по HTTPS. Если domain есть в preloaded
 HSTS list или браузер уже получил `Strict-Transport-Security`, попытка `http://` будет локально повышена до `https://`
@@ -831,6 +1194,14 @@ HSTS list или браузер уже получил `Strict-Transport-Security
 <summary>Что такое <code>ETag</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+ETag — validator версии ресурса. Клиент может отправить If-None-Match, и сервер вернет 304 Not Modified, если ресурс не
+изменился. Это экономит body transfer, но оставляет network round trip, поэтому для content-hashed assets часто выгоднее
+долгий cache lifetime.
+
+**Полный ответ**
+
 `ETag` — validator версии ресурса. Клиент может отправить `If-None-Match`, и сервер вернет `304 Not Modified`, если
 ресурс не изменился. Это экономит body transfer, но оставляет network round trip, поэтому для content-hashed assets
 часто выгоднее долгий cache lifetime.
@@ -842,6 +1213,14 @@ HSTS list или браузер уже получил `Strict-Transport-Security
 <details>
 <summary>Что такое <code>Expires</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Expires задает абсолютную дату, после которой response считается устаревшим. В современных приложениях чаще предпочитают
+Cache-Control, потому что относительные правила проще и надежнее при разнице часов между системами. Если оба header
+присутствуют, Cache-Control обычно имеет приоритет.
+
+**Полный ответ**
 
 `Expires` задает абсолютную дату, после которой response считается устаревшим. В современных приложениях чаще
 предпочитают `Cache-Control`, потому что относительные правила проще и надежнее при разнице часов между системами. Если
@@ -855,6 +1234,13 @@ HSTS list или браузер уже получил `Strict-Transport-Security
 <summary>Из чего состоит HTTP request?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Request line содержит method, target и HTTP version, затем идут headers и optional body. URL включает path и query
+params. Host, authorization и content metadata передаются headers.
+
+**Полный ответ**
+
 Request line содержит method, target и HTTP version, затем идут headers и optional body. URL включает path и query
 params. Host, authorization и content metadata передаются headers.
 
@@ -866,6 +1252,13 @@ params. Host, authorization и content metadata передаются headers.
 <summary>Из чего состоит HTTP response?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Status line содержит HTTP version и status code, затем идут response headers и optional body. Headers описывают content,
+cache, cookies и transport metadata. Body может содержать JSON, HTML, файл или stream.
+
+**Полный ответ**
+
 Status line содержит HTTP version и status code, затем идут response headers и optional body. Headers описывают content,
 cache, cookies и transport metadata. Body может содержать JSON, HTML, файл или stream.
 
@@ -876,6 +1269,14 @@ cache, cookies и transport metadata. Body может содержать JSON, H
 <details>
 <summary>Чем <code>OPTIONS</code> и <code>HEAD</code> отличаются от основных HTTP methods?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+OPTIONS запрашивает поддерживаемые возможности ресурса или используется браузером для CORS preflight. HEAD похож на GET,
+но возвращает только headers без body, что полезно для проверки metadata, cache и доступности ресурса. Оба метода важны
+для инфраструктуры, но редко являются основными product actions.
+
+**Полный ответ**
 
 `OPTIONS` запрашивает поддерживаемые возможности ресурса или используется браузером для CORS preflight. `HEAD` похож на
 `GET`, но возвращает только headers без body, что полезно для проверки metadata, cache и доступности ресурса. Оба метода
@@ -889,6 +1290,13 @@ cache, cookies и transport metadata. Body может содержать JSON, H
 <summary>Какие HTTP methods обычно идемпотентны?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+GET, HEAD, PUT, DELETE и OPTIONS определены как идемпотентные по семантике, PATCH может быть таким по контракту, POST
+обычно нет. Идемпотентность не означает одинаковый response: DELETE повторно может вернуть другой status.
+
+**Полный ответ**
+
 GET, HEAD, PUT, DELETE и OPTIONS определены как идемпотентные по семантике, PATCH может быть таким по контракту, POST
 обычно нет. Идемпотентность не означает одинаковый response: DELETE повторно может вернуть другой status.
 
@@ -899,6 +1307,12 @@ GET, HEAD, PUT, DELETE и OPTIONS определены как идемпотен
 <details>
 <summary>Как использовать curl для проверки HTTP API?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+curl позволяет отправить запрос вне приложения и увидеть, проблема находится в API, сети или frontend-коде.
+
+**Полный ответ**
 
 `curl` позволяет отправить запрос вне приложения и увидеть, проблема находится в API, сети или frontend-коде.
 
@@ -927,6 +1341,13 @@ curl -X PATCH https://api.example.com/users/1 \
 <summary>Чем HTTP отличается от HTTPS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+HTTPS передает HTTP внутри защищенного TLS-соединения. Оно шифрует трафик, подтверждает подлинность сервера сертификатом
+и защищает данные от незаметного изменения в пути.
+
+**Полный ответ**
+
 HTTPS передает HTTP внутри защищенного TLS-соединения. Оно шифрует трафик, подтверждает подлинность сервера сертификатом
 и защищает данные от незаметного изменения в пути.
 
@@ -939,6 +1360,12 @@ HTTPS не исправляет XSS, слабую авторизацию или 
 <details>
 <summary>Как устроены TCP/IP и HTTP?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Упрощенная модель TCP/IP:
+
+**Полный ответ**
 
 Упрощенная модель TCP/IP:
 
@@ -969,6 +1396,13 @@ TCP устанавливает соединение, гарантирует по
 <summary>Как работает DNS lookup?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+DNS lookup преобразует hostname в IP-адрес. Браузер и ОС сначала проверяют свои кеши, затем resolver обращается к
+настроенному DNS-серверу, который может вернуть ответ из кеша или выполнить recursive lookup через DNS hierarchy.
+
+**Полный ответ**
+
 DNS lookup преобразует hostname в IP-адрес. Браузер и ОС сначала проверяют свои кеши, затем resolver обращается к
 настроенному DNS-серверу, который может вернуть ответ из кеша или выполнить recursive lookup через DNS hierarchy.
 
@@ -983,6 +1417,13 @@ DNS lookup преобразует hostname в IP-адрес. Браузер и �
 <summary>Зачем frontend-разработчику понимать DNS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+DNS влияет на latency первого запроса к origin, API, CDN, fonts и analytics. Много разных domains увеличивает число DNS
+lookup, TCP/TLS setup и риск частичных сбоев.
+
+**Полный ответ**
+
 DNS влияет на latency первого запроса к origin, API, CDN, fonts и analytics. Много разных domains увеличивает число DNS
 lookup, TCP/TLS setup и риск частичных сбоев.
 
@@ -996,6 +1437,14 @@ origins, диагностировать проблемы после смены C
 <details>
 <summary>Что происходит перед отправкой HTTP-запроса по HTTPS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Браузер открывает или переиспользует соединение с origin. Если нового соединения избежать нельзя, сначала
+устанавливается transport connection, затем выполняется TLS handshake: выбирается версия TLS и cipher suite, проверяется
+certificate chain, согласуются ключи шифрования и имя сервера через SNI.
+
+**Полный ответ**
 
 Браузер открывает или переиспользует соединение с origin. Если нового соединения избежать нельзя, сначала
 устанавливается transport connection, затем выполняется TLS handshake: выбирается версия TLS и cipher suite, проверяется
@@ -1012,6 +1461,13 @@ handler, а с network latency, certificate проблемами, отсутст
 <summary>Чем TCP отличается от UDP в контексте HTTP?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+TCP дает надежный упорядоченный byte stream: потерянные данные повторно передаются, а приложение получает их в порядке.
+HTTP/1.1 и HTTP/2 обычно работают поверх TCP.
+
+**Полный ответ**
+
 TCP дает надежный упорядоченный byte stream: потерянные данные повторно передаются, а приложение получает их в порядке.
 HTTP/1.1 и HTTP/2 обычно работают поверх TCP.
 
@@ -1027,6 +1483,13 @@ loss.
 <summary>Что происходит, если сетевой пакет потерялся?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Для TCP потеря приводит к повторной передаче и увеличению latency; данные выше по стеку будут ждать недостающий кусок. В
+HTTP/2 поверх TCP потеря может задержать несколько streams на одном соединении.
+
+**Полный ответ**
+
 Для TCP потеря приводит к повторной передаче и увеличению latency; данные выше по стеку будут ждать недостающий кусок. В
 HTTP/2 поверх TCP потеря может задержать несколько streams на одном соединении.
 
@@ -1041,6 +1504,12 @@ HTTP/2 поверх TCP потеря может задержать нескол�
 <details>
 <summary>Как выглядит минимальный HTTP request?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Минимально важны method, request target, HTTP version и Host для HTTP/1.1:
+
+**Полный ответ**
 
 Минимально важны method, request target, HTTP version и `Host` для HTTP/1.1:
 
@@ -1061,6 +1530,13 @@ Accept: text/html
 <summary>Что означают <code>Date</code> и <code>Age</code> в HTTP headers?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Date показывает время формирования response на сервере или proxy. Age показывает, сколько секунд response уже находится
+в cache, например в CDN. Эти headers помогают понять, пришел ли ответ из cache и насколько он свежий.
+
+**Полный ответ**
+
 `Date` показывает время формирования response на сервере или proxy. `Age` показывает, сколько секунд response уже
 находится в cache, например в CDN. Эти headers помогают понять, пришел ли ответ из cache и насколько он свежий.
 
@@ -1071,6 +1547,14 @@ Accept: text/html
 <details>
 <summary>Почему раньше ассеты разносили по нескольким доменам?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В HTTP/1.1 браузеры ограничивали число одновременных соединений к одному host, поэтому domain sharding помогал качать
+больше файлов параллельно. Цена — дополнительные DNS lookup, TLS handshakes, cookies и сложность кеширования. В
+современных проектах этот прием чаще вреден.
+
+**Полный ответ**
 
 В HTTP/1.1 браузеры ограничивали число одновременных соединений к одному host, поэтому domain sharding помогал качать
 больше файлов параллельно. Цена — дополнительные DNS lookup, TLS handshakes, cookies и сложность кеширования. В
@@ -1084,6 +1568,14 @@ Accept: text/html
 <summary>Что такое domain prefetch?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Domain prefetch заранее выполняет DNS lookup для origin, который скоро может понадобиться. Это может сократить задержку
+первого запроса к стороннему домену, но лишние hints расходуют ресурсы и могут раскрывать будущие переходы. Для более
+критичных ресурсов иногда уместнее preconnect.
+
+**Полный ответ**
+
 Domain prefetch заранее выполняет DNS lookup для origin, который скоро может понадобиться. Это может сократить задержку
 первого запроса к стороннему домену, но лишние hints расходуют ресурсы и могут раскрывать будущие переходы. Для более
 критичных ресурсов иногда уместнее `preconnect`.
@@ -1095,6 +1587,13 @@ Domain prefetch заранее выполняет DNS lookup для origin, ко
 <details>
 <summary>Что происходит, если HTML ссылается на ресурсы с других доменов?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Для каждого нового origin браузеру могут понадобиться отдельные DNS lookup, connection setup и TLS handshake. CSS,
+scripts, images, fonts и API-запросы также подчиняются mixed content, CORS, CORP/CORB, CSP и cookie rules.
+
+**Полный ответ**
 
 Для каждого нового origin браузеру могут понадобиться отдельные DNS lookup, connection setup и TLS handshake. CSS,
 scripts, images, fonts и API-запросы также подчиняются mixed content, CORS, CORP/CORB, CSP и cookie rules.
@@ -1110,6 +1609,13 @@ scripts, images, fonts и API-запросы также подчиняются m
 <summary>Что делает сервер после получения HTTP request?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Server или edge layer принимает request, разбирает method, path, headers и body, применяет routing, authentication,
+authorization, validation, business logic и обращение к данным. Затем формирует status code, response headers и body.
+
+**Полный ответ**
+
 Server или edge layer принимает request, разбирает method, path, headers и body, применяет routing, authentication,
 authorization, validation, business logic и обращение к данным. Затем формирует status code, response headers и body.
 
@@ -1124,6 +1630,12 @@ authorization, validation, business logic и обращение к данным.
 <summary>Из чего состоят HTTP-запрос и ответ?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Запрос содержит method, URL, headers и необязательный body. Ответ содержит status code, headers и необязательный body.
+
+**Полный ответ**
+
 Запрос содержит method, URL, headers и необязательный body. Ответ содержит status code, headers и необязательный body.
 
 Частые headers: `Content-Type`, `Accept`, `Authorization`, `Cache-Control`, `ETag`, `Cookie`, `Set-Cookie`, `Origin`.
@@ -1137,6 +1649,12 @@ authorization, validation, business logic и обращение к данным.
 <summary>Чем WebSocket отличается от SSE?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+WebSocket предоставляет постоянный двусторонний канал и подходит для чатов, multiplayer и совместного редактирования.
+
+**Полный ответ**
+
 WebSocket предоставляет постоянный двусторонний канал и подходит для чатов, multiplayer и совместного редактирования.
 
 SSE передает события только от сервера к клиенту поверх HTTP, автоматически переподключается и проще для уведомлений,
@@ -1149,6 +1667,12 @@ SSE передает события только от сервера к клие
 <details>
 <summary>Когда выбрать polling, SSE или WebSocket?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Учитывают инфраструктуру, reconnect, authentication, масштабирование, mobile network и реальную частоту событий.
+
+**Полный ответ**
 
 - Polling прост и подходит для редких обновлений, когда задержка допустима.
 - SSE выбирают для постоянного потока server-to-client.
@@ -1164,6 +1688,14 @@ SSE передает события только от сервера к клие
 <summary>Чем Long Polling, WebSocket и Server-Sent Events отличаются?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Long Polling держит HTTP-запрос открытым до появления события, затем клиент сразу открывает следующий запрос. SSE дает
+постоянный однонаправленный поток server-to-client поверх HTTP и хорошо подходит для уведомлений. WebSocket открывает
+двусторонний канал с низкой задержкой, но требует отдельного управления reconnect, auth, scaling и проксированием.
+
+**Полный ответ**
+
 Long Polling держит HTTP-запрос открытым до появления события, затем клиент сразу открывает следующий запрос. SSE дает
 постоянный однонаправленный поток server-to-client поверх HTTP и хорошо подходит для уведомлений. WebSocket открывает
 двусторонний канал с низкой задержкой, но требует отдельного управления reconnect, auth, scaling и проксированием.
@@ -1175,6 +1707,13 @@ Long Polling держит HTTP-запрос открытым до появлен
 <details>
 <summary>Что такое 304 Not Modified и как он связан с кешем?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+304 Not Modified означает, что cached response в browser HTTP cache еще можно использовать. Браузер отправляет
+conditional request с If-None-Match или If-Modified-Since, а сервер отвечает 304 без полного body.
+
+**Полный ответ**
 
 `304 Not Modified` означает, что cached response в browser HTTP cache еще можно использовать. Браузер отправляет
 conditional request с `If-None-Match` или `If-Modified-Since`, а сервер отвечает `304` без полного body.
@@ -1190,6 +1729,14 @@ conditional request с `If-None-Match` или `If-Modified-Since`, а серве
 <summary>Что такое <code>Cache-Control</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Cache-Control задает правила кеширования для browser cache, CDN и промежуточных caches: max-age, s-maxage, no-cache,
+no-store, public, private, immutable. Для hashed assets обычно используют долгий max-age и immutable, а для HTML SPA —
+короткое кеширование или revalidation, чтобы быстрее доставлять новые версии и rollback.
+
+**Полный ответ**
+
 `Cache-Control` задает правила кеширования для browser cache, CDN и промежуточных caches: `max-age`, `s-maxage`,
 `no-cache`, `no-store`, `public`, `private`, `immutable`. Для hashed assets обычно используют долгий `max-age` и
 `immutable`, а для HTML SPA — короткое кеширование или revalidation, чтобы быстрее доставлять новые версии и rollback.
@@ -1201,6 +1748,13 @@ conditional request с `If-None-Match` или `If-Modified-Since`, а серве
 <details>
 <summary>Для чего нужны <code>If-Modified-Since</code> и <code>If-None-Match</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Это conditional request headers для revalidation. If-Modified-Since сравнивает дату изменения ресурса, а If-None-Match
+сравнивает ETag и обычно точнее. Если ресурс не изменился, сервер отвечает 304 без body, сохраняя bandwidth.
+
+**Полный ответ**
 
 Это conditional request headers для revalidation. `If-Modified-Since` сравнивает дату изменения ресурса, а
 `If-None-Match` сравнивает `ETag` и обычно точнее. Если ресурс не изменился, сервер отвечает `304` без body, сохраняя
@@ -1214,6 +1768,14 @@ bandwidth.
 <summary>Что такое <code>Transfer-Encoding</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Transfer-Encoding описывает, как body передается по соединению, например chunked encoding в HTTP/1.1. Chunked response
+позволяет начинать отправку до того, как известен полный размер body. В HTTP/2 и HTTP/3 framing устроен иначе, но
+семантика streaming response остается важной.
+
+**Полный ответ**
+
 `Transfer-Encoding` описывает, как body передается по соединению, например chunked encoding в HTTP/1.1. Chunked response
 позволяет начинать отправку до того, как известен полный размер body. В HTTP/2 и HTTP/3 framing устроен иначе, но
 семантика streaming response остается важной.
@@ -1225,6 +1787,14 @@ bandwidth.
 <details>
 <summary>Как HTTP/2 и HTTP/3 изменили подход к domain sharding?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+HTTP/2 добавил multiplexing нескольких streams в одном соединении, а HTTP/3 поверх QUIC уменьшает влияние части
+transport-level задержек. Поэтому много доменов обычно хуже: теряется reuse соединения и усложняется приоритизация.
+Оптимизация сместилась к правильному кешированию, размеру ресурсов и CDN, а не к искусственному дроблению origins.
+
+**Полный ответ**
 
 HTTP/2 добавил multiplexing нескольких streams в одном соединении, а HTTP/3 поверх QUIC уменьшает влияние части
 transport-level задержек. Поэтому много доменов обычно хуже: теряется reuse соединения и усложняется приоритизация.
@@ -1238,6 +1808,12 @@ transport-level задержек. Поэтому много доменов об�
 <summary>Что такое клиент-серверная архитектура?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Клиент отвечает за интерфейс и отправляет запросы, сервер хранит данные, применяет бизнес-правила и возвращает ответы.
+
+**Полный ответ**
+
 Клиент отвечает за интерфейс и отправляет запросы, сервер хранит данные, применяет бизнес-правила и возвращает ответы.
 
 Граница не является границей доверия: server всегда повторно проверяет authentication, authorization и входные данные,
@@ -1250,6 +1826,13 @@ transport-level задержек. Поэтому много доменов об�
 <details>
 <summary>Чем CDN cache отличается от browser cache?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Browser cache находится у конкретного пользователя и ускоряет повторные посещения. CDN cache находится ближе к
+пользователям на edge-узлах и снижает latency, трафик до origin и нагрузку на backend.
+
+**Полный ответ**
 
 Browser cache находится у конкретного пользователя и ускоряет повторные посещения. CDN cache находится ближе к
 пользователям на edge-узлах и снижает latency, трафик до origin и нагрузку на backend.
@@ -1272,6 +1855,13 @@ Cache-Control: public, max-age=31536000, immutable
 <summary>Что такое RPS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+RPS, или Requests Per Second, — количество запросов, которое сервер обрабатывает за секунду. Например, 120 RPS означает,
+что сервер в среднем обрабатывает 120 HTTP-запросов в секунду.
+
+**Полный ответ**
+
 RPS, или Requests Per Second, — количество запросов, которое сервер обрабатывает за секунду. Например, `120 RPS`
 означает, что сервер в среднем обрабатывает 120 HTTP-запросов в секунду.
 
@@ -1282,6 +1872,13 @@ RPS, или Requests Per Second, — количество запросов, ко
 <details>
 <summary>Что такое RPS monitor?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+RPS monitor измеряет количество запросов за единицу времени. Он помогает увидеть текущую нагрузку, всплески трафика и
+связать их с деградацией производительности или доступности.
+
+**Полный ответ**
 
 RPS monitor измеряет количество запросов за единицу времени. Он помогает увидеть текущую нагрузку, всплески трафика и
 связать их с деградацией производительности или доступности.
@@ -1294,6 +1891,13 @@ RPS monitor измеряет количество запросов за един
 <summary>Зачем frontend-разработчику понимать RPS?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Frontend-разработчик может работать с SSR, BFF, dev server, Node.js tooling и API-интеграциями. RPS помогает оценивать
+нагрузку на SSR, rate limits, кеширование, retry-логику и влияние frontend-кода на backend.
+
+**Полный ответ**
+
 Frontend-разработчик может работать с SSR, BFF, dev server, Node.js tooling и API-интеграциями. RPS помогает оценивать
 нагрузку на SSR, rate limits, кеширование, retry-логику и влияние frontend-кода на backend.
 
@@ -1304,6 +1908,12 @@ Frontend-разработчик может работать с SSR, BFF, dev ser
 <details>
 <summary>Как может выглядеть простой RPS monitor в Node.js?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Этот учебный HTTP-сервер считает запросы за последнюю секунду и выводит результат в консоль:
+
+**Полный ответ**
 
 Этот учебный HTTP-сервер считает запросы за последнюю секунду и выводит результат в консоль:
 
@@ -1337,6 +1947,12 @@ server.listen(3000, () => {
 <summary>Как проверить RPS monitor через curl?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+После запуска сервера можно отправить несколько запросов вручную:
+
+**Полный ответ**
+
 После запуска сервера можно отправить несколько запросов вручную:
 
 ```bash
@@ -1355,6 +1971,14 @@ curl http://localhost:3000
 <summary>Почему такой RPS monitor не production-ready?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Он хранит счетчик только в памяти одного процесса и теряет данные при перезапуске. Несколько процессов или containers
+будут считать RPS независимо. В production метрики агрегируют через Prometheus, OpenTelemetry, APM или другую систему
+observability и визуализируют, например, в Grafana.
+
+**Полный ответ**
+
 Он хранит счетчик только в памяти одного процесса и теряет данные при перезапуске. Несколько процессов или containers
 будут считать RPS независимо. В production метрики агрегируют через Prometheus, OpenTelemetry, APM или другую систему
 observability и визуализируют, например, в Grafana.
@@ -1366,6 +1990,12 @@ observability и визуализируют, например, в Grafana.
 <details>
 <summary>Какие метрики кроме RPS важны для Node.js сервера?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Метрики полезно связывать между собой: один RPS не объясняет состояние системы.
+
+**Полный ответ**
 
 - Latency и p95/p99 response time.
 - Error rate и количество ответов 4xx/5xx.
@@ -1384,6 +2014,13 @@ observability и визуализируют, например, в Grafana.
 <summary>Чем RPS отличается от latency?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+RPS показывает количество обработанных запросов в секунду, а latency — время обработки отдельного запроса. Высокий RPS
+сам по себе не является проблемой, но рост latency и error rate вместе с ним может указывать на перегрузку.
+
+**Полный ответ**
+
 RPS показывает количество обработанных запросов в секунду, а latency — время обработки отдельного запроса. Высокий RPS
 сам по себе не является проблемой, но рост latency и error rate вместе с ним может указывать на перегрузку.
 
@@ -1394,6 +2031,13 @@ RPS показывает количество обработанных запр�
 <details>
 <summary>Что такое p95 и p99 latency?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+p95 — значение, быстрее которого завершились 95% запросов; p99 аналогично описывает 99% запросов. Перцентили лучше
+среднего показывают медленный хвост распределения, хотя для полной картины также нужны размер выборки и временное окно.
+
+**Полный ответ**
 
 `p95` — значение, быстрее которого завершились 95% запросов; `p99` аналогично описывает 99% запросов. Перцентили лучше
 среднего показывают медленный хвост распределения, хотя для полной картины также нужны размер выборки и временное окно.
@@ -1406,6 +2050,14 @@ RPS показывает количество обработанных запр�
 <summary>Как event loop delay связан с производительностью Node.js?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+JavaScript выполняется в основном потоке Node.js. CPU-bound работа и долгие синхронные операции блокируют event loop,
+из-за чего callbacks и обработчики запросов запускаются позже. Event loop delay измеряет эту задержку и помогает найти
+такие блокировки.
+
+**Полный ответ**
+
 JavaScript выполняется в основном потоке Node.js. CPU-bound работа и долгие синхронные операции блокируют event loop,
 из-за чего callbacks и обработчики запросов запускаются позже. Event loop delay измеряет эту задержку и помогает найти
 такие блокировки.
@@ -1417,6 +2069,12 @@ JavaScript выполняется в основном потоке Node.js. CPU-
 <details>
 <summary>Что может увеличить RPS capacity Node.js приложения?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Изменения нужно подтверждать нагрузочными тестами: увеличение RPS не должно ухудшать latency и error rate сверх SLO.
+
+**Полный ответ**
 
 - Кеширование и использование reverse proxy или CDN.
 - Уменьшение CPU-bound работы в request handler.
@@ -1436,6 +2094,13 @@ JavaScript выполняется в основном потоке Node.js. CPU-
 <summary>Как <code>package.json</code> связан с рабочим окружением?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+package.json — manifest Node.js-проекта. В рабочем окружении важно понимать, какие scripts запускать, какой package
+manager закреплен в проекте и какой lock-файл должен быть единственным источником воспроизводимой установки.
+
+**Полный ответ**
+
 `package.json` — manifest Node.js-проекта. В рабочем окружении важно понимать, какие scripts запускать, какой package
 manager закреплен в проекте и какой lock-файл должен быть единственным источником воспроизводимой установки.
 
@@ -1450,6 +2115,14 @@ manager закреплен в проекте и какой lock-файл дол�
 <summary>Зачем frontend-проекту единый tooling?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Единый tooling снижает расхождения между локальной разработкой, CI и production build. Команда должна понимать, какой
+package manager используется, какие scripts являются основными, как запускать tests, lint, format, build и preview. Это
+ускоряет onboarding и уменьшает проблемы класса works on my machine.
+
+**Полный ответ**
+
 Единый tooling снижает расхождения между локальной разработкой, CI и production build. Команда должна понимать, какой
 package manager используется, какие scripts являются основными, как запускать tests, lint, format, build и preview. Это
 ускоряет onboarding и уменьшает проблемы класса works on my machine.
@@ -1461,6 +2134,14 @@ package manager используется, какие scripts являются о
 <details>
 <summary>Чем отличаются Bun, pnpm, Yarn и npm?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Все эти инструменты устанавливают зависимости, работают с package.json, запускают scripts и фиксируют результат через
+lock-файл. Отличаются скоростью, моделью nodemodules, строгостью dependency resolution, зрелостью экосистемы и
+дополнительными возможностями.
+
+**Полный ответ**
 
 Все эти инструменты устанавливают зависимости, работают с `package.json`, запускают scripts и фиксируют результат через
 lock-файл. Отличаются скоростью, моделью `node_modules`, строгостью dependency resolution, зрелостью экосистемы и
@@ -1492,6 +2173,12 @@ lock-файл. Отличаются скоростью, моделью `node_mod
 <summary>Зачем нужен package-lock.json?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+package-lock.json нужен для воспроизводимой установки npm-зависимостей в локальной разработке и CI.
+
+**Полный ответ**
+
 `package-lock.json` нужен для воспроизводимой установки npm-зависимостей в локальной разработке и CI.
 
 Canonical-ответ: [Что такое package-lock.json?](../nodejs/index.md#npm-и-package-scripts)
@@ -1503,6 +2190,13 @@ Canonical-ответ: [Что такое package-lock.json?](../nodejs/index.md#
 <details>
 <summary>Чем npm install отличается от npm ci?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+В рабочем процессе важно правило: локально чаще используют установку по правилам проекта, а в CI предпочитают
+воспроизводимую установку по lock-файлу.
+
+**Полный ответ**
 
 В рабочем процессе важно правило: локально чаще используют установку по правилам проекта, а в CI предпочитают
 воспроизводимую установку по lock-файлу.
@@ -1517,6 +2211,12 @@ Canonical-ответ: [Что такое package-lock.json?](../nodejs/index.md#
 <details>
 <summary>Чем ESLint, Stylelint и Prettier отличаются?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ESLint анализирует код и находит потенциальные ошибки, небезопасные конструкции и нарушения правил проекта.
+
+**Полный ответ**
 
 ESLint анализирует код и находит потенциальные ошибки, небезопасные конструкции и нарушения правил проекта.
 
@@ -1534,6 +2234,14 @@ Stylelint выполняет похожую проверку для CSS, SCSS и
 <summary>Как вы поддерживаете единый стиль кода в команде?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Команда фиксирует правила в formatter, linting, editor config, pull request checklist и CI. Важно автоматизировать
+механические споры, а в review обсуждать читаемость, архитектуру и поведение. Если правило не проверяется автоматически,
+его стоит описать в локальных соглашениях или пересмотреть.
+
+**Полный ответ**
+
 Команда фиксирует правила в formatter, linting, editor config, pull request checklist и CI. Важно автоматизировать
 механические споры, а в review обсуждать читаемость, архитектуру и поведение. Если правило не проверяется автоматически,
 его стоит описать в локальных соглашениях или пересмотреть.
@@ -1546,6 +2254,14 @@ Stylelint выполняет похожую проверку для CSS, SCSS и
 <summary>Для чего нужен linting tool?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Linting tool находит ошибки и risky patterns до runtime: неиспользуемый код, неправильные imports, нарушение
+accessibility, небезопасные конструкции и несогласованный стиль. Он не заменяет тесты и review, но дает быстрый feedback
+и делает качество менее зависимым от памяти конкретного разработчика.
+
+**Полный ответ**
+
 Linting tool находит ошибки и risky patterns до runtime: неиспользуемый код, неправильные imports, нарушение
 accessibility, небезопасные конструкции и несогласованный стиль. Он не заменяет тесты и review, но дает быстрый feedback
 и делает качество менее зависимым от памяти конкретного разработчика.
@@ -1557,6 +2273,13 @@ accessibility, небезопасные конструкции и несогла
 <details>
 <summary>Чем Webpack отличается от Vite?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Webpack строит dependency graph и создает bundles через loaders и plugins. Он гибкий, но development-сборка крупного
+проекта может быть тяжелой.
+
+**Полный ответ**
 
 Webpack строит dependency graph и создает bundles через loaders и plugins. Он гибкий, но development-сборка крупного
 проекта может быть тяжелой.
@@ -1572,6 +2295,12 @@ Vite в development использует native ES modules и преобразу
 <details>
 <summary>Как код попадает в отдельный chunk?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Основные сигналы для сборщика:
+
+**Полный ответ**
 
 Основные сигналы для сборщика:
 
@@ -1594,6 +2323,14 @@ Vite в development использует native ES modules и преобразу
 <summary>Как выглядит обычный workflow при разработке страницы или фичи?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Сначала уточняют цель, состояния UI, acceptance criteria, API-контракт, accessibility и способ проверки. Затем делают
+минимальный инкремент, запускают локальные проверки, добавляют нужные тесты и отправляют маленький pull request. Хороший
+workflow оставляет следы: описание решения, известные ограничения и понятные шаги проверки.
+
+**Полный ответ**
+
 Сначала уточняют цель, состояния UI, acceptance criteria, API-контракт, accessibility и способ проверки. Затем делают
 минимальный инкремент, запускают локальные проверки, добавляют нужные тесты и отправляют маленький pull request. Хороший
 workflow оставляет следы: описание решения, известные ограничения и понятные шаги проверки.
@@ -1605,6 +2342,14 @@ workflow оставляет следы: описание решения, изв�
 <details>
 <summary>Какое рабочее окружение вы предпочитаете?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Хороший ответ описывает не любимую IDE как самоцель, а условия продуктивности: быстрый запуск проекта, стабильный
+Node.js version, корректные extensions, formatter on save, debugger, терминал и доступ к DevTools. Важно уметь
+подстроиться под командные стандарты, чтобы локальная среда не расходилась с CI.
+
+**Полный ответ**
 
 Хороший ответ описывает не любимую IDE как самоцель, а условия продуктивности: быстрый запуск проекта, стабильный
 Node.js version, корректные extensions, formatter on save, debugger, терминал и доступ к DevTools. Важно уметь
@@ -1618,6 +2363,14 @@ Node.js version, корректные extensions, formatter on save, debugger, �
 <summary>Что вы делаете, если проект использует tabs, а вы привыкли к spaces?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Нужно следовать проектным настройкам, а не личной привычке. Форматирование должны задавать .editorconfig, Prettier или
+другой formatter, чтобы файлы не менялись случайно из-за IDE. Если правила мешают, их обсуждают отдельно, а не меняют
+попутно в feature pull request.
+
+**Полный ответ**
+
 Нужно следовать проектным настройкам, а не личной привычке. Форматирование должны задавать `.editorconfig`, Prettier или
 другой formatter, чтобы файлы не менялись случайно из-за IDE. Если правила мешают, их обсуждают отдельно, а не меняют
 попутно в feature pull request.
@@ -1630,6 +2383,14 @@ Node.js version, корректные extensions, formatter on save, debugger, �
 <summary>Зачем frontend-команде documentation guidelines?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Documentation guidelines объясняют, где описаны архитектура, conventions, design system, onboarding, troubleshooting и
+решения по workflow. Без этого знания остаются в головах отдельных людей, а новые разработчики повторяют старые ошибки.
+Практичный подход — обновлять docs вместе с кодом в том же pull request.
+
+**Полный ответ**
+
 Documentation guidelines объясняют, где описаны архитектура, conventions, design system, onboarding, troubleshooting и
 решения по workflow. Без этого знания остаются в головах отдельных людей, а новые разработчики повторяют старые ошибки.
 Практичный подход — обновлять docs вместе с кодом в том же pull request.
@@ -1641,6 +2402,14 @@ Documentation guidelines объясняют, где описаны архите�
 <details>
 <summary>Какие инструменты должны быть описаны в onboarding документации?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно описать Node.js version, package manager, install command, dev server, build, tests, lint, format, environment
+variables, mock API и troubleshooting. Хорошая onboarding документация позволяет новому разработчику поднять проект без
+долгих личных созвонов и не расходиться с CI.
+
+**Полный ответ**
 
 Нужно описать Node.js version, package manager, install command, dev server, build, tests, lint, format, environment
 variables, mock API и troubleshooting. Хорошая onboarding документация позволяет новому разработчику поднять проект без
@@ -1655,6 +2424,13 @@ variables, mock API и troubleshooting. Хорошая onboarding докумен
 <details>
 <summary>Чем Babel, SWC, esbuild и TypeScript compiler отличаются в frontend toolchain?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+TypeScript compiler умеет type checking и emit, но в современных frontend-сборках часто разделяют type checking и
+transpile. Babel трансформирует syntax через plugins, SWC и esbuild делают быстрые transforms на native-реализациях.
+
+**Полный ответ**
 
 TypeScript compiler умеет type checking и emit, но в современных frontend-сборках часто разделяют type checking и
 transpile. Babel трансформирует syntax через plugins, SWC и esbuild делают быстрые transforms на native-реализациях.
@@ -1685,6 +2461,14 @@ polyfills, browserslist или plugin pipeline.
 <details>
 <summary>Как объяснить Vite, Webpack и Rollup на интервью?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Webpack - универсальный bundler с большим plugin ecosystem и исторически богатой настройкой. Rollup силен для libraries
+и tree shaking ES modules. Vite использует быстрый dev server на native ESM и собирает production через Rollup-пайплайн
+или framework-specific integration.
+
+**Полный ответ**
 
 Webpack - универсальный bundler с большим plugin ecosystem и исторически богатой настройкой. Rollup силен для libraries
 и tree shaking ES modules. Vite использует быстрый dev server на native ESM и собирает production через Rollup-пайплайн

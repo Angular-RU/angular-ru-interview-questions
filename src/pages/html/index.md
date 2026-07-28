@@ -15,6 +15,14 @@ order: 30
 <summary>Что такое HTML и какую задачу он решает?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+HTML описывает структуру и смысл документа: заголовки, текст, навигацию, формы, ссылки и изображения. Браузер разбирает
+разметку и строит DOM, который используют CSS, JavaScript, поисковые роботы и ассистивные технологии (assistive
+technologies).
+
+**Полный ответ**
+
 HTML описывает структуру и смысл документа: заголовки, текст, навигацию, формы, ссылки и изображения. Браузер разбирает
 разметку и строит DOM, который используют CSS, JavaScript, поисковые роботы и ассистивные технологии (assistive
 technologies).
@@ -33,6 +41,13 @@ technologies).
 <summary>Что такое HTML attribute?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Attribute задает дополнительную информацию или поведение element: href, type, disabled, lang. Global attributes вроде
+id, class, hidden и data- доступны большинству элементов, а часть attributes имеет смысл только для определенных tags.
+
+**Полный ответ**
+
 ![img.png](assets/what-is-html-attribute.png)
 
 Attribute задает дополнительную информацию или поведение element: `href`, `type`, `disabled`, `lang`. Global attributes
@@ -46,6 +61,13 @@ Attribute задает дополнительную информацию или 
 <details>
 <summary>Что такое semantic HTML?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Semantic HTML использует элементы по их назначению: nav для навигации, main для основного контента, button для действия.
+Это делает структуру понятнее браузеру, разработчикам, поисковым системам и assistive technologies.
+
+**Полный ответ**
 
 Semantic HTML использует элементы по их назначению: `nav` для навигации, `main` для основного контента, `button` для
 действия. Это делает структуру понятнее браузеру, разработчикам, поисковым системам и assistive technologies.
@@ -62,6 +84,14 @@ landmarks, headings, form controls и интерактивные элемент�
 <summary>Что такое document outline?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Это логическая структура документа, прежде всего иерархия заголовков и landmarks. На практике нужно последовательно
+использовать h1–h6, не полагаясь на давно предложенный, но не реализованный браузерами outline algorithm для sectioning
+elements.
+
+**Полный ответ**
+
 Это логическая структура документа, прежде всего иерархия заголовков и landmarks. На практике нужно последовательно
 использовать `h1`–`h6`, не полагаясь на давно предложенный, но не реализованный браузерами outline algorithm для
 sectioning elements.
@@ -74,6 +104,13 @@ sectioning elements.
 <summary>Что такое <code>doctype</code> и зачем он нужен?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+сообщает браузеру, что документ следует обрабатывать в standards mode. Без корректного doctype браузер может включить
+quirks mode с устаревшими правилами layout и совместимости.
+
+**Полный ответ**
+
 `<!doctype html>` сообщает браузеру, что документ следует обрабатывать в standards mode. Без корректного doctype браузер
 может включить quirks mode с устаревшими правилами layout и совместимости.
 
@@ -85,6 +122,13 @@ sectioning elements.
 <summary>Что такое custom elements?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Custom Elements API позволяет регистрировать собственные HTML-элементы с именем через дефис и lifecycle callbacks. Это
+часть Web Components; Shadow DOM и templates являются отдельными API и не включаются автоматически.
+
+**Полный ответ**
+
 Custom Elements API позволяет регистрировать собственные HTML-элементы с именем через дефис и lifecycle callbacks. Это
 часть Web Components; Shadow DOM и templates являются отдельными API и не включаются автоматически.
 
@@ -95,6 +139,13 @@ Custom Elements API позволяет регистрировать собств
 <details>
 <summary>Чем tag отличается от HTML element?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Tag — синтаксическая часть разметки, например или . Element — целый узел: открывающий tag, attributes, content и
+закрывающий tag. Void elements вроде не имеют closing tag и содержимого.
+
+**Полный ответ**
 
 ![img.png](assets/what-the-difference-between-tag-and-element.png)
 
@@ -109,6 +160,14 @@ content и закрывающий tag. Void elements вроде `<img>` не и�
 <summary>Чем block element отличается от inline element?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Исторически block elements начинали новую строку, а inline elements участвовали в строке текста. В современном CSS
+реальное поведение задает display, поэтому семантическую категорию HTML-элемента нельзя использовать как замену знанию
+layout.
+
+**Полный ответ**
+
 Исторически block elements начинали новую строку, а inline elements участвовали в строке текста. В современном CSS
 реальное поведение задает `display`, поэтому семантическую категорию HTML-элемента нельзя использовать как замену знанию
 layout.
@@ -120,6 +179,14 @@ layout.
 <details>
 <summary>Зачем команде договариваться об HTML principles?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+HTML principles фиксируют, как команда пишет разметку: использует семантические элементы, поддерживает accessibility, не
+заменяет button и a на кликабельные div, сохраняет правильную структуру headings и forms. Это снижает споры в review и
+помогает screen readers, SEO, автотестам и долгой поддержке интерфейса.
+
+**Полный ответ**
 
 HTML principles фиксируют, как команда пишет разметку: использует семантические элементы, поддерживает accessibility, не
 заменяет `button` и `a` на кликабельные `div`, сохраняет правильную структуру headings и forms. Это снижает споры в
@@ -133,6 +200,14 @@ review и помогает screen readers, SEO, автотестам и долг
 <summary>Чем <code>section</code>, <code>article</code>, <code>main</code>, <code>aside</code> и <code>nav</code> отличаются друг от друга?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+main содержит основное уникальное содержимое страницы, nav — крупный блок навигации, article — самостоятельный материал,
+пригодный для отдельного распространения, section — тематический раздел обычно с заголовком, aside — связанный, но
+второстепенный контент.
+
+**Полный ответ**
+
 `main` содержит основное уникальное содержимое страницы, `nav` — крупный блок навигации, `article` — самостоятельный
 материал, пригодный для отдельного распространения, `section` — тематический раздел обычно с заголовком, `aside` —
 связанный, но второстепенный контент.
@@ -145,6 +220,14 @@ review и помогает screen readers, SEO, автотестам и долг
 <summary>Когда использовать <code>button</code>, а когда <code>a</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+button выполняет действие: отправляет форму, открывает dialog, меняет состояние. a с href выполняет навигацию к URL.
+Правильный элемент сразу дает ожидаемые keyboard behavior, semantics и browser features вроде открытия ссылки в новой
+вкладке.
+
+**Полный ответ**
+
 `button` выполняет действие: отправляет форму, открывает dialog, меняет состояние. `a` с `href` выполняет навигацию к
 URL. Правильный элемент сразу дает ожидаемые keyboard behavior, semantics и browser features вроде открытия ссылки в
 новой вкладке.
@@ -156,6 +239,15 @@ URL. Правильный элемент сразу дает ожидаемые 
 <details>
 <summary>Когда команда может использовать HTML preprocessor или template engine?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+HTML preprocessor или template engine полезны, когда разметка генерируется сервером, CMS, static site generator или
+design system tooling. В Angular основным слоем обычно остаются Angular templates, но frontend-разработчик должен
+понимать, откуда приходит HTML, какие fragments может вставлять backend и какие ограничения это создает для структуры,
+styles и hydration.
+
+**Полный ответ**
 
 HTML preprocessor или template engine полезны, когда разметка генерируется сервером, CMS, static site generator или
 design system tooling. В Angular основным слоем обычно остаются Angular templates, но frontend-разработчик должен
@@ -170,6 +262,14 @@ styles и hydration.
 <summary>Как backend или CMS может влиять на frontend markup?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Backend или CMS могут добавлять wrappers, ids, classes, служебные attributes и готовые HTML-фрагменты. Эти соглашения
+нужно учитывать, чтобы не сломать CSS, accessibility, analytics и автотесты. Хороший ответ включает мысль, что такие
+контракты лучше документировать, а не выяснять по случайным DOM-структурам в production.
+
+**Полный ответ**
+
 Backend или CMS могут добавлять wrappers, ids, classes, служебные attributes и готовые HTML-фрагменты. Эти соглашения
 нужно учитывать, чтобы не сломать CSS, accessibility, analytics и автотесты. Хороший ответ включает мысль, что такие
 контракты лучше документировать, а не выяснять по случайным DOM-структурам в production.
@@ -181,6 +281,14 @@ Backend или CMS могут добавлять wrappers, ids, classes, слу�
 <details>
 <summary>Как договориться о комментариях в HTML?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+HTML-комментарии стоит оставлять только для неочевидной структуры, интеграционного ограничения или временного
+workaround. Они не должны пересказывать obvious markup. В Angular чаще лучше помогают понятные имена компонентов, inputs
+и template blocks, а большой комментарий в template может быть сигналом, что код стоит упростить.
+
+**Полный ответ**
 
 HTML-комментарии стоит оставлять только для неочевидной структуры, интеграционного ограничения или временного
 workaround. Они не должны пересказывать obvious markup. В Angular чаще лучше помогают понятные имена компонентов, inputs
@@ -194,6 +302,13 @@ workaround. Они не должны пересказывать obvious markup. 
 <summary>Что делает атрибут <code>lang</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+lang задает язык документа или фрагмента. Он помогает screen reader выбрать произношение, браузеру — проверку орфографии
+и переносы, а поисковым системам — интерпретировать содержимое.
+
+**Полный ответ**
+
 `lang` задает язык документа или фрагмента. Он помогает screen reader выбрать произношение, браузеру — проверку
 орфографии и переносы, а поисковым системам — интерпретировать содержимое.
 
@@ -205,6 +320,13 @@ workaround. Они не должны пересказывать obvious markup. 
 <summary>Для чего нужны <code>data-*</code> attributes?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Они хранят небольшие пользовательские данные прямо на element и доступны через dataset. Их используют для связи разметки
+с поведением или тестами, но не как замену application state и не для секретных данных.
+
+**Полный ответ**
+
 Они хранят небольшие пользовательские данные прямо на element и доступны через `dataset`. Их используют для связи
 разметки с поведением или тестами, но не как замену application state и не для секретных данных.
 
@@ -215,6 +337,15 @@ workaround. Они не должны пересказывать obvious markup. 
 <details>
 <summary>Из каких частей состоит HTML5 как open web platform?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+HTML5 в широком смысле часто называют набором Web Platform API: semantic HTML, forms, media, canvas, SVG, storage,
+offline capabilities, history, drag and drop и messaging. На интервью важно не смешивать сам язык разметки с браузерными
+API вокруг него. Для Angular-разработчика это база, на которую опираются компоненты, forms, routing и интеграции с
+browser APIs.
+
+**Полный ответ**
 
 HTML5 в широком смысле часто называют набором Web Platform API: semantic HTML, forms, media, canvas, SVG, storage,
 offline capabilities, history, drag and drop и messaging. На интервью важно не смешивать сам язык разметки с браузерными
@@ -229,6 +360,14 @@ browser APIs.
 <summary>Чем cookie отличается от <code>sessionStorage</code> и <code>localStorage</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Cookie может автоматически отправляться с HTTP-запросами и иметь флаги HttpOnly, Secure, SameSite. localStorage и
+sessionStorage доступны JavaScript, привязаны к origin и не отправляются автоматически; sessionStorage живет в рамках
+вкладки, localStorage сохраняется дольше. Секретные tokens опасно хранить в Web Storage из-за XSS.
+
+**Полный ответ**
+
 Cookie может автоматически отправляться с HTTP-запросами и иметь флаги `HttpOnly`, `Secure`, `SameSite`. `localStorage`
 и `sessionStorage` доступны JavaScript, привязаны к origin и не отправляются автоматически; `sessionStorage` живет в
 рамках вкладки, `localStorage` сохраняется дольше. Секретные tokens опасно хранить в Web Storage из-за XSS.
@@ -240,6 +379,14 @@ Cookie может автоматически отправляться с HTTP-з
 <details>
 <summary>Чем <code>script</code>, <code>script async</code> и <code>script defer</code> отличаются?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Обычный script блокирует HTML parsing до загрузки и выполнения. async загружается параллельно и выполняется сразу после
+загрузки, поэтому порядок между async scripts не гарантирован. defer загружается параллельно, выполняется после parsing
+в порядке объявления и обычно лучше подходит для application bundle.
+
+**Полный ответ**
 
 Обычный `script` блокирует HTML parsing до загрузки и выполнения. `async` загружается параллельно и выполняется сразу
 после загрузки, поэтому порядок между async scripts не гарантирован. `defer` загружается параллельно, выполняется после
@@ -253,6 +400,13 @@ parsing в порядке объявления и обычно лучше под
 <summary>Почему clickable <code>div</code> — плохая практика?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+div не получает focus, keyboard activation, role и accessible name интерактивного элемента автоматически. Их ручная
+имитация сложна и хрупка. Для действий следует использовать button, для переходов — a.
+
+**Полный ответ**
+
 `div` не получает focus, keyboard activation, role и accessible name интерактивного элемента автоматически. Их ручная
 имитация сложна и хрупка. Для действий следует использовать `button`, для переходов — `a`.
 
@@ -265,6 +419,13 @@ parsing в порядке объявления и обычно лучше под
 <details>
 <summary>Что происходит после получения HTML-документа?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Браузер начинает streaming parse HTML еще до полной загрузки документа. Он строит DOM, заранее обнаруживает ресурсы
+через preload scanner, загружает CSS, JavaScript, изображения, fonts и другие зависимости.
+
+**Полный ответ**
 
 Браузер начинает streaming parse HTML еще до полной загрузки документа. Он строит DOM, заранее обнаруживает ресурсы
 через preload scanner, загружает CSS, JavaScript, изображения, fonts и другие зависимости.
@@ -281,6 +442,14 @@ stylesheets, fonts и большие изображения могут заде�
 <summary>Что такое progressive enhancement?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Progressive enhancement начинает с базового доступного HTML и постепенно добавляет CSS, JavaScript и продвинутые browser
+features. Если часть улучшений недоступна, основной content и ключевые действия остаются рабочими. Для Angular это
+особенно заметно в SSR/prerender сценариях: пользователь не должен видеть пустую страницу до загрузки bundle.
+
+**Полный ответ**
+
 Progressive enhancement начинает с базового доступного HTML и постепенно добавляет CSS, JavaScript и продвинутые browser
 features. Если часть улучшений недоступна, основной content и ключевые действия остаются рабочими. Для Angular это
 особенно заметно в SSR/prerender сценариях: пользователь не должен видеть пустую страницу до загрузки bundle.
@@ -292,6 +461,15 @@ features. Если часть улучшений недоступна, осно�
 <details>
 <summary>Чем progressive enhancement отличается от graceful degradation?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Progressive enhancement проектирует опыт от базового слоя к улучшениям. Graceful degradation обычно начинается с
+полнофункционального варианта и пытается сохранить приемлемую работу при отсутствии части возможностей. Первый подход
+лучше помогает accessibility, слабым устройствам и нестабильной сети, второй часто встречается при поддержке старых
+браузеров.
+
+**Полный ответ**
 
 Progressive enhancement проектирует опыт от базового слоя к улучшениям. Graceful degradation обычно начинается с
 полнофункционального варианта и пытается сохранить приемлемую работу при отсутствии части возможностей. Первый подход
@@ -306,6 +484,14 @@ Progressive enhancement проектирует опыт от базового с
 <summary>Чем browser support отличается от browser optimization?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Browser support означает, что пользователь может выполнить основной сценарий в браузере или на устройстве. Browser
+optimization означает, что под важные браузеры, устройства и сети интерфейс дополнительно улучшается. Не всегда нужно
+давать всем одинаковый experience, но базовый сценарий не должен ломаться без явной продуктовой причины.
+
+**Полный ответ**
+
 Browser support означает, что пользователь может выполнить основной сценарий в браузере или на устройстве. Browser
 optimization означает, что под важные браузеры, устройства и сети интерфейс дополнительно улучшается. Не всегда нужно
 давать всем одинаковый experience, но базовый сценарий не должен ломаться без явной продуктовой причины.
@@ -317,6 +503,14 @@ optimization означает, что под важные браузеры, ус
 <details>
 <summary>Как определить, какие браузеры поддерживать?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Browser support должен опираться на аналитику пользователей, требования бизнеса, корпоративную среду, законодательные
+ограничения и стоимость поддержки. Решение нельзя принимать только по личным предпочтениям разработчиков. Его стоит
+записать в guidelines и регулярно пересматривать.
+
+**Полный ответ**
 
 Browser support должен опираться на аналитику пользователей, требования бизнеса, корпоративную среду, законодательные
 ограничения и стоимость поддержки. Решение нельзя принимать только по личным предпочтениям разработчиков. Его стоит
@@ -330,6 +524,14 @@ Browser support должен опираться на аналитику поль
 <summary>Что такое graded browser support?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Graded browser support делит браузеры или устройства на уровни. Например, в одних браузерах гарантируется полный
+experience, в других — базовая функциональность, а для устаревших окружений — readable content или explicit fallback.
+Это помогает управлять стоимостью поддержки и ожиданиями бизнеса.
+
+**Полный ответ**
+
 Graded browser support делит браузеры или устройства на уровни. Например, в одних браузерах гарантируется полный
 experience, в других — базовая функциональность, а для устаревших окружений — readable content или explicit fallback.
 Это помогает управлять стоимостью поддержки и ожиданиями бизнеса.
@@ -342,6 +544,14 @@ experience, в других — базовая функциональность,
 <summary>Когда компоненту нужна отдельная browser support policy?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Отдельная policy нужна, если компонент использует API с разной поддержкой: camera, clipboard, drag and drop, сложную
+графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире, а
+конкретный advanced component — уже, если fallback честно описан.
+
+**Полный ответ**
+
 Отдельная policy нужна, если компонент использует API с разной поддержкой: camera, clipboard, drag and drop, сложную
 графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире, а
 конкретный advanced component — уже, если fallback честно описан.
@@ -353,6 +563,13 @@ experience, в других — базовая функциональность,
 <details>
 <summary>Почему HTML-парсер не падает на невалидной разметке?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+HTML parsing designed to be forgiving: браузеры десятилетиями должны были показывать страницы с ошибками разметки.
+Спецификация описывает tokenization, tree construction и error recovery, поэтому parser исправляет многие случаи сам.
+
+**Полный ответ**
 
 HTML parsing designed to be forgiving: браузеры десятилетиями должны были показывать страницы с ошибками разметки.
 Спецификация описывает tokenization, tree construction и error recovery, поэтому parser исправляет многие случаи сам.
@@ -368,6 +585,13 @@ HTML parsing designed to be forgiving: браузеры десятилетиям
 <summary>Чем DOM отличается от HTML source?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+HTML source — это текст, который пришел от сервера или был записан в документ. DOM — live object model, которую браузер
+построил после parsing и error recovery, а затем может изменять JavaScript.
+
+**Полный ответ**
+
 HTML source — это текст, который пришел от сервера или был записан в документ. DOM — live object model, которую браузер
 построил после parsing и error recovery, а затем может изменять JavaScript.
 
@@ -381,6 +605,14 @@ rendering и изменения, которых не было в исходно�
 <details>
 <summary>Что такое preload, prefetch и preconnect?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+preload приоритетно загружает ресурс текущей страницы, prefetch с низким приоритетом готовит вероятный следующий
+переход, preconnect заранее устанавливает соединение с origin. Ошибочное применение расходует bandwidth и конкурирует с
+критическими ресурсами.
+
+**Полный ответ**
 
 `preload` приоритетно загружает ресурс текущей страницы, `prefetch` с низким приоритетом готовит вероятный следующий
 переход, `preconnect` заранее устанавливает соединение с origin. Ошибочное применение расходует bandwidth и конкурирует
@@ -396,6 +628,13 @@ rendering и изменения, которых не было в исходно�
 <summary>Как работает HTML form?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+form объединяет controls и при submit формирует набор успешных пар name=value. Браузер валидирует controls, кодирует
+данные и отправляет их на action выбранным method, если JavaScript не перехватил событие.
+
+**Полный ответ**
+
 `form` объединяет controls и при submit формирует набор успешных пар `name=value`. Браузер валидирует controls, кодирует
 данные и отправляет их на `action` выбранным `method`, если JavaScript не перехватил событие.
 
@@ -407,6 +646,13 @@ rendering и изменения, которых не было в исходно�
 <summary>Что делают <code>action</code> и <code>method</code> у формы?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+action задает URL отправки, method — HTTP-метод get или post. При GET данные попадают в query string, при POST — в
+request body. Для других HTTP-методов обычно используют JavaScript или backend method override.
+
+**Полный ответ**
+
 `action` задает URL отправки, `method` — HTTP-метод `get` или `post`. При `GET` данные попадают в query string, при
 `POST` — в request body. Для других HTTP-методов обычно используют JavaScript или backend method override.
 
@@ -417,6 +663,14 @@ rendering и изменения, которых не было в исходно�
 <details>
 <summary>Чем GET form отличается от POST form?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+GET подходит для безопасного поиска и фильтров: URL можно сохранить и повторить. POST используют для операций с побочным
+эффектом и больших или чувствительных данных, но HTTPS все равно обязателен. Выбор метода не является
+authorization-механизмом.
+
+**Полный ответ**
 
 GET подходит для безопасного поиска и фильтров: URL можно сохранить и повторить. POST используют для операций с побочным
 эффектом и больших или чувствительных данных, но HTTPS все равно обязателен. Выбор метода не является
@@ -430,6 +684,13 @@ authorization-механизмом.
 <summary>Почему специализированные типы <code>input</code> полезнее <code>text</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Типы email, number, date, url, search, tel, checkbox и другие дают подходящую семантику, native validation, мобильную
+клавиатуру и browser UI. Поддержка и локализация отдельных типов различаются, поэтому server validation все равно нужна.
+
+**Полный ответ**
+
 Типы `email`, `number`, `date`, `url`, `search`, `tel`, `checkbox` и другие дают подходящую семантику, native
 validation, мобильную клавиатуру и browser UI. Поддержка и локализация отдельных типов различаются, поэтому server
 validation все равно нужна.
@@ -441,6 +702,13 @@ validation все равно нужна.
 <details>
 <summary>Что такое <code>label</code> и как связать его с control?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+label дает полю доступное имя и увеличивает clickable area. Его связывают атрибутом for, равным id control, или
+вкладывают control внутрь label.
+
+**Полный ответ**
 
 `label` дает полю доступное имя и увеличивает clickable area. Его связывают атрибутом `for`, равным `id` control, или
 вкладывают control внутрь label.
@@ -462,6 +730,13 @@ validation все равно нужна.
 <summary>Почему <code>placeholder</code> не должен заменять <code>label</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Placeholder исчезает при вводе, часто имеет низкий contrast и не является надежной подписью для assistive technologies.
+Он может показывать пример формата, но постоянное понятное имя поля должен задавать label.
+
+**Полный ответ**
+
 Placeholder исчезает при вводе, часто имеет низкий contrast и не является надежной подписью для assistive technologies.
 Он может показывать пример формата, но постоянное понятное имя поля должен задавать label.
 
@@ -472,6 +747,13 @@ Placeholder исчезает при вводе, часто имеет низки
 <details>
 <summary>Для чего нужен <code>name</code> у form control?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+name определяет ключ при native form submission и объединяет radio buttons в одну группу. Control без name обычно не
+входит в отправляемый набор данных.
+
+**Полный ответ**
 
 `name` определяет ключ при native form submission и объединяет radio buttons в одну группу. Control без `name` обычно не
 входит в отправляемый набор данных.
@@ -484,6 +766,13 @@ Placeholder исчезает при вводе, часто имеет низки
 <summary>Что такое native validation?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Браузер проверяет constraints вроде required, min, max, minlength, maxlength, pattern и соответствие типу перед submit.
+Это улучшает UX, но не заменяет backend validation, потому что клиентскую проверку можно обойти.
+
+**Полный ответ**
+
 Браузер проверяет constraints вроде `required`, `min`, `max`, `minlength`, `maxlength`, `pattern` и соответствие типу
 перед submit. Это улучшает UX, но не заменяет backend validation, потому что клиентскую проверку можно обойти.
 
@@ -495,6 +784,13 @@ Placeholder исчезает при вводе, часто имеет низки
 <summary>Для чего нужен <code>autocomplete</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+autocomplete подсказывает браузеру назначение поля, например name, email, current-password или one-time-code. Корректные
+tokens ускоряют заполнение и помогают пользователям с когнитивными и моторными ограничениями.
+
+**Полный ответ**
+
 `autocomplete` подсказывает браузеру назначение поля, например `name`, `email`, `current-password` или `one-time-code`.
 Корректные tokens ускоряют заполнение и помогают пользователям с когнитивными и моторными ограничениями.
 
@@ -505,6 +801,14 @@ Placeholder исчезает при вводе, часто имеет низки
 <details>
 <summary>Как сделать accessible error message для поля?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Сообщение должно быть конкретным, видимым и связанным с полем через aria-describedby; невалидность можно обозначить
+aria-invalid="true". После submit focus переводят осмысленно, а динамическую сводку ошибок при необходимости объявляют
+live region.
+
+**Полный ответ**
 
 Сообщение должно быть конкретным, видимым и связанным с полем через `aria-describedby`; невалидность можно обозначить
 `aria-invalid="true"`. После submit focus переводят осмысленно, а динамическую сводку ошибок при необходимости объявляют
@@ -518,6 +822,13 @@ live region.
 <summary>Почему disabled field не отправляется вместе с формой?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Disabled control исключается из focus order, validation и набора успешных controls при submit. Если значение должно
+отправляться, используют другой способ моделирования; скрытое поле нельзя считать защитой от подмены данных.
+
+**Полный ответ**
+
 Disabled control исключается из focus order, validation и набора успешных controls при submit. Если значение должно
 отправляться, используют другой способ моделирования; скрытое поле нельзя считать защитой от подмены данных.
 
@@ -528,6 +839,13 @@ Disabled control исключается из focus order, validation и набо
 <details>
 <summary>Чем <code>disabled</code> отличается от <code>readonly</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+disabled control не фокусируется и не отправляется. readonly поддерживается только частью controls, остается focusable и
+отправляет значение, но пользователь не может его изменить обычным вводом.
+
+**Полный ответ**
 
 `disabled` control не фокусируется и не отправляется. `readonly` поддерживается только частью controls, остается
 focusable и отправляет значение, но пользователь не может его изменить обычным вводом.
@@ -540,6 +858,13 @@ focusable и отправляет значение, но пользовател�
 <summary>Для чего нужны <code>fieldset</code> и <code>legend</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+fieldset семантически группирует связанные controls, а legend дает группе доступное название. Это особенно важно для
+radio buttons и checkbox groups, где отдельные labels не объясняют общий вопрос.
+
+**Полный ответ**
+
 `fieldset` семантически группирует связанные controls, а `legend` дает группе доступное название. Это особенно важно для
 radio buttons и checkbox groups, где отдельные labels не объясняют общий вопрос.
 
@@ -550,6 +875,13 @@ radio buttons и checkbox groups, где отдельные labels не объя
 <details>
 <summary>Как группировать radio buttons?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Radio buttons одной группы получают одинаковый name, уникальные id и собственные labels. Группу помещают в fieldset с
+legend, чтобы ее назначение было понятно визуально и screen reader.
+
+**Полный ответ**
 
 Radio buttons одной группы получают одинаковый `name`, уникальные `id` и собственные labels. Группу помещают в
 `fieldset` с `legend`, чтобы ее назначение было понятно визуально и screen reader.
@@ -564,6 +896,14 @@ Radio buttons одной группы получают одинаковый `nam
 <summary>Что такое accessibility и WCAG?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Accessibility, или a11y, — проектирование интерфейса так, чтобы им могли пользоваться люди с разными возможностями и
+устройствами. WCAG — рекомендации W3C, сгруппированные по принципам perceivable, operable, understandable и robust, с
+проверяемыми критериями уровней A, AA и AAA.
+
+**Полный ответ**
+
 Accessibility, или a11y, — проектирование интерфейса так, чтобы им могли пользоваться люди с разными возможностями и
 устройствами. WCAG — рекомендации W3C, сгруппированные по принципам perceivable, operable, understandable и robust, с
 проверяемыми критериями уровней A, AA и AAA.
@@ -576,6 +916,13 @@ Accessibility, или a11y, — проектирование интерфейс�
 <summary>Что такое keyboard navigation и visible focus?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Все действия должны быть доступны с клавиатуры в логичном порядке. Текущий focus обязан быть заметен; нельзя убирать
+outline без равноценной замены. Native controls уже поддерживают Tab, Enter, Space и ожидаемые паттерны.
+
+**Полный ответ**
+
 Все действия должны быть доступны с клавиатуры в логичном порядке. Текущий focus обязан быть заметен; нельзя убирать
 outline без равноценной замены. Native controls уже поддерживают Tab, Enter, Space и ожидаемые паттерны.
 
@@ -586,6 +933,14 @@ outline без равноценной замены. Native controls уже по�
 <details>
 <summary>Что такое focus management и focus trap?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Focus management переводит focus после значимого UI-события и возвращает его в понятное место. Modal dialog ограничивает
+Tab внутри себя, устанавливает начальный focus и после закрытия возвращает его trigger. Focus trap не применяют к
+немодальным областям без необходимости.
+
+**Полный ответ**
 
 Focus management переводит focus после значимого UI-события и возвращает его в понятное место. Modal dialog ограничивает
 Tab внутри себя, устанавливает начальный focus и после закрытия возвращает его trigger. Focus trap не применяют к
@@ -599,6 +954,13 @@ Tab внутри себя, устанавливает начальный focus �
 <summary>Что такое screen reader?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Screen reader озвучивает accessibility tree и позволяет перемещаться по headings, landmarks, controls и другим
+семантическим узлам. Проверка только DOM или визуального вида не гарантирует корректный опыт screen reader.
+
+**Полный ответ**
+
 Screen reader озвучивает accessibility tree и позволяет перемещаться по headings, landmarks, controls и другим
 семантическим узлам. Проверка только DOM или визуального вида не гарантирует корректный опыт screen reader.
 
@@ -609,6 +971,14 @@ Screen reader озвучивает accessibility tree и позволяет пе
 <details>
 <summary>Что такое ARIA и когда ее использовать?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+ARIA добавляет roles, states и relationships в accessibility tree, но не создает keyboard behavior и не меняет семантику
+для обычного UI автоматически. Сначала выбирают native HTML; ARIA используют, когда нужную семантику нельзя выразить
+подходящим элементом.
+
+**Полный ответ**
 
 ARIA добавляет roles, states и relationships в accessibility tree, но не создает keyboard behavior и не меняет семантику
 для обычного UI автоматически. Сначала выбирают native HTML; ARIA используют, когда нужную семантику нельзя выразить
@@ -622,6 +992,14 @@ ARIA добавляет roles, states и relationships в accessibility tree, н
 <summary>Как ARIA и screen reader связаны с accessibility?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Screen reader читает accessibility tree, который строится из HTML-семантики, текста, attributes и ARIA. ARIA может
+добавить role, state или связь между элементами, но не добавляет поведение клавиатуры и не исправляет неверный элемент.
+Поэтому сначала выбирают native HTML, а ARIA используют для сложных widgets и динамических состояний.
+
+**Полный ответ**
+
 Screen reader читает accessibility tree, который строится из HTML-семантики, текста, attributes и ARIA. ARIA может
 добавить role, state или связь между элементами, но не добавляет поведение клавиатуры и не исправляет неверный элемент.
 Поэтому сначала выбирают native HTML, а ARIA используют для сложных widgets и динамических состояний.
@@ -633,6 +1011,14 @@ Screen reader читает accessibility tree, который строится �
 <details>
 <summary>Как сделать страницу доступнее без JavaScript?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Использовать semantic landmarks, правильную иерархию заголовков, label, fieldset, legend, понятные ссылки, доступные
+изображения и native form validation. Контент и основные действия должны быть доступны как HTML, а JavaScript добавляет
+улучшения. Такой подход помогает progressive enhancement и снижает риск пустого интерфейса при ошибке bundle.
+
+**Полный ответ**
 
 Использовать semantic landmarks, правильную иерархию заголовков, `label`, `fieldset`, `legend`, понятные ссылки,
 доступные изображения и native form validation. Контент и основные действия должны быть доступны как HTML, а JavaScript
@@ -646,6 +1032,14 @@ Screen reader читает accessibility tree, который строится �
 <summary>Зачем команде accessibility checklist?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Accessibility checklist помогает не забывать базовые требования: semantic HTML, keyboard navigation, focus states,
+labels, contrast, alt text и корректные ARIA attributes. В большой команде это превращает accessibility из личной памяти
+отдельного разработчика в повторяемую часть review и testing workflow.
+
+**Полный ответ**
+
 Accessibility checklist помогает не забывать базовые требования: semantic HTML, keyboard navigation, focus states,
 labels, contrast, alt text и корректные ARIA attributes. В большой команде это превращает accessibility из личной памяти
 отдельного разработчика в повторяемую часть review и testing workflow.
@@ -657,6 +1051,14 @@ labels, contrast, alt text и корректные ARIA attributes. В боль�
 <details>
 <summary>Какие accessibility tools стоит использовать во frontend workflow?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Полезны axe, Lighthouse, browser DevTools, Angular ESLint template rules и component tests для важных состояний. Но
+инструменты находят только часть проблем, поэтому их дополняют ручной проверкой keyboard flow, focus order и screen
+reader поведения в ключевых сценариях.
+
+**Полный ответ**
 
 Полезны axe, Lighthouse, browser DevTools, Angular ESLint template rules и component tests для важных состояний. Но
 инструменты находят только часть проблем, поэтому их дополняют ручной проверкой keyboard flow, focus order и screen
@@ -670,6 +1072,14 @@ reader поведения в ключевых сценариях.
 <summary>Почему accessibility нельзя полностью проверить автоматическими тестами?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Автотесты могут найти отсутствие label, часть ошибок ARIA, слабый contrast и очевидные нарушения semantics. Но они не
+понимают смысл текста, удобство сценария, ожидаемый порядок focus и реальное восприятие screen reader. Поэтому хороший
+workflow сочетает automated checks, ручную проверку и ревью компонентов design system.
+
+**Полный ответ**
+
 Автотесты могут найти отсутствие label, часть ошибок ARIA, слабый contrast и очевидные нарушения semantics. Но они не
 понимают смысл текста, удобство сценария, ожидаемый порядок focus и реальное восприятие screen reader. Поэтому хороший
 workflow сочетает automated checks, ручную проверку и ревью компонентов design system.
@@ -682,6 +1092,13 @@ workflow сочетает automated checks, ручную проверку и р�
 <summary>Что такое accessible name и как кнопка его получает?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Accessible name — имя элемента в accessibility tree. Кнопка обычно получает его из видимого текста, затем могут
+учитываться aria-labelledby или aria-label. Видимая подпись предпочтительнее скрытого имени, когда она уместна.
+
+**Полный ответ**
+
 Accessible name — имя элемента в accessibility tree. Кнопка обычно получает его из видимого текста, затем могут
 учитываться `aria-labelledby` или `aria-label`. Видимая подпись предпочтительнее скрытого имени, когда она уместна.
 
@@ -692,6 +1109,14 @@ Accessible name — имя элемента в accessibility tree. Кнопка 
 <details>
 <summary>Чем <code>aria-label</code>, <code>aria-labelledby</code> и <code>aria-describedby</code> отличаются?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+aria-label задает строку имени напрямую, aria-labelledby берет имя из текста других элементов, а aria-describedby
+добавляет описание после имени. Они не взаимозаменяемы: label отвечает «что это», description — за дополнительную
+инструкцию или ошибку.
+
+**Полный ответ**
 
 `aria-label` задает строку имени напрямую, `aria-labelledby` берет имя из текста других элементов, а `aria-describedby`
 добавляет описание после имени. Они не взаимозаменяемы: label отвечает «что это», description — за дополнительную
@@ -705,6 +1130,13 @@ Accessible name — имя элемента в accessibility tree. Кнопка 
 <summary>Для чего нужен <code>aria-hidden</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+aria-hidden="true" скрывает element и его descendants от accessibility tree, не меняя визуальное отображение. Его нельзя
+ставить на focusable element или его ancestor: keyboard focus окажется на узле, который screen reader не видит.
+
+**Полный ответ**
+
 `aria-hidden="true"` скрывает element и его descendants от accessibility tree, не меняя визуальное отображение. Его
 нельзя ставить на focusable element или его ancestor: keyboard focus окажется на узле, который screen reader не видит.
 
@@ -716,6 +1148,13 @@ Accessible name — имя элемента в accessibility tree. Кнопка 
 <summary>Что такое live region и <code>role="alert"</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Live region сообщает assistive technologies о динамических изменениях без перемещения focus. role="alert" подходит для
+срочных ошибок и обычно объявляется assertive; обычные статусы лучше сообщать через менее навязчивый role="status".
+
+**Полный ответ**
+
 Live region сообщает assistive technologies о динамических изменениях без перемещения focus. `role="alert"` подходит для
 срочных ошибок и обычно объявляется assertive; обычные статусы лучше сообщать через менее навязчивый `role="status"`.
 
@@ -726,6 +1165,13 @@ Live region сообщает assistive technologies о динамических 
 <details>
 <summary>Как сделать доступное modal dialog?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужны понятное имя, modal semantics, начальный focus, ограничение Tab внутри окна, закрытие Escape и возврат focus на
+trigger. Native решает часть поведения, но название, содержимое, trigger и тестирование остаются задачей приложения.
+
+**Полный ответ**
 
 Нужны понятное имя, modal semantics, начальный focus, ограничение Tab внутри окна, закрытие Escape и возврат focus на
 trigger. Native `<dialog>` решает часть поведения, но название, содержимое, trigger и тестирование остаются задачей
@@ -739,6 +1185,14 @@ trigger. Native `<dialog>` решает часть поведения, но на
 <summary>Как сделать доступные dropdown и tabs?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Сначала выбирают правильный паттерн: disclosure, menu, listbox и combobox имеют разное поведение. Tabs используют
+tablist, tab, tabpanel, arrow-key navigation и связи через aria-controls/aria-labelledby. Для сложных widgets следуют
+WAI-ARIA Authoring Practices и тестируют клавиатурой и screen reader.
+
+**Полный ответ**
+
 Сначала выбирают правильный паттерн: disclosure, menu, listbox и combobox имеют разное поведение. Tabs используют
 `tablist`, `tab`, `tabpanel`, arrow-key navigation и связи через `aria-controls`/`aria-labelledby`. Для сложных widgets
 следуют WAI-ARIA Authoring Practices и тестируют клавиатурой и screen reader.
@@ -751,6 +1205,13 @@ trigger. Native `<dialog>` решает часть поведения, но на
 <summary>Как сделать доступную icon button?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Используют настоящий button с accessible name, например aria-label="Закрыть"; декоративную SVG внутри скрывают через
+aria-hidden="true". Нужны достаточный target size, visible focus и понятные hover/disabled states.
+
+**Полный ответ**
+
 Используют настоящий `button` с accessible name, например `aria-label="Закрыть"`; декоративную SVG внутри скрывают через
 `aria-hidden="true"`. Нужны достаточный target size, visible focus и понятные hover/disabled states.
 
@@ -761,6 +1222,14 @@ trigger. Native `<dialog>` решает часть поведения, но на
 <details>
 <summary>Почему цвет не должен быть единственным способом передачи информации?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Различие может быть незаметно пользователям с нарушением цветовосприятия или на плохом дисплее. Ошибку, статус или
+выбранное состояние дублируют текстом, иконкой, формой или другим независимым признаком и обеспечивают достаточный
+contrast.
+
+**Полный ответ**
 
 Различие может быть незаметно пользователям с нарушением цветовосприятия или на плохом дисплее. Ошибку, статус или
 выбранное состояние дублируют текстом, иконкой, формой или другим независимым признаком и обеспечивают достаточный
@@ -773,6 +1242,12 @@ contrast.
 <details>
 <summary>Для чего нужен атрибут lang?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Атрибут lang задает язык документа или отдельного фрагмента текста.
+
+**Полный ответ**
 
 Атрибут `lang` задает язык документа или отдельного фрагмента текста.
 
@@ -805,6 +1280,12 @@ contrast.
 <summary>Для чего нужны семантические HTML-теги?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Семантические теги описывают назначение контента: header, nav, main, article, button.
+
+**Полный ответ**
+
 Семантические теги описывают назначение контента: `header`, `nav`, `main`, `article`, `button`.
 
 Они улучшают accessibility, навигацию скринридеров, SEO и читаемость разметки. Семантика не заменяет корректную
@@ -820,6 +1301,13 @@ contrast.
 <summary>Зачем нужен <code>meta name="viewport"</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+сопоставляет layout viewport ширине устройства. Без него мобильный браузер может отрендерить страницу в широком
+виртуальном viewport и уменьшить ее целиком.
+
+**Полный ответ**
+
 `<meta name="viewport" content="width=device-width, initial-scale=1">` сопоставляет layout viewport ширине устройства.
 Без него мобильный браузер может отрендерить страницу в широком виртуальном viewport и уменьшить ее целиком.
 
@@ -830,6 +1318,13 @@ contrast.
 <details>
 <summary>Что такое favicon?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Favicon — набор иконок сайта для вкладок, bookmarks, history и устройств. Его подключают через , а форматы и размеры
+выбирают с учетом целевых браузеров и manifest приложения.
+
+**Полный ответ**
 
 Favicon — набор иконок сайта для вкладок, bookmarks, history и устройств. Его подключают через `<link rel="icon">`, а
 форматы и размеры выбирают с учетом целевых браузеров и manifest приложения.
@@ -842,6 +1337,13 @@ Favicon — набор иконок сайта для вкладок, bookmarks,
 <summary>Что такое canonical URL?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+указывает предпочтительный URL для страниц с одинаковым или очень похожим content. Это сигнал поисковой системе против
+дублирования, а не redirect и не механизм безопасности.
+
+**Полный ответ**
+
 `<link rel="canonical" href="…">` указывает предпочтительный URL для страниц с одинаковым или очень похожим content. Это
 сигнал поисковой системе против дублирования, а не redirect и не механизм безопасности.
 
@@ -852,6 +1354,13 @@ Favicon — набор иконок сайта для вкладок, bookmarks,
 <details>
 <summary>Для чего нужны <code>title</code> и meta description?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+title задает название документа во вкладке и часто заголовок поискового результата. Meta description кратко описывает
+страницу и может использоваться как snippet. Они должны быть уникальными и соответствовать реальному содержимому.
+
+**Полный ответ**
 
 `title` задает название документа во вкладке и часто заголовок поискового результата. Meta description кратко описывает
 страницу и может использоваться как snippet. Они должны быть уникальными и соответствовать реальному содержимому.
@@ -864,6 +1373,13 @@ Favicon — набор иконок сайта для вкладок, bookmarks,
 <summary>Какие HTML-теги важны для поисковых систем?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Важны содержательные title, headings, links с понятным текстом, semantic landmarks, img alt, canonical и metadata.
+Семантика помогает понять структуру, но не компенсирует слабый content, закрытую индексацию или плохую доступность.
+
+**Полный ответ**
+
 Важны содержательные `title`, headings, links с понятным текстом, semantic landmarks, `img alt`, canonical и metadata.
 Семантика помогает понять структуру, но не компенсирует слабый content, закрытую индексацию или плохую доступность.
 
@@ -874,6 +1390,15 @@ Favicon — набор иконок сайта для вкладок, bookmarks,
 <details>
 <summary>Какие SEO-практики важны для frontend-разработчика?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Frontend-разработчик отвечает за содержательный HTML, корректные title и metadata, canonical URL, semantic headings,
+понятные links, alt у значимых изображений, robots rules и скорость first render. Для SPA важно, чтобы crawler получил
+контент через SSR, prerender или другой поддерживаемый rendering strategy. SEO не заменяет качество контента и не должно
+ломать accessibility.
+
+**Полный ответ**
 
 Frontend-разработчик отвечает за содержательный HTML, корректные `title` и metadata, canonical URL, semantic headings,
 понятные links, `alt` у значимых изображений, robots rules и скорость first render. Для SPA важно, чтобы crawler получил
@@ -888,6 +1413,14 @@ Frontend-разработчик отвечает за содержательны
 <summary>Как правильно использовать заголовки <code>h1</code>–<code>h6</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Заголовки создают иерархию, а не выбираются ради размера шрифта. Обычно у страницы один основной h1, затем уровни идут
+последовательно по структуре. Несколько h1 технически допустимы, но один главный заголовок обычно понятнее пользователям
+и инструментам.
+
+**Полный ответ**
+
 Заголовки создают иерархию, а не выбираются ради размера шрифта. Обычно у страницы один основной `h1`, затем уровни идут
 последовательно по структуре. Несколько `h1` технически допустимы, но один главный заголовок обычно понятнее
 пользователям и инструментам.
@@ -900,6 +1433,13 @@ Frontend-разработчик отвечает за содержательны
 <summary>Что такое Open Graph?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Open Graph metadata задает title, description, image и URL для preview при публикации ссылки в социальных сетях и
+мессенджерах. Это не замена обычным HTML metadata; изображения должны иметь доступный URL и подходящие размеры.
+
+**Полный ответ**
+
 Open Graph metadata задает title, description, image и URL для preview при публикации ссылки в социальных сетях и
 мессенджерах. Это не замена обычным HTML metadata; изображения должны иметь доступный URL и подходящие размеры.
 
@@ -910,6 +1450,14 @@ Open Graph metadata задает title, description, image и URL для preview
 <details>
 <summary>Как SSR влияет на SEO?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+SSR или prerender отдает содержательный HTML раньше JavaScript, упрощая индексацию и previews. Современные crawlers
+могут выполнять JavaScript, но это требует времени и ресурсов; SPA без server-rendered content также хуже работает у
+ботов без полного rendering support.
+
+**Полный ответ**
 
 SSR или prerender отдает содержательный HTML раньше JavaScript, упрощая индексацию и previews. Современные crawlers
 могут выполнять JavaScript, но это требует времени и ресурсов; SPA без server-rendered content также хуже работает у
@@ -925,6 +1473,14 @@ SSR или prerender отдает содержательный HTML раньше
 <summary>Чем JPEG, PNG, WebP, AVIF и SVG отличаются друг от друга?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+JPEG подходит для фотографий без прозрачности, PNG — для lossless-графики и прозрачности, WebP и AVIF дают более
+современное сжатие, SVG — векторную графику. Формат выбирают по типу изображения, качеству, размеру, transparency,
+animation и browser support.
+
+**Полный ответ**
+
 JPEG подходит для фотографий без прозрачности, PNG — для lossless-графики и прозрачности, WebP и AVIF дают более
 современное сжатие, SVG — векторную графику. Формат выбирают по типу изображения, качеству, размеру, transparency,
 animation и browser support.
@@ -937,6 +1493,13 @@ animation и browser support.
 <summary>Когда использовать SVG, а когда raster image?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SVG подходит для иконок, схем и простой графики, которая должна масштабироваться и стилизоваться. Для фотографий и
+сложных текстур raster format обычно компактнее и быстрее. Очень сложный SVG тоже может быть тяжелым для rendering.
+
+**Полный ответ**
+
 SVG подходит для иконок, схем и простой графики, которая должна масштабироваться и стилизоваться. Для фотографий и
 сложных текстур raster format обычно компактнее и быстрее. Очень сложный SVG тоже может быть тяжелым для rendering.
 
@@ -947,6 +1510,13 @@ SVG подходит для иконок, схем и простой графи�
 <details>
 <summary>Что такое responsive images и как работают <code>srcset</code>/<code>sizes</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+srcset перечисляет image candidates по ширине или density, а sizes сообщает ожидаемый layout size. Браузер выбирает
+ресурс с учетом viewport, DPR, доступной ширины и других факторов, не загружая все варианты.
+
+**Полный ответ**
 
 `srcset` перечисляет image candidates по ширине или density, а `sizes` сообщает ожидаемый layout size. Браузер выбирает
 ресурс с учетом viewport, DPR, доступной ширины и других факторов, не загружая все варианты.
@@ -963,6 +1533,13 @@ desktop-картинку и не платил за это LCP, трафиком 
 <summary>Что делает <code>loading="lazy"</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Атрибут откладывает загрузку изображения или iframe, пока ресурс не приблизится к viewport. Это экономит сеть, но его не
+ставят на вероятный LCP image. width и height задают заранее, чтобы сохранить место и избежать CLS.
+
+**Полный ответ**
+
 Атрибут откладывает загрузку изображения или iframe, пока ресурс не приблизится к viewport. Это экономит сеть, но его не
 ставят на вероятный LCP image. `width` и `height` задают заранее, чтобы сохранить место и избежать CLS.
 
@@ -973,6 +1550,13 @@ desktop-картинку и не платил за это LCP, трафиком 
 <details>
 <summary>Что такое <code>alt</code> и когда он должен быть пустым?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+alt передает текстовую альтернативу смыслового изображения. У декоративного изображения используют alt="", чтобы screen
+reader его пропустил. Alt описывает назначение изображения в контексте, а не обязательно все визуальные детали.
+
+**Полный ответ**
 
 `alt` передает текстовую альтернативу смыслового изображения. У декоративного изображения используют `alt=""`, чтобы
 screen reader его пропустил. Alt описывает назначение изображения в контексте, а не обязательно все визуальные детали.
@@ -985,6 +1569,13 @@ screen reader его пропустил. Alt описывает назначен
 <summary>Для чего нужен элемент <code>picture</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+picture позволяет задавать source для разных media conditions, crops и formats, сохраняя fallback img. Его используют
+для art direction или выбора формата; обычное изменение resolution часто достаточно решить через srcset.
+
+**Полный ответ**
+
 `picture` позволяет задавать `source` для разных media conditions, crops и formats, сохраняя fallback `img`. Его
 используют для art direction или выбора формата; обычное изменение resolution часто достаточно решить через `srcset`.
 
@@ -995,6 +1586,14 @@ screen reader его пропустил. Alt описывает назначен
 <details>
 <summary>Что такое SVG?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+SVG — векторный формат изображения, который описывает картинку через XML-разметку: линии, пути, фигуры, градиенты и
+текст. В отличие от PNG и JPEG, SVG масштабируется без потери качества: браузер пересчитывает геометрию, а не
+растягивает пиксели.
+
+**Полный ответ**
 
 SVG — векторный формат изображения, который описывает картинку через XML-разметку: линии, пути, фигуры, градиенты и
 текст. В отличие от PNG и JPEG, SVG масштабируется без потери качества: браузер пересчитывает геометрию, а не
@@ -1008,6 +1607,13 @@ SVG — векторный формат изображения, который �
 <summary>Почему SVG подходит для scalable icons?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+SVG-иконка остается четкой при разных размерах и плотностях экрана. Один файл можно использовать в размерах 16px, 24px,
+48px и на Retina-дисплеях без отдельного набора изображений.
+
+**Полный ответ**
+
 SVG-иконка остается четкой при разных размерах и плотностях экрана. Один файл можно использовать в размерах `16px`,
 `24px`, `48px` и на Retina-дисплеях без отдельного набора изображений.
 
@@ -1018,6 +1624,12 @@ SVG-иконка остается четкой при разных размер�
 <details>
 <summary>Как сделать SVG-иконку масштабируемой?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Нужно задать viewBox и управлять внешними width и height атрибутами или через CSS:
+
+**Полный ответ**
 
 Нужно задать `viewBox` и управлять внешними `width` и `height` атрибутами или через CSS:
 
@@ -1049,6 +1661,13 @@ SVG-иконка остается четкой при разных размер�
 <summary>Что такое <code>viewBox</code> в SVG?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+viewBox задает координатную область SVG. Например, viewBox="0 0 24 24" означает виртуальную область шириной и высотой 24
+единицы. По ней браузер масштабирует содержимое SVG под внешний размер.
+
+**Полный ответ**
+
 `viewBox` задает координатную область SVG. Например, `viewBox="0 0 24 24"` означает виртуальную область шириной и
 высотой 24 единицы. По ней браузер масштабирует содержимое SVG под внешний размер.
 
@@ -1060,6 +1679,13 @@ SVG-иконка остается четкой при разных размер�
 <summary>Чем <code>width</code>/<code>height</code> отличаются от <code>viewBox</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+width и height задают внешний размер SVG на странице, а viewBox — внутреннюю координатную систему. При наличии viewBox
+внешний размер можно менять через CSS, сохраняя пропорции изображения.
+
+**Полный ответ**
+
 `width` и `height` задают внешний размер SVG на странице, а `viewBox` — внутреннюю координатную систему. При наличии
 `viewBox` внешний размер можно менять через CSS, сохраняя пропорции изображения.
 
@@ -1070,6 +1696,12 @@ SVG-иконка остается четкой при разных размер�
 <details>
 <summary>Как менять цвет SVG-иконки через CSS?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Значение currentColor позволяет иконке наследовать CSS-свойство color родителя:
+
+**Полный ответ**
 
 Значение `currentColor` позволяет иконке наследовать CSS-свойство `color` родителя:
 
@@ -1108,6 +1740,14 @@ SVG-иконка остается четкой при разных размер�
 <summary>Что лучше для иконок: inline SVG, SVG sprite или <code>img</code>?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Inline SVG удобен для управления цветом, состояниями и доступностью через CSS. SVG sprite подходит для переиспользования
+большого набора символов. проще и хорошо кешируется, но не позволяет странице напрямую менять стили внутренних элементов
+SVG.
+
+**Полный ответ**
+
 Inline SVG удобен для управления цветом, состояниями и доступностью через CSS. SVG sprite подходит для переиспользования
 большого набора символов. `<img src="icon.svg">` проще и хорошо кешируется, но не позволяет странице напрямую менять
 стили внутренних элементов SVG.
@@ -1124,6 +1764,14 @@ accessibility, цвет, размер и не зависит от font loading.
 <summary>Какие проблемы появляются при локализации frontend-приложения?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Локализация влияет не только на перевод строк. Нужно учитывать длину текста, pluralization, даты, числа, валюты,
+сортировку, переносы, шрифты, SEO, accessibility и направление LTR/RTL. Если компоненты не проверять на разных locale,
+интерфейс может сломаться из-за длинных labels или другого порядка слов.
+
+**Полный ответ**
+
 Локализация влияет не только на перевод строк. Нужно учитывать длину текста, pluralization, даты, числа, валюты,
 сортировку, переносы, шрифты, SEO, accessibility и направление LTR/RTL. Если компоненты не проверять на разных locale,
 интерфейс может сломаться из-за длинных labels или другого порядка слов.
@@ -1135,6 +1783,12 @@ accessibility, цвет, размер и не зависит от font loading.
 <details>
 <summary>Как сделать SVG-иконку доступной?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Декоративную иконку нужно скрыть от accessibility tree:
+
+**Полный ответ**
 
 Декоративную иконку нужно скрыть от accessibility tree:
 
@@ -1164,6 +1818,14 @@ accessibility, цвет, размер и не зависит от font loading.
 <summary>Какие ошибки часто делают при работе с SVG-иконками?</summary><br>
 <table><tr><td>
 
+**Короткий ответ**
+
+Забывают viewBox. - Жестко задают размеры и затрудняют масштабирование. - Не используют currentColor, когда цвет должен
+наследоваться. - Подключают тяжелые SVG без оптимизации. - Не учитывают accessibility. - Оставляют лишние metadata из
+Figma и других редакторов.
+
+**Полный ответ**
+
 - Забывают `viewBox`.
 - Жестко задают размеры и затрудняют масштабирование.
 - Не используют `currentColor`, когда цвет должен наследоваться.
@@ -1180,6 +1842,13 @@ accessibility, цвет, размер и не зависит от font loading.
 <details>
 <summary>Как рассчитывается accessible name?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Accessible name - имя элемента в accessibility tree. Его могут задавать видимый текст, aria-labelledby, aria-label, alt,
+label элемента формы и другие источники по алгоритму браузера.
+
+**Полный ответ**
 
 Accessible name - имя элемента в accessibility tree. Его могут задавать видимый текст, `aria-labelledby`, `aria-label`,
 `alt`, label элемента формы и другие источники по алгоритму браузера.
@@ -1200,6 +1869,14 @@ Accessible name - имя элемента в accessibility tree. Его могу
 <details>
 <summary>Когда использовать <code>aria-live</code>?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+aria-live сообщает screen reader об изменениях, которые происходят без перемещения focus: ошибка сохранения, результат
+поиска, завершение загрузки. Для обычного контента, который появляется после действия и получает focus, live region
+часто не нужна.
+
+**Полный ответ**
 
 `aria-live` сообщает screen reader об изменениях, которые происходят без перемещения focus: ошибка сохранения, результат
 поиска, завершение загрузки. Для обычного контента, который появляется после действия и получает focus, live region
@@ -1224,6 +1901,13 @@ Accessible name - имя элемента в accessibility tree. Его могу
 <details>
 <summary>Что такое structured data и зачем нужен JSON-LD?</summary><br>
 <table><tr><td>
+
+**Короткий ответ**
+
+Structured data описывает смысл страницы машинно-читаемым способом: article, product, breadcrumbs, FAQ, organization.
+JSON-LD удобно добавлять отдельным script block, не смешивая schema-разметку с HTML-структурой.
+
+**Полный ответ**
 
 Structured data описывает смысл страницы машинно-читаемым способом: article, product, breadcrumbs, FAQ, organization.
 JSON-LD удобно добавлять отдельным script block, не смешивая schema-разметку с HTML-структурой.
