@@ -59,6 +59,44 @@
     font-weight: 800;
 }
 
+.content details .answer-short {
+    margin-bottom: 28px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-inline-start: 4px solid var(--accent);
+    border-radius: 10px;
+    background: var(--accent-soft);
+}
+
+.content details .answer-short > :last-child,
+.content details .answer-full > :last-child {
+    margin-bottom: 0;
+}
+
+.content details .answer .answer-title {
+    color: var(--text);
+    font-size: 1.05rem;
+    line-height: 1.4;
+}
+
+.content details .answer-short .answer-title {
+    margin-bottom: 8px;
+    color: var(--accent-strong);
+}
+
+.content details .answer-short .answer-title strong {
+    color: inherit;
+}
+
+.content details .answer-full {
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.content details .answer-full .answer-title {
+    margin-bottom: 12px;
+}
+
 .content details .answer ul,
 .content details .answer ol {
     margin: 12px 0 20px;
