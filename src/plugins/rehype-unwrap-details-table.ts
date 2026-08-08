@@ -2,6 +2,9 @@ import type {Element, ElementContent, Root, RootContent} from 'hast';
 
 type Node = Root | RootContent | ElementContent;
 
+const SHORT_ANSWER_TITLE = 'Короткий ответ';
+const FULL_ANSWER_TITLE = 'Полный ответ';
+
 const isElement = (node: Node): node is Element => node.type === 'element';
 
 const isTag = (node: Node, tagName: string): node is Element =>
@@ -43,6 +46,54 @@ const getTextContent = (node: Node): string => {
     }
 
     return node.children.map((child) => getTextContent(child)).join('');
+};
+
+const isAnswerTitle = (node: ElementContent, title: string): node is Element =>
+    isTag(node, 'p') && getTextContent(node).trim() === title;
+
+const createAnswerSection = (
+    className: string,
+    children: ElementContent[],
+): Element => ({
+    type: 'element',
+    tagName: 'div',
+    properties: {
+        className: [className],
+    },
+    children,
+});
+
+const splitAnswerSections = (children: ElementContent[]): ElementContent[] => {
+    const shortAnswerIndex = children.findIndex((child) =>
+        isAnswerTitle(child, SHORT_ANSWER_TITLE),
+    );
+    const fullAnswerIndex = children.findIndex(
+        (child, index) =>
+            index > shortAnswerIndex && isAnswerTitle(child, FULL_ANSWER_TITLE),
+    );
+
+    if (shortAnswerIndex === -1 || fullAnswerIndex === -1) {
+        return children;
+    }
+
+    const shortAnswerTitle = children[shortAnswerIndex];
+    const fullAnswerTitle = children[fullAnswerIndex];
+
+    if (!isElement(shortAnswerTitle) || !isElement(fullAnswerTitle)) {
+        return children;
+    }
+
+    shortAnswerTitle.properties.className = ['answer-title'];
+    fullAnswerTitle.properties.className = ['answer-title'];
+
+    return [
+        ...children.slice(0, shortAnswerIndex),
+        createAnswerSection(
+            'answer-short',
+            children.slice(shortAnswerIndex, fullAnswerIndex),
+        ),
+        createAnswerSection('answer-full', children.slice(fullAnswerIndex)),
+    ];
 };
 
 const createSlug = (value: string): string =>
@@ -132,7 +183,7 @@ const unwrapDetailsTable = (details: Element): void => {
                 properties: {
                     className: ['answer'],
                 },
-                children: cellChildren,
+                children: splitAnswerSections(cellChildren),
             });
 
             continue;
