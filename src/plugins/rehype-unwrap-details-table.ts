@@ -51,10 +51,7 @@ const getTextContent = (node: Node): string => {
 const isAnswerTitle = (node: ElementContent, title: string): node is Element =>
     isTag(node, 'p') && getTextContent(node).trim() === title;
 
-const createAnswerSection = (
-    className: string,
-    children: ElementContent[],
-): Element => ({
+const createAnswerSection = (className: string, children: ElementContent[]): Element => ({
     type: 'element',
     tagName: 'div',
     properties: {
