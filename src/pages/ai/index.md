@@ -1909,17 +1909,47 @@ Skill, а проверяемый invariant - в CI**.
 
 **Короткий ответ**
 
-AI-модель - это обученная система, которая по входному контексту предсказывает полезный выход: текст, код, JSON,
-изображение, аудио, действие через tool или план работы.
+AI-модель - это обученная система, которая преобразует входной контекст в вероятностный выход: текст, код, JSON,
+изображение, tool call или другой результат. В production важна не только «умность» модели, но и конкретная версия,
+capabilities, context window, latency, цена и ограничения API.
 
 **Полный ответ**
 
-AI-модель - это обученная система, которая по входному контексту предсказывает полезный выход: текст, код, JSON,
-изображение, аудио, действие через tool или план работы.
+Под AI-моделью в разработке обычно понимают конкретную обученную модель, доступную через API или локальный runtime. Она
+получает входной контекст и вычисляет вероятностный выход. Для языковой модели этим выходом могут быть токены текста,
+структурированный JSON, аргументы tool call или промежуточное reasoning-состояние.
 
-В разработке под "моделью" обычно имеют в виду конкретный model ID у провайдера: например `gpt-5.5`, `claude-fable-5`
-или `qwen3.7-max`. Название важно, потому что разные модели отличаются качеством рассуждения, скоростью, ценой, размером
-контекста, поддержкой инструментов, multimodal-возможностями и доступностью в API.
+Важно различать несколько уровней:
+
+- **семейство** - например GPT-5.6, Claude 5 или Qwen 3.7;
+- **model ID** - конкретный идентификатор, который передается в API;
+- **provider** - сервис, который предоставляет inference и дополнительные возможности;
+- **product surface** - API, ChatGPT, Claude, Codex, cloud-платформа или локальный runtime.
+
+Одинаковое семейство на разных поверхностях не обязательно означает одинаковое поведение. Product может добавлять system
+instructions, tools, retrieval, memory, compaction, safety checks и собственный agent loop. Поэтому сравнивать «ChatGPT
+против Claude» и «gpt-5.6-sol против claude-opus-5» - не одно и то же.
+
+При выборе модели инженеру важны не только общие способности, но и контракт:
+
+- какие modalities поддерживаются;
+- какой context window и max output;
+- есть ли reasoning, tool calling и structured output;
+- насколько стабилен конкретный model ID;
+- как устроены rate limits, latency и стоимость;
+- где обрабатываются данные и какие compliance-требования поддерживаются.
+
+Например, на август 2026 года OpenAI рекомендует `gpt-5.6-sol` как flagship для сложной профессиональной работы,
+`gpt-5.6-terra` - как баланс качества и стоимости, а `gpt-5.6-luna` - для массовых cost-sensitive workloads. Но эти
+названия являются текущим состоянием каталога, а не архитектурным контрактом вашего продукта.
+
+Поэтому application code лучше зависеть не от «магического имени лучшей модели», а от capability и измеримого качества.
+Model ID хранится в конфигурации, вход и выход имеют schemas, а замена модели проходит через evals.
+
+На интервью полезно ответить так: **модель - это версия вычислительного компонента, provider - инфраструктура вокруг
+нее, а продукт добавляет orchestration и tools. Выбирать и обновлять модель нужно как production dependency**.
+
+См. [OpenAI models](https://developers.openai.com/api/docs/models).
 
 </td></tr></table>
 
@@ -1931,51 +1961,115 @@ AI-модель - это обученная система, которая по 
 
 **Короткий ответ**
 
-Benchmark показывает поведение на наборе задач, но не гарантирует лучший результат в вашем продукте. Для реального
-выбора важны:
+Benchmark измеряет модель на фиксированном наборе задач, а не на вашем product workflow. Модель с лучшим публичным score
+может хуже соблюдать ваш JSON contract, чаще ошибаться в tools, быть медленнее или стоить слишком дорого. Поэтому нужны
+собственные evals.
 
 **Полный ответ**
 
-Benchmark показывает поведение на наборе задач, но не гарантирует лучший результат в вашем продукте. Для реального
-выбора важны:
+Benchmark полезен как внешний сигнал, но он отвечает на ограниченный вопрос: как модель показала себя на конкретном
+датасете, с определенным prompt, scoring и условиями запуска. Production-задача почти всегда отличается.
 
-- качество на ваших сценариях;
-- стабильность формата ответа;
-- latency;
-- стоимость;
-- контекстное окно;
-- tool calling;
-- безопасность и политика данных;
-- доступность в нужном регионе или cloud-провайдере.
+Публичный benchmark может не учитывать:
 
-Поэтому зрелая команда делает маленький eval-набор из собственных задач и сравнивает модели на нем.
+- ваш язык, домен и стиль требований;
+- private codebase и внутренние API;
+- точность structured output;
+- правильность выбора и аргументов tools;
+- long-running agent workflow;
+- latency и tail latency;
+- стоимость полного сценария, включая retries;
+- policy, безопасность и требования к данным;
+- стабильность результата между повторными запусками.
+
+Например, две модели могут одинаково хорошо решить алгоритмическую задачу, но одна стабильно возвращает валидный JSON и
+делает два tool calls, а другая иногда ломает schema и выполняет десять дорогих шагов. Для продукта первая может быть
+намного лучше даже при меньшем score в общем leaderboard.
+
+Еще одна проблема - оптимизация под benchmark. Набор может быть известен, загрязнен training data или просто слишком
+далек от реальных задач команды. Поэтому сравнение нужно переносить на собственный distribution.
+
+Практичный eval-набор включает реальные или обезличенные кейсы:
+
+1. Собрать 20-100 типичных задач разных уровней сложности.
+2. Зафиксировать вход, ожидаемые свойства и недопустимые ошибки.
+3. Использовать deterministic graders там, где это возможно: schema, tests, exact fields, tool arguments.
+4. Для субъективного качества добавить blind human review или rubric-based grader.
+5. Измерять не только pass rate, но и latency, tokens, tool calls, retries и стоимость.
+6. Отдельно держать adversarial и regression cases.
+7. Повторять eval при смене модели, prompt или agent harness.
+
+Для coding agent хорошим eval может быть не «написал ли красивый ответ», а: воспроизвел баг, изменил только нужные
+файлы, прошел tests, не нарушил API и не добавил лишнюю dependency.
+
+На интервью сильный ответ: **benchmark помогает сформировать shortlist, а решение принимает ваш eval на реальном
+workflow и с метриками качества, стоимости и надежности**.
 
 </td></tr></table>
 
 </details>
 
 <details>
-<summary>Чем отличаются GPT-5, Claude Fable 5 и Claude Opus на момент 2026 года?</summary><br>
+<summary>Чем отличаются GPT-5.6, Claude Fable 5 и Claude Opus 5 на момент 2026 года?</summary><br>
 <table><tr><td>
 
 **Короткий ответ**
 
-На момент 2026 года это не одна "лестница силы", а разные семейства моделей и продуктовые поверхности.
+Это разные model families и tiering, а не единая лестница. На август 2026 OpenAI позиционирует GPT-5.6 Sol как flagship
+для сложной профессиональной работы; Anthropic - Claude Fable 5 как модель максимальной доступной capability, а Claude
+Opus 5 как основной вариант для complex agentic coding и enterprise work.
 
 **Полный ответ**
 
-На момент 2026 года это не одна "лестница силы", а разные семейства моделей и продуктовые поверхности.
+Сравнивать модели корректнее по назначению и вашим evals, а не по бренду. Текущая картина на август 2026 выглядит так.
 
-GPT-5.x - семейство OpenAI. В Codex manual текущая рекомендация для большинства задач Codex - `gpt-5.5`, а более быстрый
-и дешевый вариант для легких coding tasks - `gpt-5.4-mini`. Важно проверять актуальный model ID в документации, потому
-что алиасы и доступность меняются.
+**OpenAI GPT-5.6**
 
-Claude Fable 5 и Claude Opus - модели Anthropic. В официальной таблице Anthropic Fable 5 описан как модель максимальной
-доступной capability, Opus 4.8 - как модель для complex agentic coding и enterprise work, Sonnet 5 - как баланс скорости
-и интеллекта, Haiku 4.5 - как быстрый вариант. См.
+У OpenAI семейство разделено на три основных tier:
+
+- `gpt-5.6-sol` - flagship для complex reasoning, coding и профессиональной работы;
+- `gpt-5.6-terra` - баланс intelligence и cost;
+- `gpt-5.6-luna` - cost-sensitive и high-volume workloads.
+
+Alias `gpt-5.6` сейчас указывает на `gpt-5.6-sol`. В официальном каталоге у трех вариантов заявлено context window около
+1.05M tokens и max output 128K; отличаются прежде всего capability/cost trade-off.
+
+**Anthropic Claude**
+
+В актуальной линейке Anthropic:
+
+- `claude-fable-5` - наиболее capable широко доступная модель, ориентированная на long-running agents;
+- `claude-opus-5` - complex agentic coding и enterprise work;
+- `claude-sonnet-5` - баланс скорости и intelligence;
+- `claude-haiku-4-5` - самый быстрый tier.
+
+Fable 5, Opus 5 и Sonnet 5 имеют 1M context window в текущей официальной таблице. Начиная с поколения Claude 4.6,
+dateless model IDs вроде `claude-opus-5` являются pinned model versions, а не evergreen alias.
+
+**Как выбирать между OpenAI и Anthropic**
+
+Не стоит делать вывод «Fable всегда сильнее GPT» или наоборот. Один provider может лучше пройти ваш coding eval,
+другой - длинный document workflow. Кроме самой модели отличаются:
+
+- tool и agent ecosystem;
+- особенности API и reasoning controls;
+- availability через cloud providers;
+- caching и batch capabilities;
+- pricing;
+- data policy и enterprise controls;
+- behavior на вашем prompt и codebase.
+
+Например, для сложного refactoring можно параллельно прогнать один и тот же набор репозиторных задач через
+`gpt-5.6-sol`, `claude-opus-5` и при необходимости `claude-fable-5`, а затем сравнить test pass rate, размер diff,
+review findings, latency и стоимость. Это дает больше информации, чем общий benchmark.
+
+Названия быстро меняются, поэтому в production лучше документировать дату сравнения и хранить model ID в конфигурации.
+
+На интервью полезно сказать: **на август 2026 актуальные top tiers - GPT-5.6 Sol у OpenAI и Fable 5 / Opus 5 у
+Anthropic, но выбор делается по workload-specific eval, а не по маркетинговой позиции модели**.
+
+См. [OpenAI models](https://developers.openai.com/api/docs/models) и
 [Claude models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
-
-На интервью лучше отвечать не "какая модель умнее", а "какую модель я выберу под задачу и как проверю качество".
 
 </td></tr></table>
 
@@ -1987,22 +2081,57 @@ Claude Fable 5 и Claude Opus - модели Anthropic. В официально�
 
 **Короткий ответ**
 
-Qwen - семейство языковых и multimodal-моделей Alibaba. В Qwen-документации описаны возможности natural language
-understanding, text generation, vision/audio understanding, tool use и agent-сценарии. Alibaba Cloud Model Studio также
-предлагает Qwen и сторонние модели для текста, изображений, аудио и видео.
+Qwen - семейство моделей Alibaba с hosted и open-weight вариантами. Его полезно знать, потому что рынок не ограничен
+OpenAI и Anthropic: другой provider может дать лучший cost/performance, нужный регион, локальный deployment или
+совместимый API.
 
 **Полный ответ**
 
-Qwen - семейство языковых и multimodal-моделей Alibaba. В Qwen-документации описаны возможности natural language
-understanding, text generation, vision/audio understanding, tool use и agent-сценарии. Alibaba Cloud Model Studio также
-предлагает Qwen и сторонние модели для текста, изображений, аудио и видео.
+Qwen - семейство текстовых и multimodal-моделей Alibaba. На август 2026 Alibaba Cloud Model Studio рекомендует
+`qwen3.7-max` как наиболее capable Qwen tier и `qwen3.7-plus` как более сбалансированный вариант. В каталоге также есть
+другие поколения и open-source/open-weight модели для локального или собственного deployment.
 
-Знать Qwen полезно, потому что рынок моделей не сводится к OpenAI и Anthropic. У Qwen есть open-weight и
-hosted-варианты, сильные multilingual-сценарии, локальный запуск через инструменты вроде Ollama/llama.cpp и
-использование через Alibaba Cloud.
+Qwen интересен инженеру не потому, что модель «китайская», а потому что он показывает несколько важных свойств
+современного model ecosystem.
 
-См. [Qwen docs](https://qwen.readthedocs.io/en/latest/) и
-[Alibaba Cloud Model Studio models](https://www.alibabacloud.com/help/en/model-studio/models).
+**1. Provider diversity**
+
+Если система поддерживает только один vendor, смена цены, rate limits, региона или model lifecycle становится
+архитектурной проблемой. Qwen дает еще одну реальную production-альтернативу.
+
+**2. Hosted и self-hosted сценарии**
+
+Часть Qwen-линейки доступна как managed inference в Alibaba Cloud, а open-weight модели можно запускать в собственной
+инфраструктуре при подходящих hardware и licensing requirements. Это важно для data residency, offline-сценариев и
+контроля инфраструктуры.
+
+**3. API compatibility**
+
+Model Studio предоставляет, среди прочего, OpenAI-compatible и Anthropic-compatible interfaces. Это может уменьшить
+стоимость интеграции, но compatibility не означает идентичное поведение: параметры, tool semantics, limits и качество
+все равно нужно проверять.
+
+**4. Multimodal и agent capabilities**
+
+В Qwen-линейке есть text, vision, audio/video и специализированные модели. Текущие Qwen 3.7/3.6 варианты в Model Studio
+поддерживают function calling, а некоторые - built-in tools и длинный context.
+
+При этом нельзя выбирать Qwen только ради меньшей цены. Нужно проверить:
+
+- качество на вашем языке и домене;
+- нужные регионы и compliance;
+- конкретную лицензию для open-weight модели;
+- context/tool capabilities конкретного model ID;
+- стоимость GPU и operations при self-hosting;
+- скорость обновлений и deprecation policy.
+
+Например, локальный open-weight вариант может убрать внешний data transfer, но добавить расходы на GPU, autoscaling,
+observability и model serving. Hosted Qwen, наоборот, снижает operational burden, но возвращает vendor dependency.
+
+На интервью сильный ответ: **Qwen нужен как пример альтернативной экосистемы с hosted и open-weight вариантами; зрелая
+архитектура сравнивает providers по evals, данным, стоимости и deployment constraints**.
+
+См. [Alibaba Cloud Model Studio models](https://www.alibabacloud.com/help/en/model-studio/models).
 
 </td></tr></table>
 
@@ -2014,19 +2143,53 @@ hosted-варианты, сильные multilingual-сценарии, лока�
 
 **Короткий ответ**
 
-Frontier-модель стоит брать для задач, где цена ошибки выше цены inference: архитектурный анализ, сложный refactoring,
-агентное coding workflow, security review, длинный контекст, нечеткие требования.
+Frontier-модель оправдана, когда дополнительное качество уменьшает дорогие ошибки или число итераций. Более дешевый tier
+лучше для массовых предсказуемых задач, а локальная модель - когда важны data control, offline/deployment constraints
+или экономика собственного inference.
 
 **Полный ответ**
 
-Frontier-модель стоит брать для задач, где цена ошибки выше цены inference: архитектурный анализ, сложный refactoring,
-агентное coding workflow, security review, длинный контекст, нечеткие требования.
+Правильная цель - не использовать самую сильную модель везде, а выбрать **самую дешевую конфигурацию, которая стабильно
+проходит необходимый quality bar**.
 
-Более дешевую или локальную модель разумно брать для массовых простых операций: классификация, нормализация текста,
-черновики, локальная приватность, autocomplete, генерация вариантов, предварительная фильтрация.
+**Frontier-модель полезна**, когда:
 
-Практичный подход: сначала измерить качество на eval-наборе, затем выбрать самую дешевую модель, которая стабильно
-проходит нужный порог.
+- требования неоднозначны и нужен сильный reasoning;
+- задача затрагивает много файлов или длинный контекст;
+- агент должен планировать несколько шагов и работать с tools;
+- ошибка может привести к security, financial или production impact;
+- human review дорог и хорошая первая попытка экономит больше, чем inference;
+- eval показывает заметный quality gain относительно дешевого tier.
+
+Примеры: архитектурный анализ, сложный debugging, migration plan, security review, high-value code generation.
+
+**Более дешевый hosted tier подходит**, когда:
+
+- задача узкая и хорошо формализована;
+- результат легко проверить schema или deterministic code;
+- запросов много;
+- latency важнее максимального reasoning;
+- ошибка дешева и есть fallback.
+
+Примеры: classification, extraction, normalization, простые summaries, routing, черновики.
+
+**Локальная или self-hosted модель оправдана**, когда:
+
+- данные нельзя передавать внешнему provider;
+- требуется offline или edge execution;
+- workload большой и стабильный, а собственный inference экономически выгоден;
+- нужна особая версия или fine-tuned/open-weight модель;
+- команда готова поддерживать GPU serving, scaling и observability.
+
+Self-hosting не означает автоматически «дешево и безопасно». В TCO входят hardware, idle capacity, upgrades, security,
+monitoring и инженерное время.
+
+Практичный паттерн - **cascade**: дешевая модель делает первый проход, deterministic grader проверяет результат, а
+сложные или low-confidence случаи escalated в frontier tier. Важно измерить, не съедают ли retries и routing overhead
+всю экономию.
+
+На интервью полезно говорить через **стоимость ошибки и eval threshold**: frontier покупает дополнительную надежность,
+cheap tier - throughput, local model - контроль deployment. Решение подтверждается измерениями.
 
 </td></tr></table>
 
@@ -2038,22 +2201,63 @@ Frontier-модель стоит брать для задач, где цена �
 
 **Короткий ответ**
 
-Нужно отделять бизнес-логику от конкретного model ID:
+Модель нужно считать заменяемой production dependency: хранить model ID в конфигурации, изолировать provider API,
+фиксировать schemas и evals, логировать фактическую версию и менять модель через canary/shadow rollout, а не
+переписывать бизнес-логику.
 
 **Полный ответ**
 
-Нужно отделять бизнес-логику от конкретного model ID:
+Model lifecycle развивается быстрее большинства application dependencies. Появляются новые model IDs, старые deprecated,
+меняются цены, context limits, reasoning controls и рекомендуемые APIs. Если продукт напрямую размазан по конкретному
+SDK и поведению одной модели, каждая миграция становится проектом.
 
-- хранить model ID в конфигурации;
-- иметь provider adapter;
-- описывать ожидаемый формат ответа через schema;
-- держать eval-набор для ключевых сценариев;
-- логировать версию модели, prompt и tool calls;
-- делать canary или shadow-прогоны перед заменой модели;
-- не завязывать продуктовый контракт на особенности одной модели.
+Полезно разделить несколько слоев.
 
-Модель - это зависимость, а не архитектура. Ее нужно обновлять так же дисциплинированно, как базу данных, framework или
-платежный провайдер.
+**1. Product contract**
+
+Бизнес-код должен оперировать понятным контрактом: например `ReviewResult`, `ExtractedInvoice` или `SupportDecision`, а
+не сырым provider response. Structured output и validation создают границу между моделью и приложением.
+
+**2. Provider adapter**
+
+Provider-specific details - client, model ID, reasoning parameters, tool format, retries - изолируются в adapter. Не
+нужно строить огромную универсальную abstraction для всех возможных LLM, но точка замены должна быть очевидной.
+
+**3. Configuration and versioning**
+
+Model ID, reasoning effort и rollout flags хранятся в конфигурации. В telemetry важно писать фактический provider, model
+ID, prompt version, tool configuration и latency. Иначе regression после обновления трудно расследовать.
+
+Нужно понимать semantics IDs. Например, у OpenAI alias `gpt-5.6` сейчас маршрутизируется на `gpt-5.6-sol`, а Anthropic
+указывает, что dateless IDs поколения Claude 4.6+ вроде `claude-opus-5` являются pinned versions. Поэтому нельзя
+предполагать одинаковую alias-policy у разных providers.
+
+**4. Evals before migration**
+
+Перед заменой модели прогоняют regression suite:
+
+- correctness и task success;
+- schema/tool-call validity;
+- safety и refusal behavior;
+- latency;
+- token usage и cost;
+- критичные adversarial cases.
+
+**5. Controlled rollout**
+
+Для online-продукта полезны shadow traffic, canary, A/B или feature flag. Если новая модель ухудшает ключевой metric,
+нужен быстрый rollback на предыдущую конфигурацию.
+
+**6. Deprecation monitoring**
+
+Команда должна следить за provider changelog/deprecation notices. «latest» alias удобен для эксперимента, но
+production-контракт должен явно учитывать, насколько допустимо изменение поведения без релиза приложения.
+
+Анти-паттерн - писать prompts и бизнес-правила вокруг случайной особенности модели: «эта модель всегда возвращает ровно
+три пункта». Такое поведение нужно превращать в schema, grader или deterministic post-processing.
+
+На интервью хорошая формула: **model is replaceable dependency; contract, evals and rollout strategy belong to your
+system, not to the model vendor**.
 
 </td></tr></table>
 
@@ -2065,24 +2269,66 @@ Frontier-модель стоит брать для задач, где цена �
 
 **Короткий ответ**
 
-Model routing - это выбор модели под конкретный запрос. Например, простые задачи идут в дешевую fast-модель, сложные
-задачи - в сильную reasoning-модель, multimodal-задачи - в модель с vision/audio, а приватные локальные сценарии - в
-self-hosted модель.
+Model routing - это выбор модели или конфигурации для конкретного запроса по типу задачи, риску, latency, цене,
+capabilities или результату предыдущего шага. Цель - сохранить quality bar и не платить frontier-price за каждый запрос.
 
 **Полный ответ**
 
-Model routing - это выбор модели под конкретный запрос. Например, простые задачи идут в дешевую fast-модель, сложные
-задачи - в сильную reasoning-модель, multimodal-задачи - в модель с vision/audio, а приватные локальные сценарии - в
-self-hosted модель.
+Вместо одной модели для всех запросов система может направлять разные workloads в разные tiers или providers. Router
+принимает решение до вызова модели или между этапами workflow.
 
-Routing можно делать по типу задачи, размеру контекста, уровню риска, требуемому latency, бюджету или результату
-предварительной классификации. Важно, чтобы routing был наблюдаемым: команда должна понимать, какая модель отвечала и
-почему.
+Routing бывает нескольких типов.
+
+**Rule-based routing**
+
+Детерминированные правила используют известные свойства задачи:
+
+- simple classification -> cheap model;
+- сложный code review -> frontier model;
+- image input -> vision-capable model;
+- sensitive offline workflow -> local model;
+- контекст больше лимита одного tier -> модель с подходящим window.
+
+Это легко объяснить и отладить.
+
+**Classifier-based routing**
+
+Небольшая модель или отдельный classifier оценивает difficulty, intent или risk и выбирает маршрут. Такой router гибче,
+но сам становится ML-компонентом, который нужно оценивать.
+
+**Cascade / escalation**
+
+Сначала вызывается дешевый tier. Если confidence низкий, grader не прошел, schema invalid или задача оказалась сложнее,
+система повторяет запрос на более сильной модели. Это часто дает хорошую экономику для uneven workload.
+
+**Provider routing**
+
+Можно маршрутизировать между OpenAI, Anthropic, Qwen или self-hosted моделями по региону, availability, цене или
+результатам evals. Но provider failover сложнее обычного retry: behavior, tool semantics и safety policy могут
+различаться.
+
+Router должен быть наблюдаемым. Для каждого запроса полезно логировать:
+
+- выбранный provider/model;
+- причину маршрута;
+- input class/risk;
+- latency и token usage;
+- retry/escalation;
+- итоговый success metric.
+
+Главная ловушка - оптимизировать только цену первого вызова. Дешевая модель, которая часто требует retries или human
+repair, может увеличить total cost. Поэтому router оценивают end-to-end: task success, latency, inference cost и
+стоимость ошибок.
+
+Для критичных задач routing policy должна учитывать риск. Например, security-sensitive review нельзя отправлять в слабый
+tier только потому, что prompt короткий.
+
+На интервью сильный ответ: **model routing - это policy layer над моделями; он оптимизирует quality/cost/latency и
+обязательно проверяется собственными evals и telemetry**.
 
 </td></tr></table>
 
 </details>
-
 ### AI-инструменты разработки
 
 <details>
