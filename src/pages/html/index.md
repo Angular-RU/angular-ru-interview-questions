@@ -878,17 +878,54 @@ div не получает focus, keyboard activation, role и accessible name и
 
 **Короткий ответ**
 
-Браузер начинает streaming parse HTML еще до полной загрузки документа. Он строит DOM, заранее обнаруживает ресурсы
-через preload scanner, загружает CSS, JavaScript, изображения, fonts и другие зависимости.
+Браузер начинает streaming parse HTML еще до полной загрузки документа: tokenizer и tree construction строят DOM,
+preload scanner заранее обнаруживает ресурсы, параллельно загружаются CSS, JavaScript, изображения и fonts. Для первого
+render браузеру нужны DOM и CSSOM, после чего идут style calculation, layout, paint и compositing.
 
 **Полный ответ**
 
-Браузер начинает streaming parse HTML еще до полной загрузки документа. Он строит DOM, заранее обнаруживает ресурсы
-через preload scanner, загружает CSS, JavaScript, изображения, fonts и другие зависимости.
+Получение HTML не означает, что браузер сначала скачивает весь файл, а потом начинает работать. Обычно обработка идет
+потоково: новые байты приходят по сети и постепенно проходят decoding, tokenization и tree construction.
 
-Для первого render нужны DOM, CSSOM и render tree. Затем browser выполняет layout, paint и compositing. JavaScript,
-stylesheets, fonts и большие изображения могут задержать отдельные этапы, поэтому производительность оценивают по
-реальному Critical Rendering Path.
+Упрощенная последовательность выглядит так:
+
+1. **Network и decoding.** Браузер получает response, определяет encoding и превращает байты в символы.
+2. **HTML tokenization.** Parser выделяет start tags, end tags, text, comments и другие tokens.
+3. **Tree construction.** Из tokens строится DOM с учетом content model и правил error recovery.
+4. **Resource discovery.** Parser и preload scanner находят stylesheets, scripts, images, fonts и другие зависимости.
+5. **CSSOM.** Загруженные stylesheets разбираются в CSS object model.
+6. **Style + layout.** Для видимых nodes вычисляются styles и геометрия.
+7. **Paint + compositing.** Браузер рисует pixels и собирает слои в итоговый кадр.
+
+Это не строго последовательный waterfall. Сеть, parsing и часть resource loading перекрываются по времени. Например,
+preload scanner может найти `<img>` или `<link rel="stylesheet">` впереди основного parser и начать fetch раньше.
+
+JavaScript способен менять эту картину. Классический parser-blocking script:
+
+```html
+<script src="app.js"></script>
+```
+
+может остановить HTML parser до загрузки и выполнения script, потому что JavaScript потенциально меняет документ через
+DOM APIs или `document.write()`. `defer`, modules и подходящее placement уменьшают такой blocking.
+
+CSS обычно не блокирует сам HTML parsing, но может задерживать render: браузеру нужен CSSOM, чтобы корректно посчитать
+styles. Кроме того, script, который зависит от computed styles, тоже может косвенно ждать stylesheet.
+
+Практический performance-вопрос поэтому звучит не «сколько весит HTML», а **что находится на Critical Rendering Path**:
+
+- parser-blocking JavaScript;
+- render-blocking CSS;
+- web fonts;
+- LCP image;
+- long main-thread tasks;
+- лишние redirects и connection setup.
+
+В SSR/Angular сценарии server-rendered HTML может дать пользователю содержимое раньше bundle, но затем framework еще
+должен bootstrap/hydrate приложение. Поэтому «HTML уже пришел» и «страница полностью интерактивна» — разные milestones.
+
+На интервью полезно не перечислять весь browser engine: **HTML парсится потоково в DOM, ресурсы обнаруживаются и
+загружаются параллельно, а первый render зависит от critical resources, CSSOM, layout и paint**.
 
 </td></tr></table>
 
@@ -900,15 +937,72 @@ stylesheets, fonts и большие изображения могут заде�
 
 **Короткий ответ**
 
-Progressive enhancement начинает с базового доступного HTML и постепенно добавляет CSS, JavaScript и продвинутые browser
-features. Если часть улучшений недоступна, основной content и ключевые действия остаются рабочими. Для Angular это
-особенно заметно в SSR/prerender сценариях: пользователь не должен видеть пустую страницу до загрузки bundle.
+Progressive enhancement начинает с базового доступного HTML и основного пользовательского сценария, а затем добавляет
+CSS, JavaScript и новые browser APIs как улучшения. Если enhancement недоступен или сломался, ключевой content и
+действие по возможности остаются рабочими.
 
 **Полный ответ**
 
-Progressive enhancement начинает с базового доступного HTML и постепенно добавляет CSS, JavaScript и продвинутые browser
-features. Если часть улучшений недоступна, основной content и ключевые действия остаются рабочими. Для Angular это
-особенно заметно в SSR/prerender сценариях: пользователь не должен видеть пустую страницу до загрузки bundle.
+Progressive enhancement — стратегия проектирования **от устойчивой базы к дополнительным возможностям**, а не список
+fallback для старых браузеров.
+
+Простой пример — поиск:
+
+```html
+<form
+  action="/search"
+  method="get"
+>
+  <label for="query">Поиск</label>
+  <input
+    id="query"
+    name="q"
+  />
+  <button type="submit">Найти</button>
+</form>
+```
+
+Без JavaScript form уже имеет понятную семантику и может отправить запрос. JavaScript затем может добавить autocomplete,
+debounce, client-side validation или обновление результатов без full-page navigation.
+
+Подход полезен по нескольким причинам.
+
+**Resilience**
+
+Bundle может не загрузиться из-за сети, CSP, CDN incident или runtime error. Если весь основной сценарий существует
+только после JavaScript bootstrap, пользователь получает пустой или мертвый интерфейс.
+
+**Accessibility**
+
+Native HTML primitives уже содержат semantics, keyboard behavior и form behavior. Enhancement поверх них обычно
+надежнее, чем custom widget с нуля.
+
+**Performance**
+
+Server-rendered или prerendered content может стать доступным до загрузки большого client bundle.
+
+**Browser diversity**
+
+Новый API можно включать через feature detection, не запрещая весь продукт пользователю, у которого нет одной advanced
+capability.
+
+Например:
+
+```js
+if ('share' in navigator) {
+  showNativeShareButton();
+}
+```
+
+При этом progressive enhancement не означает «приложение обязано полностью работать без JavaScript». Для сложного
+редактора или IDE это может быть неразумно. Нужно определить **minimum viable experience**: что является core content и
+какие действия должны переживать отсутствие конкретной enhancement.
+
+Для Angular SSR это особенно полезная модель: SSR HTML дает ранний meaningful state, hydration добавляет client-side
+interactivity, а отдельные advanced APIs подключаются только там, где доступны.
+
+На интервью сильная формулировка: **progressive enhancement проектирует надежный baseline и делает сложность additive;
+отказ одного слоя не должен без необходимости уничтожать весь пользовательский сценарий**.
 
 </td></tr></table>
 
@@ -920,17 +1014,48 @@ features. Если часть улучшений недоступна, осно�
 
 **Короткий ответ**
 
-Progressive enhancement проектирует опыт от базового слоя к улучшениям. Graceful degradation обычно начинается с
-полнофункционального варианта и пытается сохранить приемлемую работу при отсутствии части возможностей. Первый подход
-лучше помогает accessibility, слабым устройствам и нестабильной сети, второй часто встречается при поддержке старых
-браузеров.
+Progressive enhancement проектирует продукт снизу вверх: сначала рабочий baseline, затем улучшения. Graceful degradation
+обычно начинается с полнофункционального experience и определяет, как он упростится при отсутствии части возможностей.
+Оба подхода стремятся сохранить полезный сценарий, но точка проектирования разная.
 
 **Полный ответ**
 
-Progressive enhancement проектирует опыт от базового слоя к улучшениям. Graceful degradation обычно начинается с
-полнофункционального варианта и пытается сохранить приемлемую работу при отсутствии части возможностей. Первый подход
-лучше помогает accessibility, слабым устройствам и нестабильной сети, второй часто встречается при поддержке старых
-браузеров.
+Оба термина описывают устойчивость интерфейса при разных возможностях среды, но направление мышления отличается.
+
+**Progressive enhancement:**
+
+```text
+semantic HTML -> CSS -> JavaScript -> advanced browser feature
+```
+
+Сначала проектируется минимальный надежный слой, а каждый следующий делает experience лучше.
+
+**Graceful degradation:**
+
+```text
+full experience -> feature unavailable -> controlled fallback
+```
+
+Сначала существует богатый вариант, затем команда определяет приемлемое поведение для менее способной среды.
+
+Например, редактор изображений может использовать WebGL как основной renderer. Полностью воспроизводить его без
+JavaScript бессмысленно, но graceful degradation может дать preview, download original или понятное сообщение о
+неподдерживаемой функции вместо crash.
+
+А обычная форма регистрации естественно подходит progressive enhancement: native form работает сама, а JavaScript
+добавляет password strength meter и inline validation.
+
+Разница не означает, что один подход всегда «правильный», а второй устарел. Выбор зависит от продукта:
+
+- content/service pages часто хорошо строятся progressive enhancement;
+- specialized applications иногда логичнее проектировать full experience и явный degraded mode;
+- отдельные компоненты могут использовать оба подхода одновременно.
+
+Главная ошибка — называть graceful degradation ситуацию, когда unsupported browser просто получает белый экран. Degraded
+experience все еще должен быть **преднамеренным и полезным**.
+
+На интервью можно ответить через направление: **progressive enhancement добавляет capability к baseline, graceful
+degradation снимает capability с full experience, стараясь сохранить core value**.
 
 </td></tr></table>
 
@@ -942,15 +1067,52 @@ Progressive enhancement проектирует опыт от базового с
 
 **Короткий ответ**
 
-Browser support означает, что пользователь может выполнить основной сценарий в браузере или на устройстве. Browser
-optimization означает, что под важные браузеры, устройства и сети интерфейс дополнительно улучшается. Не всегда нужно
-давать всем одинаковый experience, но базовый сценарий не должен ломаться без явной продуктовой причины.
+Browser support — обещание, что в указанном окружении работает определенный набор пользовательских сценариев. Browser
+optimization — дополнительная работа над скоростью, UX или использованием platform features для приоритетных окружений.
+Поддерживать браузер не значит давать ему pixel-identical experience.
 
 **Полный ответ**
 
-Browser support означает, что пользователь может выполнить основной сценарий в браузере или на устройстве. Browser
-optimization означает, что под важные браузеры, устройства и сети интерфейс дополнительно улучшается. Не всегда нужно
-давать всем одинаковый experience, но базовый сценарий не должен ломаться без явной продуктовой причины.
+Полезно разделять **contract корректности** и **уровень оптимизации**.
+
+Browser support отвечает на вопрос:
+
+> Может ли пользователь в этом browser/device выполнить обещанные продуктом сценарии с приемлемым качеством?
+
+Например, support matrix может гарантировать login, поиск, оформление заявки и доступ к документам в последних двух
+major versions Chrome, Edge, Firefox и Safari.
+
+Browser optimization отвечает на другой вопрос:
+
+> Где мы дополнительно тратим effort, чтобы experience был быстрее или богаче?
+
+Например, приложение поддерживает Safari и Chrome, но для Chromium использует дополнительную производительную feature
+только после feature detection. Safari получает тот же core scenario другим путем.
+
+Поддержка не обязана означать:
+
+- одинаковые animations;
+- одинаковый native form UI;
+- одинаковые fonts rasterization;
+- поддержку каждой experimental API;
+- pixel-perfect equality между engines.
+
+Она должна описывать observable user outcome. Иначе QA получает бесконечную задачу «все должно быть одинаково везде».
+
+Optimization также нельзя использовать как оправдание функциональной поломки. Если браузер заявлен supported, critical
+flow должен работать даже без отдельных performance enhancements.
+
+Практически полезно фиксировать:
+
+- supported versions/devices;
+- core scenarios;
+- accessibility baseline;
+- допустимые visual differences;
+- advanced features с отдельным fallback;
+- процесс снятия support.
+
+На интервью сильный ответ: **support — это product contract на работоспособность, optimization — приоритизация качества
+и performance поверх этого contract**.
 
 </td></tr></table>
 
@@ -962,15 +1124,49 @@ optimization означает, что под важные браузеры, ус
 
 **Короткий ответ**
 
-Browser support должен опираться на аналитику пользователей, требования бизнеса, корпоративную среду, законодательные
-ограничения и стоимость поддержки. Решение нельзя принимать только по личным предпочтениям разработчиков. Его стоит
-записать в guidelines и регулярно пересматривать.
+Support matrix определяют по реальной аналитике аудитории, business/regulatory requirements, корпоративным ограничениям,
+capabilities продукта и стоимости QA/разработки. Ее нужно версионировать и регулярно пересматривать, а не выбирать по
+личным предпочтениям команды.
 
 **Полный ответ**
 
-Browser support должен опираться на аналитику пользователей, требования бизнеса, корпоративную среду, законодательные
-ограничения и стоимость поддержки. Решение нельзя принимать только по личным предпочтениям разработчиков. Его стоит
-записать в guidelines и регулярно пересматривать.
+Фраза «поддерживаем современные браузеры» почти бесполезна: она не определяет версии, устройства и критерий
+работоспособности. Нужна явная support policy.
+
+Решение обычно собирают из нескольких источников.
+
+**Product analytics**
+
+Какой процент active users использует конкретные browser/version/device combinations? Для B2B особенно важно смотреть не
+на глобальную статистику, а на собственных клиентов.
+
+**Business requirements**
+
+Один enterprise customer со старым managed browser может быть важнее 0.2% общей аудитории.
+
+**Regulatory и accessibility requirements**
+
+Государственные или финансовые продукты могут иметь дополнительные требования к environments и assistive technologies.
+
+**Required Web APIs**
+
+Если ключевая функция зависит от WebAuthn, camera, WebGL или другой capability, нужно проверить поддержку и качество
+реализации, а не только browser version.
+
+**Cost of support**
+
+Каждый дополнительный environment увеличивает test matrix, polyfills, workarounds и incident surface. Support имеет
+цену, поэтому legacy browser не должен сохраняться «навсегда по привычке».
+
+После решения policy связывают с tooling: Browserslist/targets, transpilation, polyfills, CI/e2e matrix и QA devices. Но
+Browserslist сам по себе не является продуктовой policy: он описывает технические targets, а не полный набор user
+scenarios.
+
+Полезно заранее определить критерий удаления browser version: например, usage ниже порога несколько месяцев и отсутствие
+contractual клиентов. Изменение support лучше анонсировать, а не обнаруживать после случайного dependency upgrade.
+
+На интервью хорошо показать product thinking: **browser matrix — результат данных, обязательств и стоимости, после чего
+она превращается в конкретные build/test targets**.
 
 </td></tr></table>
 
@@ -982,15 +1178,38 @@ Browser support должен опираться на аналитику поль
 
 **Короткий ответ**
 
-Graded browser support делит браузеры или устройства на уровни. Например, в одних браузерах гарантируется полный
-experience, в других — базовая функциональность, а для устаревших окружений — readable content или explicit fallback.
-Это помогает управлять стоимостью поддержки и ожиданиями бизнеса.
+Graded browser support делит environments на уровни с разными гарантиями: например, full support, functional support и
+unsupported/limited fallback. Это делает ожидания проверяемыми и не заставляет команду обещать одинаковый experience для
+всех браузеров.
 
 **Полный ответ**
 
-Graded browser support делит браузеры или устройства на уровни. Например, в одних браузерах гарантируется полный
-experience, в других — базовая функциональность, а для устаревших окружений — readable content или explicit fallback.
-Это помогает управлять стоимостью поддержки и ожиданиями бизнеса.
+Идея graded support — заменить бинарное «работает / не работает» несколькими **уровнями service contract**.
+
+Пример:
+
+| Tier        | Гарантия                                                                              |
+| ----------- | ------------------------------------------------------------------------------------- |
+| A           | Полный функционал, визуальная проверка, performance budget и регулярный e2e           |
+| B           | Core flows и accessibility работают, minor visual differences допустимы               |
+| C           | Readable content или explicit fallback без полного interactive experience             |
+| Unsupported | Нет гарантии, показывается понятное требование обновить environment при необходимости |
+
+Такой подход полезен, когда аудитория гетерогенна. Например, основной B2C трафик тестируется глубоко на актуальных
+mobile Safari/Chrome, а редкий corporate browser сохраняет critical business flow без всех animation/performance
+guarantees.
+
+Tier должен описывать не название браузера, а **что именно команда проверяет**. Иначе «Tier B» превращается в красивую
+метку без смысла.
+
+Нужно также избегать вечного накопления tiers. Если environment почти не используется, поддержка должна иметь owner и
+review date.
+
+Graded support хорошо сочетается с progressive enhancement: lower tier может получить baseline, а richer capabilities
+включаются в более сильных environments.
+
+На интервью полезно сказать: **graded support управляет стоимостью compatibility через разные явные SLA опыта, а не
+через случайный набор browser hacks**.
 
 </td></tr></table>
 
@@ -1002,15 +1221,50 @@ experience, в других — базовая функциональность,
 
 **Короткий ответ**
 
-Отдельная policy нужна, если компонент использует API с разной поддержкой: camera, clipboard, drag and drop, сложную
-графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире, а
-конкретный advanced component — уже, если fallback честно описан.
+Отдельная policy нужна, когда capability компонента уже общей матрицы приложения: camera, clipboard, WebGL, file system,
+advanced drag-and-drop, heavy graphics или другой API с неодинаковой поддержкой. Тогда документируют feature detection,
+fallback и environments, где гарантируется полный сценарий.
 
 **Полный ответ**
 
-Отдельная policy нужна, если компонент использует API с разной поддержкой: camera, clipboard, drag and drop, сложную
-графику, heavy animations, WebGL или нестандартные browser features. Продукт может поддерживать базовый сценарий шире, а
-конкретный advanced component — уже, если fallback честно описан.
+Product-level support matrix не всегда достаточно. Страница может быть поддержана в Safari, но конкретный 3D editor,
+camera scanner или advanced clipboard flow иметь более узкие технические требования.
+
+Отдельная component/feature policy оправдана, если есть хотя бы одно из условий:
+
+- зависимость от browser API с неоднородной поддержкой;
+- существенная разница mobile/desktop input model;
+- hardware requirement, например camera/GPU;
+- performance threshold, без которого feature становится практически непригодной;
+- permission model, которая сильно различается между environments;
+- сложный fallback, который сам является отдельным продуктовым сценарием.
+
+Например, общий продукт поддерживает iOS Safari, но bulk file editor требует File System Access API. Вместо ложного
+«Safari unsupported» можно оставить приложение supported и дать editor другой flow: обычный `<input type="file">`,
+download archive или server-side обработку.
+
+Правильная реализация обычно использует **feature detection**, а не user-agent sniffing:
+
+```js
+if ('showOpenFilePicker' in window) {
+  // enhanced flow
+} else {
+  // fallback
+}
+```
+
+UA detection иногда нужен для известных engine bugs, но как основная capability model он хрупок.
+
+Policy должна отвечать:
+
+- где full experience;
+- что является fallback;
+- как сообщается недоступность;
+- какие tests запускаются;
+- кто владеет compatibility decision.
+
+На интервью сильная мысль: **support матрица продукта описывает доступность продукта, а отдельная feature policy — более
+узкий contract конкретной capability, не понижая без необходимости весь browser до unsupported**.
 
 </td></tr></table>
 
@@ -1022,16 +1276,53 @@ experience, в других — базовая функциональность,
 
 **Короткий ответ**
 
-HTML parsing designed to be forgiving: браузеры десятилетиями должны были показывать страницы с ошибками разметки.
-Спецификация описывает tokenization, tree construction и error recovery, поэтому parser исправляет многие случаи сам.
+HTML parser intentionally error-tolerant: спецификация задает deterministic tokenization, tree construction и error
+recovery для множества невалидных случаев. Браузер строит исправленный DOM вместо того, чтобы прекращать отображение
+страницы, поэтому DOM может отличаться от исходного source.
 
 **Полный ответ**
 
-HTML parsing designed to be forgiving: браузеры десятилетиями должны были показывать страницы с ошибками разметки.
-Спецификация описывает tokenization, tree construction и error recovery, поэтому parser исправляет многие случаи сам.
+HTML исторически должен был отображать огромный объем несовершенной разметки в интернете. Если бы одна ошибка закрытия
+tag останавливала документ как строгий XML parser, web был бы значительно менее совместим.
 
-Например, браузер может автоматически закрыть тег, вставить пропущенный `<tbody>` или перестроить некорректную
-вложенность. Поэтому DOM может отличаться от исходного HTML source.
+Поэтому HTML parsing specification описывает не только valid syntax, но и **точные recovery rules**.
+
+Например:
+
+```html
+<p>One</p>
+<p>Two</p>
+```
+
+При встрече второго `p` parser автоматически закрывает предыдущий paragraph. В DOM получится два sibling `p`, хотя в
+source нет явного `</p>` перед вторым.
+
+Другой известный пример — таблицы: browser может добавить `tbody`, которого не было явно в source, или переставить nodes
+из недопустимой позиции по правилам tree construction.
+
+Это важно для разработки по нескольким причинам.
+
+**DOM может не повторять source**
+
+DevTools Elements показывает построенное tree, а View Source — исходный response.
+
+**Невалидность не означает predictability**
+
+«Браузер все исправит» — плохая стратегия. Recovery rules сложны, а разные контексты (`table`, `p`, formatting elements)
+могут дать неожиданное tree.
+
+**Framework hydration чувствительна к структуре**
+
+Если server markup невалиден и parser перестроил DOM, client framework может получить hydration mismatch.
+
+**Security/sanitization**
+
+Нельзя проектировать sanitizer исходя из наивной строковой модели tags; parser behavior и DOM contexts имеют значение.
+
+Поэтому validator/linter все еще полезен, хотя browser page визуально «работает».
+
+На интервью стоит сказать: **HTML forgiving не потому, что ошибок нет, а потому что error recovery стандартизирован;
+браузер продолжает parsing и строит определенный DOM, который иногда отличается от написанного source**.
 
 </td></tr></table>
 
@@ -1043,16 +1334,51 @@ HTML parsing designed to be forgiving: браузеры десятилетиям
 
 **Короткий ответ**
 
-HTML source — это текст, который пришел от сервера или был записан в документ. DOM — live object model, которую браузер
-построил после parsing и error recovery, а затем может изменять JavaScript.
+HTML source — исходный текст документа. DOM — текущее объектное дерево после parsing/error recovery и последующих
+изменений JavaScript. Поэтому View Source и DevTools Elements могут показывать разную структуру и значения.
 
 **Полный ответ**
 
-HTML source — это текст, который пришел от сервера или был записан в документ. DOM — live object model, которую браузер
-построил после parsing и error recovery, а затем может изменять JavaScript.
+HTML source и DOM относятся к разным этапам жизни страницы.
 
-DOM может содержать автоматически добавленные узлы, нормализованную структуру, элементы из templates после runtime
-rendering и изменения, которых не было в исходном HTML. На интервью важно не смешивать view-source и Elements panel.
+**HTML source** — текст, полученный по сети или записанный в документ:
+
+```html
+<ul id="list"></ul>
+```
+
+**DOM** — объектная модель, созданная parser и доступная через JavaScript:
+
+```js
+const list = document.querySelector('#list');
+list.append(document.createElement('li'));
+```
+
+После этого DOM содержит `li`, хотя исходный server response его не содержал.
+
+DOM может отличаться от source еще до JavaScript из-за parser recovery:
+
+- optional tags;
+- автоматически созданные nodes;
+- исправленная вложенность;
+- нормализация HTML-specific structure.
+
+После запуска приложения различие становится еще сильнее: Angular/React добавляют и удаляют nodes, меняют attributes,
+рендерят portals/overlays и обновляют text.
+
+Практическое следствие для debugging:
+
+- **View Source / network response** отвечает «что прислал server?»;
+- **Elements panel / DOM APIs** отвечает «что browser имеет сейчас?».
+
+Это особенно важно при SSR/hydration. Если ошибка существует уже в server HTML, нужно смотреть response/source. Если она
+появляется после bootstrap, нужен current DOM и framework lifecycle.
+
+DOM также не равен accessibility tree: accessibility model строится на основе DOM, semantics, styles и ARIA, но может
+скрывать часть nodes или представлять их другими roles.
+
+На интервью полезная формула: **source — serialization на входе parser, DOM — live runtime model после parser и
+JavaScript**.
 
 </td></tr></table>
 
@@ -1064,15 +1390,64 @@ rendering и изменения, которых не было в исходно�
 
 **Короткий ответ**
 
-preload приоритетно загружает ресурс текущей страницы, prefetch с низким приоритетом готовит вероятный следующий
-переход, preconnect заранее устанавливает соединение с origin. Ошибочное применение расходует bandwidth и конкурирует с
-критическими ресурсами.
+`preload` заранее загружает важный ресурс текущей navigation, `prefetch` с низким приоритетом готовит вероятный ресурс
+для будущей navigation, `preconnect` заранее выполняет connection setup к origin. Все hints нужно применять выборочно:
+лишние hints расходуют bandwidth, sockets и конкурируют с critical resources.
 
 **Полный ответ**
 
-`preload` приоритетно загружает ресурс текущей страницы, `prefetch` с низким приоритетом готовит вероятный следующий
-переход, `preconnect` заранее устанавливает соединение с origin. Ошибочное применение расходует bandwidth и конкурирует
-с критическими ресурсами.
+Resource hints решают разные части latency, поэтому их нельзя считать тремя вариантами одного и того же.
+
+**`preload` — «этот ресурс нужен текущей странице скоро»**
+
+```html
+<link
+  rel="preload"
+  href="/fonts/inter.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+```
+
+Browser начинает fetch раньше обычного discovery. `as` важен для приоритета, CSP и cache matching. Неправильный preload
+может привести к двойной загрузке или забрать bandwidth у реально critical resource.
+
+Типичные кандидаты: critical font, hero/LCP image или ресурс, который browser иначе обнаружит слишком поздно. Но preload
+не должен превращаться в список всех assets страницы.
+
+**`prefetch` — «этот ресурс, вероятно, пригодится позже»**
+
+```html
+<link
+  rel="prefetch"
+  href="/next-page.js"
+/>
+```
+
+Обычно имеет более низкий priority и полезен для вероятной следующей navigation. Browser может игнорировать hint в
+зависимости от network/policy.
+
+**`preconnect` — «скоро понадобится этот origin»**
+
+```html
+<link
+  rel="preconnect"
+  href="https://cdn.example.com"
+  crossorigin
+/>
+```
+
+Он заранее выполняет DNS/TCP/TLS connection setup, но не загружает конкретный файл. Это полезно для действительно
+критичного third-party origin. Preconnect ко всем возможным доменам тратит sockets и ресурсы.
+
+Есть также `dns-prefetch`, который делает только DNS lookup и дешевле полного preconnect.
+
+Hints — **подсказки browser scheduler**, а не абсолютные команды. Их эффективность нужно проверять через waterfall,
+Performance panel и реальные Web Vitals. То, что ускоряет desktop broadband, может ухудшить constrained mobile network.
+
+На интервью сильный ответ: **preload двигает fetch текущего critical resource раньше, prefetch готовит вероятное
+будущее, preconnect сокращает connection latency; каждый hint имеет opportunity cost**.
 
 </td></tr></table>
 
