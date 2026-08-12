@@ -1461,13 +1461,66 @@ Performance panel и реальные Web Vitals. То, что ускоряет 
 
 **Короткий ответ**
 
-form объединяет controls и при submit формирует набор успешных пар name=value. Браузер валидирует controls, кодирует
-данные и отправляет их на action выбранным method, если JavaScript не перехватил событие.
+`form` объединяет form controls и описывает native submit flow. При отправке браузер запускает constraint validation,
+собирает успешные controls в пары `name=value`, кодирует данные и отправляет их на `action` выбранным `method`, если
+JavaScript не отменил submit.
 
 **Полный ответ**
 
-`form` объединяет controls и при submit формирует набор успешных пар `name=value`. Браузер валидирует controls, кодирует
-данные и отправляет их на `action` выбранным `method`, если JavaScript не перехватил событие.
+HTML form — не просто контейнер для `input`. Это browser primitive, который связывает controls, validation, submit
+semantics и формирование запроса.
+
+Простейший пример:
+
+```html
+<form
+  action="/search"
+  method="get"
+>
+  <label for="query">Поиск</label>
+  <input
+    id="query"
+    name="q"
+    required
+  />
+  <button type="submit">Найти</button>
+</form>
+```
+
+Native submit можно запустить кнопкой `type="submit"`, Enter в подходящем control или методом `requestSubmit()`. Перед
+сетевой отправкой браузер обычно:
+
+1. определяет submitter — кнопку, которая инициировала отправку;
+2. выполняет constraint validation, если она не отключена;
+3. создает form data set только из успешных controls;
+4. выбирает URL, method и encoding;
+5. генерирует `submit` event;
+6. если event не отменен, выполняет navigation/request.
+
+В набор данных обычно попадают controls с `name`. Не отправляются, например, `disabled` controls, unchecked
+checkbox/radio и controls без `name`.
+
+JavaScript может перехватить flow:
+
+```js
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const data = new FormData(form);
+  // отправить через fetch или обработать локально
+});
+```
+
+Но даже SPA выигрывает от настоящего `form`: остаются Enter-to-submit, semantics, native validation и понятный contract
+между controls.
+
+Важно различать `form.submit()` и `form.requestSubmit()`: `requestSubmit()` имитирует обычную отправку с validation и
+`submit` event, а `submit()` обходит эти шаги и используется заметно реже.
+
+Backend всегда должен повторно валидировать и авторизовывать данные. DOM, hidden fields и client validation контролирует
+пользователь.
+
+На интервью полезная формула: **form — это встроенный protocol браузера для группировки controls, validation и submit;
+JavaScript может расширить или перехватить этот flow, но не обязан реализовывать его с нуля**.
 
 </td></tr></table>
 
@@ -1479,13 +1532,75 @@ form объединяет controls и при submit формирует набо�
 
 **Короткий ответ**
 
-action задает URL отправки, method — HTTP-метод get или post. При GET данные попадают в query string, при POST — в
-request body. Для других HTTP-методов обычно используют JavaScript или backend method override.
+`action` задает destination отправки, а `method` — способ submit. Для обычной HTTP-отправки HTML form использует `get`
+или `post`: GET кодирует данные в URL, POST отправляет их в request body. Submit button может переопределить настройки
+через `formaction` и `formmethod`.
 
 **Полный ответ**
 
-`action` задает URL отправки, `method` — HTTP-метод `get` или `post`. При `GET` данные попадают в query string, при
-`POST` — в request body. Для других HTTP-методов обычно используют JavaScript или backend method override.
+`action` отвечает на вопрос **куда отправлять form data**, а `method` — **как сформировать submission**.
+
+```html
+<form
+  action="/orders"
+  method="post"
+>
+  <input name="comment" />
+  <button type="submit">Создать</button>
+</form>
+```
+
+Если `action` не задан, form отправляется на URL текущего документа. Для network submission основные методы HTML — GET и
+POST.
+
+**GET** сериализует данные в query string:
+
+```text
+/search?q=angular&page=2
+```
+
+**POST** помещает form payload в request body. Его формат задает `enctype`; типичный default —
+`application/x-www-form-urlencoded`, а для upload используют `multipart/form-data`.
+
+```html
+<form
+  action="/avatar"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input
+    type="file"
+    name="avatar"
+  />
+  <button type="submit">Загрузить</button>
+</form>
+```
+
+У submit buttons есть полезный override contract:
+
+```html
+<button type="submit">Сохранить</button>
+<button
+  type="submit"
+  formaction="/preview"
+  formmethod="post"
+>
+  Preview
+</button>
+```
+
+Это позволяет одной форме иметь несколько осмысленных submit actions без ручного click-handler для каждой кнопки.
+
+У `method` также существует `dialog` для form внутри `<dialog>`: он закрывает dialog и не делает обычный HTTP request.
+
+HTML form не умеет напрямую отправлять `PUT`, `PATCH` или `DELETE`. Для них обычно используют JavaScript/fetch или
+server-side method override.
+
+И главное: method не является security boundary. POST не скрывает данные от сети без HTTPS и не заменяет authentication,
+authorization или CSRF protection.
+
+На интервью достаточно связать `action` с destination, `method` с HTTP semantics и упомянуть `enctype`/submitter
+overrides как практические детали.
 
 </td></tr></table>
 
@@ -1497,15 +1612,66 @@ request body. Для других HTTP-методов обычно исполь�
 
 **Короткий ответ**
 
-GET подходит для безопасного поиска и фильтров: URL можно сохранить и повторить. POST используют для операций с побочным
-эффектом и больших или чувствительных данных, но HTTPS все равно обязателен. Выбор метода не является
-authorization-механизмом.
+GET подходит для безопасных операций вроде поиска и фильтров: параметры становятся частью URL, который можно сохранить,
+скопировать и повторить. POST отправляет данные в body и обычно используется для изменений состояния. Ни POST, ни GET не
+заменяют HTTPS, validation и authorization.
 
 **Полный ответ**
 
-GET подходит для безопасного поиска и фильтров: URL можно сохранить и повторить. POST используют для операций с побочным
-эффектом и больших или чувствительных данных, но HTTPS все равно обязателен. Выбор метода не является
-authorization-механизмом.
+Разница важнее, чем просто «query string против body»: выбор должен отражать **семантику операции**.
+
+GET используют для чтения и поиска, которые не должны менять значимое server state:
+
+```html
+<form
+  action="/catalog"
+  method="get"
+>
+  <input name="query" />
+  <button type="submit">Искать</button>
+</form>
+```
+
+Получается URL вроде:
+
+```text
+/catalog?query=monitor
+```
+
+Плюсы GET для такого сценария:
+
+- URL можно bookmark/share;
+- browser history естественно хранит состояние фильтра;
+- navigation можно повторять;
+- HTTP caches и crawlers понимают read semantics лучше.
+
+POST обычно выбирают для создания сущности, команды или передачи большого payload:
+
+```html
+<form
+  action="/orders"
+  method="post"
+>
+  ...
+</form>
+```
+
+Но есть важные ограничения.
+
+**POST не означает «секретно».** Body виден client tools, server logs/proxies могут его записывать, а транспорт защищает
+HTTPS.
+
+**GET не должен менять состояние.** Prefetcher, crawler или пользователь, повторив URL, не должен случайно удалить
+запись или провести платеж.
+
+**POST не гарантирует idempotency.** Double submit может создать два заказа, поэтому критические операции часто требуют
+idempotency key или server-side deduplication.
+
+**Метод не заменяет security.** И GET, и POST требуют server validation, authentication/authorization; state-changing
+requests дополнительно проектируют с учетом CSRF.
+
+На интервью сильный ответ: **GET моделирует безопасное чтение и делает параметры частью адреса ресурса, POST моделирует
+submission/command; security определяется не тем, где лежат параметры**.
 
 </td></tr></table>
 
@@ -1517,14 +1683,63 @@ authorization-механизмом.
 
 **Короткий ответ**
 
-Типы email, number, date, url, search, tel, checkbox и другие дают подходящую семантику, native validation, мобильную
-клавиатуру и browser UI. Поддержка и локализация отдельных типов различаются, поэтому server validation все равно нужна.
+`email`, `number`, `date`, `url`, `tel`, `search`, `checkbox` и другие типы дают браузеру больше смысла: подходящий UI,
+mobile keyboard, value model и часть native validation. Но browser behavior различается, а server validation все равно
+обязательна.
 
 **Полный ответ**
 
-Типы `email`, `number`, `date`, `url`, `search`, `tel`, `checkbox` и другие дают подходящую семантику, native
-validation, мобильную клавиатуру и browser UI. Поддержка и локализация отдельных типов различаются, поэтому server
-validation все равно нужна.
+`type` сообщает браузеру **какие данные ожидаются и какое native behavior можно дать пользователю**.
+
+```html
+<input
+  type="email"
+  name="email"
+  autocomplete="email"
+/>
+<input
+  type="date"
+  name="birthday"
+/>
+<input
+  type="number"
+  name="count"
+  min="1"
+  max="10"
+/>
+```
+
+Преимущества специализированных типов:
+
+- подходящая экранная клавиатура на mobile;
+- встроенные controls, например date picker;
+- type-specific validation;
+- корректный value contract;
+- лучшее autofill поведение;
+- дополнительная semantics для tooling и assistive technologies.
+
+Но `type` нужно выбирать по **модели данных**, а не по желаемой клавиатуре. Например, телефон, ZIP code или номер карты
+часто являются строками, а не числами: ведущие нули и формат имеют смысл. Для keyboard hint можно использовать
+`inputmode`:
+
+```html
+<input
+  name="otp"
+  inputmode="numeric"
+  autocomplete="one-time-code"
+/>
+```
+
+`input type="number"` имеет собственные нюансы: stepper UI, `min/max/step`, locale-specific input и value parsing. Он не
+является универсальным способом запретить все нецифровые символы.
+
+Date/time controls также могут визуально различаться между браузерами и OS. Если product требует custom picker, native
+input semantics и validation все равно стоит учитывать.
+
+Client type validation нельзя считать security: request можно отправить напрямую, не используя форму.
+
+На интервью полезно сказать: **specialized type переносит часть UX и validation в platform, но type должен отражать
+семантику данных, а не заменять domain validation**.
 
 </td></tr></table>
 
@@ -1536,13 +1751,15 @@ validation все равно нужна.
 
 **Короткий ответ**
 
-label дает полю доступное имя и увеличивает clickable area. Его связывают атрибутом for, равным id control, или
-вкладывают control внутрь label.
+`label` задает form control понятное имя и увеличивает clickable area. Надежный вариант — связать `label[for]` с
+уникальным `id` control; также control можно вложить внутрь `label`.
 
 **Полный ответ**
 
-`label` дает полю доступное имя и увеличивает clickable area. Его связывают атрибутом `for`, равным `id` control, или
-вкладывают control внутрь label.
+Form field должен иметь понятное **accessible name**, и для большинства обычных inputs лучший primitive — настоящий
+`label`.
+
+Явная связь:
 
 ```html
 <label for="email">Email</label>
@@ -1552,6 +1769,42 @@ label дает полю доступное имя и увеличивает clic
   type="email"
 />
 ```
+
+`for` содержит `id` control. При клике на label browser переводит focus/activation к связанному control, что особенно
+полезно для checkbox и radio с маленькой визуальной областью.
+
+Возможна implicit association:
+
+```html
+<label>
+  Email
+  <input
+    name="email"
+    type="email"
+  />
+</label>
+```
+
+Явная связь часто удобнее в component layout, потому что label и input могут находиться в разных wrappers.
+
+Label — не место для длинной инструкции. Дополнительную подсказку обычно выводят отдельно и связывают через
+`aria-describedby`:
+
+```html
+<label for="password">Пароль</label>
+<input
+  id="password"
+  aria-describedby="password-hint"
+/>
+<p id="password-hint">Минимум 12 символов</p>
+```
+
+`aria-label` может дать accessible name icon-only/custom control, но для обычного видимого поля он хуже настоящей
+видимой подписи: пользователь тоже должен понимать назначение control.
+
+В component library важно проверить, что генерируемые `id` уникальны и wrapper-компонент не разрывает association.
+
+На интервью: **label дает не просто текст рядом с input, а программно определимую связь между названием и control**.
 
 </td></tr></table>
 
@@ -1563,13 +1816,49 @@ label дает полю доступное имя и увеличивает clic
 
 **Короткий ответ**
 
-Placeholder исчезает при вводе, часто имеет низкий contrast и не является надежной подписью для assistive technologies.
-Он может показывать пример формата, но постоянное понятное имя поля должен задавать label.
+Placeholder — временная подсказка внутри поля: он исчезает при вводе, может иметь слабый contrast и не является надежной
+заменой постоянному accessible name. Его используют для примера значения, а назначение control задают label.
 
 **Полный ответ**
 
-Placeholder исчезает при вводе, часто имеет низкий contrast и не является надежной подписью для assistive technologies.
-Он может показывать пример формата, но постоянное понятное имя поля должен задавать label.
+UI вида
+
+```html
+<input placeholder="Email" />
+```
+
+выглядит компактно, но теряет важную информацию сразу после того, как пользователь начал вводить значение.
+
+Проблемы placeholder-as-label:
+
+- пользователь перестает видеть, что означает поле;
+- трудно сравнить несколько заполненных fields;
+- placeholder часто стилизуют менее контрастно;
+- assistive technology behavior исторически неоднородно;
+- текст внутри поля легко спутать с уже введенным значением;
+- autofill может заполнить поле, оставив интерфейс без видимой подписи.
+
+Правильнее:
+
+```html
+<label for="phone">Телефон</label>
+<input
+  id="phone"
+  name="phone"
+  placeholder="+372 5555 5555"
+/>
+```
+
+Здесь label отвечает **что это**, placeholder — **пример формата**.
+
+Floating label pattern допустим, если подпись действительно остается видимой и программно связанной с control после
+ввода, а не просто является placeholder с CSS-анимацией.
+
+Если пример или инструкция важны для успешного ввода, их лучше не прятать в placeholder вообще: постоянный hint рядом с
+полем устойчивее.
+
+На интервью хороший ответ связывает placeholder не только с accessibility, но и с memory load: **пользователю не нужно
+помнить назначение уже заполненного поля**.
 
 </td></tr></table>
 
@@ -1581,13 +1870,52 @@ Placeholder исчезает при вводе, часто имеет низки
 
 **Короткий ответ**
 
-name определяет ключ при native form submission и объединяет radio buttons в одну группу. Control без name обычно не
-входит в отправляемый набор данных.
+`name` задает ключ control при native form submission и используется для группировки radio buttons. Control без `name`
+обычно не попадает в form data set, даже если у него есть `id`.
 
 **Полный ответ**
 
-`name` определяет ключ при native form submission и объединяет radio buttons в одну группу. Control без `name` обычно не
-входит в отправляемый набор данных.
+`id` и `name` решают разные задачи:
+
+- `id` идентифицирует DOM element и связывает его, например, с `label[for]`;
+- `name` участвует в **form data contract**.
+
+```html
+<label for="email">Email</label>
+<input
+  id="email"
+  name="email"
+  value="user@example.com"
+/>
+```
+
+При submit получится примерно:
+
+```text
+email=user%40example.com
+```
+
+Если убрать `name`, визуально поле продолжит работать, но browser не включит его значение в native submission/FormData.
+
+Некоторые controls имеют дополнительные правила:
+
+- unchecked checkbox не отправляется;
+- checked checkbox без явного `value` обычно передает default value `on`;
+- radio buttons с одинаковым `name` образуют одну группу и передают value выбранного варианта;
+- `disabled` control не является successful control и не отправляется;
+- несколько controls могут иметь одинаковый `name`, тогда form data содержит несколько значений.
+
+Это полезно и без network submit:
+
+```js
+const data = new FormData(form);
+console.log(data.get('email'));
+```
+
+Не стоит использовать `name` как security или globally unique identifier. Client может изменить любое значение перед
+request.
+
+На интервью формула: **`id` связывает DOM, `name` связывает control с form payload**.
 
 </td></tr></table>
 
@@ -1599,13 +1927,52 @@ name определяет ключ при native form submission и объеди
 
 **Короткий ответ**
 
-Браузер проверяет constraints вроде required, min, max, minlength, maxlength, pattern и соответствие типу перед submit.
-Это улучшает UX, но не заменяет backend validation, потому что клиентскую проверку можно обойти.
+Constraint Validation API позволяет браузеру проверять `required`, type constraints, `min/max`, `minlength/maxlength`,
+`pattern`, `step` и другие правила перед submit. Это UX-слой, а не security boundary: backend должен валидировать данные
+заново.
 
 **Полный ответ**
 
-Браузер проверяет constraints вроде `required`, `min`, `max`, `minlength`, `maxlength`, `pattern` и соответствие типу
-перед submit. Это улучшает UX, но не заменяет backend validation, потому что клиентскую проверку можно обойти.
+HTML controls умеют участвовать во встроенной constraint validation.
+
+```html
+<input
+  type="email"
+  name="email"
+  required
+  maxlength="120"
+/>
+```
+
+Browser вычисляет `validity` и может заблокировать native submit, если control нарушает constraint.
+
+Основные состояния доступны через `ValidityState`: `valueMissing`, `typeMismatch`, `patternMismatch`, `tooShort`,
+`rangeUnderflow`, `stepMismatch` и другие.
+
+JavaScript API:
+
+```js
+input.checkValidity();
+input.reportValidity();
+input.setCustomValidity('Такой email уже используется');
+```
+
+`setCustomValidity()` нужно затем сбросить пустой строкой, иначе control продолжит считаться invalid.
+
+Validation можно отключить у всей формы через `novalidate` или для конкретной submit button через `formnovalidate`.
+
+CSS получает useful pseudo-classes вроде `:valid`, `:invalid`, `:user-valid`/`:user-invalid` там, где они
+поддерживаются. Но показывать красные ошибки на первом render обычно плохой UX: validation должна учитывать момент
+взаимодействия.
+
+Native messages и UI зависят от browser/locale, поэтому design system иногда показывает собственные сообщения, но это не
+обязывает выбрасывать platform validity model.
+
+Самое важное ограничение: пользователь может удалить attributes в DevTools или отправить request напрямую. Server
+validation проверяет domain rules, consistency и authorization независимо от client.
+
+На интервью сильная мысль: **native validation дает бесплатный baseline и API для UX, но доверенной остается только
+server-side проверка**.
 
 </td></tr></table>
 
@@ -1617,13 +1984,58 @@ name определяет ключ при native form submission и объеди
 
 **Короткий ответ**
 
-autocomplete подсказывает браузеру назначение поля, например name, email, current-password или one-time-code. Корректные
-tokens ускоряют заполнение и помогают пользователям с когнитивными и моторными ограничениями.
+`autocomplete` сообщает браузеру назначение поля: `name`, `email`, `username`, `current-password`, `new-password`,
+`one-time-code`, `shipping` и другие tokens. Это улучшает autofill, password managers и доступность, если tokens
+отражают реальный смысл данных.
 
 **Полный ответ**
 
-`autocomplete` подсказывает браузеру назначение поля, например `name`, `email`, `current-password` или `one-time-code`.
-Корректные tokens ускоряют заполнение и помогают пользователям с когнитивными и моторными ограничениями.
+Browser не должен угадывать назначение каждого поля только по placeholder или CSS. `autocomplete` дает машинно-читаемый
+hint.
+
+```html
+<input
+  name="email"
+  autocomplete="email"
+/>
+<input
+  type="password"
+  name="password"
+  autocomplete="current-password"
+/>
+```
+
+Для регистрации:
+
+```html
+<input
+  name="username"
+  autocomplete="username"
+/>
+<input
+  type="password"
+  name="password"
+  autocomplete="new-password"
+/>
+```
+
+Для адресов tokens можно уточнять контекстом `shipping`/`billing`, а `section-*` помогает различать несколько одинаковых
+наборов fields на одной странице.
+
+Плюсы:
+
+- меньше ручного ввода;
+- меньше опечаток;
+- лучшее password-manager behavior;
+- полезно пользователям с моторными или когнитивными ограничениями;
+- mobile browser может предложить OTP через `one-time-code`.
+
+`autocomplete="off"` не является надежным security mechanism: браузеры и password managers могут сознательно
+игнорировать его для credentials, чтобы не поощрять слабые password practices.
+
+Не стоит ставить неверный token ради желаемого UI: autofill может подставить чувствительные данные не в то поле.
+
+На интервью: **autocomplete — semantic contract с browser autofill, а не просто on/off switch**.
 
 </td></tr></table>
 
@@ -1635,15 +2047,47 @@ tokens ускоряют заполнение и помогают пользов�
 
 **Короткий ответ**
 
-Сообщение должно быть конкретным, видимым и связанным с полем через aria-describedby; невалидность можно обозначить
-aria-invalid="true". После submit focus переводят осмысленно, а динамическую сводку ошибок при необходимости объявляют
-live region.
+Ошибка должна быть конкретной, видимой и программно связанной с control, например через `aria-describedby`; invalid
+state можно обозначить `aria-invalid="true"`. После submit нужен понятный focus/error-summary strategy, но focus не
+стоит дергать на каждую ошибку во время ввода.
 
 **Полный ответ**
 
-Сообщение должно быть конкретным, видимым и связанным с полем через `aria-describedby`; невалидность можно обозначить
-`aria-invalid="true"`. После submit focus переводят осмысленно, а динамическую сводку ошибок при необходимости объявляют
-live region.
+Плохая ошибка сообщает только «неверное значение» или меняет цвет border. Хорошая отвечает **что не так и как
+исправить**.
+
+```html
+<label for="email">Email</label>
+<input
+  id="email"
+  name="email"
+  aria-invalid="true"
+  aria-describedby="email-error"
+/>
+<p id="email-error">Введите адрес в формате name@example.com</p>
+```
+
+Здесь сообщение:
+
+- видно всем пользователям;
+- связано с input в accessibility tree;
+- не полагается только на цвет;
+- содержит actionable instruction.
+
+Если у поля одновременно hint и error, `aria-describedby` может ссылаться на оба ids.
+
+После submit длинной формы полезен error summary с links к проблемным fields. Обычно focus переводят в summary или
+первый invalid control **один раз после неуспешной отправки**, а не скачут focus-ом на каждом `input` event.
+
+Для динамического появления ошибки live region используют осторожно. Если каждое нажатие клавиши вызывает assertive
+announcement, screen reader experience становится шумным. Часто достаточно связи через description и сообщения после
+blur/submit.
+
+`aria-invalid` не выполняет validation само: это только accessibility state. Domain validation и business rules остаются
+в коде/server.
+
+На интервью полезно перечислить три слоя: **визуальное сообщение + programmatic relation + разумное focus/announcement
+behavior**.
 
 </td></tr></table>
 
@@ -1655,13 +2099,50 @@ live region.
 
 **Короткий ответ**
 
-Disabled control исключается из focus order, validation и набора успешных controls при submit. Если значение должно
-отправляться, используют другой способ моделирования; скрытое поле нельзя считать защитой от подмены данных.
+`disabled` control исключается из focus order, constraint validation и набора успешных controls при submit. Это часть
+HTML semantics: disabled значение считается недоступным для взаимодействия, поэтому browser не включает его в form data.
 
 **Полный ответ**
 
-Disabled control исключается из focus order, validation и набора успешных controls при submit. Если значение должно
-отправляться, используют другой способ моделирования; скрытое поле нельзя считать защитой от подмены данных.
+```html
+<input
+  name="plan"
+  value="pro"
+  disabled
+/>
+```
+
+Визуально значение есть в DOM, но native submission не отправит `plan=pro`.
+
+Это часто удивляет при форме редактирования: разработчик disables поле, чтобы запретить изменение, а backend перестает
+получать значение.
+
+Если значение должно быть отправлено, нужно выбрать подходящую модель:
+
+- `readonly` для поддерживаемых текстовых controls, если пользователь должен видеть и отправлять значение;
+- отдельный hidden control, если payload действительно требует это поле;
+- лучше всего — server может сам восстановить trusted значение из сущности/session вместо доверия client.
+
+```html
+<input
+  value="PRO"
+  readonly
+/>
+<input
+  type="hidden"
+  name="planId"
+  value="42"
+/>
+```
+
+Hidden field **не становится защищенным**: его легко изменить через DevTools/request. Например, цену или роль нельзя
+доверять только потому, что input скрыт или disabled.
+
+`fieldset disabled` распространяет disabled state на большинство потомков; содержимое первого `legend` имеет специальное
+исключение для взаимодействия.
+
+На интервью сильный ответ: **disabled означает не только внешний вид, а исключение control из interaction и submission
+model**.
 
 </td></tr></table>
 
@@ -1673,13 +2154,53 @@ Disabled control исключается из focus order, validation и набо
 
 **Короткий ответ**
 
-disabled control не фокусируется и не отправляется. readonly поддерживается только частью controls, остается focusable и
-отправляет значение, но пользователь не может его изменить обычным вводом.
+`disabled` control нельзя использовать, он обычно не получает focus и не отправляется. `readonly` применяется только к
+поддерживаемым text-like controls: значение нельзя редактировать обычным вводом, но control остается focusable и
+отправляется с формой.
 
 **Полный ответ**
 
-`disabled` control не фокусируется и не отправляется. `readonly` поддерживается только частью controls, остается
-focusable и отправляет значение, но пользователь не может его изменить обычным вводом.
+Оба состояния могут визуально означать «нельзя менять», но contract у них разный.
+
+```html
+<input
+  name="id"
+  value="A-42"
+  readonly
+/>
+<input
+  name="internal"
+  value="secret"
+  disabled
+/>
+```
+
+**`disabled`:**
+
+- control недоступен для обычного interaction;
+- не участвует в Tab navigation в стандартном случае;
+- не участвует в constraint validation;
+- не входит в native form submission;
+- поддерживается многими form controls.
+
+**`readonly`:**
+
+- пользователь не может изменить значение обычным вводом;
+- control остается focusable;
+- значение отправляется;
+- readonly control не участвует в constraint validation;
+- attribute применим к ограниченному набору controls, главным образом text-like `input` и `textarea`.
+
+У checkbox, radio, select или button нет эквивалентного native `readonly`. Если product хочет «показывать выбор, но не
+давать менять», иногда лучше вывести обычный текст вместо fake-disabled interactive control.
+
+Еще один UX trade-off: disabled control часто имеет низкий contrast и не позволяет пользователю скопировать значение.
+Readonly поле может быть лучше, если данные полезно выделить/copy.
+
+Ни `disabled`, ни `readonly` не являются authorization. Client может создать собственный request с любым значением.
+
+На интервью: **disabled убирает control из формы как активный участник; readonly сохраняет его как отправляемое
+значение, но запрещает редактирование**.
 
 </td></tr></table>
 
@@ -1691,13 +2212,62 @@ focusable и отправляет значение, но пользовател�
 
 **Короткий ответ**
 
-fieldset семантически группирует связанные controls, а legend дает группе доступное название. Это особенно важно для
-radio buttons и checkbox groups, где отдельные labels не объясняют общий вопрос.
+`fieldset` семантически группирует связанные form controls, а `legend` дает группе общее название. Это особенно важно
+для radio/checkbox groups, где отдельные labels называют варианты, но не объясняют общий вопрос.
 
 **Полный ответ**
 
-`fieldset` семантически группирует связанные controls, а `legend` дает группе доступное название. Это особенно важно для
-radio buttons и checkbox groups, где отдельные labels не объясняют общий вопрос.
+Представим группу:
+
+```html
+<fieldset>
+  <legend>Способ доставки</legend>
+
+  <label>
+    <input
+      type="radio"
+      name="delivery"
+      value="courier"
+    />
+    Курьер
+  </label>
+  <label>
+    <input
+      type="radio"
+      name="delivery"
+      value="pickup"
+    />
+    Самовывоз
+  </label>
+</fieldset>
+```
+
+Каждый radio имеет свой label, но `legend` сообщает контекст всей группы: **что именно пользователь выбирает**. Screen
+reader может объявлять group name вместе с вариантами.
+
+`fieldset` полезен не только для radio: им группируют связанные addresses, contact preferences или набор checkbox, если
+группа имеет общий вопрос.
+
+Есть и behavior: `fieldset disabled` disabled большинство form controls внутри группы. Это удобный native способ
+заблокировать целый section формы.
+
+```html
+<fieldset disabled>
+  <legend>Дополнительные настройки</legend>
+  ...
+</fieldset>
+```
+
+При этом спецификация имеет special case для descendants первого `legend`, поэтому не стоит моделировать disabled logic
+только по внешнему виду.
+
+Не каждый визуальный card должен становиться fieldset. Если внутри нет логически связанной группы form controls, обычный
+container корректнее.
+
+В design system важно не потерять `<legend>` при создании красивого group component: визуальный title и semantic group
+name должны оставаться связанными.
+
+На интервью: **label называет конкретный control, legend — вопрос/назначение группы controls**.
 
 </td></tr></table>
 
@@ -1709,13 +2279,57 @@ radio buttons и checkbox groups, где отдельные labels не объя
 
 **Короткий ответ**
 
-Radio buttons одной группы получают одинаковый name, уникальные id и собственные labels. Группу помещают в fieldset с
-legend, чтобы ее назначение было понятно визуально и screen reader.
+Radio buttons одного выбора получают одинаковый `name`, уникальные `id`, собственные `value` и labels. Группу обычно
+оборачивают в `fieldset` с `legend`; native radio уже дает взаимное исключение и ожидаемую keyboard navigation.
 
 **Полный ответ**
 
-Radio buttons одной группы получают одинаковый `name`, уникальные `id` и собственные labels. Группу помещают в
-`fieldset` с `legend`, чтобы ее назначение было понятно визуально и screen reader.
+Правильная native группа:
+
+```html
+<fieldset>
+  <legend>Тема</legend>
+
+  <input
+    id="theme-light"
+    type="radio"
+    name="theme"
+    value="light"
+    checked
+  />
+  <label for="theme-light">Светлая</label>
+
+  <input
+    id="theme-dark"
+    type="radio"
+    name="theme"
+    value="dark"
+  />
+  <label for="theme-dark">Темная</label>
+</fieldset>
+```
+
+Главное правило — **одинаковый `name`**. Browser гарантирует, что в группе выбран максимум один radio, а submit передает
+value выбранного варианта:
+
+```text
+theme=dark
+```
+
+`id` нужен для label association и должен быть уникальным, а `value` должен быть стабильным machine-readable contract,
+не обязательно совпадающим с локализованным текстом label.
+
+Если выбор обязателен, `required` на radio делает обязательной группу с этим `name`; на практике достаточно constraint
+на одном из controls группы.
+
+Native radios также имеют ожидаемое keyboard behavior: Tab входит в группу, arrow keys меняют selection согласно
+browser/platform conventions. При custom styling лучше визуально скрывать native input корректным способом, а не
+заменять его набором `div` с ручным ARIA без необходимости.
+
+Если options можно выбирать несколько одновременно, это уже checkbox group, а не radios.
+
+На интервью сильная формулировка: **`name` создает логическую radio group, `value` описывает выбранный вариант,
+`fieldset/legend` добавляют общий доступный контекст**.
 
 </td></tr></table>
 
