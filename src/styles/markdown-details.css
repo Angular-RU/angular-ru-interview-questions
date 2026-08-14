@@ -152,3 +152,14 @@
     padding: 20px 24px;
     border: 0;
 }
+
+@media (max-width: 700px) {
+    .content details .answer,
+    .content details > table td {
+        padding: 16px;
+    }
+
+    .content details .answer-short {
+        padding: 14px 16px;
+    }
+}
