@@ -54,12 +54,14 @@
 
 @media (max-width: 700px) {
     .page {
-        width: min(100% - 24px, 1120px);
-        padding: 24px 0 48px;
+        width: 100%;
+        padding: 0 0 48px;
     }
 
     .content {
-        padding: 24px 18px;
-        border-radius: 16px;
+        padding: 24px 16px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
     }
 }
