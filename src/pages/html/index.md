@@ -4046,15 +4046,56 @@ URL/HTTP/content/metadata contract, а не самим фактом server rende
 
 **Короткий ответ**
 
-JPEG подходит для фотографий без прозрачности, PNG — для lossless-графики и прозрачности, WebP и AVIF дают более
-современное сжатие, SVG — векторную графику. Формат выбирают по типу изображения, качеству, размеру, transparency,
-animation и browser support.
+JPEG обычно выбирают для фотографий, PNG — для lossless-графики и alpha transparency, WebP/AVIF — для более эффективного
+raster compression, SVG — для векторной графики. Выбор зависит от типа контента, качества, размера файла, прозрачности,
+animation и delivery strategy.
 
 **Полный ответ**
 
-JPEG подходит для фотографий без прозрачности, PNG — для lossless-графики и прозрачности, WebP и AVIF дают более
-современное сжатие, SVG — векторную графику. Формат выбирают по типу изображения, качеству, размеру, transparency,
-animation и browser support.
+Главное различие — **как хранится изображение и какой trade-off между качеством, размером и возможностями**.
+
+**JPEG**
+
+- raster format с lossy compression;
+- хорошо подходит для фотографий и сложных natural images;
+- не поддерживает alpha transparency;
+- плохо подходит для line art/text/screenshots с резкими границами.
+
+**PNG**
+
+- raster + lossless compression;
+- поддерживает alpha transparency;
+- хорош для UI screenshots, diagrams и изображений, где важны точные pixels;
+- для фотографий часто заметно тяжелее lossy formats.
+
+**WebP**
+
+- raster format с lossy и lossless modes;
+- поддерживает transparency и animation;
+- часто дает меньший файл, чем JPEG/PNG при сопоставимом visual quality.
+
+**AVIF**
+
+- современный raster format на базе AV1 image coding;
+- особенно эффективен для фотографий и high-quality compression;
+- поддерживает transparency и HDR-related capabilities;
+- encode/decode cost и tooling нужно учитывать в pipeline.
+
+**SVG**
+
+- vector/XML format;
+- хранит paths, shapes, text, gradients и transforms вместо pixel grid;
+- отлично масштабируется для icons/logos/diagrams;
+- не является универсальной заменой raster: сложная фотография как SVG обычно бессмысленна и может быть тяжелой.
+
+Практический production pipeline часто использует `<picture>` или server/CDN image service: браузеру предлагают
+AVIF/WebP и fallback, а размер подбирают через responsive images.
+
+Нельзя выбирать format только по расширению. Нужно измерять **реальный byte size + visual quality + decode/render cost +
+cache strategy** на типичных assets.
+
+На интервью: **raster formats кодируют pixels, SVG — geometry; JPEG/PNG решают разные legacy/use-case задачи, WebP/AVIF
+обычно улучшают delivery, но формат выбирают по конкретному контенту и инфраструктуре**.
 
 </td></tr></table>
 
@@ -4066,13 +4107,61 @@ animation и browser support.
 
 **Короткий ответ**
 
-SVG подходит для иконок, схем и простой графики, которая должна масштабироваться и стилизоваться. Для фотографий и
-сложных текстур raster format обычно компактнее и быстрее. Очень сложный SVG тоже может быть тяжелым для rendering.
+SVG подходит для logos, icons, charts и простой графики, которая должна масштабироваться или стилизоваться. Raster image
+лучше для фотографий, сложных текстур и pixel-based content. Сложный SVG тоже может быть тяжелым, поэтому vector не
+означает автоматически быстрее.
 
 **Полный ответ**
 
-SVG подходит для иконок, схем и простой графики, которая должна масштабироваться и стилизоваться. Для фотографий и
-сложных текстур raster format обычно компактнее и быстрее. Очень сложный SVG тоже может быть тяжелым для rendering.
+Выбор начинается с природы изображения.
+
+**SVG хорош, когда изображение описывается небольшим количеством геометрических primitives:**
+
+- icons;
+- logos;
+- simple illustrations;
+- diagrams;
+- charts;
+- maps/schemes;
+- shapes, которые нужно recolor через CSS.
+
+Пример icon:
+
+```html
+<svg
+  viewBox="0 0 24 24"
+  aria-hidden="true"
+>
+  <path d="..." />
+</svg>
+```
+
+Плюсы SVG:
+
+- resolution-independent scaling;
+- DOM/CSS styling для inline SVG;
+- обычно один asset для разных DPR;
+- text/geometry можно сделать semantic/interactive при необходимости.
+
+**Raster лучше, когда content по природе pixel-rich:**
+
+- photos;
+- screenshots;
+- textures;
+- complex paintings/renders;
+- camera-generated images.
+
+Попытка превратить фотографию в тысячи vector paths увеличит markup, memory и paint cost. И наоборот, маленький
+monochrome icon в PNG потребует нескольких resolutions и хуже адаптируется к `currentColor`.
+
+Есть промежуточные случаи. Например, сложная illustration может быть меньше как optimized WebP/AVIF, чем SVG с тысячами
+nodes. Поэтому performance проверяют измерением, а не правилом «SVG всегда легче».
+
+Security тоже отличается: SVG — XML document format с потенциально сложным содержимым. Untrusted SVG нельзя бездумно
+вставлять inline; upload pipeline должен sanitise/serve его согласно threat model.
+
+На интервью: **SVG выбирают за geometry/scalability/styling, raster — за efficient representation сложного pixel
+content; окончательный выбор подтверждают размером и rendering cost**.
 
 </td></tr></table>
 
@@ -4084,17 +4173,61 @@ SVG подходит для иконок, схем и простой графи�
 
 **Короткий ответ**
 
-srcset перечисляет image candidates по ширине или density, а sizes сообщает ожидаемый layout size. Браузер выбирает
-ресурс с учетом viewport, DPR, доступной ширины и других факторов, не загружая все варианты.
+Responsive images позволяют браузеру выбрать подходящий image resource вместо загрузки одного большого файла всем
+устройствам. `srcset` описывает candidates, а `sizes` сообщает ожидаемый layout width при `w` descriptors; browser
+учитывает viewport, DPR и собственные heuristics.
 
 **Полный ответ**
 
-`srcset` перечисляет image candidates по ширине или density, а `sizes` сообщает ожидаемый layout size. Браузер выбирает
-ресурс с учетом viewport, DPR, доступной ширины и других факторов, не загружая все варианты.
+Проблема обычного `<img src="hero-2000.jpg">` в том, что mobile screen может скачать asset, рассчитанный на
+desktop/retina, хотя визуально ему достаточно гораздо меньшего файла.
 
-На уровне командных guidelines стоит договориться, когда использовать `srcset`, `sizes`, `picture`, lazy loading и
-отдельные форматы. Responsive images нужны не ради синтаксиса, а чтобы мобильный пользователь не скачивал тяжелую
-desktop-картинку и не платил за это LCP, трафиком и battery usage.
+Для resolution switching используют `srcset` с width descriptors:
+
+```html
+<img
+  src="photo-800.jpg"
+  srcset="photo-480.jpg 480w, photo-800.jpg 800w, photo-1600.jpg 1600w"
+  sizes="(max-width: 40rem) 100vw, 50vw"
+  width="1600"
+  height="900"
+  alt="Команда за рабочим столом"
+/>
+```
+
+Здесь:
+
+- `480w`, `800w`, `1600w` — intrinsic widths candidates;
+- `sizes` описывает примерную **display width** image в layout;
+- browser сопоставляет display width, device pixel ratio, доступные candidates и может выбрать resource сам.
+
+Важно: `sizes` — не команда «загрузи этот файл при таком breakpoint». Это информация о layout size. При `w` descriptors
+без корректного `sizes` browser может принять неверное решение и скачать слишком большой ресурс.
+
+Для fixed-size icon/avatar можно использовать density descriptors:
+
+```html
+<img
+  src="avatar.png"
+  srcset="avatar.png 1x, avatar@2x.png 2x"
+  width="48"
+  height="48"
+  alt="Максим"
+/>
+```
+
+Responsive images особенно полезны для LCP/large content images. Они уменьшают network bytes без ручного JavaScript
+media-query loader.
+
+Нужно помнить:
+
+- `src` остается fallback и участвует в source selection;
+- `width`/`height` помогают заранее зарезервировать aspect ratio;
+- не нужно генерировать десятки почти одинаковых widths без измеримой пользы;
+- image CDN может автоматизировать resize/format conversion.
+
+На интервью: **`srcset` дает браузеру набор candidates, `sizes` описывает место изображения в layout, а окончательный
+resource выбирает browser — это declarative negotiation, а не JS breakpoint switch**.
 
 </td></tr></table>
 
@@ -4106,13 +4239,66 @@ desktop-картинку и не платил за это LCP, трафиком 
 
 **Короткий ответ**
 
-Атрибут откладывает загрузку изображения или iframe, пока ресурс не приблизится к viewport. Это экономит сеть, но его не
-ставят на вероятный LCP image. width и height задают заранее, чтобы сохранить место и избежать CLS.
+`loading="lazy"` разрешает браузеру отложить загрузку offscreen `img`/`iframe`, пока ресурс не приблизится к viewport.
+Это экономит network/CPU, но его не ставят на вероятный LCP/above-the-fold image; для images также задают
+`width`/`height`, чтобы избежать layout shifts.
 
 **Полный ответ**
 
-Атрибут откладывает загрузку изображения или iframe, пока ресурс не приблизится к viewport. Это экономит сеть, но его не
-ставят на вероятный LCP image. `width` и `height` задают заранее, чтобы сохранить место и избежать CLS.
+Без lazy loading длинная страница может сразу инициировать десятки image requests, хотя пользователь увидит только
+первые несколько.
+
+```html
+<img
+  src="gallery-12.jpg"
+  loading="lazy"
+  width="800"
+  height="600"
+  alt="Зал музея"
+/>
+```
+
+`loading="lazy"` — **browser hint/state**, а не точный pixel threshold contract. User agent сам решает, насколько
+заранее начать fetch с учетом connection, viewport и implementation heuristics.
+
+Что дает lazy loading:
+
+- меньше initial network competition;
+- меньше bytes для пользователя, который не дошел до нижней части page;
+- быстрее освобождаются resources для critical CSS/JS/LCP asset.
+
+Но есть важный anti-pattern:
+
+```html
+<img
+  src="hero.jpg"
+  loading="lazy"
+  alt="..."
+/>
+```
+
+если `hero.jpg` — главный above-the-fold/LCP candidate. Его lazy loading может задержать discovery/fetch и ухудшить LCP.
+Critical image обычно грузят eagerly, а при необходимости используют `fetchpriority="high"` только после измерения.
+
+Для lazy-loaded images полезно задавать dimensions:
+
+```html
+<img
+  src="card.jpg"
+  loading="lazy"
+  width="640"
+  height="360"
+  alt="..."
+/>
+```
+
+Browser может вычислить aspect ratio и зарезервировать место до download, снижая CLS.
+
+Также lazy loading не исправляет oversized image: offscreen 5 MB photo останется 5 MB после начала загрузки. Его
+комбинируют с `srcset`, compression и CDN resizing.
+
+На интервью: **lazy loading управляет моментом fetch, responsive images — размером выбранного resource; для хорошего
+performance нужны оба уровня и нельзя lazy-load critical LCP image без причины**.
 
 </td></tr></table>
 
@@ -4124,13 +4310,73 @@ desktop-картинку и не платил за это LCP, трафиком 
 
 **Короткий ответ**
 
-alt передает текстовую альтернативу смыслового изображения. У декоративного изображения используют alt="", чтобы screen
-reader его пропустил. Alt описывает назначение изображения в контексте, а не обязательно все визуальные детали.
+`alt` задает text alternative для `<img>`. Для meaningful image он передает эквивалентный смысл/функцию в контексте; для
+purely decorative image используют `alt=""`, чтобы assistive technologies могли его пропустить. Filename и описание всех
+визуальных деталей обычно не нужны.
 
 **Полный ответ**
 
-`alt` передает текстовую альтернативу смыслового изображения. У декоративного изображения используют `alt=""`, чтобы
-screen reader его пропустил. Alt описывает назначение изображения в контексте, а не обязательно все визуальные детали.
+Хороший `alt` отвечает не на вопрос «что нарисовано вообще», а **что пользователь должен получить из изображения в этом
+контексте**.
+
+Meaningful image:
+
+```html
+<img
+  src="chart.png"
+  alt="Продажи выросли с 12 до 18 млн рублей за второй квартал"
+/>
+```
+
+Если chart содержит complex data, одного alt может быть недостаточно: рядом нужен text/table explanation.
+
+Decorative image:
+
+```html
+<img
+  src="separator.svg"
+  alt=""
+/>
+```
+
+Пустой `alt` говорит, что image не добавляет meaningful information. Это отличается от **отсутствующего `alt`**: без
+attribute user agent/AT может пытаться восстановить alternative из filename или других signals.
+
+Если image уже дублирует соседний text:
+
+```html
+<a href="/download">
+  <img
+    src="download.svg"
+    alt=""
+  />
+  Скачать отчет
+</a>
+```
+
+иконка декоративна, потому что link уже имеет понятное accessible name из текста.
+
+Если image является единственным content ссылки/кнопки, alt должен передавать **функцию**, а не форму:
+
+```html
+<a href="/home">
+  <img
+    src="logo.svg"
+    alt="Компания Example — на главную"
+  />
+</a>
+```
+
+Типичные ошибки:
+
+- `alt="image123.png"`;
+- keyword stuffing ради SEO;
+- повтор caption слово в слово без пользы;
+- описание декоративных flourishes;
+- пустой alt у meaningful content.
+
+На интервью: **alt — functional/text equivalent image в данном context; `alt=""` сознательно помечает decoration, а
+отсутствие alt — совсем другой semantic state**.
 
 </td></tr></table>
 
@@ -4142,13 +4388,70 @@ screen reader его пропустил. Alt описывает назначен
 
 **Короткий ответ**
 
-picture позволяет задавать source для разных media conditions, crops и formats, сохраняя fallback img. Его используют
-для art direction или выбора формата; обычное изменение resolution часто достаточно решить через srcset.
+`<picture>` позволяет выбрать разные `<source>` по media/type, сохраняя обязательный fallback `<img>`. Его используют
+для art direction или format negotiation; если отличаются только resolutions одного изображения, часто достаточно
+`img[srcset][sizes]`.
 
 **Полный ответ**
 
-`picture` позволяет задавать `source` для разных media conditions, crops и formats, сохраняя fallback `img`. Его
-используют для art direction или выбора формата; обычное изменение resolution часто достаточно решить через `srcset`.
+`picture` — контейнер для нескольких возможных image sources. Само изображение все равно представляет вложенный `<img>`.
+
+**Format selection:**
+
+```html
+<picture>
+  <source
+    srcset="hero.avif"
+    type="image/avif"
+  />
+  <source
+    srcset="hero.webp"
+    type="image/webp"
+  />
+  <img
+    src="hero.jpg"
+    width="1600"
+    height="900"
+    alt="Город ночью"
+  />
+</picture>
+```
+
+Browser выбирает первый подходящий source, который соответствует conditions/capabilities; `img` остается fallback и
+владельцем `alt`, dimensions и большей части semantics.
+
+**Art direction:** mobile может требовать не просто меньший файл, а другой crop/composition.
+
+```html
+<picture>
+  <source
+    media="(max-width: 40rem)"
+    srcset="portrait-crop.jpg"
+  />
+  <img
+    src="wide.jpg"
+    alt="Спикер на сцене"
+  />
+</picture>
+```
+
+Здесь images визуально различаются по composition, но должны сохранять тот же meaningful content/alt contract.
+
+Когда `picture` не нужен:
+
+```html
+<img
+  srcset="photo-480.jpg 480w, photo-960.jpg 960w"
+  sizes="100vw"
+  src="photo-960.jpg"
+  alt="..."
+/>
+```
+
+Если задача только выбрать resolution одной и той же картинки, `srcset` проще.
+
+На интервью: **`picture` выбирает source strategy (format/art direction), а `img` остается semantic fallback; для
+простого resolution switching обычно достаточно `srcset/sizes`**.
 
 </td></tr></table>
 
@@ -4160,15 +4463,67 @@ picture позволяет задавать source для разных media con
 
 **Короткий ответ**
 
-SVG — векторный формат изображения, который описывает картинку через XML-разметку: линии, пути, фигуры, градиенты и
-текст. В отличие от PNG и JPEG, SVG масштабируется без потери качества: браузер пересчитывает геометрию, а не
-растягивает пиксели.
+SVG (Scalable Vector Graphics) — XML-based vector graphics format: изображение описывается shapes, paths, text,
+gradients и transforms. Browser масштабирует geometry в заданный viewport, поэтому SVG хорошо подходит для
+icons/logos/diagrams и может быть частью DOM при inline usage.
 
 **Полный ответ**
 
-SVG — векторный формат изображения, который описывает картинку через XML-разметку: линии, пути, фигуры, градиенты и
-текст. В отличие от PNG и JPEG, SVG масштабируется без потери качества: браузер пересчитывает геометрию, а не
-растягивает пиксели.
+SVG — это не просто «картинка без пикселей». Это отдельная vector graphics model.
+
+Минимальный пример:
+
+```html
+<svg
+  viewBox="0 0 24 24"
+  width="24"
+  height="24"
+  aria-hidden="true"
+>
+  <circle
+    cx="12"
+    cy="12"
+    r="10"
+  />
+</svg>
+```
+
+Внутри можно описывать:
+
+- `path`, `circle`, `rect`, `line`, `polygon`;
+- fills/strokes;
+- gradients;
+- transforms;
+- clipping/masks;
+- text;
+- reusable symbols.
+
+`viewBox` задает internal coordinate system. Внешний `width`/`height` определяет, сколько места SVG занимает в layout, а
+browser преобразует внутренние координаты к этому viewport.
+
+SVG можно доставлять по-разному:
+
+```html
+<img
+  src="logo.svg"
+  alt="Example"
+/>
+```
+
+или inline:
+
+```html
+<svg viewBox="0 0 24 24">...</svg>
+```
+
+Inline вариант становится частью DOM и дает больше CSS/control; external `<img>` проще кешируется/изолирует internals.
+
+Слово Scalable не означает бесплатный rendering. SVG с тысячами paths, filters и animations может быть тяжелым по
+CPU/memory. Optimization удаляет editor metadata, упрощает paths и уменьшает precision, но должна сохранять
+semantics/visual result.
+
+На интервью: **SVG хранит vector scene, а browser rasterizes ее под текущий viewport; это делает format удобным для
+scalable UI graphics, но complexity scene все равно влияет на performance**.
 
 </td></tr></table>
 
@@ -4180,13 +4535,54 @@ SVG — векторный формат изображения, который �
 
 **Короткий ответ**
 
-SVG-иконка остается четкой при разных размерах и плотностях экрана. Один файл можно использовать в размерах 16px, 24px,
-48px и на Retina-дисплеях без отдельного набора изображений.
+SVG icon описывает geometry в логической coordinate system, поэтому один asset можно отрисовать в 16px, 24px, 48px и на
+high-DPR screen без отдельных bitmap resolutions. `viewBox` сохраняет proportions, а `currentColor` позволяет встроить
+icon в design-system color contract.
 
 **Полный ответ**
 
-SVG-иконка остается четкой при разных размерах и плотностях экрана. Один файл можно использовать в размерах `16px`,
-`24px`, `48px` и на Retina-дисплеях без отдельного набора изображений.
+Bitmap icon хранит конкретную pixel grid. Если растянуть маленький PNG, browser интерполирует pixels, а для разных DPR
+часто нужны отдельные assets.
+
+SVG задает geometry:
+
+```html
+<svg
+  viewBox="0 0 24 24"
+  class="icon"
+  aria-hidden="true"
+>
+  <path
+    d="..."
+    fill="currentColor"
+  />
+</svg>
+```
+
+```css
+.icon {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+```
+
+`viewBox="0 0 24 24"` остается той же coordinate system независимо от CSS size. Browser масштабирует path в 16, 24, 32
+или 48 CSS px, а затем rasterizes для physical device pixels.
+
+Это удобно для design system:
+
+- один symbol/asset на размеры;
+- цвет наследуется от `color`;
+- hover/disabled state не требует нового файла;
+- icon можно встроить в button/text flow;
+- не нужен font loading как у icon fonts.
+
+Но визуально хороший scalable icon иногда требует **optical variants**. Очень тонкий 24px icon, уменьшенный до 12px,
+может потерять читаемость. Тогда design system хранит несколько intentional glyph variants, даже если технически SVG
+масштабируется бесконечно.
+
+На интервью: **SVG масштабируется математически благодаря geometry/viewBox, но product-quality iconography все равно
+учитывает stroke weight, optical size и rendering complexity**.
 
 </td></tr></table>
 
@@ -4198,31 +4594,67 @@ SVG-иконка остается четкой при разных размер�
 
 **Короткий ответ**
 
-Нужно задать viewBox и управлять внешними width и height атрибутами или через CSS:
+Задать корректный `viewBox`, не привязывать geometry к одному CSS-size и управлять внешними `width`/`height` через
+attributes или CSS. Обычно сохраняют aspect ratio, а для icon component задают один logical size и `currentColor`.
 
 **Полный ответ**
 
-Нужно задать `viewBox` и управлять внешними `width` и `height` атрибутами или через CSS:
+Базовый scalable icon:
 
 ```html
 <svg
+  class="icon"
   viewBox="0 0 24 24"
-  width="24"
-  height="24"
   aria-hidden="true"
 >
-  <path d="M12 2L2 22h20L12 2z" />
+  <path
+    fill="currentColor"
+    d="..."
+  />
 </svg>
 ```
 
 ```css
 .icon {
-  width: 32px;
-  height: 32px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 ```
 
-`viewBox` сохраняет внутреннюю систему координат, поэтому браузер корректно пересчитывает геометрию под новый размер.
+Ключевая часть — `viewBox`. Он описывает internal canvas, например `0 0 24 24`. CSS size может меняться, а browser
+знает, как преобразовать координаты path.
+
+Если `viewBox` отсутствует, SVG может иметь fixed intrinsic dimensions, но reusable scaling становится менее
+предсказуемым, особенно для generated assets.
+
+В component API полезно отделить:
+
+- **geometry** — fixed в SVG asset;
+- **layout size** — CSS/token/prop;
+- **color** — `currentColor`;
+- **semantics** — decorative vs meaningful.
+
+Например:
+
+```css
+.icon--s {
+  width: 1rem;
+  height: 1rem;
+}
+.icon--m {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.icon--l {
+  width: 2rem;
+  height: 2rem;
+}
+```
+
+Не стоит удалять `viewBox` во время SVG optimization: это одна из типичных причин «иконка перестала масштабироваться».
+
+На интервью: **масштабируемость = стабильная internal coordinate system через `viewBox` + независимый external CSS
+size**.
 
 </td></tr></table>
 
@@ -4234,13 +4666,60 @@ SVG-иконка остается четкой при разных размер�
 
 **Короткий ответ**
 
-viewBox задает координатную область SVG. Например, viewBox="0 0 24 24" означает виртуальную область шириной и высотой 24
-единицы. По ней браузер масштабирует содержимое SVG под внешний размер.
+`viewBox="min-x min-y width height"` задает прямоугольник внутренней coordinate system SVG, который отображается во
+внешний viewport. Например `0 0 24 24` означает logical canvas 24×24 units; browser масштабирует его под фактический
+`width`/`height`.
 
 **Полный ответ**
 
-`viewBox` задает координатную область SVG. Например, `viewBox="0 0 24 24"` означает виртуальную область шириной и
-высотой 24 единицы. По ней браузер масштабирует содержимое SVG под внешний размер.
+Разберем:
+
+```html
+<svg
+  viewBox="0 0 24 24"
+  width="48"
+  height="48"
+>
+  <circle
+    cx="12"
+    cy="12"
+    r="10"
+  />
+</svg>
+```
+
+`viewBox` содержит четыре числа:
+
+```text
+min-x min-y width height
+```
+
+Для `0 0 24 24` internal coordinates идут от `0` до `24` по обеим axes. Внешний viewport здесь 48×48 CSS px, поэтому
+geometry масштабируется примерно в 2 раза.
+
+Это позволяет path оставаться таким же:
+
+```html
+<path d="M4 12h16" />
+```
+
+а размер icon менять через CSS.
+
+`viewBox` также может иметь non-zero origin:
+
+```html
+<svg viewBox="-12 -12 24 24">...</svg>
+```
+
+Это полезно для coordinate systems вокруг center.
+
+Как content вписывается во viewport, дополнительно контролирует `preserveAspectRatio`. Default обычно сохраняет aspect
+ratio и центрирует content; для специальных graphics поведение можно изменить.
+
+Важно не путать `viewBox` с physical/image size. Он не говорит «SVG шириной 24px». Это **logical coordinate window**.
+
+На интервью: **`viewBox` связывает внутреннюю geometry и внешний viewport; благодаря этому SVG можно resize без
+переписывания coordinates**.
 
 </td></tr></table>
 
@@ -4252,13 +4731,51 @@ viewBox задает координатную область SVG. Наприме
 
 **Короткий ответ**
 
-width и height задают внешний размер SVG на странице, а viewBox — внутреннюю координатную систему. При наличии viewBox
-внешний размер можно менять через CSS, сохраняя пропорции изображения.
+`width`/`height` задают внешний viewport/intrinsic layout size SVG, а `viewBox` — внутреннюю coordinate system, которую
+browser вписывает в этот viewport. Поэтому `viewBox="0 0 24 24"` может отображаться как 16×16, 24×24 или 64×64 CSS px.
 
 **Полный ответ**
 
-`width` и `height` задают внешний размер SVG на странице, а `viewBox` — внутреннюю координатную систему. При наличии
-`viewBox` внешний размер можно менять через CSS, сохраняя пропорции изображения.
+Пример:
+
+```html
+<svg
+  viewBox="0 0 24 24"
+  width="48"
+  height="48"
+>
+  ...
+</svg>
+```
+
+Здесь:
+
+- internal drawing space — 24×24 logical units;
+- layout viewport — 48×48 CSS px;
+- browser выполняет transform между ними.
+
+Если поменять:
+
+```css
+svg {
+  width: 2rem;
+  height: 2rem;
+}
+```
+
+geometry не меняется; меняется только space, в который она rasterizes.
+
+Почему полезно указывать `width`/`height` у external images? Они помогают browser заранее знать aspect ratio/intrinsic
+dimensions и резервировать layout space.
+
+Для inline icon component часто dimensions задает CSS, а attributes можно опустить или использовать как sensible
+defaults. Но `viewBox` обычно сохраняют в asset.
+
+Если external viewport имеет другой aspect ratio, вступает `preserveAspectRatio`: browser решает, letterbox/crop/stretch
+ли geometry.
+
+На интервью: **`viewBox` отвечает «в каких координатах нарисовано», width/height — «какого размера это место в
+layout»**.
 
 </td></tr></table>
 
@@ -4270,38 +4787,68 @@ width и height задают внешний размер SVG на страниц
 
 **Короткий ответ**
 
-Значение currentColor позволяет иконке наследовать CSS-свойство color родителя:
+Для monochrome icon обычно используют `fill="currentColor"` или `stroke="currentColor"`. `currentColor` берет computed
+CSS `color` текущего element, поэтому icon автоматически следует text/hover/disabled theme без отдельных asset variants.
 
 **Полный ответ**
 
-Значение `currentColor` позволяет иконке наследовать CSS-свойство `color` родителя:
+Пример:
 
 ```html
-<button class="button">
+<button class="action">
   <svg
-    viewBox="0 0 24 24"
     class="icon"
+    viewBox="0 0 24 24"
     aria-hidden="true"
   >
     <path
       fill="currentColor"
-      d="M12 2L2 22h20L12 2z"
+      d="..."
     />
   </svg>
-  Отправить
+  Сохранить
 </button>
 ```
 
 ```css
-.button {
-  color: #4f46e5;
+.action {
+  color: var(--text-action);
 }
 
-.icon {
-  width: 24px;
-  height: 24px;
+.action:hover {
+  color: var(--text-action-hover);
 }
 ```
+
+SVG path наследует current `color` через `currentColor`.
+
+Для stroke icon:
+
+```html
+<path
+  d="..."
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+/>
+```
+
+Преимущества:
+
+- меньше duplicate SVG variants;
+- theme/high-contrast styles проще централизовать;
+- icon и label остаются синхронными;
+- CSS states работают естественно.
+
+Но это работает только если SVG доступен для styling. Inline SVG/symbol обычно позволяет управлять internal paint.
+`<img src="icon.svg">` воспринимается как replaced image: CSS страницы не может просто выбрать path внутри external
+document.
+
+Multi-color illustration не нужно насильно сводить к `currentColor`; там лучше semantic CSS custom properties или
+фиксированная palette в зависимости от component contract.
+
+На интервью: **`currentColor` связывает SVG paint с CSS `color`, поэтому monochrome icon становится частью обычного
+typography/state contract**.
 
 </td></tr></table>
 
@@ -4313,19 +4860,87 @@ width и height задают внешний размер SVG на страниц
 
 **Короткий ответ**
 
-Inline SVG удобен для управления цветом, состояниями и доступностью через CSS. SVG sprite подходит для переиспользования
-большого набора символов. проще и хорошо кешируется, но не позволяет странице напрямую менять стили внутренних элементов
-SVG.
+Нет универсального победителя. Inline SVG проще стилизовать и делать stateful, sprite уменьшает дублирование geometry
+для большого icon set, `<img src="...svg">` хорошо кешируется и изолирует internals. Выбор делают на уровне
+design-system pipeline, учитывая cache, theming, accessibility и bundle size.
 
 **Полный ответ**
 
-Inline SVG удобен для управления цветом, состояниями и доступностью через CSS. SVG sprite подходит для переиспользования
-большого набора символов. `<img src="icon.svg">` проще и хорошо кешируется, но не позволяет странице напрямую менять
-стили внутренних элементов SVG.
+**Inline SVG**
 
-Команда должна заранее договориться, где живут иконки, кто отвечает за оптимизацию, как задаются имена и как
-обрабатываются декоративные и смысловые icons. SVG обычно предпочтительнее icon font, потому что лучше контролирует
-accessibility, цвет, размер и не зависит от font loading.
+```html
+<svg
+  viewBox="0 0 24 24"
+  aria-hidden="true"
+>
+  <path
+    fill="currentColor"
+    d="..."
+  />
+</svg>
+```
+
+Плюсы:
+
+- `currentColor`, CSS variables и animation;
+- semantics рядом с control;
+- нет отдельного request при inlined bundle/template.
+
+Минусы:
+
+- geometry повторяется в DOM, если icon используется сотни раз;
+- увеличивает HTML/JS template payload.
+
+**SVG sprite**
+
+```html
+<svg aria-hidden="true">
+  <use href="#icon-search" />
+</svg>
+```
+
+Плюсы:
+
+- reusable symbols;
+- единый icon catalog;
+- меньше duplicate path markup.
+
+Trade-offs:
+
+- build/runtime pipeline сложнее;
+- external sprite/CORS/caching behavior нужно продумать;
+- accessibility обычно задается на consuming control, не symbol.
+
+**`img`**
+
+```html
+<img
+  src="/icons/search.svg"
+  alt=""
+/>
+```
+
+Плюсы:
+
+- простой resource;
+- browser cache;
+- internal SVG не загрязняет DOM.
+
+Минус: parent page не может обычным CSS изменить individual path fill/stroke external SVG.
+
+В современном component library часто icon component скрывает strategy от product code:
+
+```html
+<tui-icon name="search" />
+```
+
+а pipeline решает sprite/inline/caching.
+
+Icon fonts обычно проигрывают SVG по semantics, fallback и control over geometry, хотя могут встречаться в legacy
+systems.
+
+На интервью: **выбирают не syntax, а delivery architecture: inline — control, sprite — reuse, img — isolation/cache;
+design system должен унифицировать API и accessibility**.
 
 </td></tr></table>
 
@@ -4337,15 +4952,70 @@ accessibility, цвет, размер и не зависит от font loading.
 
 **Короткий ответ**
 
-Локализация влияет не только на перевод строк. Нужно учитывать длину текста, pluralization, даты, числа, валюты,
-сортировку, переносы, шрифты, SEO, accessibility и направление LTR/RTL. Если компоненты не проверять на разных locale,
-интерфейс может сломаться из-за длинных labels или другого порядка слов.
+Localization затрагивает layout, plural rules, dates/numbers/currency, sorting, fonts, line breaking, LTR/RTL,
+accessibility и metadata — не только перевод строк. Компоненты должны выдерживать длинные labels, другой word order и
+разные locale formats без hardcoded widths/concatenated phrases.
 
 **Полный ответ**
 
-Локализация влияет не только на перевод строк. Нужно учитывать длину текста, pluralization, даты, числа, валюты,
-сортировку, переносы, шрифты, SEO, accessibility и направление LTR/RTL. Если компоненты не проверять на разных locale,
-интерфейс может сломаться из-за длинных labels или другого порядка слов.
+Типичный anti-pattern — считать i18n заменой строки:
+
+```ts
+button = locale === 'ru' ? 'Сохранить' : 'Save';
+```
+
+Реальный localization contract шире.
+
+**Длина текста**
+
+German/Finnish/Russian translation может быть заметно длиннее English. Fixed-width button/card начинает overflow.
+
+**Grammar/pluralization**
+
+```text
+1 item / 2 items
+```
+
+нельзя надежно собирать простым `count + word`. Используют ICU/message format или locale-aware translation system.
+
+**Date/time/number/currency**
+
+`12/08/2026`, decimal separators, grouping, timezone и currency display различаются. Форматируют через `Intl`, а не
+string concatenation.
+
+**Word order**
+
+Нельзя переводить fragments отдельно:
+
+```text
+'Delete ' + userName + '?'
+```
+
+Другой язык может требовать иной порядок/склонение.
+
+**RTL**
+
+Arabic/Hebrew требуют logical CSS properties (`margin-inline-start`, `inset-inline-end`), корректных directional icons и
+проверки mixed LTR/RTL content.
+
+**Fonts**
+
+Выбранный font может не содержать Cyrillic/CJK/Arabic glyphs или иметь другой metrics, меняющий layout.
+
+**Accessibility/metadata**
+
+Обновляются `lang`, accessible labels, validation messages, title/description/OG metadata.
+
+**Images**
+
+Не стоит вшивать текст в raster/SVG asset без localization pipeline. Text в image хуже переводится, масштабируется и
+читается assistive technologies.
+
+Практический workflow включает pseudo-localization: искусственно удлиняют strings и тестируют accented/RTL content до
+реальных переводов.
+
+На интервью: **localization — изменение assumptions интерфейса о text, grammar, direction и formatting; resilient
+component не зависит от длины и порядка English strings**.
 
 </td></tr></table>
 
@@ -4357,29 +5027,69 @@ accessibility, цвет, размер и не зависит от font loading.
 
 **Короткий ответ**
 
-Декоративную иконку нужно скрыть от accessibility tree:
+Сначала определить, несет ли icon собственный смысл. Decorative SVG скрывают через `aria-hidden="true"` (accessible name
+дает окружающий control/text). Meaningful standalone graphic получает role/name, например `role="img"` +
+`aria-labelledby`; icon-only button должен иметь имя на самой кнопке.
 
 **Полный ответ**
 
-Декоративную иконку нужно скрыть от accessibility tree:
+**Decorative icon внутри подписанной кнопки:**
 
 ```html
-<svg
-  aria-hidden="true"
-  focusable="false"
-></svg>
+<button type="button">
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    ...
+  </svg>
+  Поиск
+</button>
 ```
 
-Если иконка передает смысл, ей нужен доступный текст, например видимая подпись рядом или имя изображения:
+Button уже имеет accessible name «Поиск», поэтому отдельное объявление SVG только дублировало бы информацию.
+
+**Icon-only button:**
+
+```html
+<button
+  type="button"
+  aria-label="Закрыть"
+>
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    ...
+  </svg>
+</button>
+```
+
+Interaction owner — button, значит name принадлежит **button**, а не внутреннему path/SVG.
+
+**Meaningful standalone SVG:**
 
 ```html
 <svg
   role="img"
-  aria-label="Поиск"
-></svg>
+  aria-labelledby="chart-title chart-desc"
+  viewBox="0 0 400 200"
+>
+  <title id="chart-title">Динамика выручки</title>
+  <desc id="chart-desc">Рост на 24% за квартал</desc>
+  ...
+</svg>
 ```
 
-Для кнопки только с иконкой доступное имя обычно задают самой кнопке.
+Для complex chart SVG name/description редко достаточно: рядом нужен readable data/table summary.
+
+`focusable="false"` иногда встречается как legacy interoperability measure, но современная стратегия должна исходить из
+actual support matrix. Главное — декоративный SVG не должен становиться отдельной focus stop без interaction.
+
+Нельзя ставить `aria-hidden="true"` на SVG, если он сам является единственным meaningful interactive object.
+
+На интервью: **accessibility SVG определяется ролью в UI: decoration скрываем, interaction name задаем control,
+standalone meaningful graphic получает semantic name/description**.
 
 </td></tr></table>
 
@@ -4391,18 +5101,64 @@ accessibility, цвет, размер и не зависит от font loading.
 
 **Короткий ответ**
 
-Забывают viewBox. - Жестко задают размеры и затрудняют масштабирование. - Не используют currentColor, когда цвет должен
-наследоваться. - Подключают тяжелые SVG без оптимизации. - Не учитывают accessibility. - Оставляют лишние metadata из
-Figma и других редакторов.
+Частые ошибки: удаленный/неверный `viewBox`, hardcoded fill вместо `currentColor`, лишняя editor metadata, слишком
+сложные paths, дублирование accessible names, отсутствие icon pipeline и небезопасный inline untrusted SVG. Иконка
+должна иметь единый geometry/style/accessibility contract.
 
 **Полный ответ**
 
-- Забывают `viewBox`.
-- Жестко задают размеры и затрудняют масштабирование.
-- Не используют `currentColor`, когда цвет должен наследоваться.
-- Подключают тяжелые SVG без оптимизации.
-- Не учитывают accessibility.
-- Оставляют лишние metadata из Figma и других редакторов.
+Практический checklist.
+
+**1. Теряют `viewBox`**
+
+После optimizer/export icon перестает нормально resize или получает unexpected crop.
+
+**2. Hardcode цвета**
+
+```html
+<path fill="#000" />
+```
+
+Theme/hover/disabled states требуют новых assets. Для monochrome icon чаще подходит `currentColor`.
+
+**3. Оставляют editor noise**
+
+Figma/Illustrator export может содержать metadata, unnecessary groups, transforms, huge coordinate precision.
+Optimization уменьшает bytes/DOM complexity.
+
+**4. Переоптимизируют**
+
+Aggressive path simplification может визуально изменить glyph или удалить нужные ids/viewBox. Optimizer config должен
+тестироваться на real icon set.
+
+**5. Неверная accessibility**
+
+Decorative SVG озвучивается рядом с text или icon-only button вообще не имеет name.
+
+**6. Дублируют geometry в application code**
+
+Десятки teams копируют raw paths. Лучше central icon registry/component/package.
+
+**7. Огромный sprite**
+
+Если single sprite содержит тысячи icons, пользователь может скачать большой unused payload. Нужно смотреть bundle/cache
+usage.
+
+**8. Небезопасно вставляют external SVG markup**
+
+SVG — markup format. Untrusted uploaded SVG нельзя вставлять как trusted inline HTML без sanitization/threat analysis.
+
+**9. Путают visual size и hit target**
+
+16×16 icon внутри button не означает, что pointer target должен быть 16×16. Interaction sizing — задача button
+component.
+
+**10. Не тестируют forced colors/themes**
+
+Hardcoded fills/strokes могут исчезнуть в high-contrast theme.
+
+На интервью: **хорошая SVG-система — не коллекция файлов, а pipeline: optimize geometry, preserve viewBox, unify
+color/size, define accessibility ownership и контролировать security/cache**.
 
 </td></tr></table>
 
