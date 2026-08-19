@@ -5172,22 +5172,76 @@ color/size, define accessibility ownership и контролировать secur
 
 **Короткий ответ**
 
-Accessible name - имя элемента в accessibility tree. Его могут задавать видимый текст, aria-labelledby, aria-label, alt,
-label элемента формы и другие источники по алгоритму браузера.
+Accessible name — программно вычисляемое имя объекта в accessibility tree. Browser получает его по Accessible Name and
+Description Computation из связанных labels, видимого текста, `aria-labelledby`, `aria-label`, `alt` и других допустимых
+источников с определенным precedence.
 
 **Полный ответ**
 
-Accessible name - имя элемента в accessibility tree. Его могут задавать видимый текст, `aria-labelledby`, `aria-label`,
-`alt`, label элемента формы и другие источники по алгоритму браузера.
+Accessible name отвечает на вопрос **«как этот объект называется для accessibility API?»**. Role сообщает тип объекта —
+например `button` или `textbox`, а name позволяет отличить конкретный control от остальных.
+
+Для обычной кнопки имя часто берется из собственного текста:
 
 ```html
-<button aria-label="Закрыть">
-  <svg aria-hidden="true"></svg>
+<button type="button">Сохранить</button>
+```
+
+Для form control надежный источник — связанный `label`:
+
+```html
+<label for="email">Email</label>
+<input
+  id="email"
+  type="email"
+/>
+```
+
+Если подходящий visible text уже существует в другом element, можно связать его через `aria-labelledby`:
+
+```html
+<h2 id="dialog-title">Удалить проект?</h2>
+<div
+  role="dialog"
+  aria-labelledby="dialog-title"
+>
+  ...
+</div>
+```
+
+Для icon-only control допустим literal name через `aria-label`:
+
+```html
+<button
+  type="button"
+  aria-label="Закрыть"
+>
+  <svg aria-hidden="true">...</svg>
 </button>
 ```
 
-Лучше предпочитать видимый текст или `aria-labelledby`, потому что они синхронизированы с интерфейсом. `aria-label`
-полезен для icon-only controls, но его легко забыть обновить при переводе.
+У изображений одним из источников name является `alt`. Browser применяет стандартизированный алгоритм, который учитывает
+тип элемента, ARIA relationships и допустимые источники в определенном порядке, а затем публикует вычисленное имя через
+platform accessibility API.
+
+Важный trade-off — **ARIA naming может переопределить native/visible naming**. Например:
+
+```html
+<button aria-label="Отправить">Сохранить</button>
+```
+
+визуально показывает «Сохранить», но accessible name может стать «Отправить». Такой рассинхрон затрудняет работу screen
+reader и speech-input users. Поэтому сначала лучше использовать visible/native label, затем `aria-labelledby`, а
+`aria-label` оставлять для случаев, где подходящего видимого источника нет.
+
+`aria-describedby` решает другую задачу: добавляет description/context и не должен использоваться как замена имени. Если
+`aria-labelledby` ссылается на несколько ids, их text alternatives формируют одно имя в порядке ссылок.
+
+Практически computed name удобно проверять в Accessibility panel DevTools или через accessibility-oriented tests по
+role/name. Это надежнее, чем угадывать результат только по DOM markup.
+
+На интервью: **accessible name не является одной конкретной HTML-строкой — browser вычисляет его по стандартному
+алгоритму из native и ARIA sources; главное понимать precedence и не расходить имя с видимым интерфейсом**.
 
 </td></tr></table>
 
@@ -5199,27 +5253,60 @@ Accessible name - имя элемента в accessibility tree. Его могу
 
 **Короткий ответ**
 
-aria-live сообщает screen reader об изменениях, которые происходят без перемещения focus: ошибка сохранения, результат
-поиска, завершение загрузки. Для обычного контента, который появляется после действия и получает focus, live region
-часто не нужна.
+`aria-live` используют для значимых динамических updates, которые происходят без перемещения focus: результат
+сохранения, изменение числа результатов, завершение фоновой операции. `polite` обычно подходит для обычных status
+updates, `assertive` — только для действительно срочных сообщений.
 
 **Полный ответ**
 
-`aria-live` сообщает screen reader об изменениях, которые происходят без перемещения focus: ошибка сохранения, результат
-поиска, завершение загрузки. Для обычного контента, который появляется после действия и получает focus, live region
-часто не нужна.
+Live region нужна, когда DOM изменился **вне текущей точки focus**, но пользователь assistive technology все равно
+должен узнать об этом изменении.
+
+Типичный вариант — стабильный status container:
 
 ```html
 <p
+  id="save-status"
   role="status"
-  aria-live="polite"
->
-  Данные сохранены
-</p>
+></p>
 ```
 
-`polite` не перебивает текущую речь, `assertive` используют редко и только для срочных сообщений. Частая ошибка -
-объявлять слишком много изменений и создавать шум.
+После успешной операции приложение обновляет его text:
+
+```js
+document.querySelector('#save-status').textContent = 'Данные сохранены';
+```
+
+`role="status"` уже имеет подходящую live-region semantics для обычных non-urgent сообщений. Если используется
+`aria-live` напрямую, основные значения такие:
+
+- `polite` — объявить update при ближайшей удобной возможности, не перебивая текущую задачу без необходимости;
+- `assertive` — сообщить изменение с высоким приоритетом; текущая речь может быть прервана;
+- `off` — live announcement не запрашивается.
+
+Поэтому `assertive` не подходит для обычного autosave, счетчика результатов или validation на каждый keystroke. Иначе
+интерфейс начинает постоянно перебивать пользователя.
+
+Для срочного события обычно лучше использовать подходящую semantics вроде `role="alert"`, а не ставить
+`aria-live="assertive"` на большие containers.
+
+Есть дополнительные настройки:
+
+- `aria-atomic` определяет, нужно ли объявлять region целиком или только изменившуюся часть;
+- `aria-relevant` уточняет, какие types DOM changes считаются релевантными.
+
+Практический edge case: надежнее, когда live region уже существует в DOM, а приложение **обновляет ее содержимое**.
+Создание нового element сразу с готовым текстом может вести себя неодинаково в разных browser/assistive-technology
+combinations, потому что observer еще не обязательно начал отслеживать region.
+
+Также live region не нужна автоматически для любого нового content. Если после submit focus переводится в error summary,
+screen reader уже получит новый контекст через focus. Дополнительный live announcement может продублировать сообщение.
+
+В Angular это обычно означает: держать небольшой status region стабильным в template и менять только его text/state, а
+не создавать большой `aria-live` wrapper вокруг всего feature tree.
+
+На интервью: **`aria-live` — канал для важных asynchronous updates без focus move; выбирать нужно минимальный region и
+минимально достаточный priority, иначе accessibility превращается в поток лишних announcements**.
 
 </td></tr></table>
 
@@ -5231,26 +5318,73 @@ aria-live сообщает screen reader об изменениях, которы
 
 **Короткий ответ**
 
-Structured data описывает смысл страницы машинно-читаемым способом: article, product, breadcrumbs, FAQ, organization.
-JSON-LD удобно добавлять отдельным script block, не смешивая schema-разметку с HTML-структурой.
+Structured data описывает entities и properties страницы в машинно-читаемом формате, обычно с vocabulary Schema.org.
+Google поддерживает JSON-LD, Microdata и RDFa и рекомендует JSON-LD для Search features; корректная разметка может
+сделать страницу eligible для rich results, но не гарантирует их показ.
 
 **Полный ответ**
 
-Structured data описывает смысл страницы машинно-читаемым способом: article, product, breadcrumbs, FAQ, organization.
-JSON-LD удобно добавлять отдельным script block, не смешивая schema-разметку с HTML-структурой.
+Structured data добавляет к странице **явную модель фактов**, которую crawler может обработать без попытки вывести все
+relations только из визуального HTML. Например, страница статьи может отдельно сообщить headline, дату публикации и
+author.
+
+JSON-LD размещают в отдельном script block:
 
 ```html
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Frontend interview questions"
+    "headline": "Frontend interview questions",
+    "datePublished": "2026-08-19",
+    "author": {
+      "@type": "Organization",
+      "name": "Angular-RU"
+    }
   }
 </script>
 ```
 
-JSON-LD не гарантирует rich results. Данные должны соответствовать видимому контенту страницы, иначе поисковая система
-может их игнорировать.
+Плюс JSON-LD в том, что semantic graph отделен от layout markup. Компонентам не нужно размазывать `itemprop` по
+вложенной DOM-структуре, а structured data можно генерировать из того же source of truth, что и visible content.
+
+Но здесь важны несколько ограничений.
+
+**Schema.org и Search feature — не одно и то же**
+
+Schema.org описывает vocabulary. Для конкретного Google rich result нужно дополнительно соблюдать документацию и
+required/recommended properties именно этого feature. Валидный произвольный Schema.org object сам по себе не обещает
+расширенный search result.
+
+**Markup должен соответствовать странице**
+
+Structured data не должна заявлять rating, author, price или другие facts, которых нет или которые противоречат видимому
+content. Иначе поисковая система может игнорировать markup или считать его нарушающим guidelines.
+
+**Rich result не гарантирован**
+
+Даже корректная разметка только делает страницу eligible. Search engine сам решает, показывать ли расширенный result для
+конкретного query, device и context.
+
+**Crawler должен получить страницу**
+
+Правильный JSON-LD бесполезен, если URL закрыт от crawling/indexing или возвращает ошибочный HTTP contract. Для public
+indexable routes structured data желательно отдавать уже в server/static HTML вместе с основной metadata, а не зависеть
+без необходимости от позднего client effect.
+
+В Angular/SSR удобно строить JSON-LD из route/domain data и следить, чтобы hydration не оставляла duplicate или
+конфликтующие blocks при navigation.
+
+Еще один engineering detail — serialization. Не стоит собирать JSON-LD строковой конкатенацией из CMS/user content:
+нужно корректно сериализовать значения и учитывать HTML `<script>` context, чтобы не получить broken markup или XSS
+через недоверенные строки.
+
+Проверка production flow обычно включает Rich Results Test для поддерживаемого feature, проверку реального URL в Search
+Console и мониторинг reports после deploy. Это важнее, чем просто увидеть зеленый JSON validator локально.
+
+На интервью: **structured data — machine-readable semantic contract страницы; JSON-LD удобен как отдельный graph, но он
+должен совпадать с visible content, соответствовать правилам конкретного search feature и не является shortcut к ranking
+или гарантией rich results**.
 
 </td></tr></table>
 
