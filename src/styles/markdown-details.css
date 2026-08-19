@@ -68,6 +68,10 @@
     background: var(--accent-soft);
 }
 
+.content details .answer-short code {
+    background: color-mix(in srgb, var(--code-bg) 40%, var(--accent-soft));
+}
+
 .content details .answer-short > :last-child,
 .content details .answer-full > :last-child {
     margin-bottom: 0;
