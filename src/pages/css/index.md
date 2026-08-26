@@ -1085,9 +1085,40 @@ Normal flow — стандартное размещение элементов �
 
 **Полный ответ**
 
-Normal flow — стандартное размещение элементов без positioning, float и специальных layout-контекстов. Block-элементы
-идут сверху вниз, inline-контент располагается внутри строк. Flex и Grid создают собственные правила раскладки для
-дочерних элементов.
+Normal flow — базовая модель раскладки, в которой boxes участвуют в обычном document flow, если их не выводят из него
+`float`, `position: absolute/fixed` или другие специальные механизмы.
+
+Внутри normal flow browser использует formatting contexts. Например, block-level boxes в block formatting context обычно
+идут один за другим по block axis, а inline-level content формирует line boxes:
+
+```html
+<article>
+  <h2>Заголовок</h2>
+  <p>
+    Текст
+    <strong>в строке</strong>
+    продолжается дальше.
+  </p>
+</article>
+```
+
+`h2` и `p` участвуют в block layout, а текст и `strong` внутри `p` — в inline formatting context.
+
+Важно: элемент может сам участвовать в outer normal flow, но создавать другой layout context для детей. Например:
+
+```css
+.toolbar {
+  display: flex;
+}
+```
+
+`.toolbar` как box остается частью layout своего parent, но ее children уже раскладываются по правилам Flexbox.
+
+`position: relative` тоже не выводит box из normal flow: исходное место сохраняется, даже если box визуально смещен
+через inset properties. `absolute` и `fixed`, наоборот, out-of-flow и не резервируют обычное место среди siblings.
+
+На интервью полезно объяснить normal flow как **baseline layout model**, от которой уже отличаются float, positioning,
+Flexbox и Grid.
 
 </td></tr></table>
 
@@ -1099,15 +1130,60 @@ Normal flow — стандартное размещение элементов �
 
 **Короткий ответ**
 
-BFC — изолированный контекст раскладки block-элементов. Он удерживает floats и предотвращает схлопывание внешних margin
-с содержимым в ряде случаев. Его создают, например, display: flow-root, flex/grid containers и некоторые значения
-overflow.
+BFC — независимый контекст block layout. Он содержит floats и разделяет некоторые случаи margin collapsing. Его явно
+создают через `display: flow-root`; также BFC создают floats, `inline-block`, absolute/fixed positioning и block
+containers с `overflow`, отличным от `visible`/`clip`. Flex/Grid создают собственные formatting contexts, а не BFC для
+items.
 
 **Полный ответ**
 
-BFC — изолированный контекст раскладки block-элементов. Он удерживает floats и предотвращает схлопывание внешних margin
-с содержимым в ряде случаев. Его создают, например, `display: flow-root`, flex/grid containers и некоторые значения
-`overflow`.
+Block formatting context (BFC) — независимая область block layout. Block boxes внутри нее раскладываются по своим
+правилам, а влияние floats и collapsing margins не пересекает некоторые границы BFC.
+
+Типичные способы создать BFC:
+
+```css
+.component {
+  display: flow-root;
+}
+```
+
+Также BFC создают, например, floats, absolutely/fixed positioned block containers, `inline-block` и block containers с
+`overflow`, отличным от `visible` и `clip`.
+
+`display: flow-root` обычно лучший явный способ, когда нужен именно новый BFC без побочных эффектов:
+
+```html
+<div class="article">
+  <img
+    class="preview"
+    alt=""
+  />
+  <p>Текст рядом с изображением</p>
+</div>
+```
+
+```css
+.article {
+  display: flow-root;
+}
+
+.preview {
+  float: left;
+}
+```
+
+Теперь parent учитывает float при вычислении своей высоты — исторический clearfix больше не нужен.
+
+BFC также помогает изолировать обтекание float: внешний float не должен перекрывать содержимое соседнего BFC так, как он
+мог бы влиять на обычный block content.
+
+Важно не смешивать термины. Flex и Grid containers создают **свои independent formatting contexts**, а не block
+formatting context для flex/grid children. При этом они действительно устраняют ряд похожих эффектов, например margin
+collapsing между items.
+
+На интервью: **BFC — не generic «изоляция CSS», а конкретный block-layout context; `flow-root` — современный способ
+запросить его явно**.
 
 </td></tr></table>
 
@@ -1124,8 +1200,39 @@ vertical-align и доступная ширина. Перенос строки �
 
 **Полный ответ**
 
-В нем текст и inline boxes формируют строки внутри контейнера. На расположение влияют `line-height`, baseline,
-`vertical-align` и доступная ширина. Перенос строки создает новый line box.
+Inline formatting context появляется, когда inline-level content раскладывается внутри block container. Text fragments и
+inline boxes собираются в line boxes, а при нехватке inline-size создается следующая строка.
+
+```html
+<p>
+  Текст
+  <strong>важный фрагмент</strong>
+  и продолжение.
+</p>
+```
+
+Browser разбивает содержимое `p` на строки с учетом доступной ширины, font metrics, whitespace, bidi/writing mode и
+возможностей переноса.
+
+На вертикальное расположение inline content влияют baseline, `line-height` и `vertical-align`:
+
+```css
+.icon {
+  vertical-align: middle;
+}
+```
+
+Но `vertical-align` здесь не является универсальным способом «центрировать что угодно по вертикали». Он работает в
+inline/table-cell context и выравнивает inline-level boxes относительно line box/baseline.
+
+У обычного non-replaced inline element `width`/`height` не работают так, как у block box: его геометрия определяется
+содержимым и фрагментацией по строкам. У replaced inline elements вроде `img` sizing behavior другой.
+
+Частый практический edge case — слишком маленький `line-height`: glyphs могут визуально пересекаться между строками,
+хотя сами line boxes формально существуют отдельно.
+
+На интервью: **inline formatting context нужно связывать с line boxes, baseline и переносом текста, а не просто с
+`display: inline`**.
 
 </td></tr></table>
 
@@ -1143,9 +1250,39 @@ vertical-align и доступная ширина. Перенос строки �
 
 **Полный ответ**
 
-Вертикальные margin соседних block boxes в normal flow могут объединиться в один margin вместо суммы. Обычно остается
-наибольший положительный отступ, а отрицательные значения участвуют по отдельным правилам. Flex и Grid items не
-схлопывают margin.
+Margin collapsing — правило normal block layout, при котором adjoining vertical margins некоторых block boxes
+объединяются в один collapsed margin вместо обычного сложения.
+
+```html
+<section class="first"></section>
+<section class="second"></section>
+```
+
+```css
+.first {
+  margin-bottom: 24px;
+}
+
+.second {
+  margin-top: 16px;
+}
+```
+
+Расстояние между блоками обычно будет `24px`, а не `40px`.
+
+Если все adjoining margins положительные, берется максимальный. Если есть отрицательные значения, результат считается
+как максимальный положительный margin плюс наиболее отрицательный. Если все margins отрицательные, остается наиболее
+отрицательный.
+
+Collapsing бывает не только между siblings: margin первого/последнего child иногда может схлопнуться с parent, а у
+пустого block top/bottom margins способны схлопнуться друг с другом.
+
+Горизонтальные margins не схлопываются. Flex/Grid items также не используют классический margin collapsing.
+
+Практический вывод: когда spacing — часть layout container, `gap` обычно выражает намерение лучше, чем зависимость от
+collapsing margins.
+
+На интервью: **margin collapsing — специальное правило adjoining vertical margins в block flow, а не баг browser**.
 
 </td></tr></table>
 
@@ -1162,8 +1299,46 @@ inline content и разделяющей высоты. Может схлопыв
 
 **Полный ответ**
 
-Между соседними block-элементами, а также между parent и первым или последним child при отсутствии border, padding,
-inline content и разделяющей высоты. Может схлопываться margin пустого блока. Это относится к block formatting context.
+Margin collapsing возникает только для определенных adjoining vertical margins block-level boxes в normal flow.
+
+Основные случаи:
+
+1. **Соседние siblings** в одном block formatting context:
+
+```css
+.a {
+  margin-bottom: 2rem;
+}
+
+.b {
+  margin-top: 1rem;
+}
+```
+
+Между ними получится один collapsed margin.
+
+2. **Parent и первый child** — если между их top margins нет border, padding, inline content, clearance или другого
+   разделителя.
+
+3. **Parent и последний child** — при подходящих условиях, когда bottom edge parent не отделен border/padding и sizing
+   не запрещает collapsing.
+
+4. **Пустой block** — его top/bottom margins могут collapse через сам element, если внутри нет content, padding, border
+   и sizing, разделяющих эти margins.
+
+Из-за parent-child collapsing отступ иногда визуально оказывается «снаружи parent», что часто воспринимают как странный
+баг:
+
+```html
+<div class="card">
+  <h2>Title</h2>
+</div>
+```
+
+Если у `h2` есть `margin-top`, а у `.card` нет top padding/border, margin может участвовать в collapsing с parent.
+
+На интервью лучше назвать **siblings, parent-child и empty block**, а затем добавить, что collapsing требует normal
+block flow и adjoining margins.
 
 </td></tr></table>
 
@@ -1180,8 +1355,45 @@ inline content и разделяющей высоты. Может схлопыв
 
 **Полный ответ**
 
-Предпочесть `gap`, добавить осмысленный padding/border или создать BFC через `display: flow-root`. Не стоит добавлять
-случайный `overflow: hidden`, если обрезание содержимого нежелательно. Решение должно соответствовать layout-смыслу.
+Способ зависит от того, какое layout-намерение нужно выразить. Не стоит лечить collapsing случайным CSS side effect.
+
+Если нужен контролируемый spacing между items, предпочтительнее `gap`:
+
+```css
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+```
+
+Если parent действительно должен иметь внутренний отступ, используйте `padding`. Если по дизайну нужен border — border
+также разделит parent/child margins.
+
+Когда нужен новый block formatting context без визуальных побочных эффектов:
+
+```css
+.container {
+  display: flow-root;
+}
+```
+
+Это обычно лучше исторического хака:
+
+```css
+.container {
+  overflow: hidden;
+}
+```
+
+`overflow: hidden` тоже может прекратить collapsing через создание independent formatting context, но одновременно
+обрезает overflow и делает box scroll container для программной прокрутки. Это уже другой semantic/behavior contract.
+
+Flex/Grid containers также убирают классическое collapsing между своими items, но переводить layout на Flexbox только
+ради одного margin не всегда оправданно.
+
+На интервью: **выбирать `gap`, padding/border или `flow-root` по смыслу; не добавлять `overflow: hidden` как магический
+clearfix/margin hack без учета clipping**.
 
 </td></tr></table>
 
@@ -1198,8 +1410,37 @@ inline content и разделяющей высоты. Может схлопыв
 
 **Полный ответ**
 
-У flex/grid items, absolutely positioned elements, floats и элементов в разных BFC. Border, padding или inline content
-между parent и child также разделяют margin. Горизонтальные margin не схлопываются.
+Классическое margin collapsing не происходит во многих layout situations:
+
+- horizontal margins не collapse;
+- margins flex/grid items не collapse друг с другом или с container;
+- out-of-flow absolutely/fixed positioned boxes не участвуют в таком collapsing;
+- floats не collapse своими margins с обычными block boxes;
+- margins boxes из разных block formatting contexts не collapse через границу context;
+- `inline-block` создает boundary, через которую его внутренние margins не collapse наружу.
+
+Для parent-child случая collapsing также прерывают реальные разделители вроде `border`, `padding`, inline content или
+clearance.
+
+```css
+.card {
+  padding-block-start: 1px;
+}
+```
+
+технически разорвет collapsing, но добавлять фиктивный `1px` только ради этого — плохой contract. Если нужна именно
+formatting boundary, лучше:
+
+```css
+.card {
+  display: flow-root;
+}
+```
+
+А если задача — spacing между children, обычно лучше container layout + `gap`.
+
+На интервью: **margin collapsing принадлежит normal block flow; смена formatting context или появление разделяющего box
+edge прекращает его**.
 
 </td></tr></table>
 
@@ -1217,9 +1458,52 @@ bottom, left. Positioning используют для overlays, sticky headers �
 
 **Полный ответ**
 
-Свойство `position` определяет, участвует ли box в normal flow и относительно чего работают inset-свойства `top`,
-`right`, `bottom`, `left`. Positioning используют для overlays, sticky headers и локального смещения. Основной layout
-обычно лучше строить Flexbox или Grid.
+`position` выбирает positioning scheme для box и определяет две важные вещи: остается ли element в normal flow и
+относительно какого containing block работают inset properties.
+
+Основные значения:
+
+```css
+.element {
+  position: static | relative | absolute | fixed | sticky;
+}
+```
+
+`static` — обычный flow; inset properties для него не позиционируют box. `relative` оставляет element в flow, но
+разрешает visual offset. `absolute` и `fixed` выводят box из flow. `sticky` остается in-flow, но при scroll может
+смещаться внутри заданных constraints.
+
+Вместо физических `top/right/bottom/left` в component library полезно помнить и logical insets:
+
+```css
+.badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+}
+```
+
+Они лучше работают с разными writing modes/directions.
+
+Positioning тесно связан с **containing block** и **stacking**. Например, absolute descendant часто позиционируют
+относительно ближайшего подходящего ancestor:
+
+```css
+.card {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  inset: 0 auto auto 0;
+}
+```
+
+Основную раскладку страницы обычно не стоит строить absolute coordinates: siblings перестают автоматически учитывать
+размеры друг друга, и responsive layout становится хрупким.
+
+На интервью: **positioning — это не просто `top/left`, а flow participation + containing block + inset resolution +
+stacking behavior**.
 
 </td></tr></table>
 
@@ -1237,9 +1521,49 @@ container и inset, например top: 0.
 
 **Полный ответ**
 
-`relative` сохраняет место в flow и создает containing block для потомков. `absolute` исключается из flow, `fixed`
-обычно привязан к viewport, `sticky` ведет себя как normal flow до заданного scroll threshold. Sticky требует
-подходящего scroll container и inset, например `top: 0`.
+У этих schemes разное участие в flow и разные reference rectangles.
+
+| Значение   | В normal flow | Основная идея                                                      |
+| ---------- | ------------- | ------------------------------------------------------------------ |
+| `relative` | да            | сместить in-flow box относительно его обычной позиции              |
+| `absolute` | нет           | позиционировать относительно absolute-positioning containing block |
+| `fixed`    | нет           | как absolute, но обычно относительно viewport/page area            |
+| `sticky`   | да            | in-flow box, который ограниченно «прилипает» при scroll            |
+
+**`relative`** сохраняет исходное место. Сдвиг через inset не заставляет siblings занять новое положение:
+
+```css
+.item {
+  position: relative;
+  inset-inline-start: 8px;
+}
+```
+
+Он также часто используется, чтобы установить containing block для absolute descendants.
+
+**`absolute`** не влияет на обычное размещение siblings. Его containing block формирует ближайший ancestor, который
+устанавливает absolute-positioning containing block; это не обязательно непосредственный parent.
+
+**`fixed`** обычно привязан к viewport, но не всегда: transform/filter/contain и некоторые другие properties ancestor
+могут сформировать fixed-positioning containing block. Поэтому `position: fixed` внутри transformed container способен
+вести себя не как глобальный overlay.
+
+**`sticky`** сначала участвует в flow, затем смещается относительно ближайшего scrollport при достижении inset
+constraint:
+
+```css
+.header {
+  position: sticky;
+  top: 0;
+}
+```
+
+Без подходящего inset вроде `top: 0` «прилипать» нечему. Sticky также ограничен containing block и может неожиданно
+перестать работать из-за ancestor со scrollable `overflow` или отсутствия пространства для движения.
+
+`fixed` и `sticky` сами создают stacking contexts. Для overlays это тоже влияет на поведение `z-index`.
+
+На интервью лучше раскрыть **flow, containing block и scroll behavior**, а не просто перечислить четыре определения.
 
 </td></tr></table>
 
@@ -1256,9 +1580,51 @@ container и inset, например top: 0.
 
 **Полный ответ**
 
-Это локальная система наложения элементов. Новый context создают, например, positioned element с `z-index`, `opacity`
-меньше 1, `transform` и `isolation: isolate`. Дочерний элемент не может выйти своим `z-index` за пределы context
-родителя.
+Stacking context — локальная координатная система по оси наложения. Его descendants сравнивают `z-index` между собой, а
+затем весь context участвует во внешнем stacking order как единое целое.
+
+Поэтому child с огромным `z-index` не может «выпрыгнуть» из parent context:
+
+```css
+.panel {
+  position: relative;
+  z-index: 1;
+}
+
+.panel__tooltip {
+  position: absolute;
+  z-index: 999999;
+}
+
+.modal {
+  position: relative;
+  z-index: 2;
+}
+```
+
+Если `.panel` и `.modal` находятся в одном внешнем context, tooltip остается внутри слоя `z-index: 1` и не перекроет
+`.modal` с `2`.
+
+Stacking context создают, среди прочего:
+
+- root element;
+- positioned element с integer `z-index`;
+- `position: fixed` и `position: sticky`;
+- `opacity < 1`;
+- `transform`, `filter`, `perspective`;
+- `mix-blend-mode` не `normal`;
+- `isolation: isolate`;
+- некоторые `contain`/`will-change` cases.
+
+Это одна из причин, почему случайный `transform: translateZ(0)` может неожиданно поменять layering.
+
+Для dialogs/popovers есть еще **top layer** platform: native `<dialog>`/popover могут находиться выше обычной document
+stacking hierarchy, поэтому гонка `z-index: 999999` не является заменой правильному overlay primitive.
+
+При отладке нужно подниматься по ancestors и искать, где появился новый stacking context.
+
+На интервью: **stacking context делает `z-index` локальным; сначала сравниваются contexts, а не все descendants страницы
+глобально**.
 
 </td></tr></table>
 
@@ -1275,8 +1641,42 @@ context, который целиком расположен выше. Нужно
 
 **Полный ответ**
 
-`z-index` задает порядок внутри текущего stacking context, а не глобально на странице. Большое число проиграет элементу
-из context, который целиком расположен выше. Нужно искать родителей, создающих contexts, а не увеличивать значение.
+`z-index` задает stack level box внутри его текущего stacking context. Это не глобальный номер слоя страницы.
+
+Типичная ошибка:
+
+```css
+.tooltip {
+  position: absolute;
+  z-index: 10000;
+}
+```
+
+и ожидание, что tooltip теперь выше всего. Если ancestor tooltip находится в stacking context `z-index: 1`, а соседний
+context имеет `z-index: 2`, весь первый subtree остается ниже независимо от `10000` внутри него.
+
+Новый stacking context часто создают незаметные properties: `transform`, `opacity < 1`, `filter`, `isolation`, `contain`
+и другие. Поэтому debug начинается не с увеличения числа, а с проверки ancestors.
+
+Еще один нюанс: `z-index` применяется к positioned boxes, а Flexbox/Grid разрешают `z-index` своим items без
+обязательного `position`. Для обычного static block добавление одного `z-index` само по себе не превращает его в
+positioned element.
+
+Integer `z-index` у подходящего element обычно также создает собственный stacking context, поэтому архитектурно полезно
+держать небольшой осмысленный scale:
+
+```css
+:root {
+  --z-dropdown: 10;
+  --z-overlay: 20;
+  --z-toast: 30;
+}
+```
+
+Но design tokens не исправят неправильно вложенные contexts — иногда overlay нужно portal-нуть выше или использовать
+platform top layer.
+
+На интервью: **если `z-index` «не работает», сначала найти stacking context boundary и сравнить stack level parents**.
 
 </td></tr></table>
 
@@ -1293,8 +1693,39 @@ container. Это влияет на sticky positioning, доступность �
 
 **Полный ответ**
 
-Overflow описывает поведение содержимого, выходящего за padding box. Он может обрезать содержимое или создать scroll
-container. Это влияет на sticky positioning, доступность скрытого контента и layout.
+Overflow описывает, что происходит с содержимым, которое выходит за box в inline/block axis. Управление задается через
+`overflow`, `overflow-x`/`overflow-y` и logical variants.
+
+Initial value — `visible`: overflow может рисоваться за box, и сам box не становится scroll container.
+
+```css
+.code {
+  overflow-x: auto;
+}
+```
+
+В таком случае horizontal overflow можно прокрутить, не ломая ширину layout.
+
+`hidden`, `auto` и `scroll` относятся к scrollable overflow values и создают scroll container. Для block box они также
+устанавливают independent formatting context. `clip`, в отличие от `hidden`, не создает scroll container и не дает
+программно прокручивать clipped content.
+
+Overflow влияет не только на scrollbar:
+
+- может обрезать shadows, focus rings и positioned descendants;
+- меняет ближайший scroll container, что важно для `position: sticky`;
+- влияет на scroll APIs и переход к focused descendant;
+- может скрыть важный content от пользователя, если UI не дает способа его увидеть.
+
+Отдельный edge case — axes взаимодействуют: если одна ось использует scrollable value, `visible`/`clip` другой оси могут
+вычисляться иначе, чем ожидается. Поэтому `overflow-x: hidden; overflow-y: visible` не всегда означает независимые
+behaviors.
+
+Для длинного текста overflow часто не нужно скрывать: лучше сначала проверить `overflow-wrap`, `word-break`, intrinsic
+sizing и `min-width: 0` во Flex/Grid.
+
+На интервью: **overflow — это clipping + scroll-container semantics + влияние на formatting/sticky, а не просто
+«показать scrollbar»**.
 
 </td></tr></table>
 
@@ -1306,15 +1737,52 @@ container. Это влияет на sticky positioning, доступность �
 
 **Короткий ответ**
 
-hidden обрезает содержимое, но контейнер остается программно прокручиваемым. auto показывает scrollbars при
-необходимости, scroll резервирует прокрутку всегда, clip обрезает без scroll container. Выбор должен сохранять
-доступность контента с клавиатуры.
+`hidden` обрезает content, но оставляет программную прокрутку и scroll-container semantics. `auto` дает scrolling UI при
+необходимости, `scroll` запрашивает его всегда, `clip` обрезает без scroll container и запрещает scrolling. `clip` сам
+по себе не создает formatting context.
 
 **Полный ответ**
 
-`hidden` обрезает содержимое, но контейнер остается программно прокручиваемым. `auto` показывает scrollbars при
-необходимости, `scroll` резервирует прокрутку всегда, `clip` обрезает без scroll container. Выбор должен сохранять
-доступность контента с клавиатуры.
+Все четыре значения работают с overflow по-разному.
+
+**`hidden`** — content обрезается по padding box, пользовательский scrolling UI не показывается, но box остается scroll
+container и его можно прокрутить программно:
+
+```js
+container.scrollTo({left: 100});
+```
+
+То есть `hidden` не означает «прокрутки не существует».
+
+**`auto`** — box становится scroll container; scrolling UI появляется, когда есть scrollable overflow и platform
+действительно показывает scrollbars.
+
+**`scroll`** — тоже scroll container, но UA должен предоставлять scrolling mechanism даже когда overflow отсутствует. На
+системах с overlay scrollbars это не обязательно означает постоянно занятую полосу layout.
+
+**`clip`** — content обрезается по overflow clip edge, но box **не** становится scroll container и не поддерживает
+programmatic scrolling. В отличие от `hidden`, сам `clip` не создает новый formatting context. Если нужны и clipping, и
+formatting boundary:
+
+```css
+.box {
+  overflow: clip;
+  display: flow-root;
+}
+```
+
+Практический выбор:
+
+- scrollable panel/code/table — обычно `auto`;
+- намеренно скрытая область, которую code может прокручивать — иногда `hidden`;
+- жесткое clipping без scroll semantics — `clip`;
+- `scroll` полезен, когда стабильное наличие scrolling mechanism важнее появления по необходимости; для layout stability
+  также существует `scrollbar-gutter`.
+
+Нельзя скрывать overflow только ради визуальной чистоты, если так пользователь теряет focusable или значимый content.
+
+На интервью особенно важно различить **`hidden` vs `clip`: первый остается scroll container, второй запрещает scrolling
+полностью**.
 
 </td></tr></table>
 
