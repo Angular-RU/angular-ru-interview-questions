@@ -2826,15 +2826,76 @@ type; сначала определите, какой набор вы вообщ
 
 **Короткий ответ**
 
-Responsive layout адаптирует интерфейс к разным размерам и возможностям устройства. Mobile-first — стратегия написания
-CSS, где базовые стили рассчитаны на узкий экран, а более широкие состояния добавляются через min-width. Можно сделать
-responsive layout и без mobile-first, но mobile-first часто помогает приоритизировать content и performance.
+Responsive layout — результат: интерфейс адаптируется к доступному пространству и возможностям среды. Mobile-first —
+стратегия authoring, где базовый layout рассчитан на узкое пространство, а более широкие варианты добавляются через
+`min-width`/range media queries. Mobile-first не обязателен для responsive UI и сам по себе не гарантирует performance.
 
 **Полный ответ**
 
-Responsive layout адаптирует интерфейс к разным размерам и возможностям устройства. Mobile-first — стратегия написания
-CSS, где базовые стили рассчитаны на узкий экран, а более широкие состояния добавляются через `min-width`. Можно сделать
-responsive layout и без mobile-first, но mobile-first часто помогает приоритизировать content и performance.
+**Responsive design** и **mobile-first** отвечают на разные вопросы.
+
+Responsive layout описывает **поведение интерфейса**: content и controls должны оставаться удобными при разных размерах
+container/viewport, zoom, orientation и input capabilities.
+
+Например, layout может плавно менять количество колонок без привязки к конкретным device names:
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 1rem;
+}
+```
+
+А когда нужен явный structural breakpoint, можно использовать media query:
+
+```css
+.page {
+  display: block;
+}
+
+@media (width >= 48rem) {
+  .page {
+    display: grid;
+    grid-template-columns: 16rem minmax(0, 1fr);
+  }
+}
+```
+
+Это **mobile-first authoring**: narrow layout является baseline, а правило для большего пространства добавляет новое
+состояние.
+
+Desktop-first тоже может быть responsive:
+
+```css
+.page {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 1fr);
+}
+
+@media (width < 48rem) {
+  .page {
+    display: block;
+  }
+}
+```
+
+Поэтому mobile-first — не требование responsive design, а способ организовать cascade.
+
+Breakpoints лучше выбирать там, где **ломается content**, а не по каталогам «phone/tablet/desktop». Устройства меняются,
+окна desktop browser могут быть узкими, а component может находиться в sidebar. Для component-level adaptation часто
+лучше подходят container queries, потому что они реагируют на доступное пространство component, а не всего viewport.
+
+Responsive design также не ограничивается width. Media features позволяют учитывать, например, `hover`, `pointer`,
+`prefers-reduced-motion`, contrast/color preferences и другие возможности среды.
+
+Важный trade-off: mobile-first **не означает автоматически более быстрый mobile page**. Browser все равно загружает
+stylesheet, а network/images/JavaScript и rendering cost зависят от отдельной performance architecture. Его реальное
+преимущество — удобный baseline и часто более простой progressive cascade, если продукт действительно проектируется от
+минимально доступного пространства.
+
+На интервью: **responsive — свойство результата, mobile-first — стратегия написания CSS; выбирайте breakpoints по
+content constraints и не выдавайте mobile-first за performance optimization сам по себе**.
 
 </td></tr></table>
 
@@ -2846,15 +2907,91 @@ responsive layout и без mobile-first, но mobile-first часто помо�
 
 **Короткий ответ**
 
-Fixed layout использует жесткие размеры и почти не реагирует на viewport. Fluid layout растягивается в процентах или
-гибких единицах. Responsive layout меняет структуру, размеры и иногда порядок content через constraints, media queries,
-Flexbox, Grid и container queries.
+Fixed layout опирается на жесткие размеры/constraints, fluid использует доступное пространство через flexible units, а
+responsive меняет layout при изменении условий. На практике чаще используют hybrid: fluid sizing внутри `min`/`max`
+constraints плюс media/container queries там, где действительно меняется структура.
 
 **Полный ответ**
 
-Fixed layout использует жесткие размеры и почти не реагирует на viewport. Fluid layout растягивается в процентах или
-гибких единицах. Responsive layout меняет структуру, размеры и иногда порядок content через constraints, media queries,
-Flexbox, Grid и container queries.
+Эти термины описывают разные способы связывать layout с доступным пространством.
+
+**Fixed layout** задает размеры, которые почти не зависят от viewport:
+
+```css
+.page {
+  inline-size: 60rem;
+}
+```
+
+Такой layout предсказуем, но на viewport уже `60rem` появится overflow или потребуется отдельная adaptation logic.
+«Fixed» не обязательно означает только `px`: суть в жестком constraint, а не конкретной CSS unit.
+
+**Fluid layout** использует flexible sizing:
+
+```css
+.page {
+  inline-size: 100%;
+}
+
+.sidebar {
+  inline-size: 30%;
+}
+```
+
+Современный fluid CSS обычно богаче простых percentages:
+
+```css
+.page {
+  inline-size: min(100% - 2rem, 75rem);
+  margin-inline: auto;
+}
+
+.title {
+  font-size: clamp(1.5rem, 1rem + 2vw, 3rem);
+}
+```
+
+`min()`, `max()`, `clamp()`, `fr`, `minmax()` и intrinsic sizing позволяют layout плавно адаптироваться без большого
+числа breakpoints.
+
+**Responsive layout** меняет presentation в ответ на conditions:
+
+```css
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (width >= 60rem) {
+  .layout {
+    grid-template-columns: 18rem minmax(0, 1fr);
+  }
+}
+```
+
+Для reusable component условием может быть container, а не viewport:
+
+```css
+.card-list {
+  container-type: inline-size;
+}
+
+@container (width >= 40rem) {
+  .card {
+    grid-template-columns: 12rem 1fr;
+  }
+}
+```
+
+В production эти подходы обычно смешиваются: wrapper имеет fluid width с `max-inline-size`, typography использует
+`clamp()`, Grid/Flexbox распределяют свободное пространство, а media/container query применяется только в точке, где
+нужна **структурная** перестройка.
+
+Нежелательный pattern — десятки breakpoints только потому, что существует много device resolutions. Это привязывает CSS
+к каталогу устройств вместо реальных constraints интерфейса.
+
+На интервью: **fixed = жесткие constraints, fluid = плавное использование доступного пространства, responsive = смена
+layout state по conditions; современный UI обычно hybrid**.
 
 </td></tr></table>
 
@@ -2866,15 +3003,78 @@ Flexbox, Grid и container queries.
 
 **Короткий ответ**
 
-block занимает доступную строку, inline участвует в тексте и не принимает обычные width/height, inline-block сохраняет
-inline-размещение с размером box. flex управляет элементами преимущественно по одной оси, grid — по строкам и колонкам.
-Выбор определяется задачей layout, а не внешним видом элемента.
+`display` определяет и внешнюю роль box в layout родителя, и внутренний formatting context для children. `block` —
+block-level flow box, `inline` — inline flow, `inline-block` — inline-level `flow-root`, `flex` — block-level flex
+container, `grid` — block-level grid container.
 
 **Полный ответ**
 
-`block` занимает доступную строку, `inline` участвует в тексте и не принимает обычные width/height, `inline-block`
-сохраняет inline-размещение с размером box. `flex` управляет элементами преимущественно по одной оси, `grid` — по
-строкам и колонкам. Выбор определяется задачей layout, а не внешним видом элемента.
+Полезнее понимать `display` не как список несвязанных keywords, а как комбинацию **outer** и **inner display type**.
+
+- outer type отвечает, как principal box участвует в layout родителя;
+- inner type определяет formatting context для descendants.
+
+CSS Display описывает common значения так:
+
+| Короткая запись | Концептуально      | Что происходит                                           |
+| --------------- | ------------------ | -------------------------------------------------------- |
+| `block`         | `block flow`       | block-level box, children используют normal flow         |
+| `inline`        | `inline flow`      | inline box внутри line boxes родителя                    |
+| `inline-block`  | `inline flow-root` | atomic inline-level box с собственным formatting context |
+| `flex`          | `block flex`       | block-level flex container                               |
+| `grid`          | `block grid`       | block-level grid container                               |
+
+`block` в обычном horizontal writing mode с `inline-size: auto` часто растягивается на доступную ширину, но фраза «block
+всегда занимает всю строку» — упрощение. Его реальная роль — block-level participation в flow layout.
+
+```css
+.block {
+  display: block;
+}
+```
+
+Non-replaced `inline` участвует в inline formatting context и может разбиваться по строкам. Обычные `width`/`height` не
+задают ему box size так же, как block box:
+
+```css
+.label {
+  display: inline;
+}
+```
+
+`inline-block` остается единым atomic inline-level box рядом с текстом, но внутри создает `flow-root`, поэтому ему
+удобно задавать dimensions/padding:
+
+```css
+.badge {
+  display: inline-block;
+  inline-size: 6rem;
+}
+```
+
+`flex` и `grid` отличаются прежде всего **inner layout model**:
+
+```css
+.toolbar {
+  display: flex;
+}
+
+.dashboard {
+  display: grid;
+}
+```
+
+Flex formatting context оптимизирован под распределение items преимущественно по одной main axis с cross-axis alignment.
+Grid моделирует tracks по двум осям и relationships rows/columns.
+
+Если container должен сам быть inline-level, существуют `inline-flex` и `inline-grid`: меняется outer participation, но
+внутри остается flex/grid formatting context.
+
+`display` не меняет semantic meaning HTML element. Например, `nav { display: grid }` остается navigation landmark;
+layout и document semantics — разные уровни.
+
+На интервью: **`display` задает outer participation + inner formatting context; поэтому `inline-block` — не просто
+«inline, которому разрешили width», а `inline flow-root`, а `flex/grid` меняют layout model children**.
 
 </td></tr></table>
 
@@ -2886,15 +3086,72 @@ inline-размещение с размером box. flex управляет э�
 
 **Короткий ответ**
 
-Используют visually-hidden class: элемент остается в DOM и accessibility tree, но визуально убран за счет clipping и
-минимального размера. Нельзя использовать display: none, visibility: hidden или aria-hidden="true", если текст должен
-быть прочитан screen reader. Для focusable skip-link скрытие должно сниматься при focus.
+Используют visually-hidden pattern: элемент остается в DOM/accessibility tree, но его visual box сводят к 1px и
+clipping. `display: none`, `visibility: hidden`, `hidden` и `aria-hidden="true"` не подходят, если content должен
+читаться assistive technology. Focusable skip-link должен становиться видимым при focus.
 
 **Полный ответ**
 
-Используют visually-hidden class: элемент остается в DOM и accessibility tree, но визуально убран за счет clipping и
-минимального размера. Нельзя использовать `display: none`, `visibility: hidden` или `aria-hidden="true"`, если текст
-должен быть прочитан screen reader. Для focusable skip-link скрытие должно сниматься при focus.
+Если content нужен assistive technology, но не должен занимать visual space, используют специальный visually-hidden
+utility, а не `display: none`.
+
+Один из patterns, приведенных WAI:
+
+```css
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(100%);
+  white-space: nowrap;
+}
+```
+
+Так element остается в document/accessibility tree, но visual box становится практически незаметным и не влияет на
+обычный layout.
+
+Важно не подменять эту задачу другими способами скрытия:
+
+```css
+.hidden {
+  display: none;
+}
+```
+
+`display: none` убирает subtree из box tree и в обычном случае из accessibility presentation. Аналогично
+`visibility: hidden` не является screen-reader-only pattern. `aria-hidden="true"` прямо сообщает accessibility API, что
+content нужно скрыть от assistive technology — это противоположная задача.
+
+`opacity: 0` тоже плохая generic замена: element продолжает занимать место, а interactive control может остаться
+невидимо focusable/clickable.
+
+Особый случай — skip link. Keyboard user должен **увидеть** control, когда тот получает focus:
+
+```css
+.skip-link:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(100%);
+  white-space: nowrap;
+}
+
+.skip-link:focus {
+  position: fixed;
+  inset: 1rem auto auto 1rem;
+}
+```
+
+WAI отдельно отмечает, что скрытый skip link допустим, если при keyboard focus он становится хорошо видимым.
+
+Не стоит превращать visually-hidden в способ дублировать весь visual UI для screen readers. Semantic HTML, корректные
+labels и accessible names обычно лучше отдельного параллельного текста.
+
+На интервью: **screen-reader-only pattern визуально clips content, но сохраняет его для AT; interactive hidden content
+требует отдельного focus behavior, а `display:none`/`aria-hidden` решают обратную задачу**.
 
 </td></tr></table>
 
@@ -2906,15 +3163,67 @@ inline-размещение с размером box. flex управляет э�
 
 **Короткий ответ**
 
-Чаще всего встречаются screen, print и all. print используют для печатной версии: убрать навигацию, раскрыть URL ссылок,
-настроить page breaks и контраст. Старые типы вроде speech имеют ограниченную практическую поддержку, поэтому важнее
-знать реальные media features.
+В Media Queries Level 4 актуальны `all`, `print` и `screen`. Старые `speech`, `handheld`, `tv`, `projection`, `tty`,
+`braille`, `embossed`, `aural` deprecated: authors не должны их использовать, а user agents должны заставлять их match
+nothing. Обычно важнее media features, чем media types.
 
 **Полный ответ**
 
-Чаще всего встречаются `screen`, `print` и `all`. `print` используют для печатной версии: убрать навигацию, раскрыть URL
-ссылок, настроить page breaks и контраст. Старые типы вроде `speech` имеют ограниченную практическую поддержку, поэтому
-важнее знать реальные media features.
+Современная Media Queries specification оставляет всего три media types:
+
+- `all` — все устройства/среды;
+- `print` — печать и Print Preview;
+- `screen` — все устройства, которые не относятся к `print`.
+
+Например, print stylesheet может убрать application chrome и настроить документ для бумаги:
+
+```css
+@media print {
+  nav,
+  .toolbar {
+    display: none;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+  }
+}
+```
+
+`all` обычно писать не нужно: query без media type уже применяется ко всем media types, если его conditions true.
+
+```css
+@media (width >= 60rem) {
+  /* effectively all + width condition */
+}
+```
+
+Исторически существовали `tty`, `tv`, `projection`, `handheld`, `braille`, `embossed`, `aural`, `speech`. В Media
+Queries Level 4 они **deprecated**. Specification требует, чтобы user agents распознавали их как valid media types, но
+они должны match nothing. Поэтому совет «используйте `speech` для screen reader» сегодня неверен.
+
+Почему старые categories ушли: device category слишком грубо описывает capabilities. Phone может иметь high-resolution
+screen, mouse/keyboard и print support; desktop window может быть узким. Поэтому modern CSS чаще спрашивает конкретную
+feature:
+
+```css
+@media (hover: hover) and (pointer: fine) {
+  .menu-item:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+}
+```
+
+Media features отвечают на реальное условие лучше, чем попытка угадать тип устройства.
+
+На интервью: **сейчас media types — `all`, `print`, `screen`; остальные исторические types deprecated и match nothing, а
+device capabilities выражают media features**.
 
 </td></tr></table>
 
@@ -2926,15 +3235,69 @@ inline-размещение с размером box. flex управляет э�
 
 **Короткий ответ**
 
-Retina graphics учитывает высокий device pixel ratio, где одному CSS pixel соответствует несколько device pixels. Для
-растровых изображений используют srcset с x или w descriptors, responsive images и подходящее сжатие. Иконки и простая
-графика часто лучше работают как SVG, потому что масштабируются без потери четкости.
+Retina — marketing term для high-density displays. В web важно не название устройства, а effective pixel density. Для
+растровых `<img>` используют `srcset`: `x` descriptors при фиксированном rendered size или `w` + `sizes`, когда размер
+зависит от layout. Для vector graphics обычно подходит SVG; background images могут использовать `image-set()`.
 
 **Полный ответ**
 
-Retina graphics учитывает высокий device pixel ratio, где одному CSS pixel соответствует несколько device pixels. Для
-растровых изображений используют `srcset` с `x` или `w` descriptors, responsive images и подходящее сжатие. Иконки и
-простая графика часто лучше работают как SVG, потому что масштабируются без потери четкости.
+«Retina» — брендовый/исторический термин. Для web-разработки полезнее говорить о **high-density display** и соотношении
+CSS pixels с device pixels.
+
+Одна и та же картинка, растянутая на `200 × 100` CSS pixels, на high-density screen может потребовать resource с большей
+intrinsic resolution, чтобы не выглядеть размытой.
+
+Если rendered size известен, `srcset` с density descriptors описывает варианты одного изображения:
+
+```html
+<img
+  src="avatar-200.jpg"
+  srcset="avatar-200.jpg 1x, avatar-400.jpg 2x"
+  width="200"
+  height="200"
+  alt="Профиль пользователя"
+/>
+```
+
+User agent выбирает candidate не только по nominal screen density: HTML specification позволяет учитывать pixel density,
+zoom и другие факторы, включая network conditions.
+
+Если rendered width зависит от responsive layout, обычно правильнее `w` descriptors + `sizes`:
+
+```html
+<img
+  src="photo-640.jpg"
+  srcset="photo-480.jpg 480w, photo-960.jpg 960w, photo-1440.jpg 1440w"
+  sizes="(width < 40rem) 100vw, 50vw"
+  width="1440"
+  height="900"
+  alt="Городская площадь"
+/>
+```
+
+Browser знает candidate intrinsic widths и ожидаемый rendered size, вычисляет effective density и сам выбирает resource.
+Это лучше, чем JavaScript-проверка `devicePixelRatio` и ручная замена `src`: browser может начать image preload еще до
+выполнения script.
+
+Для SVG отдельный 2x asset обычно не нужен: vector geometry масштабируется без потери четкости. SVG хорошо подходит для
+icons, logos и diagram-like graphics, но фотографию не следует превращать в SVG только ради density.
+
+Для CSS background можно использовать `image-set()`:
+
+```css
+.hero {
+  background-image: image-set(url('/hero.webp') 1x, url('/hero@2x.webp') 2x);
+}
+```
+
+Не нужно всегда отправлять самый большой raster «на всякий случай»: high-resolution image увеличивает transfer/decode
+cost. Responsive images позволяют browser выбрать достаточный, а не максимальный resource.
+
+Также стоит задавать intrinsic `width`/`height` для `<img>`, чтобы browser мог зарезервировать aspect-ratio space до
+загрузки и уменьшить layout shift.
+
+На интервью: **retina-specific CSS почти не нужен; решайте задачу density через declarative responsive images,
+используйте SVG для vector content и не заставляйте high-DPR devices всегда скачивать максимальный raster**.
 
 </td></tr></table>
 
