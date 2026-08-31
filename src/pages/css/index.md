@@ -2309,9 +2309,82 @@ Sass/Less дают nesting, mixins, functions, modules и удобства дл�
 
 **Полный ответ**
 
-Sass/Less дают nesting, mixins, functions, modules и удобства для дизайн-систем. Минусы: дополнительная сборка, риск
-глубокой вложенности, абстракций поверх CSS и расхождения с runtime-возможностями браузера. Многие задачи сегодня
-закрывают native CSS custom properties, nesting, cascade layers и modern selectors.
+CSS preprocessor принимает source вроде Sass/Less и **до браузера** компилирует его в обычный CSS. Поэтому его
+возможности делятся на две группы: удобный authoring syntax и compile-time programming.
+
+Например, Sass может дать variables, mixins, functions, loops и modules:
+
+```scss
+$space: 8px;
+
+@mixin focus-ring {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.button {
+  padding: $space $space * 2;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+```
+
+После build browser видит только сгенерированный CSS. Sass variable `$space` уже не существует в runtime, поэтому
+JavaScript, cascade или media query не могут изменить ее значение после загрузки страницы.
+
+Это важное отличие от CSS custom properties:
+
+```css
+:root {
+  --space: 0.5rem;
+}
+
+.card {
+  padding: var(--space);
+}
+```
+
+`--space` остается частью CSSOM, участвует в cascade/inheritance и может меняться в runtime. Поэтому Sass variables и
+custom properties решают пересекающиеся, но не одинаковые задачи.
+
+Плюсы preprocessors:
+
+- compile-time functions/mixins помогают генерировать повторяющиеся patterns;
+- modules позволяют организовать большую style codebase;
+- зрелые ecosystems дают utilities для color/math и design-token generation;
+- legacy projects могут иметь большой объем готовых Sass/Less abstractions.
+
+Минусы:
+
+- дополнительная build dependency и время compilation;
+- source map/debugging сложнее прямого CSS;
+- легко создать слишком глубокую nesting и огромный generated output;
+- compile-time abstractions иногда скрывают реальную cascade/specificity;
+- часть старых причин использовать preprocessor теперь закрывает native CSS.
+
+Например, browser уже поддерживает CSS nesting:
+
+```css
+.card {
+  padding: 1rem;
+
+  & > .title {
+    font-weight: 600;
+  }
+}
+```
+
+Но native nesting **не является Sass один-в-один**. Например, Sass-паттерн `&__title` конкатенирует selector name, а CSS
+nesting так делать не умеет. Поэтому миграция с Sass не всегда сводится к удалению build step.
+
+Современный выбор обычно такой: если проекту нужны в основном variables, nesting и cascade organization, стоит сначала
+проверить native CSS custom properties, nesting и `@layer`. Если реально нужны compile-time loops, reusable functions
+или существующая Sass ecosystem, preprocessor по-прежнему оправдан.
+
+На интервью: **preprocessor — compile-time layer над CSS. Он полезен там, где нужна генерация/абстракция до browser, но
+runtime theming и cascade лучше решать native CSS primitives**.
 
 </td></tr></table>
 
@@ -2329,9 +2402,55 @@ CSS postprocessors обрабатывают уже написанный CSS: д�
 
 **Полный ответ**
 
-CSS postprocessors обрабатывают уже написанный CSS: добавляют vendor prefixes, оптимизируют output, раскрывают
-современный синтаксис или проверяют правила. Типичный пример — PostCSS с Autoprefixer. Это снижает ручную работу, но
-должно опираться на реальную browser support policy, а не на настройки на всякий случай.
+CSS postprocessor работает с CSS как с входными данными и преобразует его в build pipeline. На практике чаще всего речь
+идет об инструментах на базе PostCSS, которые разбирают CSS в AST и запускают plugins.
+
+Классический пример — Autoprefixer:
+
+```css
+.example {
+  user-select: none;
+}
+```
+
+В зависимости от target browsers pipeline может добавить только реально необходимые vendor-prefixed declarations. Важно,
+что решение принимается по browser support policy, обычно через Browserslist, а не по памяти разработчика.
+
+Другие типичные задачи postprocessing:
+
+- преобразование части нового CSS syntax для выбранных targets;
+- minification и объединение безопасных rules;
+- удаление comments/dead artifacts;
+- linting или custom AST checks;
+- нормализация output сторонних generators.
+
+Например, `postcss-preset-env` может позволить писать часть современного CSS и преобразовать ее в форму, понятную target
+browsers. Но такое преобразование не означает, что **любую** новую browser feature можно polyfill-ить
+CSS-трансформацией. Если feature зависит от runtime layout algorithm или platform API, build tool может быть бессилен.
+
+Postprocessor также не должен превращаться в безусловный набор «всех prefix на свете»:
+
+```css
+/* плохо поддерживать вручную */
+-webkit-something: value;
+-moz-something: value;
+something: value;
+```
+
+Ручные prefixes устаревают вместе с browser matrix. Лучше иметь единую target policy и воспроизводимый pipeline.
+
+Trade-offs тоже есть:
+
+- больше plugins — больше complexity и update surface;
+- transform может изменить semantics нового syntax или затруднить debugging;
+- minifier должен сохранять observable behavior;
+- source maps нужны, чтобы DevTools указывал на исходный source, а не только generated CSS.
+
+Термин «postprocessor» исторический: современный PostCSS pipeline может стоять на разных этапах build и работать не
+только «после всего CSS». Важнее понимать функцию — **AST transformation готового CSS syntax**.
+
+На интервью: **postprocessing автоматизирует compatibility/optimization policy; Autoprefixer должен следовать target
+browsers, а не заменять понимание browser support**.
 
 </td></tr></table>
 
@@ -2349,13 +2468,70 @@ preload только для критичных начертаний и fallback 
 
 **Полный ответ**
 
-Шрифты подключают через `@font-face`, задают `font-family`, `src`, `font-weight`, `font-style` и `font-display`.
-Используют WOFF2, preload только для критичных начертаний и fallback stack с похожими метриками, чтобы снизить CLS.
-Слишком много начертаний ухудшает LCP и first render.
+Web font обычно объявляют через `@font-face`, после чего используют его обычным `font-family`.
 
-Командные правила для fonts должны описывать источник файлов, разрешенные weights, fallback stack, `font-display`,
-preload strategy и связь с design tokens. Это защищает проект от ситуации, когда каждая feature случайно подключает
-новое тяжелое начертание.
+Минимальный пример:
+
+```css
+@font-face {
+  font-family: 'Product Sans';
+  src: url('/fonts/product-sans-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'Product Sans', system-ui, sans-serif;
+}
+```
+
+Для web обычно предпочитают WOFF2: он сжат специально для доставки fonts. Каждое реально используемое начертание должно
+быть корректно описано через `font-weight`/`font-style`, иначе browser может синтезировать bold/italic или загрузить не
+тот face.
+
+Variable font способен покрыть диапазон weights одним resource:
+
+```css
+@font-face {
+  font-family: 'Product Sans Variable';
+  src: url('/fonts/product-sans.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+Но variable file не автоматически меньше любого набора static fonts: нужно сравнивать реальные assets/subsets.
+
+`font-display` задает стратегию между invisible text, fallback font и поздней заменой. Часто выбирают `swap`, `fallback`
+или `optional` в зависимости от важности brand font и допустимого layout shift.
+
+Для performance важны не только CSS declarations:
+
+- preload нужен только для действительно critical font resource, который понадобится на первом render;
+- URL в preload должен совпадать с URL в `@font-face`;
+- cross-origin правила должны быть настроены корректно;
+- subset/`unicode-range` может не загружать glyphs, которые странице не нужны;
+- не стоит загружать пять weights, если интерфейс использует два.
+
+Web font способен вызвать layout shift, если fallback сильно отличается по metrics. Помимо выбора похожего system
+fallback, CSS Fonts дает descriptors вроде `size-adjust`, `ascent-override`, `descent-override` и `line-gap-override`,
+которыми можно приблизить fallback metrics к web font. Их поддержку нужно учитывать в target browsers.
+
+```css
+@font-face {
+  font-family: 'Product Fallback';
+  src: local('Arial');
+  size-adjust: 102%;
+}
+```
+
+Preload не нужно использовать «на всякий случай»: каждый preload конкурирует за network priority с CSS, images и другими
+critical resources.
+
+На интервью: **правильное подключение font — это не только `@font-face`: нужно описать faces, выбрать loading strategy,
+минимизировать bytes и контролировать fallback metrics/CLS**.
 
 </td></tr></table>
 
@@ -2373,9 +2549,52 @@ FOUT означает, что браузер сначала показывает
 
 **Полный ответ**
 
-FOUT означает, что браузер сначала показывает fallback font, а потом заменяет его на custom font. FOIT означает, что
-текст временно невидим, пока custom font не загрузится. Обычно этим управляют через `font-display`, preload только
-критичных fonts, subset и fallback с близкими метриками.
+FOUT и FOIT описывают, что пользователь видит, пока downloadable web font еще не готов.
+
+**FOIT — Flash of Invisible Text**: browser некоторое время скрывает glyphs, ожидая web font. Текст занимает место через
+invisible fallback, но визуально пользователь его не видит.
+
+**FOUT — Flash of Unstyled Text**: browser сразу показывает fallback font, а после загрузки заменяет его web font.
+Контент доступен раньше, но при заметно разных metrics возможен layout shift.
+
+Этим поведением управляет `font-display` внутри `@font-face`:
+
+```css
+@font-face {
+  font-family: 'Brand';
+  src: url('/brand.woff2') format('woff2');
+  font-display: swap;
+}
+```
+
+У font loading есть block period, swap period и затем failure behavior. Конкретная продолжительность зависит от user
+agent, поэтому не стоит заучивать одно универсальное число миллисекунд.
+
+Основные стратегии:
+
+- `block` допускает короткий период invisible text, затем длительный swap period;
+- `swap` почти сразу показывает fallback и разрешает заменить его позже;
+- `fallback` дает небольшой шанс font загрузиться быстро, но ограничивает поздний swap;
+- `optional` минимизирует блокировку и может оставить fallback до следующей navigation/session, если font не пришел
+  достаточно быстро;
+- `auto` оставляет стратегию browser.
+
+`swap` часто улучшает perceived availability текста, но не гарантирует лучший UX автоматически. Если brand font сильно
+шире fallback, поздняя замена может двигать строки и элементы.
+
+Для снижения проблемы комбинируют:
+
+- небольшой WOFF2/subset;
+- preload только critical face;
+- хороший fallback stack;
+- metric matching через `size-adjust` и font metric overrides там, где это подходит support policy;
+- отказ от ненужных weights/styles.
+
+FOIT/FOUT — не отдельные CSS bugs, а trade-off между **скоростью появления текста, визуальной стабильностью и brand
+typography**.
+
+На интервью: **`font-display` управляет timeline загрузки; FOUT показывает fallback раньше, FOIT временно скрывает text,
+а оптимизация должна учитывать и readability, и CLS**.
 
 </td></tr></table>
 
@@ -2393,9 +2612,61 @@ Pseudo-element создает стилизуемую часть элемента
 
 **Полный ответ**
 
-Pseudo-element создает стилизуемую часть элемента, которой нет как отдельного DOM-узла: `::before`, `::after`,
-`::marker`, `::placeholder`, `::selection`. Его используют для декоративного контента, markers и визуальных деталей.
-Смысловой текст лучше хранить в HTML, чтобы он был доступен assistive technologies и копированию.
+Pseudo-element позволяет выбрать и стилизовать **часть/абстрактный элемент render tree**, которой не обязательно
+соответствует отдельный DOM node.
+
+Синтаксис использует двойное двоеточие:
+
+```css
+selector::pseudo-element {
+  /* declarations */
+}
+```
+
+Примеры решают разные задачи:
+
+```css
+li::marker {
+  color: tomato;
+}
+
+input::placeholder {
+  color: gray;
+}
+
+p::first-line {
+  font-weight: 600;
+}
+```
+
+`::marker` адресует marker list item, `::placeholder` — placeholder form control, `::first-line` — первую formatted
+line. Это показывает, почему pseudo-element нельзя сводить только к «виртуальному `div`».
+
+`::before` и `::after` создают generated boxes, когда `content` приводит к их генерации:
+
+```css
+.external-link::after {
+  content: ' ↗';
+}
+```
+
+Но meaningful content лучше не хранить только в CSS. Generated content может по-разному попадать в accessibility tree,
+не всегда удобно копируется и исчезает вместе со styles. Для обязательной подписи/инструкции правильнее HTML.
+
+Pseudo-element также не является обычным DOM `Element`:
+
+```js
+document.querySelector('.external-link::after'); // не возвращает pseudo-element
+```
+
+Его existence и допустимые properties определяются конкретной CSS specification. Например, набор свойств для
+`::first-line` ограничен сильнее, чем для обычного element.
+
+Ранние pseudo-elements исторически поддерживали syntax с одним colon (`:before`), но современная запись — `::before`,
+чтобы визуально отличать pseudo-elements от pseudo-classes.
+
+На интервью: **pseudo-element адресует часть formatting/render structure без отдельного DOM node; `::before`/`::after` —
+только два частных примера**.
 
 </td></tr></table>
 
@@ -2413,9 +2684,67 @@ Pseudo-class выбирает элемент по состоянию или от
 
 **Полный ответ**
 
-Pseudo-class выбирает элемент по состоянию или отношению: `:hover`, `:focus-visible`, `:checked`, `:disabled`,
-`:first-child`, `:has()`. Она не создает новый box, а уточняет selector. Для accessibility особенно важны
-`:focus-visible`, disabled states и состояния form controls.
+Pseudo-class добавляет к selector условие, которое определяется state, structure или relation элемента, а не отдельным
+class attribute в markup.
+
+Примеры state:
+
+```css
+button:hover {
+}
+button:focus-visible {
+}
+input:checked {
+}
+input:disabled {
+}
+```
+
+Structural pseudo-classes описывают положение среди siblings:
+
+```css
+li:first-child {
+}
+li:nth-child(odd) {
+}
+```
+
+Functional pseudo-classes могут выражать более сложные relations:
+
+```css
+.card:has(> img) {
+}
+:is(h1, h2, h3) > a {
+}
+button:not(:disabled) {
+}
+```
+
+В отличие от pseudo-element, pseudo-class **не создает и не адресует отдельную часть render tree** — она уточняет, когда
+сам element совпадает с selector.
+
+Важно помнить specificity. Большинство pseudo-classes дают вес class selector. Но есть специальные rules:
+
+- `:where(...)` всегда имеет нулевую specificity;
+- `:is(...)`, `:not(...)` и `:has(...)` сами не добавляют обычный class-weight — итоговый вклад определяется наиболее
+  специфичным selector из их аргументов.
+
+Например:
+
+```css
+:where(.dialog, .popover) button {
+  font: inherit;
+}
+```
+
+удобен для low-specificity base rules, которые потом легко переопределять.
+
+Accessibility edge case: `:hover` нельзя считать единственным способом открыть важное управление, потому что
+touch/keyboard users могут не иметь hover. Для keyboard focus обычно нужен `:focus-visible`/`:focus-within` или явное
+application state.
+
+На интервью: **pseudo-class выбирает существующий element по состоянию/структуре/отношению; pseudo-element выбирает
+часть formatting/render structure**.
 
 </td></tr></table>
 
@@ -2433,9 +2762,59 @@ p:nth-child(2) выберет p, только если он второй child �
 
 **Полный ответ**
 
-`:nth-child()` считает элемент среди всех siblings, а `:nth-of-type()` — только среди siblings того же tag name.
-Например, `p:nth-child(2)` выберет `p`, только если он второй child вообще, а `p:nth-of-type(2)` выберет второй `p`.
-Разница важна, когда структура содержит смешанные элементы.
+Обе pseudo-classes используют формулу `An+B`, но считают разные наборы siblings.
+
+`p:nth-child(2)` означает: **element должен быть `p` и одновременно вторым child среди всех element siblings**.
+
+```html
+<section>
+  <h2>Title</h2>
+  <p>First paragraph</p>
+  <p>Second paragraph</p>
+</section>
+```
+
+```css
+p:nth-child(2) {
+  color: red;
+}
+```
+
+Выберет `First paragraph`, потому что этот `p` — второй child вообще.
+
+`p:nth-of-type(2)` сначала рассматривает siblings с тем же type selector `p` и выбирает второй из них:
+
+```css
+p:nth-of-type(2) {
+  color: blue;
+}
+```
+
+Здесь будет выбран `Second paragraph`.
+
+Поэтому эти selectors легко перепутать, если между одинаковыми tags добавляется другой element: `:nth-child()` реагирует
+на общую sibling structure, `:nth-of-type()` — на позицию среди того же element type.
+
+У современного `:nth-child()` есть дополнительная форма `of <selector-list>`:
+
+```css
+tr:nth-child(even of :not([hidden])) {
+  background: var(--stripe);
+}
+```
+
+Она сначала фильтрует siblings по selector list, а затем применяет `An+B`. Это полезно для zebra striping, когда часть
+rows скрыта: counting идет только по видимому subset.
+
+Это не делает `:nth-of-type()` ненужным. `:nth-of-type()` лаконично выражает именно counting одного tag type;
+`:nth-child(... of S)` умеет считать произвольный filtered set, например `.item:not(.disabled)`.
+
+При динамическом DOM position пересчитывается автоматически, поэтому selector может начать matching другой element после
+insert/remove sibling. Если выбор должен отражать business identity, positional pseudo-class не заменяет semantic
+class/data attribute.
+
+На интервью: **`nth-child` считает общий или явно отфильтрованный sibling set, `nth-of-type` — siblings того же element
+type; сначала определите, какой набор вы вообще хотите нумеровать**.
 
 </td></tr></table>
 
