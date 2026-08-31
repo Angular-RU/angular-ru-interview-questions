@@ -1799,21 +1799,57 @@ Scroll Snap позволяет контейнеру после прокрутк�
 
 **Полный ответ**
 
-Scroll Snap позволяет контейнеру после прокрутки остановиться у заданных snap positions. Контейнер задает ось и
-строгость, элементы — точки выравнивания. Это CSS-enhancement, а не замена доступной навигации carousel.
+CSS Scroll Snap позволяет scroll container после прокрутки выравниваться по заранее определенным snap positions вместо
+остановки в произвольной точке.
+
+Контейнер задает ось и строгость snapping:
 
 ```css
 .carousel {
   display: flex;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
 }
+```
 
+А children объявляют, как их snap area должна выравниваться со snapport контейнера:
+
+```css
 .slide {
-  flex: 0 0 100%;
+  flex: 0 0 80%;
   scroll-snap-align: start;
 }
 ```
+
+Важно различать два понятия:
+
+- `scroll-snap-type` — включает snapping на container и выбирает axis/strictness;
+- `scroll-snap-align` — задает snap position для item.
+
+`proximity` оставляет browser больше свободы и обычно ощущается как enhancement обычной прокрутки. `mandatory` требует
+завершать scroll на допустимой snap position, поэтому может быть слишком агрессивным для длинного или неоднородного
+content.
+
+На фактическую точку выравнивания также влияют `scroll-padding` и `scroll-margin`:
+
+```css
+.carousel {
+  scroll-padding-inline: 1rem;
+}
+
+.slide {
+  scroll-margin-inline: 0.5rem;
+}
+```
+
+Это особенно полезно, если начало content не должно прилипать прямо к edge scrollport или сверху есть sticky header.
+
+Scroll Snap применяется и к programmatic scrolling: browser выбирает итоговую snap position после поддерживаемой
+операции прокрутки. Поэтому JavaScript-карусель не должна одновременно вручную «дотягивать» scroll и конкурировать с CSS
+snapping без необходимости.
+
+На интервью: **Scroll Snap описывает допустимые позиции завершения прокрутки; container управляет axis/strictness, items
+— alignment, а `scroll-padding`/`scroll-margin` корректируют геометрию snapping**.
 
 </td></tr></table>
 
@@ -1830,8 +1866,49 @@ Scroll Snap позволяет контейнеру после прокрутк�
 
 **Полный ответ**
 
-Для горизонтальных галерей, paged sections и сценариев, где остановка на целом элементе ожидаема пользователем. Нужно
-оставить обычную прокрутку и элементы управления. Для длинного читаемого контента mandatory snapping часто мешает.
+Scroll Snap полезен, когда content естественно состоит из дискретных visual units и пользователю ожидаемо
+останавливаться на границе одного из них.
+
+Хорошие сценарии:
+
+- горизонтальная gallery/carousel;
+- список карточек, где следующий item должен аккуратно входить в viewport;
+- paged onboarding;
+- короткие полноэкранные sections, если такой interaction действительно соответствует продукту.
+
+Например:
+
+```css
+.gallery {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(80%, 24rem);
+  overflow-x: auto;
+  gap: 1rem;
+  scroll-snap-type: inline proximity;
+}
+
+.gallery > * {
+  scroll-snap-align: start;
+}
+```
+
+Здесь `proximity` улучшает обычную horizontal scroll, но не заставляет пользователя обязательно перескакивать на
+соседнюю карточку.
+
+`mandatory` оправдан, когда каждая snap area действительно является отдельной page/state и промежуточное положение не
+имеет пользы. Oversized snap area сама по себе обрабатывается UA: пока area полностью покрывает snapport, пользователь
+может свободно прокручивать внутри нее. Риск возникает, если mandatory snap positions привязаны к далеко разнесенным
+elements, например только к headings: content между snap areas может стать недоступным.
+
+CSS snapping не заменяет controls и semantics carousel. Если пользователю нужны «назад/вперед», индикатор текущего
+slide, keyboard navigation или announcement для assistive technologies, это отдельные interaction/accessibility задачи.
+
+Также полезно сохранять базовую прокрутку рабочей без snapping: Scroll Snap должен улучшать layout, а не быть
+единственным способом добраться до content.
+
+На интервью: **использовать snap там, где UX уже дискретный по своей природе; для обычной ленты чаще начинать с
+`proximity`, а не превращать каждую прокрутку в mandatory paging**.
 
 </td></tr></table>
 
@@ -1849,9 +1926,39 @@ Scroll Snap позволяет контейнеру после прокрутк�
 
 **Полный ответ**
 
-Слишком строгий snap может бороться с жестом пользователя, затруднять диагональную прокрутку и перескакивать после
-изменения размера контента. Safe areas и browser chrome меняют viewport. Поведение нужно проверять на touch devices и с
-увеличенным шрифтом.
+На touch devices Scroll Snap взаимодействует не с отдельным mouse wheel tick, а с gesture, momentum scrolling, nested
+scroll containers и меняющейся геометрией viewport/content. Поэтому слишком строгий snapping быстро становится заметным.
+
+Типичный проблемный сценарий — horizontal carousel внутри вертикальной страницы:
+
+```css
+.carousel {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+```
+
+Пользователь начинает диагональный gesture, browser выбирает scroll axis, а mandatory snap после momentum может увести
+carousel дальше, чем ожидалось. Поэтому `proximity` часто дает более естественный результат.
+
+Еще несколько edge cases:
+
+- после lazy-loading image или изменения размера item browser может пересчитать snap positions и повторно выровнять
+  container;
+- sticky controls/header могут перекрыть snapped content — помогает `scroll-padding`;
+- nested scroll containers усложняют понимание, какой container должен получить gesture;
+- очень широкие/высокие snap areas плохо сочетаются с `mandatory`, потому что пользователь хочет читать content внутри
+  item, а не постоянно возвращаться к его boundary;
+- zoom, увеличенный text и orientation change меняют размеры карточек и доступные snap positions.
+
+Не стоит блокировать native scrolling JavaScript-обработчиками `touchmove` только ради более «идеального» carousel. Это
+легко ухудшает responsiveness и accessibility.
+
+Проверять нужно не только эмуляцию desktop DevTools, но и реальные touch interactions: медленный drag, быстрый fling,
+изменение orientation, zoom/text scaling и navigation controls.
+
+На интервью: **главный trade-off Scroll Snap на mobile — баланс между предсказуемым alignment и сохранением контроля
+пользователя над native scrolling**.
 
 </td></tr></table>
 
@@ -1869,9 +1976,56 @@ Containing block — прямоугольник, относительно кот
 
 **Полный ответ**
 
-Containing block — прямоугольник, относительно которого вычисляются position и percentage sizes элемента. Его источник
-зависит от `position`, formatting context и properties ancestors; для absolute element это не всегда непосредственный
-родитель.
+Containing block — reference rectangle, относительно которого CSS вычисляет геометрию некоторых descendants: percentage
+sizes и inset coordinates positioned elements.
+
+Это не обязательно непосредственный DOM parent.
+
+Для обычного in-flow block percentage width обычно связан с containing block, сформированным content box его block
+container:
+
+```css
+.parent {
+  width: 600px;
+}
+
+.child {
+  width: 50%;
+}
+```
+
+`child` получает reference size из containing block и в простом случае становится `300px` шириной.
+
+Для `position: absolute` containing block часто создается ближайшим ancestor, который устанавливает absolute-positioning
+containing block. Классический пример:
+
+```css
+.card {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+}
+```
+
+`.card` здесь становится reference для offsets `.badge`.
+
+Но правило «absolute всегда относительно ближайшего `position: relative`» — только удобное упрощение. Containing block
+могут устанавливать и другие свойства/механизмы, например transforms или containment. Поэтому при странном positioning
+нужно искать не просто DOM parent, а ancestor, который реально establishes containing block.
+
+`position: fixed` обычно позиционируется относительно viewport/initial containing block, но некоторые ancestors,
+например с transform, способны создать для fixed descendant другой containing block. Это объясняет распространенный баг
+«fixed внезапно прокручивается вместе с component».
+
+Containing block связан с sizing, а не со stacking order: его не нужно путать со stacking context. Один ancestor может
+создавать оба механизма, но это разные обязанности CSS.
+
+На интервью: **containing block — геометрическая система координат для sizing/positioning; конкретный ancestor зависит
+от positioning scheme и properties, а не только от DOM hierarchy**.
 
 </td></tr></table>
 
@@ -1889,9 +2043,60 @@ clearfix, ломало высоты контейнеров и плохо выр�
 
 **Полный ответ**
 
-`float` изначально нужен для обтекания изображений и вставок текстом. Раньше на нем строили колонки, но это требовало
-clearfix, ломало высоты контейнеров и плохо выражало намерение layout. Для современной раскладки обычно выбирают Flexbox
-или Grid, а `float` оставляют для настоящего text wrapping.
+`float` перемещает box к inline-start/inline-end стороне container, позволяя последующему inline content обтекать его.
+Именно text wrapping вокруг media — исходный и до сих пор хороший use case.
+
+```html
+<article>
+  <img
+    class="photo"
+    alt="..."
+  />
+  <p>Длинный текст статьи...</p>
+</article>
+```
+
+```css
+.photo {
+  float: inline-start;
+  inline-size: 10rem;
+  margin-inline-end: 1rem;
+}
+```
+
+Текстовые line boxes адаптируются вокруг float — это поведение сложно и бессмысленно воспроизводить Flexbox/Grid, потому
+что здесь float выражает именно semantics layout.
+
+Исторически floats использовали для колонок:
+
+```css
+.sidebar {
+  float: left;
+  width: 30%;
+}
+
+.content {
+  float: left;
+  width: 70%;
+}
+```
+
+Но это был workaround до появления layout systems. Возникали проблемы:
+
+- parent мог не расширяться визуально под floating children;
+- требовались clearfix/`clear` hacks;
+- vertical alignment и equal-height columns были неудобны;
+- source order и wrapping влияли на layout неочевидно;
+- responsive перестройка требовала больше специальных правил.
+
+Flexbox и Grid напрямую моделируют rows/columns, alignment, gap, flexible sizing и order constraints, поэтому для
+application layout они почти всегда выразительнее.
+
+Важно не говорить, что float «устарел». Устарело использование float как универсальной grid system; для обтекания
+editorial content это по-прежнему подходящий CSS primitive.
+
+На интервью: **float нужен для flow-around-content; Flexbox/Grid вытеснили его из общего page layout, потому что
+моделируют layout intent напрямую и не требуют clearing hacks**.
 
 </td></tr></table>
 
@@ -1909,9 +2114,53 @@ Clearing нужен, когда контейнер должен учитыват
 
 **Полный ответ**
 
-Clearing нужен, когда контейнер должен учитывать плавающие элементы. Исторически использовали `clear: both` и clearfix
-через pseudo-element; современный простой вариант — создать BFC через `display: flow-root`. Лучше сначала проверить,
-нужен ли `float` вообще, потому что Flexbox и Grid обычно снимают эту проблему.
+Clearing решает две связанные исторические задачи: остановить обтекание конкретного float и заставить container
+корректно охватывать floating descendants.
+
+Property `clear` применяется к следующему box:
+
+```css
+.footer {
+  clear: both;
+}
+```
+
+Так block начинает располагаться ниже соответствующих floats вместо обтекания рядом с ними.
+
+Для container с floating children долго использовали clearfix:
+
+```css
+.container::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+```
+
+Pseudo-element после floats заставляет parent layout учитывать нужную высоту. Это важно знать при поддержке legacy CSS,
+но в новом коде обычно есть более прямой способ.
+
+Современный вариант — явно создать block formatting context:
+
+```css
+.container {
+  display: flow-root;
+}
+```
+
+`flow-root` описывает намерение «этот element является root нового block formatting context» без искусственного
+pseudo-element и без clipping side effects `overflow: hidden`.
+
+`overflow: hidden/auto` исторически тоже использовали как clearfix, потому что они могут создать новый formatting
+context, но это связывает две независимые задачи: float containment и overflow behavior. Если content должен выходить за
+bounds, такой hack ломает интерфейс.
+
+Если clearing понадобился только потому, что floats используются для columns/cards, лучший fix часто не clearfix, а
+миграция layout на Flexbox/Grid. Но если float реально нужен для editorial wrapping, `clear` и `flow-root` остаются
+корректными инструментами.
+
+На интервью: **`clear` управляет отношением следующего box к float, clearfix — legacy pattern, `flow-root` — современная
+явная boundary для float containment**.
 
 </td></tr></table>
 
@@ -1929,9 +2178,55 @@ workaround. User agent sniffing оставляют как последний в�
 
 **Полный ответ**
 
-Сначала нужно воспроизвести проблему в конкретном браузере, проверить поддержку свойства, cascade, computed styles и
-минимальный пример. Затем выбирают feature detection через `@supports`, progressive enhancement, fallback или
-ограниченный workaround. User agent sniffing оставляют как последний вариант для документированного browser bug.
+Начинать нужно не с browser hack, а с классификации проблемы: unsupported feature, различие defaults, ошибка
+собственного cascade/layout или реальный browser bug.
+
+Практический порядок:
+
+1. воспроизвести проблему в минимальном example;
+2. проверить computed styles и layout в DevTools;
+3. сверить поддержку конкретного property/value/selector;
+4. понять, можно ли дать рабочий baseline без новой возможности;
+5. добавить enhancement через normal cascade или `@supports`;
+6. только для подтвержденного engine bug использовать локальный документированный workaround.
+
+CSS уже умеет graceful fallback через invalid-at-parse-time declarations:
+
+```css
+.card {
+  width: 100%;
+  width: min(100%, 40rem);
+}
+```
+
+Browser, который не понимает второе value, игнорирует declaration и сохраняет первое.
+
+Когда enhancement состоит из группы связанных rules, подходит feature query:
+
+```css
+.layout {
+  display: block;
+}
+
+@supports (display: grid) {
+  .layout {
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+  }
+}
+```
+
+`@supports` проверяет, принимает ли implementation запрошенную syntax/property-value (а в modern syntax может проверять
+selector support), но это не доказательство отсутствия behavioral bugs. Поэтому feature detection не отменяет testing.
+
+User-agent sniffing и browser-specific selectors/hacks хрупки: version string меняется, workaround переживает исходный
+bug и начинает ломать будущие engines. Если без него нельзя, scope должен быть минимальным, с comment/link на bug и
+условием удаления.
+
+Также vendor prefixes лучше получать из toolchain/browser-support policy, а не писать вручную по памяти.
+
+На интервью: **progressive enhancement и feature detection — default strategy; browser sniffing допустим только как
+последний локальный workaround для подтвержденного engine bug**.
 
 </td></tr></table>
 
@@ -1943,15 +2238,60 @@ workaround. User agent sniffing оставляют как последний в�
 
 **Короткий ответ**
 
-Это браузер или webview, где часть современных возможностей отсутствует или ограничена: старый engine, embedded webview,
-режим экономии, слабое устройство или корпоративная среда. Интерфейс должен иметь базовый рабочий слой и улучшаться при
-наличии возможностей. Это практическая причина использовать progressive enhancement и проверку @supports.
+Это не стандартный CSS-термин. Обычно так называют browser/WebView с ограниченной поддержкой нужных platform features.
+Базовый UI должен оставаться рабочим, а новые возможности добавляются через progressive enhancement и feature detection.
+Слабое устройство само по себе — performance constraint, а не feature support.
 
 **Полный ответ**
 
-Это браузер или webview, где часть современных возможностей отсутствует или ограничена: старый engine, embedded webview,
-режим экономии, слабое устройство или корпоративная среда. Интерфейс должен иметь базовый рабочий слой и улучшаться при
-наличии возможностей. Это практическая причина использовать progressive enhancement и проверку `@supports`.
+`feature-constrained browser` — не формальный термин CSS specification. В практическом разговоре так можно назвать
+browser/WebView, который не поддерживает часть возможностей, на которые рассчитывает современный application.
+
+Причины могут быть разными:
+
+- старый engine в корпоративной среде;
+- embedded WebView, обновляемый отдельно от system browser;
+- kiosk/TV/in-app browser с ограниченным engine;
+- target environment, где конкретное CSS/API feature отключено или еще не реализовано.
+
+Важно отделять **feature support** от **device performance**. Слабый CPU или режим энергосбережения может сделать
+animations дорогими, но сам по себе не означает, что browser «не поддерживает CSS Grid». Это уже performance constraint,
+а не feature constraint.
+
+Рабочая стратегия — baseline first:
+
+```css
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@supports (container-type: inline-size) {
+  .card-list {
+    container-type: inline-size;
+  }
+}
+```
+
+Baseline должен сохранять content и основные действия. Новая feature добавляет удобство/layout enhancement, когда
+environment ее понимает.
+
+Но `@supports` нужен не всегда. CSS parsing уже игнорирует unsupported declarations, поэтому простой ordered fallback
+часто дешевле:
+
+```css
+.title {
+  color: #663399;
+  color: oklch(50% 0.2 300);
+}
+```
+
+Для product decision нужна явная browser support policy: какие environments поддерживаются, насколько деградация
+допустима и какие сценарии обязательно тестируются. Иначе команда либо тащит бесконечные polyfills/hacks, либо случайно
+ломает реальные user environments.
+
+На интервью: **это скорее архитектурная категория environment constraints, а не специальный тип браузера; решение —
+capability-based progressive enhancement и заранее определенный support contract**.
 
 </td></tr></table>
 
