@@ -3318,29 +3318,52 @@ cost. Responsive images позволяют browser выбрать достато
 
 **Короткий ответ**
 
-Flexbox — одномерная модель раскладки для строки или колонки. Она распределяет свободное пространство, выравнивает
-элементы и управляет их ростом и сжатием. Подходит для toolbar, sidebar/content и элементов компонента.
+Flexbox — одномерная layout model для распределения и выравнивания flex items вдоль main axis с управлением cross-axis
+alignment. `display: flex` делает in-flow children flex items; их размеры могут расти, сжиматься и учитывать доступное
+пространство.
 
 **Полный ответ**
 
-Flexbox — одномерная модель раскладки для строки или колонки. Она распределяет свободное пространство, выравнивает
-элементы и управляет их ростом и сжатием. Подходит для toolbar, sidebar/content и элементов компонента.
+Flexbox — отдельная CSS layout model, оптимизированная под интерфейсные раскладки. Элемент с `display: flex` становится
+flex container, а его in-flow children — flex items.
+
+Главная идея: container раскладывает items вдоль **main axis**, а затем позволяет управлять:
+
+- направлением этой оси через `flex-direction`;
+- переносом на несколько flex lines через `flex-wrap`;
+- распределением свободного места через flex sizing;
+- выравниванием по main/cross axis;
+- расстояниями через `gap`.
 
 ```css
-.layout {
+.toolbar {
   display: flex;
-  gap: 16px;
-}
-
-.sidebar {
-  flex: 0 0 280px;
-}
-
-.content {
-  flex: 1 1 auto;
-  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
 }
 ```
+
+Flexbox называют **одномерной** моделью не потому, что он всегда рисует одну физическую строку. `flex-wrap` может
+создать несколько flex lines, но sizing и распределение элементов выполняются по каждой line отдельно. Между строками
+нет общей системы tracks, как в Grid.
+
+Например, карточка может сама быть column flex container:
+
+```css
+.card {
+  display: flex;
+  flex-direction: column;
+}
+```
+
+а ее footer можно прижать вниз через auto margin. Это типичный пример того, что Flexbox хорошо решает component-level
+layout, а не только горизонтальные menus.
+
+Еще один важный момент: физические направления зависят от `writing-mode` и `direction`. `row` следует inline axis,
+поэтому фраза «Flexbox — это горизонтальная раскладка» слишком упрощает модель.
+
+На интервью: **Flexbox — одномерная модель, где container управляет main/cross axes, flexing и alignment своих items;
+для независимых двухмерных tracks обычно лучше Grid**.
 
 Практика: [`Flexbox: оси и выравнивание`](/examples/css/flexbox/example1/index.html)
 
@@ -3354,13 +3377,52 @@ Flexbox — одномерная модель раскладки для стро
 
 **Короткий ответ**
 
-Flexbox помогает строить одномерные раскладки: строку, колонку, toolbar, группу кнопок, карточку или пару sidebar и
-content. Он распределяет свободное место, выравнивает элементы, управляет переносом, ростом и сжатием flex items.
+Flexbox лучше всего подходит для одномерных component layouts: toolbar, navigation, button group, sidebar/content,
+вертикальной карточки и распределения свободного места. Если нужны согласованные строки и колонки одновременно, обычно
+лучше Grid.
 
 **Полный ответ**
 
-Flexbox помогает строить одномерные раскладки: строку, колонку, toolbar, группу кнопок, карточку или пару sidebar и
-content. Он распределяет свободное место, выравнивает элементы, управляет переносом, ростом и сжатием flex items.
+Flexbox особенно удобен, когда главная задача формулируется как **«расположить набор элементов вдоль одной оси и
+правильно распределить свободное место»**.
+
+Типичные сценарии:
+
+- toolbar или navigation row;
+- группа кнопок с выравниванием;
+- avatar + text + actions;
+- sidebar + flexible content;
+- вертикальная карточка, где footer должен уйти вниз;
+- равномерное распределение items;
+- переносимый список tags/chips.
+
+Например, header с гибким центральным блоком:
+
+```css
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header__title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+```
+
+Flexbox полезен не только для визуального выравнивания. Его sizing algorithm умеет распределять **positive free space**
+и **negative free space**, поэтому элементы могут расти и сжиматься относительно своей flex base size.
+
+Но есть граница применения. Если элементы должны согласованно стоять по строкам **и** колонкам, например dashboard
+matrix или таблицеподобный layout, Flexbox часто приводит к ручным widths и синхронизации между отдельными lines. Для
+этого Grid обычно выражает намерение лучше.
+
+Еще один anti-pattern — применять Flexbox только ради `display: flex` на каждом wrapper. Layout model стоит выбирать по
+задаче: обычный document flow, Flexbox и Grid имеют разные algorithms и semantics размещения.
+
+На интервью: **Flexbox выбирают для one-dimensional distribution/alignment; если появляется необходимость
+синхронизировать обе оси, это сигнал проверить Grid**.
 
 Практика: [`Flexbox: оси и выравнивание`](/examples/css/flexbox/example1/index.html)
 
@@ -3374,13 +3436,48 @@ content. Он распределяет свободное место, вырав
 
 **Короткий ответ**
 
-Main axis задается flex-direction: горизонтально для row и вертикально для column. Cross axis перпендикулярна главной.
-Поэтому смысл justify-content и align-items зависит от направления контейнера.
+Main axis — основная ось размещения flex items, cross axis ей перпендикулярна. Их физическое направление зависит от
+`flex-direction`, `writing-mode` и `direction`: `row` следует inline axis, `column` — block axis.
 
 **Полный ответ**
 
-Main axis задается `flex-direction`: горизонтально для `row` и вертикально для `column`. Cross axis перпендикулярна
-главной. Поэтому смысл `justify-content` и `align-items` зависит от направления контейнера.
+Flexbox использует flow-relative термины вместо жестких «horizontal/vertical».
+
+**Main axis** — ось, вдоль которой раскладываются flex items. **Cross axis** ей перпендикулярна.
+
+```css
+.container {
+  display: flex;
+  flex-direction: row;
+}
+```
+
+Для обычного horizontal writing mode `row` визуально идет слева направо при `direction: ltr`, поэтому main axis кажется
+горизонтальной. Но формально `row` следует **inline axis**, а `column` — **block axis**.
+
+Из-за этого нужно учитывать writing direction:
+
+```css
+.rtl-toolbar {
+  direction: rtl;
+  display: flex;
+  flex-direction: row;
+}
+```
+
+Здесь main-start находится с другой физической стороны, хотя `flex-direction` по-прежнему `row`.
+
+Связь properties с axes:
+
+- `justify-content` работает вдоль main axis;
+- `align-items` / `align-self` — вдоль cross axis;
+- `align-content` распределяет flex lines вдоль cross axis у multi-line container.
+
+Поэтому вопрос «почему `justify-content` вдруг центрирует по вертикали?» обычно означает, что container переключили на
+`flex-direction: column`: main axis стала соответствовать block axis.
+
+На интервью: **не привязывайте main axis к horizontal, а cross axis к vertical; сначала определите `flex-direction` +
+writing mode, затем уже интерпретируйте alignment properties**.
 
 Практика: [`Flexbox: column direction`](/examples/css/flexbox/example2/index.html)
 
@@ -3394,13 +3491,55 @@ Main axis задается `flex-direction`: горизонтально для `
 
 **Короткий ответ**
 
-flex-direction задает направление main axis: row, row-reverse, column или column-reverse. От него зависит, куда
-раскладываются flex items и по какой оси работает justify-content.
+`flex-direction` задает main axis и ее направление: `row`, `row-reverse`, `column`, `column-reverse`. `row` следует
+inline axis, `column` — block axis; `*-reverse` меняет визуальное направление, но не DOM/source order.
 
 **Полный ответ**
 
-`flex-direction` задает направление main axis: `row`, `row-reverse`, `column` или `column-reverse`. От него зависит,
-куда раскладываются flex items и по какой оси работает `justify-content`.
+`flex-direction` определяет, какая flow-relative ось станет main axis и где будут main-start/main-end.
+
+Значения:
+
+- `row` — main axis совпадает с inline axis;
+- `row-reverse` — та же ось, но main-start/main-end меняются местами;
+- `column` — main axis совпадает с block axis;
+- `column-reverse` — block axis в обратном направлении.
+
+```css
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+```
+
+Такой container удобен для вертикального layout карточки или dialog content.
+
+Важно: `row` не означает буквально «left → right». При RTL или другом `writing-mode` физическое направление будет иным.
+
+`row-reverse` и `column-reverse` требуют осторожности:
+
+```css
+.actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
+```
+
+Они меняют **визуальное** направление flex items, но source order в DOM не переписывают. Screen readers, sequential
+keyboard navigation и логический порядок документа могут по-прежнему следовать source order. Поэтому reverse/order не
+стоит использовать, чтобы исправлять неправильную семантическую последовательность markup.
+
+Если нужно одновременно задать direction и wrapping, есть shorthand:
+
+```css
+.list {
+  display: flex;
+  flex-flow: row wrap;
+}
+```
+
+На интервью: **`flex-direction` управляет flow-relative main axis, а reverse — presentation tool, не замена правильному
+DOM order**.
 
 Практика: [`Flexbox: column direction`](/examples/css/flexbox/example2/index.html)
 
@@ -3414,13 +3553,53 @@ flex-direction задает направление main axis: row, row-reverse, 
 
 **Короткий ответ**
 
-flex-wrap определяет, должны ли элементы оставаться в одной строке или могут переноситься на новые flex lines. При
-переносе расстояния между строками можно контролировать через row-gap, а распределение строк — через align-content.
+`flex-wrap` определяет, будет container single-line (`nowrap`) или сможет создавать несколько flex lines
+(`wrap`/`wrap-reverse`). Каждая line выполняет flex sizing отдельно; `align-content` управляет распределением нескольких
+lines по cross axis.
 
 **Полный ответ**
 
-`flex-wrap` определяет, должны ли элементы оставаться в одной строке или могут переноситься на новые flex lines. При
-переносе расстояния между строками можно контролировать через `row-gap`, а распределение строк — через `align-content`.
+По умолчанию flex container имеет `flex-wrap: nowrap`: все items пытаются остаться в одной flex line. Если суммарного
+места не хватает, дальше вступают flex shrinking и min-size constraints.
+
+```css
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+```
+
+При `wrap` browser создает дополнительные flex lines, когда items больше не помещаются вдоль main axis.
+
+Значения:
+
+- `nowrap` — одна flex line;
+- `wrap` — разрешены новые lines в обычном cross direction;
+- `wrap-reverse` — разрешены lines, но cross-start/cross-end меняются местами.
+
+Ключевой нюанс: multi-line Flexbox не превращается в Grid. Каждая flex line раскладывается независимо при распределении
+свободного места. Поэтому items во второй строке не обязаны совпадать по ширине с items в первой.
+
+```css
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 16rem;
+}
+```
+
+Если последняя строка содержит меньше карточек, они могут растянуться иначе, чем элементы предыдущих строк. Если нужны
+общие column tracks между строками, Grid обычно подходит лучше.
+
+`align-content` относится к **flex lines**, а не отдельным items, и имеет смысл для multi-line container при наличии
+свободного места по cross axis. `align-items` при этом продолжает выравнивать items внутри каждой line.
+
+На интервью: **`flex-wrap` создает несколько независимых flex lines; wrapping решает перенос, но не дает двухмерную
+track system Grid**.
 
 Практика: [`Flexbox: wrap`](/examples/css/flexbox/example3/index.html)
 
@@ -3434,13 +3613,58 @@ flex-wrap определяет, должны ли элементы остава�
 
 **Короткий ответ**
 
-gap задает расстояние между flex items и между flex lines, если элементы переносятся. Он принадлежит контейнеру и не
-добавляет внешний отступ по краям раскладки.
+`gap` задает минимальные gutters между flex items и flex lines без добавления отступа по внешним краям container. В row
+flexbox `column-gap` разделяет items по main axis, `row-gap` — соседние lines по cross axis; для column направление
+меняется.
 
 **Полный ответ**
 
-`gap` задает расстояние между flex items и между flex lines, если элементы переносятся. Он принадлежит контейнеру и не
-добавляет внешний отступ по краям раскладки.
+`gap`, `row-gap` и `column-gap` задают spacing **между** соседними boxes внутри layout context.
+
+```css
+.toolbar {
+  display: flex;
+  gap: 0.75rem;
+}
+```
+
+В отличие от margin, `gap` принадлежит container и не добавляет такой же отступ перед первым или после последнего item.
+
+Для row flex container:
+
+```css
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.75rem;
+  column-gap: 0.5rem;
+}
+```
+
+- `column-gap` оказывается на main axis и разделяет items внутри flex line;
+- `row-gap` оказывается на cross axis и разделяет соседние flex lines.
+
+Для `flex-direction: column` соответствие main/cross axes меняется, поэтому не стоит мысленно переводить `row-gap` в
+«vertical gap для любого Flexbox».
+
+Еще один нюанс: `gap` задает **минимальный gutter**. Distributed alignment вроде `justify-content: space-between` может
+добавить дополнительное свободное пространство между items сверх указанного gap.
+
+```css
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+```
+
+Здесь видимое расстояние между controls может быть больше `1rem`.
+
+Margin все еще нужен, когда spacing относится к конкретному item или должен участвовать в auto-margin alignment. `gap`
+лучше описывает регулярный внутренний ритм siblings.
+
+На интервью: **`gap` — container-level gutter, а не замена всех margins; в Flexbox его row/column axes нужно
+интерпретировать вместе с `flex-direction`**.
 
 Практика: [`Flexbox: row-gap и column-gap`](/examples/css/flexbox/example4/index.html)
 
@@ -3494,13 +3718,61 @@ margin забирает свободное пространство и отта�
 
 **Короткий ответ**
 
-Контейнеру задают display: flex, justify-content: center и align-items: center. При flex-direction: row горизонтальное
-центрирование идет по main axis, а вертикальное — по cross axis.
+Для обычного `flex-direction: row` центрирование по обеим осям задают `justify-content: center` и `align-items: center`.
+Но корректнее мыслить main/cross axes: при `column` те же properties поменяют физические направления.
 
 **Полный ответ**
 
-Контейнеру задают `display: flex`, `justify-content: center` и `align-items: center`. При `flex-direction: row`
-горизонтальное центрирование идет по main axis, а вертикальное — по cross axis.
+Базовый рецепт центрирования flex item:
+
+```css
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+Но важно понимать **почему** он работает:
+
+- `justify-content: center` распределяет свободное пространство вдоль main axis;
+- `align-items: center` задает cross-axis alignment flex items.
+
+При default `flex-direction: row` в horizontal writing mode main axis обычно горизонтальная, а cross axis вертикальная.
+Поэтому визуально получается центрирование по X и Y.
+
+Если направление изменить:
+
+```css
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+`justify-content` теперь центрирует вдоль block/main axis, а `align-items` — вдоль inline/cross axis. CSS не меняет
+meaning properties на «horizontal/vertical» — меняется mapping axes.
+
+Для вертикального центрирования container должен иметь **свободное пространство** по нужной оси:
+
+```css
+.viewport-center {
+  min-block-size: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+Если высота container равна высоте content, распределять по вертикали просто нечего.
+
+Для одного item cross-axis alignment можно переопределить через `align-self`. А иногда вместо `justify-content` нужен
+auto margin, если надо прижать один элемент к краю, а не распределять всю группу.
+
+На интервью: **центрирование Flexbox — это center по main + cross axes при наличии свободного пространства, а не
+магическая пара horizontal/vertical properties**.
 
 Практика: [`Flexbox: центрирование items`](/examples/css/flexbox/example5/index.html)
 
@@ -3514,13 +3786,62 @@ margin забирает свободное пространство и отта�
 
 **Короткий ответ**
 
-justify-content распределяет элементы и свободное пространство вдоль main axis. align-items выравнивает flex items вдоль
-cross axis. Для отдельного элемента cross-axis выравнивание можно изменить через align-self.
+`justify-content` распределяет flex items и свободное пространство в каждой flex line вдоль main axis. `align-items`
+задает default cross-axis alignment items внутри line; отдельный item может переопределить его через `align-self`.
 
 **Полный ответ**
 
-`justify-content` распределяет элементы и свободное пространство вдоль main axis. `align-items` выравнивает flex items
-вдоль cross axis. Для отдельного элемента cross-axis выравнивание можно изменить через `align-self`.
+Главное различие — **какая axis и какой alignment subject**.
+
+`justify-content` работает вдоль main axis и распределяет items **внутри каждой flex line** после того, как sizing
+algorithm определил их размеры.
+
+```css
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+```
+
+Если после sizing осталось положительное свободное место, оно может быть размещено в начале, конце, по центру или
+распределено между items.
+
+`align-items` задает default alignment flex items вдоль cross axis:
+
+```css
+.toolbar {
+  display: flex;
+  align-items: center;
+}
+```
+
+Для отдельного item есть `align-self`:
+
+```css
+.toolbar__badge {
+  align-self: flex-start;
+}
+```
+
+Важно не путать `align-items` и `align-content`:
+
+- `align-items` — items внутри flex line;
+- `align-content` — сами flex lines внутри multi-line flex container.
+
+Еще один нюанс: `justify-content` не заменяет flex sizing. Если `flex-grow` уже поглотил все positive free space,
+`justify-content` может практически не иметь пространства для распределения.
+
+```css
+.item {
+  flex: 1 1 0;
+}
+```
+
+Несколько таких items могут занять всю main axis, поэтому `justify-content: space-between` уже нечего распределять между
+ними.
+
+На интервью: **`justify-content` = content distribution по main axis; `align-items` = default self-alignment items по
+cross axis; `align-content` = alignment flex lines**.
 
 Практика: [`Flexbox: justify-content и align-items`](/examples/css/flexbox/example1/index.html)
 
