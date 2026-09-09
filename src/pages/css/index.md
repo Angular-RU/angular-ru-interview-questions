@@ -3678,13 +3678,86 @@ Margin все еще нужен, когда spacing относится к кон
 
 **Короткий ответ**
 
-В современном CSS это обычно раскрывается примерно в flex: 1 1 0%. Элемент начинает с нулевого basis, может расти и
-сжиматься, деля доступное пространство с соседями. Для контента часто дополнительно нужен min-width: 0.
+`flex: 1` — числовая форма shorthand `flex`, концептуально `flex: 1 1 0`: item может расти и сжиматься, а распределение
+начинается с нулевой flex basis. Это не означает `width: 100%`. Automatic minimum size все еще действует, поэтому для
+сжимаемого контента часто нужен `min-width: 0`.
 
 **Полный ответ**
 
-В современном CSS это обычно раскрывается примерно в `flex: 1 1 0%`. Элемент начинает с нулевого basis, может расти и
-сжиматься, деля доступное пространство с соседями. Для контента часто дополнительно нужен `min-width: 0`.
+`flex` — shorthand для трех свойств в порядке `flex-grow`, `flex-shrink`, `flex-basis`.
+
+Для одного положительного числа:
+
+```css
+.item {
+  flex: 1;
+}
+```
+
+смысл соответствует:
+
+```css
+.item {
+  flex: 1 1 0;
+}
+```
+
+То есть:
+
+- `flex-grow: 1` — item участвует в распределении positive free space;
+- `flex-shrink: 1` — item может участвовать в распределении negative free space;
+- `flex-basis: 0` — flexing начинается с нулевой базы, а не с preferred/content size.
+
+Поэтому три одинаковых item обычно делят доступное main-axis пространство поровну:
+
+```css
+.columns {
+  display: flex;
+  gap: 1rem;
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+}
+```
+
+Важно: `flex: 1` **не равно** `width: 100%`. `width` задает preferred main size, а `flex` участвует в отдельном
+алгоритме, который сначала определяет flex base sizes, затем распределяет свободное пространство и применяет min/max
+constraints.
+
+Также нулевая basis не отменяет automatic minimum size flex item. Длинная строка, `white-space: nowrap` или широкий
+вложенный элемент могут не дать колонке сжаться. Для row Flexbox типичный opt-out:
+
+```css
+.column {
+  flex: 1;
+  min-width: 0;
+}
+```
+
+В DevTools/browser serialization числовой shorthand может отображаться с `0%` basis. Для понимания layout важнее идея:
+**числовой `flex` использует нулевую basis**, в отличие от `flex: auto` (`1 1 auto`).
+
+Сравнение частых shorthand:
+
+```css
+.initial {
+  flex: initial;
+} /* 0 1 auto */
+.auto {
+  flex: auto;
+} /* 1 1 auto */
+.none {
+  flex: none;
+} /* 0 0 auto */
+.one {
+  flex: 1;
+} /* numeric flex, zero basis */
+```
+
+На интервью: **`flex: 1` означает не «занять всю ширину», а grow/shrink от нулевой flex basis; итоговый размер все равно
+ограничивают siblings, gaps и min/max sizes**.
 
 Практика: [`Flexbox: flex-grow`](/examples/css/flexbox/example7/index.html)
 
@@ -3877,13 +3950,86 @@ gap описывает внутреннее расстояние между со
 
 **Короткий ответ**
 
-flex-basis задает базовый размер до распределения пространства. flex-grow определяет долю положительного свободного
-места, flex-shrink — участие в сжатии при нехватке места. Итоговый размер также зависит от min/max constraints.
+`flex-basis` задает исходную main size для flexing. Если после bases остается positive free space, его распределяет
+`flex-grow`; если места не хватает, negative free space распределяется через `flex-shrink`. Итог дополнительно
+ограничивается min/max sizes и automatic minimum size.
 
 **Полный ответ**
 
-`flex-basis` задает базовый размер до распределения пространства. `flex-grow` определяет долю положительного свободного
-места, `flex-shrink` — участие в сжатии при нехватке места. Итоговый размер также зависит от min/max constraints.
+Три свойства описывают разные части flex sizing algorithm:
+
+```css
+.item {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 12rem;
+}
+```
+
+### `flex-basis`
+
+Это стартовая **main-axis base size**, от которой алгоритм считает свободное пространство.
+
+Для row container basis относится к width/main size, для column — к height/main size.
+
+```css
+.item {
+  flex-basis: 12rem;
+}
+```
+
+До flexing два таких item условно запрашивают по `12rem`.
+
+### `flex-grow`
+
+Работает, когда после учета flex bases остается **positive free space**:
+
+```css
+.a {
+  flex: 1 1 10rem;
+}
+.b {
+  flex: 2 1 10rem;
+}
+```
+
+Если есть свободное место, `.b` получает его вдвое быстрее `.a` по отношению grow factors `1:2`. Это отношение долей
+**свободного пространства**, а не обещание, что итоговая ширина `.b` всегда будет ровно в два раза больше `.a`.
+
+### `flex-shrink`
+
+Работает, когда сумма bases больше доступной main size и появляется **negative free space**.
+
+```css
+.a {
+  flex: 0 1 20rem;
+}
+.b {
+  flex: 0 2 20rem;
+}
+```
+
+Shrink распределяется не только по raw factor. Алгоритм учитывает scaled shrink factor: `flex-shrink × flex base size`.
+Это нужно, чтобы маленький item с тем же factor не терял столько же абсолютных pixels, сколько большой.
+
+После распределения item может быть заморожен на `min-width`, `max-width`, `min-height`, `max-height` или automatic
+minimum size. Поэтому формула grow/shrink не является последним шагом.
+
+На практике лучше задавать согласованный shorthand:
+
+```css
+.sidebar {
+  flex: 0 0 18rem;
+}
+.content {
+  flex: 1 1 auto;
+}
+```
+
+чем менять один longhand и случайно оставить старые значения двух других.
+
+На интервью: **basis определяет старт, grow делит positive free space, shrink делит negative free space; финальный used
+size получается после flexing и min/max clamping**.
 
 Практика: [`Flexbox: flex-grow`](/examples/css/flexbox/example8/index.html) и
 [`Flexbox: flex-shrink`](/examples/css/flexbox/example6/index.html)
@@ -3898,15 +4044,70 @@ flex-basis задает базовый размер до распределен�
 
 **Короткий ответ**
 
-flex-basis: 0 начинает распределение свободного места от нулевой базы, поэтому элементы с одинаковым flex-grow чаще
-получают равные доли. flex-basis: auto сначала учитывает width, height или размер содержимого, а уже потом распределяет
-оставшееся пространство.
+`flex-basis: 0` начинает flexing с нулевой базы, поэтому одинаковые grow factors стремятся делить доступное пространство
+независимо от preferred width/content size. `flex-basis: auto` сначала берет main-size property (`width`/`height`), а
+если она `auto` — content-based size, и уже затем распределяет free space.
 
 **Полный ответ**
 
-`flex-basis: 0` начинает распределение свободного места от нулевой базы, поэтому элементы с одинаковым `flex-grow` чаще
-получают равные доли. `flex-basis: auto` сначала учитывает `width`, `height` или размер содержимого, а уже потом
-распределяет оставшееся пространство.
+Разница в том, **какую стартовую main size item приносит в flex algorithm**.
+
+### `flex-basis: 0`
+
+```css
+.item {
+  flex: 1 1 0;
+}
+```
+
+Basis равна нулю. Если несколько items имеют одинаковый grow factor и одинаковые constraints, доступное пространство
+распределяется от одинаковой стартовой базы. Это типичный прием для равных колонок.
+
+### `flex-basis: auto`
+
+```css
+.item {
+  flex: 1 1 auto;
+  width: 20rem;
+}
+```
+
+`auto` сначала берет main-size property: для row Flexbox это обычно `width`, для column — `height`. Если main-size
+property сама `auto`, basis становится content-based.
+
+Из-за этого два `flex: 1 1 auto` item с разным содержимым могут закончить flexing с разными размерами:
+
+```css
+.short {
+  flex: 1 1 auto;
+}
+.long {
+  flex: 1 1 auto;
+}
+```
+
+Одинаковый `flex-grow: 1` добавляет им одинаковую **долю free space поверх разных bases**, а не делает итоговые размеры
+одинаковыми.
+
+С нулевой basis намерение другое:
+
+```css
+.short,
+.long {
+  flex: 1 1 0;
+  min-width: 0;
+}
+```
+
+Теперь starting basis одинакова, но min/max constraints и automatic minimum size по-прежнему могут нарушить визуальное
+равенство. Поэтому `min-width: 0` часто идет вместе с этим pattern.
+
+Отдельный edge case: `0` как definite length и `0%` как percentage не абсолютно идентичны при **indefinite main size**
+container. Percentage `flex-basis` в таком случае может перейти к content-based sizing. Поэтому в явной трехкомпонентной
+записи `flex: 1 1 0` хорошо выражает именно definite zero basis.
+
+На интервью: **`0` говорит «не учитывай preferred/content size как стартовую базу», `auto` говорит «начни с main-size
+property или content»**.
 
 Практика: [`Flexbox: flex-grow`](/examples/css/flexbox/example8/index.html)
 
@@ -3920,15 +4121,77 @@ flex-basis: 0 начинает распределение свободного �
 
 **Короткий ответ**
 
-Flex items по умолчанию имеют automatic minimum size, часто равный min-content width. Длинный текст или вложенный блок
-может растягивать колонку и ломать layout. min-width: 0 разрешает элементу сжиматься внутри flex-контейнера, после чего
-работают wrapping, ellipsis или overflow.
+У flex item `min-width: auto` по умолчанию. В main axis для non-scrollable item это может дать content-based automatic
+minimum size, из-за которой item не сжимается до доступной ширины. `min-width: 0` снимает этот минимум для row Flexbox;
+для column аналогичная проблема обычно решается `min-height: 0`.
 
 **Полный ответ**
 
-Flex items по умолчанию имеют automatic minimum size, часто равный min-content width. Длинный текст или вложенный блок
-может растягивать колонку и ломать layout. `min-width: 0` разрешает элементу сжиматься внутри flex-контейнера, после
-чего работают wrapping, ellipsis или overflow.
+Частая ситуация:
+
+```css
+.row {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+}
+```
+
+Внутри `.content` появляется длинный URL, `white-space: nowrap`, table или другой элемент с большой intrinsic width — и
+родитель неожиданно начинает overflow.
+
+Причина не обязательно в `flex-shrink`. У flex item initial `min-width` равен `auto`, а automatic minimum size в main
+axis для non-scrollable item может быть **content-based**. То есть item имеет право сказать flex algorithm: «меньше этой
+границы меня не сжимай».
+
+Явный opt-out:
+
+```css
+.content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+```
+
+После этого flex item может стать уже своего content-based minimum, а уже внутри можно выбирать нужное overflow
+behavior:
+
+```css
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+
+Важно разделять уровни: `min-width: 0` разрешает **flex item** сжаться, а `overflow`/wrapping определяет, что делать с
+его **content** после сжатия.
+
+Для column container проблема переезжает в main/block axis:
+
+```css
+.page {
+  display: flex;
+  flex-direction: column;
+  block-size: 100dvh;
+}
+
+.main {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+```
+
+Здесь `min-height: 0` позволяет `.main` занять оставшуюся высоту вместо растягивания всей страницы содержимым.
+
+Есть нюанс: для flex item с scrollable overflow automatic minimum size в main axis может и так стать zero. Но полагаться
+на побочный эффект `overflow` вместо явного sizing intent обычно хуже для читаемости layout.
+
+На интервью: **`min-width: 0` нужен не потому, что Flexbox «плохо shrink-ится», а потому что automatic minimum size
+может ограничивать результат flex-shrink**.
 
 Практика: [`Flexbox: flex-shrink`](/examples/css/flexbox/example6/index.html)
 
@@ -3942,13 +4205,61 @@ Flex items по умолчанию имеют automatic minimum size, часто
 
 **Короткий ответ**
 
-Контейнеру задают display: flex, фиксированной колонке — flex: 0 0 280px, а гибкой — flex: 1 1 auto и часто
-min-width: 0. Так sidebar сохраняет ширину, а content занимает оставшееся пространство.
+Контейнеру задают `display: flex`, sidebar — `flex: 0 0 17.5rem`, а content — `flex: 1 1 auto` и `min-width: 0`. Sidebar
+не растет и не сжимается, content получает оставшееся пространство. На узких экранах fixed basis нужно отдельно
+адаптировать, иначе layout может overflow.
 
 **Полный ответ**
 
-Контейнеру задают `display: flex`, фиксированной колонке — `flex: 0 0 280px`, а гибкой — `flex: 1 1 auto` и часто
-`min-width: 0`. Так sidebar сохраняет ширину, а content занимает оставшееся пространство.
+Базовый pattern:
+
+```css
+.layout {
+  display: flex;
+  gap: 1rem;
+}
+
+.sidebar {
+  flex: 0 0 17.5rem;
+}
+
+.content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+```
+
+`sidebar` расшифровывается так:
+
+- `flex-grow: 0` — не забирает дополнительное свободное место;
+- `flex-shrink: 0` — не отдает свою basis при нехватке места;
+- `flex-basis: 17.5rem` — стартовая и фактически фиксированная main size.
+
+`content` с `flex: 1 1 auto` может расти и сжиматься. `min-width: 0` важен, если внутри есть длинный content, который
+иначе удерживает automatic minimum size.
+
+Этот pattern не означает, что sidebar обязан быть фиксированным на всех viewport. При очень узком container
+`flex-shrink: 0` способен вызвать overflow. В responsive UI можно переключить layout:
+
+```css
+@media (width < 48rem) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex-basis: auto;
+  }
+}
+```
+
+или сделать sidebar ограниченно гибким через `clamp()`/другую basis, если продукт этого требует.
+
+Если sidebar **разрешено** сжимать, нельзя механически использовать `0 0`: например `flex: 0 1 17.5rem` оставляет grow
+выключенным, но разрешает shrink.
+
+На интервью: **fixed + fluid columns — это разные flex contracts: sidebar с контролируемой basis/factors и content,
+который поглощает остаток; отдельно продумайте narrow-container behavior**.
 
 Практика: [`Flexbox: flex-grow`](/examples/css/flexbox/example7/index.html)
 
@@ -3962,13 +4273,63 @@ min-width: 0. Так sidebar сохраняет ширину, а content зан�
 
 **Короткий ответ**
 
-Для равных колонок обычно задают элементам одинаковое сокращение, например flex: 1 1 0. Нулевой basis убирает влияние
-начального размера контента, а одинаковый flex-grow делит свободное место поровну.
+Для равных flex-колонок обычно используют одинаковый `flex: 1 1 0` и `min-width: 0`. Zero basis убирает влияние
+preferred/content width из стартового распределения, а одинаковый grow factor делит free space поровну. Min/max sizes,
+padding и intrinsic constraints все еще могут повлиять на фактический внешний размер.
 
 **Полный ответ**
 
-Для равных колонок обычно задают элементам одинаковое сокращение, например `flex: 1 1 0`. Нулевой basis убирает влияние
-начального размера контента, а одинаковый `flex-grow` делит свободное место поровну.
+Типичный вариант:
+
+```css
+.columns {
+  display: flex;
+  gap: 1rem;
+}
+
+.column {
+  flex: 1 1 0;
+  min-width: 0;
+}
+```
+
+Почему не просто `flex-grow: 1`?
+
+У initial `flex-basis` значение `auto`, поэтому разные content/preferred sizes сначала дадут разные bases, и одинаковый
+grow factor лишь добавит одинаковую долю оставшегося пространства поверх них.
+
+`flex: 1 1 0` начинает все items с одинаковой нулевой basis. При одинаковых grow factors positive free space делится
+равными долями.
+
+Но «равные flex values» не отменяют constraints:
+
+```css
+.column--featured {
+  min-width: 20rem;
+}
+```
+
+Такой item может быть зафиксирован minimum size, после чего алгоритм перераспределит пространство между остальными.
+Automatic minimum size делает похожее неявно, поэтому для контентных колонок часто нужен `min-width: 0`.
+
+Padding/borders тоже относятся к box model. Если у колонок разное оформление, одинаковый flexed content size не всегда
+означает одинаковую визуальную outer width. Для строгого равенства лучше держать одинаковую box structure или переносить
+разное внутреннее оформление во вложенный элемент.
+
+Если задача именно «N согласованных равных tracks», особенно между несколькими строками, Grid выражает ее прямее:
+
+```css
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+```
+
+Flexbox удобен, когда это одна flex line или когда content distribution важнее общей двухмерной сетки.
+
+На интервью: **для равных flex items используйте одинаковый grow + zero basis, но помните, что min/max/automatic minimum
+sizes могут вмешаться; для настоящих равных tracks часто лучше Grid**.
 
 Практика: [`Flexbox: flex-grow`](/examples/css/flexbox/example7/index.html)
 
