@@ -1214,6 +1214,32 @@ promises, он завершается `AggregateError`.
 </details>
 
 <details>
+<summary>С какой ошибкой завершится <code>Promise.any()</code>, если все promises будут отклонены?</summary><br>
+<table><tr><td>
+
+**Короткий ответ**
+
+`AggregateError`.
+
+**Полный ответ**
+
+Если все переданные promises завершатся с rejection, `Promise.any()` отклонит итоговый promise с `AggregateError`. В
+свойстве `errors` находятся причины всех отклонений в порядке переданных promises.
+
+```js
+try {
+  await Promise.any([Promise.reject('A'), Promise.reject('B')]);
+} catch (error) {
+  console.log(error instanceof AggregateError); // true
+  console.log(error.errors); // ['A', 'B']
+}
+```
+
+</td></tr></table>
+
+</details>
+
+<details>
 <summary>Что такое Promise.withResolvers?</summary><br>
 <table><tr><td>
 
