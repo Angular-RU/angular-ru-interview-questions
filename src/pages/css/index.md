@@ -4516,10 +4516,34 @@ Grid — двумерная система раскладки со строка�
 
 **Полный ответ**
 
-Grid — двумерная система раскладки со строками, колонками и областями. Она позволяет определить структуру контейнера, а
-элементам — занимать одну или несколько ячеек. Grid удобен для карточек и page-level layout.
+Grid — двумерная layout model, где container создает систему **columns и rows**, а items размещаются относительно grid
+lines, cells или named areas.
 
-Практика: [`CSS Grid: явная сетка 3 на 3`](/examples/css/grid/example1/index.html) и
+```css
+.layout {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+}
+```
+
+В отличие от обычного flow, несколько элементов могут выравниваться по одним и тем же границам tracks. Item может
+занимать одну cell или несколько tracks через `grid-column` / `grid-row`.
+
+Важно различать **explicit grid** и **implicit grid**. Explicit tracks объявляются через `grid-template-*`; если item
+оказывается за их пределами, browser автоматически создает implicit tracks, размер которых можно контролировать через
+`grid-auto-rows` и `grid-auto-columns`.
+
+Grid не обязан быть жестким: tracks могут быть flexible и intrinsic — например `1fr`, `min-content`, `max-content`,
+`minmax()` и `repeat(auto-fit, ...)`.
+
+На практике Grid особенно удобен для page shells, dashboards, forms и card grids, где важны общие row/column boundaries.
+Внутри отдельной grid cell при этом часто используют Flexbox или normal flow.
+
+На интервью: **Grid — track-based двумерная модель; container определяет rows/columns, items размещаются по grid lines,
+а explicit и implicit grid вместе формируют итоговую раскладку**. Практика:
+[`CSS Grid: явная сетка 3 на 3`](/examples/css/grid/example1/index.html) и
 [`CSS Grid: адаптивная сетка товаров`](/examples/css/grid/example11/index.html)
 
 </td></tr></table>
@@ -4537,10 +4561,44 @@ Grid — двумерная система раскладки со строка�
 
 **Полный ответ**
 
-Они описывают явные tracks сетки и их размеры. Можно использовать px, `%`, `fr`, `minmax()`, `repeat()` и intrinsic
-keywords. Неявные tracks создаются автоматически для элементов вне заданной сетки.
+`grid-template-columns` и `grid-template-rows` задают **explicit tracks** и их sizing functions.
 
-Практика: [`CSS Grid: фиксированные tracks`](/examples/css/grid/example1/index.html) и
+```css
+.page {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+}
+```
+
+Track может быть fixed, flexible или intrinsic:
+
+```css
+.grid {
+  grid-template-columns: 12rem 25% 1fr minmax(10rem, 2fr) max-content;
+}
+```
+
+`fr` делит оставшееся free space после fixed/intrinsic tracks и gaps. `minmax()` задает диапазон, а `repeat()` сокращает
+повторяющиеся definitions.
+
+Если items выходят за explicit grid, создаются implicit tracks:
+
+```css
+.grid {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(6rem, auto);
+}
+```
+
+Четвертый и следующие ряды уже не перечислены в `grid-template-rows`, но получают размер через `grid-auto-rows`.
+
+Частый production edge case — длинный content в `1fr` track. Automatic minimum может не дать колонке сжаться, поэтому
+для остаточной области часто пишут `minmax(0, 1fr)`.
+
+На интервью: **template properties описывают explicit grid, а implicit tracks настраиваются через `grid-auto-*`; track
+sizing может быть fixed, intrinsic или flexible**. Практика:
+[`CSS Grid: фиксированные tracks`](/examples/css/grid/example1/index.html) и
 [`CSS Grid: fr-единицы`](/examples/css/grid/example2/index.html)
 
 </td></tr></table>
@@ -4559,11 +4617,40 @@ Flexbox выбирают для строки, колонки, выравнива
 
 **Полный ответ**
 
-Flexbox выбирают для строки, колонки, выравнивания и неизвестного числа элементов. Grid — когда важны согласованные
-колонки, строки или двумерные области. Если приходится имитировать строки вложенными flex-контейнерами, Grid обычно
-проще.
+Выбор лучше начинать с главного layout constraint.
 
-Практика: [`Flexbox: wrap`](/examples/css/flexbox/example3/index.html) и
+Flexbox обычно подходит, когда задача звучит как «распределить items вдоль одной main axis и позволить content влиять на
+их размеры»:
+
+```css
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+```
+
+Grid лучше, когда нужны общие rows/columns, по которым должны выровняться несколько элементов:
+
+```css
+.form {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: 0.75rem 1rem;
+}
+```
+
+Сигналы в пользу Flexbox: toolbar, navigation, button group, avatar + text, распределение free space, auto margin.
+Сигналы в пользу Grid: одинаковые column boundaries между rows, spanning, named areas, responsive число колонок,
+двумерная структура.
+
+`flex-wrap` не превращает Flexbox в Grid: каждая flex line рассчитывается отдельно. Если приходится вручную
+синхронизировать widths между wrapped rows, это сильный сигнал проверить Grid.
+
+Модели нормально комбинируются: page shell может быть Grid, а toolbar внутри одной area — Flexbox.
+
+На интервью: **Flexbox — distribution-first вдоль одной оси, Grid — track/layout-first по двум осям; выбирать нужно по
+constraint, а не по названию компонента**. Практика: [`Flexbox: wrap`](/examples/css/flexbox/example3/index.html) и
 [`CSS Grid: адаптивная сетка товаров`](/examples/css/grid/example11/index.html)
 
 </td></tr></table>
@@ -4582,11 +4669,37 @@ Grid управляет двумя измерениями одновременн
 
 **Полный ответ**
 
-Grid управляет двумя измерениями одновременно и начинает с структуры контейнера. Flexbox распределяет элементы вдоль
-одной основной оси и лучше адаптируется к содержимому. Их часто комбинируют: Grid для страницы, Flexbox внутри
-компонентов.
+Главное различие — в алгоритме раскладки.
 
-Практика: [`CSS Grid: именованные области`](/examples/css/grid/example6/index.html) и
+Flexbox берет items, определяет main axis и распределяет positive/negative free space между ними. Даже при `flex-wrap`
+каждая line flex-ится отдельно. Grid сначала формирует rows/columns и их размеры, а затем размещает items относительно
+общей системы grid lines.
+
+```css
+.toolbar {
+  display: flex;
+  gap: 1rem;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 18rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+}
+```
+
+Поэтому wrapped Flexbox может дать последней строке другое распределение ширины, а Grid сохраняет общие column tracks
+для всей сетки.
+
+Но Grid не «лучше». Для простого push одного action к краю Flexbox с `margin-inline-start: auto` обычно понятнее, чем
+создание grid tracks.
+
+Обе модели поддерживают alignment, `gap`, intrinsic sizing и могут overflow-ить при неверных min-size constraints.
+Правило «Grid для page, Flexbox для component» полезно только как эвристика.
+
+На интервью: **Flexbox flex-ит items по одной основной оси, Grid size-ит общие tracks по двум осям; в реальном UI их
+часто используют вместе**. Практика: [`CSS Grid: именованные области`](/examples/css/grid/example6/index.html) и
 [`Flexbox: wrap`](/examples/css/flexbox/example3/index.html)
 
 </td></tr></table>
@@ -4605,11 +4718,37 @@ Grid лучше выбирать для двумерной структуры: �
 
 **Полный ответ**
 
-Grid лучше выбирать для двумерной структуры: согласованных строк, колонок, областей страницы и карточных сеток. Flexbox
-удобнее для одномерного распределения элементов внутри компонента. Если layout одновременно зависит и от строк, и от
-колонок, Grid обычно проще и устойчивее.
+Grid стоит выбирать, когда общая двумерная структура важнее индивидуального распределения каждого ряда.
 
-Практика: [`CSS Grid: page layout`](/examples/css/grid/example3/index.html) и
+```css
+.page {
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'sidebar main';
+  grid-template-columns: 16rem minmax(0, 1fr);
+  gap: 1rem;
+}
+```
+
+Grid особенно удобен, если несколько rows должны делить одинаковые column tracks, элементы занимают несколько
+rows/columns, layout естественно описывается areas или число колонок должно зависеть от доступной ширины.
+
+Responsive card grid часто обходится без media query:
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  gap: 1rem;
+}
+```
+
+Flexbox лучше оставить для реально одномерных задач: toolbar, actions row, chips, avatar + text. Переход на Grid только
+потому, что он «современнее», добавляет complexity без пользы.
+
+На интервью: **если layout одновременно зависит от rows и columns или нужен общий track alignment, Grid обычно выражает
+намерение устойчивее Flexbox**. Практика: [`CSS Grid: page layout`](/examples/css/grid/example3/index.html) и
 [`CSS Grid: grid-template-areas`](/examples/css/grid/example6/index.html)
 
 </td></tr></table>
@@ -4627,10 +4766,37 @@ minmax(min, max) задает диапазон размера grid track. Нап
 
 **Полный ответ**
 
-`minmax(min, max)` задает диапазон размера grid track. Например, колонка может быть не уже `240px`, но растягиваться до
-доли свободного пространства. Это основа многих responsive grids без media queries.
+`minmax(min, max)` задает нижнюю и верхнюю границу размера grid track.
 
-Практика: [`CSS Grid: адаптивная сетка товаров`](/examples/css/grid/example11/index.html)
+```css
+.layout {
+  display: grid;
+  grid-template-columns: minmax(12rem, 20rem) minmax(0, 1fr);
+}
+```
+
+Первая колонка растет от `12rem` до `20rem`, а вторая получает остаток и может сжаться до `0`.
+
+Популярный responsive pattern:
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+```
+
+Browser создает столько tracks, сколько помещается, каждый не уже `15rem`, а free space распределяется через `1fr`.
+
+Edge case: container может стать уже `15rem` и получить horizontal overflow. Для reusable component безопаснее
+`minmax(min(15rem, 100%), 1fr)`.
+
+`minmax(0, 1fr)` тоже важен: обычный `1fr` имеет automatic minimum, связанный с intrinsic content size. Zero minimum
+явно разрешает track сжаться ниже min-content.
+
+На интервью: **`minmax()` задает диапазон track sizing; в связке с `fr` и `auto-fit/fill` это основа большинства
+responsive Grid patterns**. Практика: [`CSS Grid: адаптивная сетка товаров`](/examples/css/grid/example11/index.html)
 
 </td></tr></table>
 
@@ -4647,18 +4813,32 @@ minmax(min, max) задает диапазон размера grid track. Нап
 
 **Полный ответ**
 
-Оба значения создают столько повторяющихся tracks, сколько помещается. `auto-fill` сохраняет пустые tracks, а `auto-fit`
-схлопывает их и растягивает занятые. Разница заметна, когда элементов меньше доступных колонок.
+`auto-fill` и `auto-fit` используются внутри `repeat()` как auto-repeat: browser вычисляет, сколько повторяющихся tracks
+помещается в доступный размер container.
 
 ```css
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
 }
 ```
 
-Практика: [`CSS Grid: auto-fit и minmax`](/examples/css/grid/example11/index.html)
+Пока items достаточно, оба варианта часто выглядят одинаково. Разница проявляется, когда свободных track positions
+больше, чем элементов.
+
+**`auto-fill`** сохраняет пустые tracks, поэтому grid продолжает резервировать column slots.
+
+**`auto-fit`** схлопывает пустые tracks, а освободившееся место может перейти занятым `fr` tracks — карточки растянутся.
+
+Практически `auto-fit` чаще используют для card grids, где существующие cards должны заполнить row. `auto-fill` полезен,
+когда сама структура пустых column slots имеет смысл.
+
+Это не аналог `flex-wrap`: keywords определяют число Grid tracks, а перенос items делает Grid auto-placement.
+
+На интервью: **оба значения создают максимум auto-repeat tracks; `auto-fill` сохраняет пустые, `auto-fit` их схлопывает
+и позволяет занятым tracks растянуться**. Практика:
+[`CSS Grid: auto-fit и minmax`](/examples/css/grid/example11/index.html)
 
 </td></tr></table>
 
@@ -4676,26 +4856,44 @@ grid lines. Элементы накладываются друг на друга
 
 **Полный ответ**
 
-Grid stacking — прием, при котором несколько grid items размещают в одной и той же области сетки или в пересекающихся
-grid lines. Элементы накладываются друг на друга, а порядок слоя определяется обычными правилами stacking context:
-порядком в DOM, `z-index`, `position`, `opacity`, `transform` и другими свойствами.
-
-Это удобно для overlay: текст поверх изображения, badge на карточке, декоративный слой или controlled overlap без
-`position: absolute`. Grid при этом продолжает задавать общую геометрию и размер области.
+Grid позволяет нескольким items занимать одну и ту же cell или area, поэтому controlled overlap можно сделать без
+обязательного `position: absolute`.
 
 ```css
-.card {
+.hero {
   display: grid;
 }
 
-.card img,
-.card .content {
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
+.hero > img,
+.hero > .content {
+  grid-area: 1 / 1;
 }
 ```
 
-Практика: [`CSS Grid: пересекающиеся линии`](/examples/css/grid/example9/index.html) и
+Оба элемента накладываются, но остаются grid items и продолжают участвовать в track sizing. Это важное отличие от
+absolute-positioned element, который обычно out-of-flow.
+
+Для grid items можно применять `z-index` даже без `position`:
+
+```css
+.hero > img {
+  z-index: 0;
+}
+
+.hero > .content {
+  z-index: 1;
+}
+```
+
+Обычные stacking context rules никуда не исчезают: descendant с большим `z-index` не может выйти за пределы stacking
+context ancestor.
+
+Grid stacking удобен для text-over-image, badge/decorative layers, skeleton/content transitions. Но visual overlap не
+меняет DOM order, поэтому focus order и semantics должны оставаться понятными.
+
+На интервью: **несколько grid items могут делить одну area и перекрываться, сохраняя участие в Grid sizing; layering
+дальше подчиняется обычным stacking rules**. Практика:
+[`CSS Grid: пересекающиеся линии`](/examples/css/grid/example9/index.html) и
 [`CSS Grid: текст поверх изображения`](/examples/css/grid/example10/index.html)
 
 </td></tr></table>
@@ -4714,22 +4912,39 @@ grid lines. Элементы накладываются друг на друга
 
 **Полный ответ**
 
-В Grid нет прямого аналога `flex-wrap`, потому что grid items автоматически переходят в новые строки или колонки по
-правилам auto-placement. Для карточных сеток обычно задают повторяющиеся колонки через `repeat()`, `auto-fit` или
-`auto-fill`, а минимальный и максимальный размер колонки описывают через `minmax()`.
-
-Так сетка сама вычисляет, сколько колонок помещается в контейнер, и переносит лишние элементы на следующую строку без
-media queries.
+В Grid нет отдельного `flex-wrap`: визуальный перенос получается из **track definition + auto-placement**.
 
 ```css
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 1rem;
 }
 ```
 
-Практика: [`CSS Grid: auto-fit и minmax`](/examples/css/grid/example11/index.html)
+Browser определяет число columns, создает cells и размещает items по ним. Когда cells текущей row заканчиваются,
+следующие items автоматически переходят в следующую row.
+
+Это отличается от Flexbox wrapping: каждая flex line рассчитывается независимо, а Grid rows используют общую систему
+column tracks.
+
+Даже с фиксированным числом columns новые rows создаются автоматически:
+
+```css
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(8rem, auto);
+}
+```
+
+Четвертый item попадет в implicit row, размер которой задает `grid-auto-rows`.
+
+`grid-auto-flow: column` может создавать implicit columns, а `grid-auto-flow: dense` заполняет holes более поздними
+items. `dense` требует осторожности: visual order способен отличаться от DOM order, что важно для keyboard navigation.
+
+На интервью: **Grid wrapping — это не отдельное property; tracks задают доступные cells, а auto-placement переносит
+items в следующие rows или columns**. Практика: [`CSS Grid: auto-fit и minmax`](/examples/css/grid/example11/index.html)
 
 </td></tr></table>
 
