@@ -3776,8 +3776,52 @@ constraints.
 
 **Полный ответ**
 
-Карточку делают flex-контейнером с `flex-direction: column`, а нужному нижнему блоку задают `margin-top: auto`. Auto
-margin забирает свободное пространство и отталкивает блок к нижнему краю карточки.
+Надежный pattern — сделать карточку column flex container, а нижнему блоку отдать свободное место перед ним через auto
+margin:
+
+```css
+.card {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 18rem;
+}
+
+.card__actions {
+  margin-block-start: auto;
+}
+```
+
+В column Flexbox main axis идет по block direction. После того как browser вычислил размеры обычного content, оставшееся
+**positive free space** может быть поглощено auto margin. Поэтому `margin-block-start: auto` растягивается и отталкивает
+`.card__actions` к main-end.
+
+Физическая запись `margin-top: auto` работает в обычном horizontal writing mode, но logical property лучше выражает
+намерение и не привязывает component к конкретному writing mode.
+
+Важно, чтобы у карточки действительно было свободное пространство. Если ее высота равна сумме content, auto margin
+будет `0` и ничего визуально не сдвинет. В card grid одинаковую высоту часто дает сам Grid/Flex parent или явный
+`min-block-size`.
+
+Этот pattern обычно точнее, чем:
+
+```css
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+```
+
+`space-between` распределяет свободное место **между всеми** flex items. Если между заголовком, описанием и footer есть
+несколько элементов, интервалы могут неожиданно растянуться. Auto margin создает один явный flexible separator перед
+нужным блоком.
+
+Если content становится выше карточки, footer не накладывается на него: свободного места больше нет, и нижний блок идет
+после content в normal flex flow. Если дизайн требует фиксированную высоту с прокруткой body, это уже отдельный contract:
+обычно scrollable section получает `min-height: 0` и `overflow: auto`.
+
+На интервью: **auto margin во Flexbox поглощает оставшееся пространство по main axis; для footer карточки это локальнее и
+предсказуемее, чем распределять весь content через `space-between`**.
 
 Практика: [`Flexbox: auto margin`](/examples/css/flexbox/example10/index.html)
 
@@ -3928,15 +3972,53 @@ cross axis; `align-content` = alignment flex lines**.
 
 **Короткий ответ**
 
-gap описывает внутреннее расстояние между соседними элементами на уровне контейнера. Не нужны отдельные правила для
+`gap` описывает внутреннее расстояние между соседними элементами на уровне контейнера. Не нужны отдельные правила для
 первого или последнего элемента, отрицательные margin и компенсация краев. Margin лучше оставлять для внешнего
 расстояния между независимыми блоками.
 
 **Полный ответ**
 
-`gap` описывает внутреннее расстояние между соседними элементами на уровне контейнера. Не нужны отдельные правила для
-первого или последнего элемента, отрицательные margin и компенсация краев. Margin лучше оставлять для внешнего
-расстояния между независимыми блоками.
+`gap` принадлежит layout container и задает регулярный gutter **между** соседними flex items или flex lines:
+
+```css
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+```
+
+Если item добавится, удалится или перейдет на следующую line, browser сам сохранит spacing там, где есть соседство. Не
+нужны selectors вроде `:not(:last-child)`, отрицательные margins или компенсация внешних краев.
+
+С margin тот же layout часто требует item-level rules:
+
+```css
+.actions > *:not(:last-child) {
+  margin-inline-end: 0.75rem;
+}
+```
+
+Такой вариант хуже переживает `flex-wrap`: последний item визуальной строки не обязательно является `:last-child`,
+поэтому горизонтальный margin может остаться в неожиданном месте. `gap` знает структуру flex lines и решает эту задачу
+на уровне layout algorithm.
+
+Еще одно различие — **ownership**. `gap` говорит: «этот container управляет ритмом своих children». Margin говорит:
+«конкретный item требует пространство вокруг себя». Для component architecture первое часто устойчивее: reusable child
+не обязан знать, с каким расстоянием его поставят рядом с siblings.
+
+Но `gap` не заменяет margin полностью. Margin нужен, например, когда:
+
+- отступ относится только к одному item;
+- нужно внешнее расстояние между независимыми blocks;
+- используется auto margin для поглощения free space;
+- нужен intentional negative offset.
+
+Также `gap` задает минимальный gutter. Если container использует `justify-content: space-between`, distributed free space
+добавится **сверх** gap, поэтому фактическое расстояние между items может быть больше указанного значения.
+
+На интервью: **`gap` — container-owned spacing между items/lines, margin — property конкретного box; для регулярного
+внутреннего ритма `gap` обычно проще и лучше переживает динамический content и wrapping**.
 
 Практика: [`Flexbox: gap`](/examples/css/flexbox/example3/index.html)
 
@@ -4349,9 +4431,69 @@ sizes могут вмешаться; для настоящих равных trac
 
 **Полный ответ**
 
-Частые ошибки: путать main axis и cross axis, ждать от Flexbox полноценной двумерной сетки, забывать про `flex-wrap`,
-использовать margin вместо `gap` для внутренних расстояний, не учитывать `flex-shrink` и не задавать `min-width: 0` для
-колонок с длинным контентом.
+Типичные Flexbox bugs обычно появляются не из-за одного «плохого property», а из-за неправильной mental model layout.
+
+**1. Путать физические направления с main/cross axes.**
+
+`justify-content` не означает «по горизонтали», а `align-items` — «по вертикали». После `flex-direction: column` mapping
+меняется. Сначала нужно определить main axis, потом выбирать alignment property.
+
+**2. Использовать Flexbox как двухмерную сетку.**
+
+`flex-wrap` создает несколько независимых flex lines. Колонки между строками не образуют общие tracks, поэтому карточки
+могут иметь разные widths в разных lines. Если нужно согласование и rows, и columns, обычно лучше Grid.
+
+**3. Забывать про wrapping и shrink.**
+
+По умолчанию container имеет `flex-wrap: nowrap`, а items — `flex-shrink: 1`. Поэтому controls могут неожиданно сжаться
+вместо переноса:
+
+```css
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+```
+
+Если конкретный item нельзя сжимать, это тоже нужно выразить явно через подходящий `flex` contract, а не случайный
+`width`.
+
+**4. Считать `flex-shrink` единственной причиной overflow.**
+
+Даже item с разрешенным shrink может удерживаться automatic minimum size:
+
+```css
+.content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+```
+
+Для column Flexbox аналогичная проблема часто требует `min-height: 0`. Это особенно заметно с длинными строками,
+tables, images и вложенными scroll containers.
+
+**5. Ожидать, что `flex: 1` автоматически делает любые элементы визуально одинаковыми.**
+
+На итоговый размер все еще влияют min/max constraints, automatic minimum size, padding/borders и выбранная flex basis.
+Для равных columns намерение лучше выразить согласованным `flex: 1 1 0` + подходящими min-size constraints или перейти на
+Grid, если нужны настоящие tracks.
+
+**6. Использовать `order` или `*-reverse` для исправления неправильного DOM order.**
+
+Flexbox может поменять visual order, но это не переписывает source order. Keyboard navigation и assistive technologies
+могут сохранить логическую последовательность DOM, поэтому semantic order должен быть правильным без CSS-reordering.
+
+**7. Решать container spacing item-level margins без необходимости.**
+
+Для регулярного расстояния между siblings `gap` обычно проще и лучше работает с wrapping. Margin остается правильным,
+когда отступ принадлежит конкретному item или нужен auto margin.
+
+При отладке полезно проверять не только declarations самого item, но и `flex-direction`, `flex-wrap`, computed
+`flex-basis`, min/max sizes и наличие реального free space в container.
+
+На интервью: **сильный ответ связывает симптомы с алгоритмом: axes → alignment, basis/grow/shrink → sizing, automatic
+minimum size → overflow, flex lines → wrapping, source order → accessibility**.
 
 Практика: [`Примеры Flexbox`](/examples/css/flexbox/index.html)
 
