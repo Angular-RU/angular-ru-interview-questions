@@ -1,7 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "env": {},
-    "extends": ["github>taiga-family/renovate-config"],
+    "extends": ["github>taiga-family/renovate-config", ":preserveSemverRanges"],
     "packageRules": [
         {
             "matchPackageNames": ["/^@angular\\//", "/^@angular-devkit\\//", "/^@schematics\\//", "ng-packagr"],
