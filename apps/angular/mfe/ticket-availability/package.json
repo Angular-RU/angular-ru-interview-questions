@@ -38,6 +38,6 @@
         "jsdom": "28.1.0",
         "prettier": "3.8.4",
         "typescript": "6.0.3",
-        "vitest": "4.1.10"
+        "vitest": "4.1.11"
     }
 }
