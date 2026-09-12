@@ -4,12 +4,7 @@
     "extends": ["github>taiga-family/renovate-config"],
     "packageRules": [
         {
-            "matchPackageNames": [
-                "/^@angular\\//",
-                "/^@angular-devkit\\//",
-                "/^@schematics\\//",
-                "ng-packagr"
-            ],
+            "matchPackageNames": ["/^@angular\\//", "/^@angular-devkit\\//", "/^@schematics\\//", "ng-packagr"],
             "separateMinorPatch": false
         }
     ]
