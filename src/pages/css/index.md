@@ -3798,8 +3798,8 @@ margin:
 Физическая запись `margin-top: auto` работает в обычном horizontal writing mode, но logical property лучше выражает
 намерение и не привязывает component к конкретному writing mode.
 
-Важно, чтобы у карточки действительно было свободное пространство. Если ее высота равна сумме content, auto margin
-будет `0` и ничего визуально не сдвинет. В card grid одинаковую высоту часто дает сам Grid/Flex parent или явный
+Важно, чтобы у карточки действительно было свободное пространство. Если ее высота равна сумме content, auto margin будет
+`0` и ничего визуально не сдвинет. В card grid одинаковую высоту часто дает сам Grid/Flex parent или явный
 `min-block-size`.
 
 Этот pattern обычно точнее, чем:
@@ -3817,11 +3817,11 @@ margin:
 нужным блоком.
 
 Если content становится выше карточки, footer не накладывается на него: свободного места больше нет, и нижний блок идет
-после content в normal flex flow. Если дизайн требует фиксированную высоту с прокруткой body, это уже отдельный contract:
-обычно scrollable section получает `min-height: 0` и `overflow: auto`.
+после content в normal flex flow. Если дизайн требует фиксированную высоту с прокруткой body, это уже отдельный
+contract: обычно scrollable section получает `min-height: 0` и `overflow: auto`.
 
-На интервью: **auto margin во Flexbox поглощает оставшееся пространство по main axis; для footer карточки это локальнее и
-предсказуемее, чем распределять весь content через `space-between`**.
+На интервью: **auto margin во Flexbox поглощает оставшееся пространство по main axis; для footer карточки это локальнее
+и предсказуемее, чем распределять весь content через `space-between`**.
 
 Практика: [`Flexbox: auto margin`](/examples/css/flexbox/example10/index.html)
 
@@ -4014,8 +4014,8 @@ cross axis; `align-content` = alignment flex lines**.
 - используется auto margin для поглощения free space;
 - нужен intentional negative offset.
 
-Также `gap` задает минимальный gutter. Если container использует `justify-content: space-between`, distributed free space
-добавится **сверх** gap, поэтому фактическое расстояние между items может быть больше указанного значения.
+Также `gap` задает минимальный gutter. Если container использует `justify-content: space-between`, distributed free
+space добавится **сверх** gap, поэтому фактическое расстояние между items может быть больше указанного значения.
 
 На интервью: **`gap` — container-owned spacing между items/lines, margin — property конкретного box; для регулярного
 внутреннего ритма `gap` обычно проще и лучше переживает динамический content и wrapping**.
@@ -4470,14 +4470,14 @@ sizes могут вмешаться; для настоящих равных trac
 }
 ```
 
-Для column Flexbox аналогичная проблема часто требует `min-height: 0`. Это особенно заметно с длинными строками,
-tables, images и вложенными scroll containers.
+Для column Flexbox аналогичная проблема часто требует `min-height: 0`. Это особенно заметно с длинными строками, tables,
+images и вложенными scroll containers.
 
 **5. Ожидать, что `flex: 1` автоматически делает любые элементы визуально одинаковыми.**
 
 На итоговый размер все еще влияют min/max constraints, automatic minimum size, padding/borders и выбранная flex basis.
-Для равных columns намерение лучше выразить согласованным `flex: 1 1 0` + подходящими min-size constraints или перейти на
-Grid, если нужны настоящие tracks.
+Для равных columns намерение лучше выразить согласованным `flex: 1 1 0` + подходящими min-size constraints или перейти
+на Grid, если нужны настоящие tracks.
 
 **6. Использовать `order` или `*-reverse` для исправления неправильного DOM order.**
 
