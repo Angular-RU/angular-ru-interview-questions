@@ -10,7 +10,7 @@
         "test": "ng test"
     },
     "private": true,
-    "packageManager": "npm@11.13.0",
+    "packageManager": "npm@11.19.1",
     "dependencies": {
         "@angular-architects/native-federation": "^22.0.1",
         "@angular/common": "22.1.6",
