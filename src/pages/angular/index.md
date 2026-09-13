@@ -5241,10 +5241,7 @@ OpenAPI может генерировать DTO/client, но generated layer о�
 
 ```ts
 type RemoteData<T> =
-  | {status: 'idle'}
-  | {status: 'loading'}
-  | {status: 'success'; data: T}
-  | {status: 'error'; error: string};
+  {status: 'idle'} | {status: 'loading'} | {status: 'success'; data: T} | {status: 'error'; error: string};
 ```
 
 Для signal-first чтения подходят `resource()`/`httpResource()`. Для RxJS — stream состояния через `switchMap`, `map`,

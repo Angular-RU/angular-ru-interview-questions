@@ -2065,10 +2065,7 @@ Union type означает, что значение может принадле
 
 ```ts
 type RequestState<T> =
-  | {status: 'idle'}
-  | {status: 'loading'}
-  | {status: 'success'; data: T}
-  | {status: 'error'; error: string};
+  {status: 'idle'} | {status: 'loading'} | {status: 'success'; data: T} | {status: 'error'; error: string};
 ```
 
 Перед использованием специфичных свойств union нужно сузить тип через `typeof`, `instanceof`, оператор `in`, проверку
@@ -2451,10 +2448,7 @@ Intersection `A & B` требует одновременно выполнить 
 
 ```ts
 type LoadState<T> =
-  | {status: 'idle'}
-  | {status: 'loading'}
-  | {status: 'success'; data: T}
-  | {status: 'error'; error: string};
+  {status: 'idle'} | {status: 'loading'} | {status: 'success'; data: T} | {status: 'error'; error: string};
 ```
 
 API DTO отделяют от доменной модели и преобразуют на data-access границе. Inputs типизируют максимально узко:
