@@ -4964,9 +4964,50 @@ Responsive layout плавно подстраивается под доступ�
 
 **Полный ответ**
 
-Responsive layout плавно подстраивается под доступное пространство, а adaptive обычно выбирает несколько заранее
-подготовленных layouts для диапазонов устройств. На практике подходы комбинируют, а границы выбирают по content, не по
-моделям телефонов.
+Термины responsive и adaptive используют скорее как **архитектурные подходы**, а не как жестко стандартизированные CSS
+режимы.
+
+**Responsive design** обычно означает, что layout непрерывно использует доступное пространство: flexible tracks,
+проценты, `fr`, `minmax()`, `clamp()`, wrapping и media/container queries.
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 1rem;
+}
+```
+
+Здесь число колонок меняется из-за доступной ширины, а не потому, что код знает конкретную модель устройства.
+
+**Adaptive design** чаще подразумевает несколько дискретных состояний layout:
+
+```css
+.page {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (width >= 64rem) {
+  .page {
+    grid-template-columns: 18rem minmax(0, 1fr);
+  }
+}
+```
+
+До breakpoint это один layout, после него — другой. Такой переход может быть правильнее плавного масштабирования, если
+структура действительно должна измениться: например sidebar становится drawer, table превращается в cards, actions
+переезжают в menu.
+
+На практике современные интерфейсы почти всегда **гибридные**: размеры и gaps fluid, а в нескольких точках меняется
+структура. Breakpoint лучше выбирать там, где content перестает помещаться или нарушается hierarchy, а не по названиям
+`mobile/tablet/desktop` и не по конкретным моделям устройств.
+
+Trade-off: слишком много adaptive breakpoints увеличивает число состояний для тестирования, а попытка сделать абсолютно
+все fluid может оставить неудобную структуру на промежуточных размерах.
+
+На интервью: **responsive — про непрерывную адаптацию к available space, adaptive — про несколько дискретных layout
+states; в production обычно используют оба подхода вместе**.
 
 </td></tr></table>
 
@@ -4984,9 +5025,52 @@ capabilities.
 
 **Полный ответ**
 
-Mobile-first начинает с базового layout для узкого экрана и добавляет возможности через `min-width` queries. Это
-помогает приоритизировать content и progressive enhancement, но не отменяет тестирование desktop, touch, keyboard и
-разных input capabilities.
+Mobile-first — это **стратегия authoring**, при которой базовые styles подходят узкому viewport, а более просторные
+варианты добавляются по мере появления места.
+
+```css
+.profile {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (width >= 48rem) {
+  .profile {
+    grid-template-columns: 14rem minmax(0, 1fr);
+  }
+}
+```
+
+Базовый rule работает без media query, а `min-width` добавляет enhancement. Это часто дает более простой cascade: не
+нужно сначала объявлять desktop layout, а потом отменять десятки declarations для narrow screen.
+
+Плюсы подхода:
+
+- заставляет рано определить приоритетный content и минимально рабочий UI;
+- хорошо сочетается с progressive enhancement;
+- часто уменьшает количество override rules;
+- проще мыслить как «добавить возможности при появлении пространства».
+
+Но mobile-first **сам по себе не является performance optimization**. Если CSS скрывает тяжелый desktop widget на
+mobile, его JavaScript, data request или image все равно могут загрузиться. Performance зависит от loading strategy,
+code splitting, responsive images и runtime architecture, а не от направления media queries.
+
+Также width не описывает input device. Широкий touchscreen может иметь `hover: none`, а узкое desktop window — точный
+mouse pointer. Для interaction capabilities есть отдельные queries:
+
+```css
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    box-shadow: 0 0.5rem 2rem rgb(0 0 0 / 0.15);
+  }
+}
+```
+
+Desktop-first тоже может быть оправдан, например при постепенном упрощении legacy desktop application. Важнее
+предсказуемый cascade и проверенное поведение во всех relevant sizes.
+
+На интервью: **mobile-first = базовый narrow layout + enhancements через `min-width`; это организация CSS, а не
+автоматическая гарантия скорости или доступности**.
 
 </td></tr></table>
 
@@ -5003,8 +5087,46 @@ Safe area учитывает вырезы, скругления и систем�
 
 **Полный ответ**
 
-Safe area учитывает вырезы, скругления и системные overlays устройства. Значения `env(safe-area-inset-*)` добавляют
-необходимые padding при подходящем viewport configuration, особенно для fixed controls у краев экрана.
+Safe area — область viewport, внутри которой важный content не перекрывается физической формой display или системными
+элементами у края экрана. Browser предоставляет четыре environment variables:
+
+- `safe-area-inset-top`;
+- `safe-area-inset-right`;
+- `safe-area-inset-bottom`;
+- `safe-area-inset-left`.
+
+Их читают через `env()`:
+
+```css
+.bottom-bar {
+  padding: 0.75rem max(1rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom))
+    max(1rem, env(safe-area-inset-left));
+}
+```
+
+`max()` здесь сохраняет обычный design padding даже на устройстве, где inset равен `0`.
+
+Safe area особенно важна для элементов, прижатых к viewport edge:
+
+```css
+.floating-action {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+}
+```
+
+На iOS edge-to-edge layout исторически связан с viewport configuration вроде `viewport-fit=cover`; без выхода content к
+краям необходимость компенсировать inset может вообще не возникнуть.
+
+Важно не превращать safe-area padding в глобальное правило для каждого container. Обычно его применяют на boundary
+component: page shell, fixed navigation, full-bleed media или bottom sheet.
+
+Safe area также не равна «всем возможным перекрытиям UI». On-screen keyboard, dynamic browser chrome, fold/hinge и
+multi-segment viewport имеют отдельные механизмы и могут требовать другой стратегии (`dvh`, viewport segments и т.д.).
+
+На интервью: **safe-area insets — browser-provided environment values для edge-to-edge layout; применяйте их у краев, а
+не как магический padding всего приложения**.
 
 </td></tr></table>
 
@@ -5021,8 +5143,59 @@ Layout строят в CSS pixels, а raster assets предоставляют �
 
 **Полный ответ**
 
-Layout строят в CSS pixels, а raster assets предоставляют с подходящим resolution через `srcset` или image-set. SVG
-масштабируется независимо от DPR. Не следует умножать все CSS-размеры на device pixel ratio вручную.
+CSS layout строится в **CSS pixels**, а не напрямую в физических pixels display. На Hi-DPI screen одному CSS `px` может
+соответствовать несколько device pixels. Отношение часто описывают через device pixel ratio, но оно не должно управлять
+обычными размерами UI.
+
+Неправильная идея:
+
+```js
+button.style.width = `${120 * window.devicePixelRatio}px`;
+```
+
+Browser уже абстрагирует physical density при layout. Такой код обычно делает интерфейс физически слишком большим и
+ломает zoom behavior.
+
+Density прежде всего важна для **raster resources**. Для изображения фиксированного visual size можно дать density
+candidates:
+
+```html
+<img
+  src="avatar.png"
+  srcset="avatar.png 1x, avatar@2x.png 2x"
+  width="64"
+  height="64"
+  alt=""
+/>
+```
+
+Для background images есть `image-set()`:
+
+```css
+.logo {
+  background-image: image-set(url('/logo.png') 1x, url('/logo@2x.png') 2x);
+}
+```
+
+Для responsive images с меняющейся rendered width обычно лучше width descriptors (`480w`, `960w`) + `sizes`, потому что
+browser сможет учитывать и slot size, и effective density.
+
+SVG для logos/icons часто не требует отдельных 2x/3x файлов: vector geometry масштабируется без привязки к raster
+resolution.
+
+Если style действительно зависит от output density, существует стандартный media feature `resolution`:
+
+```css
+@media (resolution >= 2dppx) {
+  /* density-specific detail */
+}
+```
+
+Но это редкая задача. Не стоит использовать density query вместо responsive image selection или для масштабирования
+layout.
+
+На интервью: **CSS px отвечает за layout, density — в основном за достаточное raster resolution; resource selection
+лучше делегировать `srcset`/`image-set()`, а не ручному `devicePixelRatio`**.
 
 </td></tr></table>
 
@@ -5039,8 +5212,66 @@ Layout определяет отображаемую ширину, а sizes со
 
 **Полный ответ**
 
-Layout определяет отображаемую ширину, а `sizes` сообщает ее браузеру для выбора кандидата из `srcset`. Если `sizes` не
-соответствует реальному layout, браузер может загрузить слишком большой или размытый ресурс.
+Responsive layout определяет, **какой slot** получит изображение, а responsive images позволяют browser выбрать
+подходящий raster resource для этого slot и текущей density.
+
+Пример с width descriptors:
+
+```html
+<img
+  src="photo-960.jpg"
+  srcset="photo-480.jpg 480w, photo-960.jpg 960w, photo-1440.jpg 1440w"
+  sizes="(width < 48rem) 100vw, 50vw"
+  width="1440"
+  height="900"
+  alt="Городская площадь"
+/>
+```
+
+`srcset` сообщает intrinsic widths candidates. `sizes` описывает ожидаемую **rendered slot width** по media conditions.
+Browser сопоставляет slot, available candidates, effective pixel density и другие факторы и выбирает resource.
+
+Важно: `sizes` не измеряет элемент после layout. Эта информация нужна browser **до загрузки image**, поэтому она должна
+правдоподобно описывать CSS layout. Если реальная колонка занимает `50vw`, а `sizes` всегда говорит `100vw`, browser
+может регулярно скачивать слишком большой asset.
+
+Для фиксированного rendered size можно использовать density descriptors:
+
+```html
+<img
+  src="icon.png"
+  srcset="icon.png 1x, icon@2x.png 2x"
+  width="32"
+  height="32"
+  alt=""
+/>
+```
+
+Не смешивают `w` и `x` descriptors в одном `srcset`.
+
+`<picture>` решает другую задачу — **art direction** или format choice:
+
+```html
+<picture>
+  <source
+    media="(width < 40rem)"
+    srcset="hero-crop-mobile.avif"
+  />
+  <source
+    type="image/avif"
+    srcset="hero.avif"
+  />
+  <img
+    src="hero.jpg"
+    alt="Команда в офисе"
+  />
+</picture>
+```
+
+Задавайте intrinsic `width`/`height`, чтобы browser мог зарезервировать aspect-ratio space и уменьшить layout shift.
+
+На интервью: **CSS определяет slot, `sizes` описывает его browser, `srcset` дает candidates; `<picture>` нужен, когда
+меняется не только resolution, но и сам content/crop/format**.
 
 </td></tr></table>
 
@@ -5059,10 +5290,52 @@ orientation, hover, pointer, prefers-reduced-motion, prefers-color-scheme и д�
 
 **Полный ответ**
 
-`@media` применяет rules при совпадении характеристик viewport, устройства или предпочтений пользователя: width,
-orientation, hover, pointer, prefers-reduced-motion, prefers-color-scheme и других признаков. Media queries используют
-не только для breakpoints, но и для адаптации input, motion и contrast. Breakpoints выбирают там, где ломается layout, а
-не по названиям устройств.
+`@media` условно включает CSS rules по media type и media features. Самый известный случай — viewport size:
+
+```css
+@media (width >= 48rem) {
+  .layout {
+    grid-template-columns: 16rem minmax(0, 1fr);
+  }
+}
+```
+
+Современная range syntax (`width >= 48rem`) выражает условие напрямую; `min-width`/`max-width` остаются валидными и
+распространенными.
+
+Media queries не ограничены шириной. Они могут описывать input capabilities:
+
+```css
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    box-shadow: 0 0.5rem 2rem rgb(0 0 0 / 0.15);
+  }
+}
+```
+
+или user preferences:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .animated {
+    animation: none;
+    scroll-behavior: auto;
+  }
+}
+```
+
+`hover`/`pointer` относятся к primary pointing device; если важна возможность **любого** доступного pointer, есть
+`any-hover` и `any-pointer`.
+
+Breakpoint лучше определять по layout constraint: например cards становятся слишком узкими, navigation перестает
+помещаться, form labels требуют другую структуру. Device catalog быстро устаревает, а одно устройство может работать в
+portrait/landscape, split view или desktop window.
+
+Media query не заменяет feature detection. Если нужно узнать поддержку CSS syntax/property, для этого обычно подходит
+`@supports`, а не `@media`.
+
+На интервью: **media queries проверяют environment/user preferences; width breakpoints — только один из сценариев, а
+границы layout лучше выбирать по content constraints**.
 
 </td></tr></table>
 
@@ -5079,8 +5352,62 @@ Container queries делают компонент адаптивным к мес
 
 **Полный ответ**
 
-Media query смотрит на viewport или device features, container query — на размер или styles ближайшего query container.
-Container queries делают компонент адаптивным к месту использования, независимо от ширины всей страницы.
+Media query отвечает на вопрос про **environment страницы**: viewport width, orientation, pointer, color scheme и т.д.
+Container query позволяет компоненту реагировать на **контекст размещения** — например на inline-size ближайшего query
+container.
+
+Для size query сначала объявляют container:
+
+```css
+.sidebar-slot {
+  container-type: inline-size;
+}
+```
+
+а внутри component styles используют `@container`:
+
+```css
+.card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@container (width >= 30rem) {
+  .card {
+    grid-template-columns: 8rem minmax(0, 1fr);
+  }
+}
+```
+
+Один и тот же `.card` теперь может быть horizontal в широкой content area и vertical в узком sidebar **при одинаковой
+viewport width**.
+
+Для reusable components это уменьшает связь с page-level breakpoints. Component не должен знать, находится он в modal,
+sidebar или dashboard — ему важна доступная ширина.
+
+Containers можно именовать:
+
+```css
+.workspace {
+  container: workspace / inline-size;
+}
+
+@container workspace (width >= 50rem) {
+  .panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+```
+
+Size queries требуют `container-type: inline-size` или `size`, потому что browser должен разорвать потенциальную
+feedback loop между размером container и styles descendants. `inline-size` обычно практичнее: компонент чаще
+адаптируется по одной inline axis.
+
+Есть также container query units (`cqi`, `cqw` и др.) и другие виды container queries, но для everyday responsive
+components size query — основной паттерн.
+
+На интервью: **media query адаптирует страницу к environment, container query адаптирует component к available space его
+container; size query требует объявленного size-container**.
 
 </td></tr></table>
 
@@ -5096,7 +5423,8 @@ Fluid typography плавно меняет размер между границ�
 
 **Полный ответ**
 
-Fluid typography плавно меняет размер между границами. `clamp(min, preferred, max)` ограничивает вычисленное значение:
+Fluid typography позволяет font size изменяться вместе с available space, но оставаться внутри безопасного диапазона.
+Для этого удобно использовать `clamp(min, preferred, max)`:
 
 ```css
 .title {
@@ -5104,7 +5432,44 @@ Fluid typography плавно меняет размер между границ�
 }
 ```
 
-Границы сохраняют читаемость на очень узких и широких экранах.
+Browser вычисляет preferred expression `1rem + 2vw`, но результат не может стать меньше `1.5rem` или больше `3rem`. Это
+часто заменяет несколько typography breakpoints.
+
+Важно не использовать pure viewport scaling без границ:
+
+```css
+.title {
+  font-size: 4vw;
+}
+```
+
+На широком screen текст может стать чрезмерно большим, на узком — слишком маленьким. Кроме того, viewport-only formula
+может хуже реагировать на text zoom. Смешивание relative font unit (`rem`) и viewport contribution сохраняет связь и с
+user font/zoom settings, и с available width.
+
+Для component-level typography preferred part можно связать с container query unit:
+
+```css
+.card-title {
+  font-size: clamp(1.125rem, 1rem + 1cqi, 1.75rem);
+}
+```
+
+Это особенно полезно внутри reusable component, но нужно убедиться, что component имеет подходящий query container.
+
+`clamp()` применим не только к typography:
+
+```css
+.page {
+  padding-inline: clamp(1rem, 4vw, 4rem);
+}
+```
+
+Accessibility остается отдельным constraint: minimum не должен быть слишком маленьким, maximum не должен мешать
+увеличению текста, а layout обязан выдерживать zoom и увеличение font size без потери content.
+
+На интервью: **`clamp()` задает lower bound, fluid preferred value и upper bound; хороший fluid type использует relative
+units и все равно тестируется при zoom/large text**.
 
 </td></tr></table>
 
