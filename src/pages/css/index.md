@@ -5489,9 +5489,48 @@ CSS methodology — это набор правил для организации
 
 **Полный ответ**
 
-CSS methodology — это набор правил для организации CSS: например BEM, SMACSS, OOCSS, CSS Modules или utility-first
-подход. Методология помогает договориться, как называть классы, где хранить styles и как ограничивать область влияния.
-Важно не название методологии, а консистентность, понятные границы и documented exceptions.
+CSS methodology — это не конкретная библиотека, а **командный contract** о том, как строить и изменять styles так, чтобы
+локальное изменение не превращалось в поиск случайных overrides по всему приложению.
+
+Методология обычно отвечает сразу на несколько вопросов:
+
+- как именовать classes и состояния;
+- где проходит boundary component/feature/global styles;
+- как переиспользовать declarations и composition;
+- какой уровень specificity считается нормальным;
+- где допустимы global rules;
+- как оформлять variants, themes и responsive states;
+- как подключать third-party styles и делать исключения.
+
+Например, BEM делает связь block/element/modifier явной через имена:
+
+```css
+.user-card {
+}
+
+.user-card__title {
+}
+
+.user-card--compact {
+}
+```
+
+CSS Modules решают другую часть той же задачи — автоматически делают class names локальными для module. Utility-first
+подход переносит значительную часть composition в markup. Эти подходы **не взаимоисключающие**: проект может
+использовать CSS Modules для isolation, design tokens для values и utilities для частых layout primitives.
+
+Главная польза methodology проявляется не на первом компоненте, а после сотен изменений. Она снижает число неявных
+зависимостей и дает разработчику ответ на вопрос: «куда положить style и чем я имею право его переопределить?».
+
+Но слишком жесткая методология тоже вредна. Если правило заставляет писать сложнее без реальной защиты invariant,
+команда начинает обходить его через исключения. Поэтому полезнее небольшой набор проверяемых principles, чем десятки
+naming rules без объяснения причин.
+
+Часть соглашений можно автоматизировать: stylelint, lint rules, code review, project boundaries. Остальное должно быть
+описано как архитектурное решение с примерами и допустимыми exceptions.
+
+На интервью: **CSS methodology — это способ контролировать naming, scope, composition и cascade в большой кодовой базе;
+ценность не в названии BEM/SMACSS, а в предсказуемости изменений и явных boundaries**.
 
 </td></tr></table>
 
@@ -5509,9 +5548,66 @@ truth и преобразуют в CSS custom properties, platform constants и 
 
 **Полный ответ**
 
-Tokens — именованные design decisions: colors, spacing, typography, radii, motion. Их хранят в нейтральном source of
-truth и преобразуют в CSS custom properties, platform constants и design-tool variables. Семантические tokens вроде
-`--color-danger` устойчивее прямых названий оттенков.
+Design tokens — это **именованные design decisions**, которые отделяют смысл значения от конкретной реализации. Вместо
+того чтобы каждый component знал конкретный hex, radius или duration, он использует token с понятной ролью.
+
+Обычно выделяют несколько уровней.
+
+Primitive tokens описывают палитру/шкалу:
+
+```css
+:root {
+  --blue-600: #2563eb;
+  --space-2: 0.5rem;
+}
+```
+
+Semantic tokens описывают назначение:
+
+```css
+:root {
+  --color-text-primary: #111827;
+  --color-action-primary: var(--blue-600);
+  --space-control-gap: var(--space-2);
+}
+```
+
+Component может использовать именно semantic contract:
+
+```css
+.button {
+  color: white;
+  background: var(--color-action-primary);
+  gap: var(--space-control-gap);
+}
+```
+
+Это позволяет theme поменять palette, не переписывая component rules:
+
+```css
+[data-theme='dark'] {
+  --color-text-primary: #f9fafb;
+  --color-action-primary: #60a5fa;
+}
+```
+
+Важно: **token не равен CSS custom property**. Source of truth может храниться в JSON/дизайн-системе, а build pipeline
+преобразует tokens в CSS variables, Sass values, Android/iOS constants или variables дизайн-инструмента. DTCG также
+определяет vendor-neutral формат обмена tokens и aliases между инструментами.
+
+Aliases полезны, когда semantic token ссылается на primitive: `action.primary` может указывать на `palette.blue.600`.
+Тогда смена brand palette не требует искать raw color по всему продукту.
+
+Антипаттерн — дать компонентам напрямую использовать только primitives вроде `--blue-600`. Такой код знает **как
+выглядит** значение, но не **зачем оно нужно**, поэтому theme/refactoring сложнее. Другая крайность — создать token для
+каждого одиночного числа и получить тысячи неуправляемых names.
+
+Хорошая token architecture фиксирует ownership и уровни: primitives → semantic decisions → при необходимости
+component-specific tokens.
+
+На интервью: **design token — это переносимое именованное design decision; CSS custom property лишь один из возможных
+runtime outputs. Semantic tokens уменьшают связь component с конкретной palette и упрощают themes/multi-platform design
+systems**.
 
 </td></tr></table>
 
@@ -5528,8 +5624,63 @@ Cascade layers задают явный порядок групп styles до с�
 
 **Полный ответ**
 
-Cascade layers задают явный порядок групп styles до сравнения specificity. Например, `reset`, `base`, `components` и
-`utilities` можно упорядочить один раз, уменьшая войны selectors и `!important`.
+Cascade layers позволяют явно задать **порядок приоритета групп author styles до сравнения specificity**.
+
+Например:
+
+```css
+@layer reset, base, components, utilities, overrides;
+
+@layer components {
+  .button {
+    color: blue;
+  }
+}
+
+@layer utilities {
+  .text-danger {
+    color: red;
+  }
+}
+```
+
+Для обычных declarations более поздний layer имеет больший приоритет. Поэтому `.text-danger` из `utilities` может
+победить `.button` из `components`, даже если selectors имеют одинаковую или меньшую specificity. Specificity
+сравнивается уже **внутри одного cascade layer bucket**, а не между слоями.
+
+Это полезно для architecture: вместо гонки `.page .dialog .button.primary` можно заранее решить, какие группы styles
+имеют право переопределять другие.
+
+Third-party CSS удобно намеренно опустить в ранний layer:
+
+```css
+@import url('vendor.css') layer(vendor);
+
+@layer vendor, base, components, utilities;
+```
+
+Тогда собственные component styles могут переопределять library styles без искусственного повышения specificity.
+
+Есть два важных edge cases.
+
+**Unlayered normal styles** находятся после named layers и имеют больший приоритет, поэтому случайный global rule вне
+`@layer` способен обойти всю layer architecture.
+
+Для `!important` порядок **инвертируется**: important declarations в более ранних layers имеют больший приоритет, а
+layered important declarations побеждают unlayered important. Это сделано, чтобы ранний защитный layer мог сохранять
+важные invariants и чтобы `!important` не превращался просто в «еще один поздний override».
+
+Порядок layer определяется моментом его первого создания. Поэтому его обычно объявляют один раз в начале:
+
+```css
+@layer reset, base, components, utilities, overrides;
+```
+
+`@layer` не заменяет component isolation и не отменяет необходимость разумной specificity. Он решает другой уровень
+задачи — **какая группа styles сильнее другой**.
+
+На интервью: **cascade layers добавляют явную ось приоритета между origin/importance и specificity; для normal rules
+позже = сильнее, для important порядок layers обратный**.
 
 </td></tr></table>
 
@@ -5547,9 +5698,73 @@ Shadow DOM создает отдельное tree boundary: обычные docum
 
 **Полный ответ**
 
-Shadow DOM создает отдельное tree boundary: обычные document selectors не проникают внутрь, а внутренние styles не
-выходят наружу. Наследуемые properties, CSS custom properties, `::part` и `::slotted` формируют контролируемые точки
-настройки.
+Shadow DOM создает отдельный **tree/style boundary**. Обычные selectors из document не выбирают descendants внутри
+shadow tree, а внутренние selectors не начинают внезапно матчить элементы снаружи.
+
+```js
+const root = element.attachShadow({mode: 'open'});
+root.innerHTML = `
+  <style>
+    .title { font-weight: 600; }
+  </style>
+  <h2 class="title"><slot></slot></h2>
+`;
+```
+
+Global `.title { ... }` в document не переопределит внутреннюю `.title` только из-за совпадения class name. Это
+существенно сильнее naming convention вроде BEM.
+
+Но Shadow DOM — **не абсолютная style isolation**. Есть контролируемые каналы взаимодействия.
+
+Inherited properties и CSS custom properties могут проходить через host:
+
+```css
+my-card {
+  color: var(--color-text-primary);
+  --card-radius: 1rem;
+}
+```
+
+Внутри shadow tree component может использовать эти values как публичный theming contract.
+
+Сам host можно стилизовать изнутри через `:host`:
+
+```css
+:host {
+  display: block;
+}
+```
+
+Для light-DOM content, переданного через `<slot>`, есть `::slotted()`:
+
+```css
+::slotted(a) {
+  font-weight: 600;
+}
+```
+
+При этом `::slotted()` выбирает сам slotted element, а не произвольных descendants глубже него.
+
+Если component хочет намеренно разрешить styling внутреннего элемента снаружи, он экспортирует part:
+
+```html
+<button part="control">Save</button>
+```
+
+```css
+my-button::part(control) {
+  border-radius: 999px;
+}
+```
+
+То есть `::part()` — явный public styling API, а не обход encapsulation. Для передачи parts через вложенные shadow
+components существует `exportparts`.
+
+Shadow DOM также не является security boundary: он организует DOM/styles и component API, но не предназначен для
+сокрытия секретов или недоверенного кода.
+
+На интервью: **Shadow DOM блокирует обычный selector matching через boundary, но оставляет намеренные contracts через
+inheritance/custom properties, slots и exported parts**.
 
 </td></tr></table>
 
@@ -5565,19 +5780,64 @@ BEM делит CSS-имена на block, element и modifier:
 
 **Полный ответ**
 
-BEM делит CSS-имена на block, element и modifier:
+BEM (Block, Element, Modifier) — naming convention, которая кодирует роль class прямо в имени и тем самым снижает
+случайные collisions в global CSS.
+
+Базовый пример:
+
+```html
+<article class="user-card user-card--compact">
+  <h2 class="user-card__title">Max</h2>
+</article>
+```
 
 ```css
 .user-card {
 }
+
 .user-card__title {
 }
+
 .user-card--compact {
 }
 ```
 
-Соглашение делает связи явными и снижает конфликты глобальных стилей, но длинные имена и ручная дисциплина могут быть
-избыточны при надежной component style isolation.
+**Block** — самостоятельная сущность, которую можно переиспользовать в другом месте: `user-card`.
+
+**Element** — часть block, не имеющая того же смысла отдельно: `user-card__title`.
+
+**Modifier** — вариант block/element: `user-card--compact`, `button--danger`.
+
+Modifier обычно не заменяет base class, а дополняет его:
+
+```html
+<button class="button button--danger">Delete</button>
+```
+
+Полезная идея BEM — не отражать DOM nesting один в один. Если внутри title появился wrapper, не нужно превращать имя в
+`user-card__header__title`. Element принадлежит block, поэтому обычно достаточно `user-card__title`. Это снижает связь
+selectors с текущей HTML structure.
+
+BEM также поощряет низкую specificity:
+
+```css
+.user-card__title {
+}
+```
+
+обычно устойчивее, чем:
+
+```css
+.page .sidebar article > header > h2 {
+}
+```
+
+Но BEM — **соглашение, а не настоящий scope mechanism**. Ошибочный global selector все равно способен затронуть block. В
+проектах с CSS Modules, Shadow DOM или framework encapsulation часть задачи collision avoidance уже решена платформой,
+поэтому полный BEM syntax может быть избыточен.
+
+На интервью: **BEM делает component relation явной через block/element/modifier и уменьшает зависимость CSS от DOM
+nesting; это naming discipline, а не физическая изоляция styles**.
 
 </td></tr></table>
 
@@ -5595,9 +5855,36 @@ CSS principles фиксируют подход к именованию, комп
 
 **Полный ответ**
 
-CSS principles фиксируют подход к именованию, композиции, специфичности, layout, responsive design и переиспользованию.
-Без таких правил CSS быстро превращается в набор случайных overrides. Хороший ответ должен упомянуть локальность стилей,
-короткие selectors, осторожность с `!important`, общий base layer и понятные исключения.
+CSS principles — это небольшой набор **архитектурных invariants**, по которым команда принимает решения, когда
+конкретной naming rule или готового рецепта нет.
+
+Например, команда может договориться:
+
+1. **Local by default** — feature/component styles не должны случайно менять соседние features.
+2. **Global intentionally** — reset, typography, tokens и действительно общие primitives имеют отдельный global layer.
+3. **Low specificity** — classes и layer order предпочтительнее длинных descendant chains и `!important` escalation.
+4. **Component owns internal layout** — parent определяет место component в page layout, а component владеет своей
+   внутренней геометрией.
+5. **Values через tokens** — повторяемые product/design decisions не копируются raw literals по коду.
+6. **DOM structure не является API без необходимости** — selector не должен ломаться от дополнительного wrapper.
+7. **Responsive по constraints** — breakpoints появляются там, где ломается content/layout, а не из списка моделей
+   устройств.
+8. **Exceptions explicit** — нестандартный override имеет причину и локальный scope.
+
+Principles отличаются от methodology уровнем абстракции. BEM может сказать **как назвать** class, а principle «local by
+default» объясняет **зачем** нужен predictable scope независимо от BEM/CSS Modules/Shadow DOM.
+
+Хороший principle проверяем. Например, «не писать плохой CSS» бесполезно, а «не использовать ID selectors в component
+styles» можно проверить stylelint rule. Другие invariants контролируются code review и architecture examples.
+
+Principles также помогают миграциям. Команда может перейти с SCSS+BEM на CSS Modules или utilities, сохранив правила про
+ownership, specificity, tokens и exceptions.
+
+Слишком много principles превращаются в handbook, который никто не помнит. Лучше несколько правил с rationale, good/bad
+examples и описанными exceptions.
+
+На интервью: **CSS principles — устойчивые правила про scope, ownership, cascade и reuse, которые переживают смену
+конкретного framework или naming methodology**.
 
 </td></tr></table>
 
@@ -5615,9 +5902,53 @@ performance-ограничение или нестандартный layout. И�
 
 **Полный ответ**
 
-Отклонение допустимо, если стандартный подход плохо решает конкретную задачу: интеграция с внешним UI kit, legacy-код,
-performance-ограничение или нестандартный layout. Исключение должно быть локальным, объясненным и по возможности
-задокументированным, иначе оно быстро становится новой неявной методологией.
+Отклонение допустимо, когда обычное правило **не решает реальную constraint** или создает больший риск, чем локальное
+исключение. Важно отличать осознанное exception от удобного способа не следовать архитектуре.
+
+Типичные причины:
+
+- third-party widget не дает достаточного styling API;
+- legacy markup пока нельзя изменить;
+- browser bug требует workaround;
+- performance measurement показал необходимость другого implementation;
+- migration идет поэтапно и старый/new style systems временно сосуществуют;
+- нестандартный layout действительно проще выразить иначе.
+
+Например, override vendor CSS лучше ограничить wrapper/layer:
+
+```css
+@layer vendor, components, overrides;
+
+@layer overrides {
+  .payment-widget .vendor-button {
+    min-inline-size: 10rem;
+  }
+}
+```
+
+чем добавлять глобальный `.vendor-button { ... }`, который станет скрытым contract для всего приложения.
+
+Хорошее исключение имеет четыре свойства:
+
+1. **Local scope** — понятно, какие элементы оно может затронуть.
+2. **Rationale** — комментарий/issue объясняет, почему standard approach недостаточен.
+3. **Owner/exit condition** — если workaround временный, понятно, когда его можно удалить.
+4. **Не создает новый default** — один exception не означает, что теперь этот pattern разрешен везде.
+
+Например:
+
+```css
+/* TODO(PROJ-123): remove after vendor exposes ::part(control) */
+.checkout .third-party-control {
+  /* narrow workaround */
+}
+```
+
+Если исключение начинает повторяться в нескольких features, это сигнал пересмотреть methodology: возможно, правило не
+отражает реальную architecture и новый pattern уже нужно оформить официально.
+
+На интервью: **exception допустим при конкретной constraint, если он локализован, объяснен и имеет понятный lifecycle;
+повторяющиеся exceptions — повод менять правило, а не плодить обходы**.
 
 </td></tr></table>
 
