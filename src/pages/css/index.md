@@ -6600,9 +6600,62 @@ performance, но усложняет build pipeline, cache и диагности
 
 **Полный ответ**
 
-Critical CSS — минимальный набор стилей, нужный для первого видимого экрана. Его можно встроить в HTML или выделить
-отдельно, чтобы браузер быстрее показал initial view. В Angular SSR/prerender сценариях это может улучшить perceived
-performance, но усложняет build pipeline, cache и диагностику визуальных regressions.
+Critical CSS — это минимальный набор styles, без которого browser не может корректно показать **первый meaningful
+view**. Идея не в том, чтобы «встроить весь CSS в HTML», а в том, чтобы не заставлять first render ждать большой
+stylesheet, если большая его часть нужна только ниже fold или на других routes.
+
+Упрощенная схема:
+
+1. Browser получает HTML.
+2. Находит render-blocking stylesheet.
+3. До построения styled/rendered representation должен получить и разобрать CSS.
+4. Только после этого first paint может использовать нужные styles.
+
+Если критичные rules маленькие, их можно inline-ить:
+
+```html
+<style>
+  .app-shell {
+    display: grid;
+    min-block-size: 100dvh;
+  }
+
+  .hero {
+    min-block-size: 20rem;
+  }
+</style>
+```
+
+а non-critical CSS загружать так, чтобы он не блокировал именно initial render. Просто оставить большой external
+stylesheet\nrender-blocking и дополнительно inline-ить кусок из него недостаточно.
+
+Потенциальные плюсы:
+
+- меньше round trips на пути к first render;
+- быстрее появляется above-the-fold content;
+- можно улучшить perceived performance и иногда LCP.
+
+Но есть и цена.
+
+**HTML становится тяжелее.** Inline CSS повторяется в каждом document response и хуже использует отдельный browser
+cache.
+
+**Extraction сложнее.** Build должен понимать, какие rules действительно нужны конкретному route/initial state.
+
+**Есть риск рассинхронизации.** Critical и full CSS не должны давать разные layout/state, иначе появятся FOUC или layout
+shift.
+
+**Слишком большой inline block вреден.** Он увеличивает HTML и может задержать parsing/transfer вместо выигрыша.
+
+Для SPA/Angular приложение обычно важнее сначала измерить bottleneck. Если основной LCP тормозит image, data или long JS
+task, critical CSS не даст магического ускорения. В SSR/prerender сценарии extraction особенно полезен, когда initial
+HTML уже содержит meaningful content.
+
+Также critical CSS не равен «CSS для viewport 1366×768». Initial view зависит от route, responsive state, theme, fonts и
+user preferences, поэтому production extraction часто консервативнее теоретического минимума.
+
+На интервью: **critical CSS сокращает render-blocking путь для первого экрана, но увеличивает complexity и может
+ухудшить cache/maintainability; сначала измеряют bottleneck, затем оптимизируют только реально критичные styles**.
 
 </td></tr></table>
 
@@ -6619,8 +6672,50 @@ Layout вычисляет геометрию render tree: размеры и ко
 
 **Полный ответ**
 
-Layout вычисляет геометрию render tree: размеры и координаты элементов. Изменение ширины, шрифта или структуры может
-потребовать пересчета части или всей страницы. Стоимость растет с размером и связанностью layout.
+Layout — этап rendering pipeline, на котором browser вычисляет **геометрию boxes**: их размеры и положение с учетом
+display mode, containing blocks, intrinsic sizes, fonts, constraints и других layout rules.
+
+Например, изменение width parent может потребовать пересчитать не только его самого:
+
+```js
+panel.style.width = '50%';
+```
+
+Если от ширины panel зависят grid tracks, wrapping текста и размеры descendants, invalidation распространяется дальше по
+layout tree.
+
+Не каждое CSS-изменение вызывает layout. Например, изменение только background color обычно требует paint, но не новой
+геометрии. А свойства вроде:
+
+- width/height;
+- margin/padding/border;
+- position offsets;
+- font metrics;
+- DOM insertion/removal;
+
+часто влияют именно на geometry.
+
+Важно различать **layout invalidation** и фактический пересчет. Browser старается batching-ить работу до момента, когда
+она нужна для следующего frame.
+
+Проблема появляется, когда JavaScript после write сразу требует актуальную geometry:
+
+```js
+element.style.width = '20rem';
+const width = element.offsetWidth;
+```
+
+Чтобы вернуть корректный `offsetWidth`, engine может быть вынужден синхронно завершить style/layout раньше
+запланированного. Если такой pattern повторяется в цикле, получается forced synchronous layout/layout thrashing.
+
+Стоимость зависит не только от числа nodes. На нее влияют layout model, dependency graph, fonts, intrinsic sizing,
+containment и то, насколько широко распространилась invalidation.
+
+Поэтому правило «layout всегда пересчитывает всю страницу» неверно. Engines умеют делать частичный re-layout, а свойства
+`contain` могут ограничивать влияние subtree.
+
+На интервью: **layout/reflow — пересчет geometry boxes; дорого не само наличие layout, а большой affected subtree и
+частые forced synchronous recalculations, особенно при чередовании DOM writes и geometry reads**.
 
 </td></tr></table>
 
@@ -6638,9 +6733,49 @@ transform: translateZ(0).
 
 **Полный ответ**
 
-Compositor может дешево перемещать готовый layer, но его сначала нужно rasterize и хранить в GPU memory. Большие layers,
-filters, uploads и частые изменения content создают overhead. Производительность подтверждают trace, а не наличием
-`transform: translateZ(0)`.
+GPU полезен прежде всего там, где browser может переиспользовать уже подготовленное изображение layer и изменить его при
+compositing. Но до этого content нужно style/layout-ить, paint-ить, rasterize-ить и разместить в памяти.
+
+Типичный удачный случай:
+
+```css
+.card {
+  transition:
+    transform 200ms,
+    opacity 200ms;
+}
+
+.card:hover {
+  transform: translateY(-0.25rem);
+  opacity: 0.9;
+}
+```
+
+Если engine вынес card в подходящий compositor layer, отдельные frames могут обновляться без нового layout и без
+перерисовки всего содержимого.
+
+Но «есть GPU» не означает «работа бесплатна».
+
+**Layer нужно создать и rasterize.** Большая поверхность требует CPU/GPU work до первого composite.
+
+**Layers занимают memory.** Сотни promoted элементов могут ухудшить performance и вызвать дополнительный raster/cache
+pressure.
+
+**Texture upload стоит времени.** Если content постоянно меняется, готовую texture нельзя просто двигать бесконечно.
+
+**Filters и большие blur/shadow могут быть дороги.** Даже если часть работы выполняется GPU, пикселей все равно много.
+
+**Compositing тоже имеет цену.** Engine должен собрать layers, учесть clipping, transforms, opacity и overlaps.
+
+**Promotion не гарантируется API.** Browser сам выбирает compositing strategy; `transform: translateZ(0)` или
+`will-change` — не контракт «включить GPU».
+
+Также frame может быть потерян из-за JavaScript/main-thread work, даже если сама animation property compositor-friendly.
+
+Правильная стратегия — смотреть Performance/Layers tooling и измерять конкретную сцену на target devices.
+
+На интервью: **GPU ускоряет отдельные raster/compositing workloads, но layers требуют rasterization, memory и
+compositing work; compositor-friendly property уменьшает часть pipeline, а не делает frame бесплатным**.
 
 </td></tr></table>
 
@@ -6658,9 +6793,64 @@ contain ограничивает влияние layout, paint, size или style
 
 **Полный ответ**
 
-`contain` ограничивает влияние layout, paint, size или style элемента на остальную страницу. `content-visibility: auto`
-позволяет пропускать rendering вне viewport, сохраняя content для поиска и accessibility tree. Для стабильной прокрутки
-часто задают `contain-intrinsic-size`.
+`contain` позволяет явно сказать browser, что определенные аспекты subtree **не влияют на остальную страницу**. Это дает
+engine возможность сильнее локализовать style/layout/paint work.
+
+Основные виды containment включают:
+
+- `size` — внешний размер не зависит от descendants;
+- `inline-size` — containment по inline axis;
+- `layout` — внутренний layout изолирован от внешнего;
+- `paint` — descendants не рисуются за пределами containment box;
+- `style` — некоторые style effects/counters scoped внутри subtree.
+
+Например:
+
+```css
+.widget {
+  contain: layout paint;
+}
+```
+
+Но containment меняет semantics, поэтому ставить `contain: strict` на все подряд нельзя. Size containment, например,
+может изменить вычисление размеров, если element не имеет подходящих explicit/intrinsic dimensions.
+
+`content-visibility: auto` решает более high-level задачу для большого off-screen content:
+
+```css
+.feed-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 30rem;
+}
+```
+
+Browser применяет containment и может **пропускать rendering work**, включая layout/paint contents, пока section не
+становится relevant пользователю. Это особенно полезно для длинных documents/feed sections.
+
+Важный nuance: `content-visibility: auto` не равен `display: none`. Даже когда rendering содержимого пропущен, оно
+остается semantic content документа: browser должен сохранять его для возможностей вроде find-in-page, tab navigation и
+accessibility semantics.
+
+`contain-intrinsic-size` дает placeholder/intrinsic estimate, чтобы off-screen section не схлопывалась до нуля и
+scrollbar не прыгал при первом реальном layout. Вариант с `auto` позволяет использовать remembered size после того, как
+element уже был отрендерен.
+
+Есть и другой режим:
+
+```css
+.panel[hidden] {
+  content-visibility: hidden;
+}
+```
+
+Он ведет себя иначе: skipped content не должен участвовать в user-agent features вроде tab navigation/find-in-page.
+
+Практически `content-visibility: auto` стоит применять к достаточно крупным самостоятельным sections. На маленьких
+components overhead и complexity могут не окупиться.
+
+На интервью: **`contain` вручную ограничивает dependency subtree, а `content-visibility: auto` позволяет browser
+временно пропускать rendering неактуального content; при `auto` semantic/accessibility presence сохраняется, а
+`contain-intrinsic-size` стабилизирует geometry**.
 
 </td></tr></table>
 
@@ -6677,8 +6867,42 @@ layout, если геометрия не изменилась. Большие pa
 
 **Полный ответ**
 
-Paint рисует пиксели для фона, текста, border, shadow и других визуальных свойств. Он может выполняться без нового
-layout, если геометрия не изменилась. Большие painted areas и сложные эффекты увеличивают стоимость.
+Repaint — разговорное название повторного **paint** для области, чья визуальная часть изменилась, но geometry может
+остаться прежней.
+
+Например:
+
+```css
+.button.is-active {
+  background: tomato;
+}
+```
+
+Если размер и position button не меняются, новый layout обычно не нужен, но browser должен обновить ее visual output.
+
+На paint stage engine формирует drawing commands для:
+
+- backgrounds;
+- text;
+- borders;
+- shadows;
+- images;
+- decorations.
+
+Дальше эти commands могут rasterize-иться в pixels/tiles, а затем compositor собирает итоговый frame. Конкретное
+разделение paint/raster/composite зависит от browser engine, поэтому полезно мыслить pipeline как модель, а не как
+жесткие три функции.
+
+Стоимость repaint зависит от **painted area и эффекта**, а не только от числа измененных properties. Маленькая смена
+color на icon обычно дешева; большой blurred shadow/filter поверх viewport может быть заметно дороже.
+
+Browser также умеет invalidation: при изменении одного element не обязательно repaint-ить весь document. Но large
+overlapping areas, clipping и effects могут расширить affected region.
+
+Paint можно увидеть в Performance tooling/paint flashing. Оптимизация без measurement часто приводит к лишним hacks.
+
+На интервью: **repaint — повторная отрисовка visual pixels/paint commands без обязательного пересчета geometry; его цена
+зависит от площади, effects и того, какую region engine признал invalid**.
 
 </td></tr></table>
 
@@ -6695,8 +6919,45 @@ Compositing собирает ранее нарисованные слои в и�
 
 **Полный ответ**
 
-Compositing собирает ранее нарисованные слои в итоговый кадр, применяя трансформации и прозрачность. Эту работу часто
-можно передать compositor thread/GPU. Но создание и хранение слоев расходует память.
+Compositing — этап, на котором browser собирает **ранее подготовленные painted/rasterized surfaces** в итоговый frame.
+
+Упрощенно pipeline можно представить так:
+
+```text
+style -> layout -> paint -> raster -> composite
+```
+
+Но реальные engines могут делать часть работы параллельно и хранить content tiles/layers сложнее этой схемы.
+
+Compositor особенно полезен, когда visual content не нужно рисовать заново, а достаточно изменить положение/opacity
+готовой surface:
+
+```css
+.toast {
+  transform: translateY(var(--offset));
+  opacity: var(--opacity);
+}
+```
+
+Если element находится на подходящем compositor layer, следующий frame может свестись к обновлению transform/opacity и
+сборке layers.
+
+Но layer — не бесплатная оптимизация:
+
+- surface занимает memory;
+- ее нужно rasterize;
+- большие textures нужно хранить/upload-ить;
+- overlaps/clip/filter могут усложнить composition;
+- слишком много layers создают overhead.
+
+Важно также не считать DOM element и compositor layer одним и тем же. Engine сам строит internal layer structure и может
+объединять или разделять content по своим heuristics.
+
+Поэтому «compositing происходит на GPU» тоже слишком грубое утверждение. GPU часто участвует в raster/composite, но
+browser architecture и fallback path зависят от platform/engine.
+
+На интервью: **compositing собирает готовые surfaces/layers в frame и иногда позволяет менять transform/opacity без
+layout/paint, но promotion и hardware acceleration определяет browser, а layers имеют memory/raster cost**.
 
 </td></tr></table>
 
@@ -6713,8 +6974,66 @@ Reflow пересчитывает геометрию и обычно приво�
 
 **Полный ответ**
 
-Reflow пересчитывает геометрию и обычно приводит к последующему paint. Repaint меняет пиксели без обязательного
-пересчета размеров. Compositing может обновить итоговый кадр без обоих этапов для подходящих свойств.
+Reflow/layout и repaint/paint меняют разные части rendering pipeline.
+
+**Layout/reflow** отвечает за geometry:
+
+- где находится box;
+- какого он размера;
+- как распределено доступное место;
+- где переносятся строки;
+- как вычисляются tracks/flex sizes.
+
+**Paint/repaint** отвечает за visual appearance уже известной geometry:
+
+- color/background;
+- border;
+- text drawing;
+- shadow;
+- images и decorations.
+
+Например:
+
+```js
+element.style.width = '20rem';
+```
+
+изменяет geometry и обычно требует layout, после которого affected content может потребовать paint.
+
+А:
+
+```js
+element.style.backgroundColor = 'tomato';
+```
+
+обычно не меняет geometry и может ограничиться paint.
+
+Есть и третий важный путь — **compositing**. Для некоторых transforms/opacity browser может переиспользовать уже
+rasterized layer и собрать новый frame без нового layout и без repaint его contents.
+
+Полезная модель:
+
+```text
+geometry changed
+  -> style/layout
+  -> usually paint
+  -> composite
+
+visual pixels changed, geometry same
+  -> paint
+  -> composite
+
+only compositor state changed
+  -> composite
+```
+
+Это не абсолютная таблица CSS properties. Реальный engine может принять другое решение из-за layer structure, filters,
+containment или implementation details. Поэтому списки «property X всегда вызывает только paint» полезны как ориентир,
+но не как specification guarantee.
+
+На интервью: **reflow пересчитывает geometry, repaint обновляет visual output без обязательного layout, compositing
+может переиспользовать готовые surfaces; layout обычно дороже из-за dependency geometry, но оптимизировать нужно по
+trace**.
 
 </td></tr></table>
 
