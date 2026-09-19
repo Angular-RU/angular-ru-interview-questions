@@ -7050,8 +7050,55 @@ trace**.
 
 **Полный ответ**
 
-Свойства размеров и геометрии: `width`, `height`, margin, padding, border, position offsets, font metrics и изменения
-DOM. Точная область пересчета зависит от layout и containment. Проверять нужно в Performance panel.
+Layout нужен, когда изменение может поменять **геометрию** element или его соседей/descendants. Чаще всего это свойства
+размеров, spacing, positioning и font metrics.
+
+Типичные примеры:
+
+- `width`, `height`, `min-*`, `max-*`;
+- `margin`, `padding`, `border-width`;
+- `top`, `right`, `bottom`, `left` для positioned elements;
+- `display`, `position`;
+- свойства Grid/Flexbox, меняющие tracks или распределение свободного места;
+- `font-size`, `font-family`, `line-height`, если меняются text metrics;
+- добавление/удаление DOM nodes.
+
+Например:
+
+```js
+panel.style.width = '30rem';
+```
+
+может изменить ширину panel, перенос текста и размеры descendants, поэтому browser должен пересчитать affected layout.
+
+Но список нельзя воспринимать как таблицу «property X всегда вызывает полный reflow страницы». Engine делает
+invalidation и может пересчитать только часть layout tree. На scope влияют:
+
+- тип layout;
+- dependency между parent/child sizes;
+- intrinsic sizing;
+- containment;
+- изменившийся subtree;
+- implementation конкретного browser.
+
+Например, `contain: layout` или `contain: size` может уменьшить область dependency, если semantics component позволяют
+использовать containment.
+
+Есть отдельная проблема **forced synchronous layout**. Browser обычно старается отложить geometry work до следующего
+frame, но JavaScript может потребовать актуальный размер сразу:
+
+```js
+box.style.width = '20rem';
+console.log(box.offsetWidth);
+```
+
+Тогда engine может выполнить style/layout немедленно, чтобы вернуть корректное значение.
+
+Поэтому производительность оценивают не по одной строке CSS, а по trace: сколько layout events произошло, сколько они
+заняли и какой subtree был затронут.
+
+На интервью: **layout чаще вызывают свойства, меняющие geometry или layout dependencies; важно различать обычную
+invalidation и forced synchronous layout, а реальный scope пересчета подтверждать Performance tooling**.
 
 </td></tr></table>
 
@@ -7068,8 +7115,50 @@ DOM. Точная область пересчета зависит от layout �
 
 **Полный ответ**
 
-Цвета, backgrounds, borders, shadows и часть filters обычно требуют paint, но не layout. Чем больше область и сложнее
-эффект, тем дороже операция. Реальная pipeline зависит от браузера и layer structure.
+Paint нужен, когда geometry может остаться прежней, но меняется **визуальное содержимое pixels**.
+
+Типичные кандидаты:
+
+- `color` и `background-*`;
+- `border-color` / часть border styling;
+- `box-shadow`;
+- `text-shadow`;
+- gradients;
+- outlines/decorations;
+- часть filter/effect scenarios.
+
+Например:
+
+```css
+.button.is-active {
+  background: tomato;
+  color: white;
+}
+```
+
+Размер button может не измениться, но browser должен обновить ее visual output.
+
+Цена paint зависит не столько от имени property, сколько от **области и сложности эффекта**. Перекрасить маленькую icon
+обычно дешево. Большой blur/shadow или effect на большую часть viewport может быть заметно дороже.
+
+Paint также связан с invalidation regions: engine старается перерисовать только нужную область, но overlaps, clipping,
+filters и layer structure могут расширить work.
+
+Важно не превращать списки вроде «background = paint» в specification guarantee. Rendering engines меняются, некоторые
+эффекты могут быть cached или обработаны иначе, а animation конкретного property может иметь отдельную optimized path.
+
+Практический способ проверить:
+
+1. записать Performance trace;
+2. найти Paint events;
+3. посмотреть paint duration/affected region;
+4. при необходимости включить Paint flashing/Layers tooling.
+
+Если animation можно выразить через compositor-friendly transform/opacity без изменения pixels, browser иногда способен
+обойти новый paint. Но это зависит от compositing setup.
+
+На интервью: **paint чаще нужен при изменении visual pixels без новой geometry; его стоимость определяется площадью,
+effects и invalidation region, поэтому проверять нужно реальный browser trace, а не только property checklist**.
 
 </td></tr></table>
 
@@ -7086,8 +7175,54 @@ DOM. Точная область пересчета зависит от layout �
 
 **Полный ответ**
 
-Они часто применяются на этапе compositing без повторного layout и paint содержимого. Это уменьшает работу main thread и
-делает кадры стабильнее. Гарантии нет: сложная сцена и лишние layers тоже могут быть дорогими.
+`transform` и `opacity` удобны для animation потому, что browser **часто может** менять их на compositor stage, не
+пересчитывая geometry и не перерисовывая содержимое element для каждого frame.
+
+Например:
+
+```css
+.card {
+  transition:
+    transform 180ms,
+    opacity 180ms;
+}
+
+.card.is-leaving {
+  transform: translateY(0.5rem);
+  opacity: 0;
+}
+```
+
+Если card находится на подходящей composited surface, frame может свестись к изменению transform/alpha этой surface и
+повторному composite.
+
+Сравните с animation ширины:
+
+```css
+.card {
+  transition: width 180ms;
+}
+```
+
+Изменение `width` влияет на geometry, поэтому может потребовать layout, затем paint и composite на каждом frame.
+
+Однако формулировка «transform и opacity всегда выполняются на GPU» неверна.
+
+- Browser сам решает, создавать ли отдельный layer.
+- Layer сначала нужно paint/rasterize.
+- Большие surfaces расходуют memory.
+- Filters, clipping, descendants и overlaps могут усложнить pipeline.
+- Одновременно тяжелый JavaScript на main thread все равно способен испортить responsiveness.
+- Изменение content внутри layer может потребовать repaint/rasterization.
+
+Есть и semantic difference: `transform` меняет visual position, но не участвует в обычном document flow. Если соседние
+elements должны реально перестроиться, transform может быть просто неправильным инструментом.
+
+Поэтому transform/opacity — хороший default для purely visual motion/fades, а не универсальная замена layout animations.
+
+На интервью: **transform/opacity часто позволяют ограничить update compositing stage и избежать layout/paint contents,
+но это browser optimization, а не гарантия GPU; применять их нужно там, где visual transform соответствует semantics
+UI**.
 
 </td></tr></table>
 
@@ -7104,8 +7239,62 @@ compositing слоев. Он не делает произвольную CSS-ан
 
 **Полный ответ**
 
-JavaScript, style calculation и layout в основном выполняются CPU/main thread. GPU часто ускоряет rasterization и
-compositing слоев. Он не делает произвольную CSS-анимацию бесплатной и не исправляет long JavaScript tasks.
+У web rendering нет простой границы «CSS = GPU, JavaScript = CPU». Работа распределяется между main thread, compositor,
+raster workers и GPU process в зависимости от browser architecture.
+
+Упрощенная модель:
+
+**Main thread / CPU** обычно занимается:
+
+- JavaScript;
+- style calculation;
+- layout;
+- построением paint records/display lists;
+- частью DOM/event work.
+
+**Raster/compositor infrastructure** может выполнять:
+
+- rasterization tiles;
+- загрузку/хранение textures;
+- transforms и blending composited surfaces;
+- final composition frame.
+
+GPU часто ускоряет rasterization и compositing, но детали зависят от engine/platform. Поэтому лучше говорить «может быть
+hardware accelerated», а не «это CSS-свойство выполняется на GPU».
+
+Например, animation `transform` может быть compositor-friendly:
+
+```css
+.panel {
+  transform: translateX(var(--x));
+}
+```
+
+но если content panel постоянно меняется, browser все равно может repaint/rasterize surface.
+
+Обратный пример: heavy JavaScript loop:
+
+```js
+while (performance.now() - start < 100) {
+  // blocking work
+}
+```
+
+не становится быстрее от GPU. Main thread остается занят, input/event handling и часть rendering pipeline могут
+задерживаться.
+
+Еще один trade-off — memory. Promotion большого количества elements в layers может снизить main-thread paint work, но
+увеличить GPU/shared memory и compositing overhead.
+
+Поэтому optimization strategy:
+
+1. найти bottleneck в Performance trace;
+2. понять, это scripting, style/layout, paint/raster или composite;
+3. исправлять именно этот этап.
+
+На интервью: **CPU/main thread обычно отвечает за JS, style и layout; GPU/compositor может ускорять raster/composite, но
+граница implementation-specific. Hardware acceleration не исправляет long JS tasks и сама имеет memory/compositing
+cost**.
 
 </td></tr></table>
 
@@ -7122,8 +7311,47 @@ compositing слоев. Он не делает произвольную CSS-ан
 
 **Полный ответ**
 
-Это поверхность, которую браузер может независимо перемещать и смешивать при сборке кадра. Layers полезны для
-анимируемых элементов, fixed content и video. Каждый слой требует памяти и может увеличить raster/compositing work.
+Compositor layer — внутренняя browser surface, которую engine может **rasterize отдельно и затем независимо
+compositить** при сборке frame.
+
+Важно: compositor layer не равен DOM element.
+
+Один DOM subtree может попасть в одну surface, несколько elements могут быть объединены, а часть subtree может получить
+отдельный layer из-за video, transform, scrolling, stacking/effects или других engine-specific причин.
+
+Полезный сценарий — moving UI:
+
+```css
+.drawer {
+  transform: translateX(var(--offset));
+}
+```
+
+Если drawer уже rasterized в отдельной surface, compositor может двигать готовое изображение, не заставляя browser
+перерисовывать все descendants для каждого frame.
+
+Плюсы независимого layer:
+
+- animation transform/opacity иногда обходится без layout/paint contents;
+- repaint одного layer может меньше затрагивать соседние surfaces;
+- часть work может происходить независимо от main-thread rendering.
+
+Цена:
+
+- layer занимает memory;
+- его нужно rasterize;
+- large surfaces создают texture/tile cost;
+- слишком много layers увеличивают compositing complexity;
+- при изменении содержимого surface может потребоваться новый raster.
+
+Также отдельный layer способен менять практическое поведение stacking/overlap optimizations, поэтому искусственно
+«промоутить» все elements бессмысленно.
+
+В DevTools Layers/Performance можно посмотреть, какие surfaces создал конкретный browser и почему. Именно это надежнее
+догадок по CSS source.
+
+На интервью: **compositor layer — browser-managed raster surface для независимого compositing; он может ускорить visual
+updates, но имеет memory/raster cost и не имеет отношения один-к-одному с DOM nodes**.
 
 </td></tr></table>
 
@@ -7140,8 +7368,47 @@ compositing слоев. Он не делает произвольную CSS-ан
 
 **Полный ответ**
 
-Браузер решает вынести элемент в отдельный compositor layer из-за transform, animation или других эвристик. Разработчик
-может подсказать намерение через `will-change`, но итог контролирует engine. Promotion нужно подтверждать Layers panel.
+Layer promotion — ситуация, когда browser решает разместить content в **отдельной composited surface/layer**, чтобы
+обрабатывать его независимо от части остальной страницы.
+
+Причины могут включать:
+
+- active transform/animation;
+- video/canvas и другие special content types;
+- scrolling/fixed content;
+- overlap/stacking requirements;
+- hints вроде `will-change`;
+- внутренние heuristics engine.
+
+Разработчик не управляет promotion напрямую через стандартный API. Даже популярный hack:
+
+```css
+.element {
+  transform: translateZ(0);
+}
+```
+
+не означает стандартизированную команду «создать GPU layer». Browser имеет право выбрать другую strategy.
+
+Зачем promotion вообще полезен? Например, menu, который постоянно двигается:
+
+```css
+.menu {
+  transform: translateY(var(--offset));
+}
+```
+
+может быть rasterized заранее, а animation frames будут менять только положение surface.
+
+Но promotion имеет startup cost: layer нужно подготовить, rasterize и сохранить в memory. Поэтому promotion в момент
+первого frame animation тоже может вызвать jank — одна из причин, зачем существует `will-change` как advance hint.
+
+Over-promotion вреден: десятки/сотни больших layers расходуют memory и увеличивают raster/composite work.
+
+Проверять результат нужно через browser tooling, а не по наличию transform в stylesheet.
+
+На интервью: **layer promotion — browser decision вынести content в отдельную composited surface; это optimization
+heuristic, не гарантированный эффект конкретного CSS hack, и его выгода всегда сравнивается с memory/raster overhead**.
 
 </td></tr></table>
 
@@ -7158,8 +7425,57 @@ compositing слоев. Он не делает произвольную CSS-ан
 
 **Полный ответ**
 
-Он заранее сообщает браузеру, какое свойство скоро изменится, чтобы подготовить оптимизацию. Использовать его следует
-незадолго до анимации и для ограниченного числа элементов. После завершения долгой подготовки hint можно убрать.
+`will-change` — это **hint user agent**, какие свойства или тип поведения скоро изменятся. Он позволяет browser заранее
+выполнить потенциально дорогую подготовку к update.
+
+Например:
+
+```css
+.card.is-about-to-animate {
+  will-change: transform;
+}
+```
+
+Browser может заранее выбрать подходящую rendering strategy, подготовить compositing resources или выполнить другую
+оптимизацию до начала animation.
+
+Ключевое слово — **может**. Спецификация не требует конкретной optimization и тем более не обещает отдельный GPU layer.
+Разные browsers и даже разные ситуации в одном browser могут использовать hint по-разному.
+
+Правильный lifecycle обычно выглядит так:
+
+1. определить реальную performance проблему;
+2. незадолго до animation добавить `will-change`;
+3. дать browser немного времени подготовиться;
+4. выполнить animation;
+5. убрать hint, когда постоянная оптимизация больше не нужна.
+
+Например:
+
+```js
+card.addEventListener('pointerenter', () => {
+  card.style.willChange = 'transform';
+
+  requestAnimationFrame(() => {
+    card.classList.add('is-open');
+  });
+});
+
+card.addEventListener('transitionend', () => {
+  card.style.willChange = 'auto';
+});
+```
+
+В реальном component lifecycle timing может быть другим; смысл в том, чтобы не держать hint бесконечно без причины.
+
+Еще один nuance: `will-change` может заранее создавать side effects, связанные с property. Например, для properties,
+которые при non-initial value создают stacking context, browser может создать его заранее. MDN отдельно предупреждает об
+этом.
+
+Значения включают `auto`, `scroll-position`, `contents` и имена animatable features/properties.
+
+На интервью: **`will-change` заранее сообщает browser о будущем изменении, но не диктует конкретную optimization; его
+используют точечно после measurement и обычно включают незадолго до изменения, а не держат глобально постоянно**.
 
 </td></tr></table>
 
@@ -7176,8 +7492,61 @@ compositing слоев. Он не делает произвольную CSS-ан
 
 **Полный ответ**
 
-Браузер может создать слишком много слоев и потратить GPU memory. Это увеличивает rasterization, compositing и иногда
-ухудшает производительность сильнее исходной проблемы. `will-change` — точечный hint, а не reset.
+`will-change` может заставить browser **дольше сохранять подготовленные optimization resources**, поэтому массовое
+использование способно сделать страницу медленнее, а не быстрее.
+
+Например, такой rule — антипаттерн:
+
+```css
+* {
+  will-change: transform;
+}
+```
+
+или:
+
+```css
+.card {
+  will-change: transform;
+}
+```
+
+если на странице тысячи cards, которые почти никогда не анимируются.
+
+Почему это плохо:
+
+**Memory.** Browser может держать дополнительные surfaces/layers/resources.
+
+**Raster/compositing overhead.** Больше независимых surfaces означает больше работы по их подготовке и сборке.
+
+**Optimization перестает быть временной.** Browser обычно сам включает/убирает internal optimizations по необходимости,
+а permanent `will-change` говорит, что изменение ожидается постоянно.
+
+**Visual side effects.** Некоторые hints могут заранее повлиять на stacking context/rendering behavior.
+
+MDN рекомендует использовать `will-change` sparingly и как last resort для уже найденной performance проблемы, а не как
+premature optimization.
+
+Практический pattern:
+
+```js
+function prepare(element) {
+  element.style.willChange = 'transform';
+}
+
+function cleanup(element) {
+  element.style.willChange = 'auto';
+}
+```
+
+При этом не обязательно буквально переключать property для каждой короткой transition: если component постоянно и часто
+анимируется, trade-off может быть другим. Решение принимают по measurement.
+
+Также нельзя считать отсутствие `will-change` упущенной оптимизацией: modern browsers уже сами применяют rendering
+heuristics. Спецификация описывает property именно как advance hint, а не обязательный механизм layer creation.
+
+На интервью: **массовый `will-change` тратит memory/resources и может увеличить compositing complexity; это точечный
+advance hint для измеренной проблемы, а не performance reset для всей страницы**.
 
 </td></tr></table>
 
