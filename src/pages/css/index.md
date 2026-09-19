@@ -5966,9 +5966,57 @@ framework, а где пишет собственный слой, иначе пр
 
 **Полный ответ**
 
-CSS framework выбирают по требованиям продукта: скорость разработки, accessibility компонентов, кастомизация, bundle
-size, качество документации, SSR-совместимость и связь с design system. Важно заранее решить, где команда следует
-framework, а где пишет собственный слой, иначе проект обрастает хаотичными overrides.
+CSS framework выбирают не по популярности, а по **constraints продукта и команды**. Сначала полезно определить, что
+именно нужно получить от framework: набор utilities, layout primitives, готовые accessible components, theming
+infrastructure или полноценную design system.
+
+Обычно оценивают несколько групп критериев.
+
+**Product fit:**
+
+- есть ли нужные components и states;
+- насколько глубоко требуется brand customization;
+- нужны ли SSR/hydration, RTL, responsive behavior и internationalization;
+- какие browsers и input modes нужно поддерживать.
+
+**Engineering fit:**
+
+- bundle/runtime cost;
+- качество TypeScript/API и документации;
+- предсказуемость upgrades и release policy;
+- возможность tree-shaking/code splitting;
+- совместимость с текущим framework и build pipeline;
+- тестируемость и удобство overrides.
+
+**Design-system fit:**
+
+- есть ли tokens и semantic theming API;
+- можно ли менять typography, spacing, colors и states без копирования internal selectors;
+- совпадают ли accessibility/interaction patterns с требованиями продукта.
+
+Например, если библиотека требует такого override:
+
+```css
+.some-page .library-dialog > div:nth-child(2) button.primary {
+  /* ... */
+}
+```
+
+это плохой сигнал: application code зависит от private DOM structure library.
+
+Перед выбором полезно сделать небольшой spike на 2–3 сложных сценариях: form с validation, dialog/overlay, table/grid,
+dark theme, SSR. Именно на сложных components быстрее проявляются проблемы customization и integration.
+
+Важно заранее определить **boundary**: где команда использует framework как public API, где разрешены wrappers/adapters
+и где допустим собственный CSS. Иначе постепенно появляется второй неформальный framework из локальных overrides.
+
+Lock-in сам по себе не всегда плох: готовая библиотека может экономить годы разработки. Риск начинается, когда замена
+невозможна без переписывания business markup и application state. Поэтому полезнее оценивать не «есть ли dependency», а
+насколько dependency контролирует architecture приложения.
+
+На интервью: **выбор CSS/UI framework — это trade-off между delivery speed, accessibility/design-system coverage,
+customization, runtime/build cost и долгосрочной стоимостью upgrades; проверять его лучше на реальных сложных сценариях,
+а не по количеству stars**.
 
 </td></tr></table>
 
@@ -5985,8 +6033,59 @@ framework, а где пишет собственный слой, иначе пр
 
 **Полный ответ**
 
-БЭМ дает предсказуемые глобальные имена и явно показывает block, element и modifier. Цена — длинные class names,
-дисциплина соглашений и возможное дублирование контекста там, где framework уже изолирует component styles.
+Сильная сторона БЭМ — предсказуемость **global CSS namespace**. По class name обычно видно, какому block принадлежит
+element и является ли class вариантом состояния.
+
+```css
+.user-card {
+}
+
+.user-card__title {
+}
+
+.user-card--compact {
+}
+```
+
+Плюсы:
+
+- низкая и обычно одинаковая specificity;
+- меньше зависимости от DOM nesting;
+- class names служат документацией структуры component;
+- global styles реже сталкиваются по случайно одинаковым именам;
+- block проще переносить между страницами без page-specific selectors.
+
+Например, selector:
+
+```css
+.user-card__title {
+}
+```
+
+устойчивее к дополнительному wrapper, чем:
+
+```css
+.sidebar article > header > h2 {
+}
+```
+
+Но цена тоже заметна.
+
+**Длинные names.** В большой design system modifiers и nested concepts могут делать markup шумной.
+
+**Ручная дисциплина.** Browser не запрещает случайно написать global `.title` или связать block с внешним DOM. БЭМ не
+является настоящим scope mechanism.
+
+**Избыточность при реальной encapsulation.** Если CSS Modules, Angular encapsulation или Shadow DOM уже обеспечивают
+локальность selectors, повторение полного block prefix во всех classes может не давать прежней пользы.
+
+**Не решает cascade architecture целиком.** БЭМ не определяет порядок layers, tokens, themes и ownership global styles.
+
+Поэтому БЭМ особенно полезен там, где styles действительно живут в общем namespace. В component-scoped architecture
+часто сохраняют идеи БЭМ — low specificity, явные states, независимость от DOM — но используют более короткие names.
+
+На интервью: **БЭМ дает понятный naming contract и устойчивый global namespace, но требует дисциплины и может
+дублировать работу framework-level style isolation; его ценность — в principles, а не в обязательной длине class name**.
 
 </td></tr></table>
 
@@ -6004,9 +6103,66 @@ server rendering и читаемость markup.
 
 **Полный ответ**
 
-CSS Modules генерируют локальные class names, CSS-in-JS связывает styles с JavaScript runtime или build step,
-utility-first собирает UI из небольших готовых classes. Выбор влияет на isolation, runtime cost, theming, tooling,
-server rendering и читаемость markup.
+Эти подходы решают разные части CSS architecture, поэтому их полезнее сравнивать не как три взаимоисключающих
+«framework», а по **scope, generation и месту composition**.
+
+### CSS Modules
+
+CSS пишется в обычном файле, а build step преобразует локальные class names в уникальные identifiers:
+
+```css
+/* card.module.css */
+.title {
+  font-weight: 600;
+}
+```
+
+Application импортирует mapping и получает compile/build-time isolation. Плюсы — обычный CSS model, хорошее browser
+caching, отсутствие обязательного style runtime. Минусы — dynamic styling и cross-module composition требуют отдельных
+patterns, а global styles все равно нужно проектировать отдельно.
+
+### CSS-in-JS
+
+Styles описываются из JavaScript/TypeScript API. Важно не сводить весь подход к runtime injection: одни libraries
+генерируют styles во время выполнения, другие умеют static extraction/build-time output.
+
+Плюсы:
+
+- удобно связывать styles с component variants и typed API;
+- colocated component code;
+- powerful theming/composition abstractions.
+
+Trade-offs зависят от реализации: runtime generation может стоить CPU и усложнять SSR/hydration, а build-time variants
+уменьшают этот cost, но добавляют compiler/tooling constraints.
+
+### Utility-first
+
+Markup собирается из маленьких reusable classes:
+
+```html
+<button class="inline-flex items-center gap-2 rounded-md px-4 py-2">Save</button>
+```
+
+Composition переносится ближе к template. Это уменьшает число одноразовых selectors и делает allowed scales/tokens
+видимыми через utility API. Цена — более насыщенная markup и необходимость отдельного решения для повторяющихся
+component patterns.
+
+Главные оси сравнения:
+
+| Вопрос             | CSS Modules       | CSS-in-JS                | Utility-first               |
+| ------------------ | ----------------- | ------------------------ | --------------------------- |
+| Scope              | локальные classes | зависит от library       | utilities обычно глобальные |
+| Runtime CSS cost   | обычно нет        | от нулевого до заметного | обычно нет                  |
+| Dynamic variants   | через classes/CSS | часто очень удобно       | условная композиция classes |
+| Markup verbosity   | низкая/средняя    | низкая                   | выше                        |
+| Tooling dependency | build mapping     | library/compiler/runtime | generator/build tool        |
+
+Подходы можно комбинировать: например CSS Modules для component styles, utilities для layout primitives и custom
+properties для themes.
+
+На интервью: **CSS Modules прежде всего решают local class scope, CSS-in-JS связывает styling API с JS execution/build
+model, utility-first переносит composition в markup; выбирать нужно по runtime cost, theming, SSR, tooling и удобству
+component ownership**.
 
 </td></tr></table>
 
@@ -6024,9 +6180,45 @@ utilities без tokens и component boundaries.
 
 **Полный ответ**
 
-Utilities ускоряют композицию, ограничивают произвольные значения и удаляют неиспользуемые rules при сборке. Минусы —
-шумная markup, необходимость соглашений для повторяющихся patterns и риск смешать design decisions со случайными
-utilities без tokens и component boundaries.
+Tailwind — практическая реализация utility-first подхода: вместо создания selector почти для каждого component state
+разработчик комбинирует готовые utilities непосредственно в markup.
+
+```html
+<button class="inline-flex items-center gap-2 rounded-md px-4 py-2 font-medium">Save</button>
+```
+
+Плюсы такого подхода:
+
+- быстрый feedback без переключения между template и stylesheet;
+- spacing, typography, colors и breakpoints можно ограничить общей шкалой;
+- selectors не накапливают specificity и historical overrides;
+- удаление component markup обычно удаляет и большую часть связанных styling references;
+- responsive/state variants используют единый синтаксис.
+
+Utility class также делает dependency локальной: увидев `gap-2` рядом с element, разработчик понимает источник spacing
+без поиска selector в нескольких files.
+
+Но есть trade-offs.
+
+**Markup становится шумнее.** Сложный component может получить длинную строку classes, особенно при responsive/states.
+
+**Повторение patterns.** Если одинаковая комбинация копируется десятки раз, нужен component boundary, template
+abstraction или другой reuse mechanism. Иначе изменение pattern придется синхронизировать вручную.
+
+**Arbitrary values могут разрушить system.** Возможность быстро написать произвольный размер полезна, но если `[37px]`
+появляется повсюду, utility-first перестает ограничивать design decisions.
+
+**Utilities не заменяют semantics.** Они хорошо описывают presentation, но состояние `danger` или `selected` все равно
+должно иметь component API/semantic source of truth.
+
+**Generated CSS зависит от source detection/configuration.** Динамически собранные class names могут быть невидимы build
+tool, если generator не умеет их определить. Поэтому class construction должна соответствовать supported pattern.
+
+Хорошая architecture обычно разделяет уровни: tokens определяют allowed values, utilities дают composition primitives,
+components скрывают повторяющиеся product patterns.
+
+На интервью: **Tailwind уменьшает custom selector/cascade overhead и ускоряет composition, но переносит complexity в
+markup; качество решения зависит от tokens, component boundaries и дисциплины вокруг arbitrary/dynamic classes**.
 
 </td></tr></table>
 
@@ -6044,9 +6236,72 @@ media assets и browser controls через color-scheme.
 
 **Полный ответ**
 
-Компоненты используют semantic custom properties, а theme переопределяет их на root container. Начальный выбор может
-учитывать `prefers-color-scheme`, пользовательская настройка должна иметь приоритет и сохраняться. Проверяют contrast,
-media assets и browser controls через `color-scheme`.
+Устойчивая theme architecture начинается с **semantic custom properties**. Component не должен знать, какой hex является
+«dark blue»; он использует role вроде surface/text/action.
+
+```css
+:root {
+  color-scheme: light;
+
+  --color-surface: white;
+  --color-text: #111827;
+  --color-action: #2563eb;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-surface: #111827;
+  --color-text: #f9fafb;
+  --color-action: #60a5fa;
+}
+
+.card {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+```
+
+`color-scheme` сообщает browser, какая схема поддерживается, чтобы встроенные controls, scrollbars и form elements могли
+получить подходящее оформление.
+
+System preference удобно использовать как **initial default**:
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --color-surface: #111827;
+    --color-text: #f9fafb;
+  }
+}
+```
+
+Но явный выбор пользователя обычно должен иметь приоритет над OS setting. Его можно хранить в account preference или
+local storage и ставить `data-theme` на root element.
+
+Критический edge case — flash неправильной theme при initial render. Если HTML сначала рисуется light, а JavaScript
+после hydration читает storage и переключает dark, пользователь увидит заметный flash. Решения:
+
+- определить theme на server, если preference известна;
+- применить маленький inline bootstrap script до первого paint;
+- не скрывать весь document до загрузки приложения.
+
+Dark theme — не просто инверсия colors. Нужно отдельно проверить:
+
+- contrast текста, borders и disabled states;
+- images/logos/illustrations;
+- focus indicators;
+- shadows и overlays;
+- native controls;
+- forced-colors/high-contrast modes.
+
+Semantic tokens позволяют иметь больше двух themes без переписывания components: brand/theme меняет mapping, component
+API остается тем же.
+
+На интервью: **theme строят через semantic tokens/custom properties, system preference используют как default, explicit
+user choice хранится отдельно и имеет приоритет; `color-scheme` и first-paint strategy являются частью полноценной dark
+theme реализации**.
 
 </td></tr></table>
 
@@ -6064,9 +6319,67 @@ boundaries.
 
 **Полный ответ**
 
-Широкие selectors создают неявные зависимости, conflicts и regressions в далеких features. Global layer оставляют для
-reset, tokens, typography и действительно общих primitives; component и feature styles ограничивают понятными
-boundaries.
+Global CSS имеет самый широкий **blast radius**: один selector может изменить элементы в features, о которых автор rule
+не знает.
+
+Например:
+
+```css
+button {
+  border: 0;
+}
+
+.content h2 {
+  margin-block: 0;
+}
+```
+
+Такие rules легко становятся неявным API всего приложения. Новый component добавляется через год и неожиданно зависит от
+старого order/specificity.
+
+Типичные проблемы:
+
+- name collisions;
+- regressions в удаленных features;
+- зависимость от source order;
+- specificity escalation;
+- сложность удаления: непонятно, кто использует rule;
+- тесты component могут не воспроизводить полный набор global dependencies.
+
+Это не означает «global CSS запрещен». Есть вещи, которые по смыслу глобальны:
+
+- reset/normalize;
+- fonts;
+- semantic design tokens;
+- base typography;
+- document-level theme;
+- действительно общие utility/primitives.
+
+Полезно выделить их явно:
+
+```css
+@layer reset, base, components, utilities;
+
+@layer base {
+  :root {
+    --color-text: #111827;
+  }
+
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+  }
+}
+```
+
+Component/feature styles при этом остаются внутри своего boundary.
+
+Опасный pattern — использовать global stylesheet как место для «быстрого фикса», потому что local selector неудобно
+переопределять. Со временем такой файл превращается в список exceptions, где любое изменение требует regression testing
+всего приложения.
+
+На интервью: **проблема global styles не в самом global scope, а в неявном ownership и большом blast radius; глобальными
+стоит оставлять только действительно application-wide contracts, а feature/component rules локализовать**.
 
 </td></tr></table>
 
@@ -6082,9 +6395,21 @@ Legacy @import глобально объединяет файлы, может з
 
 **Полный ответ**
 
-Legacy `@import` глобально объединяет файлы, может загружать их повторно и создает конфликты имен.
+Sass `@import` — legacy module mechanism с **общим global namespace**. Импортированные variables, functions и mixins
+становятся доступны без namespace, а один и тот же stylesheet может фактически загружаться несколько раз.
 
-`@use` загружает module один раз и предоставляет namespace:
+```scss
+@import 'tokens';
+@import 'buttons';
+
+.button {
+  color: $primary;
+}
+```
+
+Из такого файла не видно, откуда пришел `$primary`, а два modules могут случайно объявить одинаковое имя.
+
+Sass `@use` использует module system:
 
 ```scss
 @use 'tokens';
@@ -6094,7 +6419,36 @@ Legacy `@import` глобально объединяет файлы, может 
 }
 ```
 
-Для нового Sass-кода используют `@use` и `@forward`.
+Основные отличия:
+
+- module загружается один раз;
+- members доступны через namespace;
+- private members не становятся случайным public API;
+- dependencies проще анализировать tooling;
+- module можно конфигурировать через `with (...)` при первом `@use`.
+
+Для library facade есть `@forward`:
+
+```scss
+// _index.scss
+@forward 'colors';
+@forward 'spacing';
+```
+
+Consumer затем импортирует один public entry point.
+
+По актуальной документации Sass, Sass `@import` deprecated начиная с Dart Sass 1.80.0; для нового Sass-кода используют
+module system `@use`/`@forward`. Это относится именно к **Sass @import**, а не к стандартному CSS `@import` — у них
+разные semantics.
+
+Еще один practical difference: `@use` должен находиться до обычных style rules (кроме `@forward` и допустимой module
+configuration), поэтому dependency graph становится более явным.
+
+Migration не всегда сводится к замене строки `@import` на `@use`: код, который полагался на global variables/mixins,
+нужно перевести на namespaces или осознанный `as *`, а public API library — оформить через `@forward`.
+
+На интервью: **`@import` смешивает Sass modules в global namespace, `@use` загружает module один раз и дает explicit
+namespace; `@forward` формирует public facade. Sass `@import` deprecated, CSS `@import` — отдельный механизм**.
 
 </td></tr></table>
 
@@ -6110,16 +6464,62 @@ Legacy `@import` глобально объединяет файлы, может 
 
 **Полный ответ**
 
-Основные варианты:
+Style isolation бывает разной силы: от **соглашения именования** до настоящей browser boundary. Поэтому важно понимать,
+какую проблему решает каждый механизм.
 
-- соглашения именования, например BEM;
-- Angular style encapsulation;
-- CSS Modules;
-- Shadow DOM;
-- utility-классы;
-- ограничение стилей через feature/component boundaries.
+### Naming convention
 
-Изоляция уменьшает конфликты, но global tokens, typography и overlays все равно требуют продуманного общего слоя.
+BEM/feature prefix уменьшают collisions:
+
+```css
+.profile-card__title {
+}
+```
+
+Но browser все еще видит global selector. Это discipline, а не физический scope.
+
+### Angular ViewEncapsulation.Emulated
+
+Angular по умолчанию переписывает component selectors и добавляет специальные attributes элементам template. Component
+styles не должны матчить произвольные элементы в соседних templates, но global styles по-прежнему могут влиять на
+component. Это framework-level emulation, не Shadow DOM.
+
+### Shadow DOM
+
+Native shadow root создает реальную selector boundary. Document selectors обычно не входят внутрь, внутренние styles не
+выходят наружу. При этом остаются намеренные APIs: inheritance/custom properties, slots и `::part()`.
+
+### CSS Modules
+
+Build tool делает class names локальными для module:
+
+```css
+.title {
+}
+```
+
+может скомпилироваться в уникальный generated class. Это хорошо решает collisions, но global reset/tokens все равно
+существуют отдельно.
+
+### Utility-first
+
+Utilities уменьшают число custom selectors, но сами utility classes обычно находятся в общем namespace. Это другой
+способ контролировать CSS surface, а не строгая encapsulation.
+
+### Document boundary
+
+Для недоверенного/полностью независимого content отдельный `iframe` дает гораздо более сильную document isolation, но
+имеет цену: communication, sizing, accessibility integration и performance.
+
+Также полезны architecture boundaries — отдельные feature entry points, cascade layers, stylelint rules. Они не создают
+scope сами по себе, но предотвращают случайные cross-feature dependencies.
+
+Выбор зависит от задачи: naming convention может быть достаточна для маленького статического сайта, CSS Modules/Angular
+encapsulation удобны для application components, Shadow DOM — когда нужен web-component boundary с контролируемым public
+styling API.
+
+На интервью: **изоляция — это спектр: naming conventions < generated local scope/framework encapsulation < native Shadow
+DOM/document boundary; tokens и global base styles при любом варианте требуют отдельного явного contract**.
 
 </td></tr></table>
 
@@ -6135,10 +6535,52 @@ Legacy `@import` глобально объединяет файлы, может 
 
 **Полный ответ**
 
-Плюсы: единый дизайн, accessibility primitives, быстрый старт, готовые сложные компоненты и меньше дублирования.
+Готовый UI Kit покупает команде не просто CSS, а **готовые product primitives и накопленные решения**: component APIs,
+states, keyboard interaction, overlays, forms, theming и документацию.
 
-Минусы: ограниченная кастомизация, лишний bundle, зависимость от release cycle и сложные обновления. Перед выбором
-проверяют accessibility, theming, SSR, forms integration, поддержку Angular-версий и качество API.
+Плюсы:
+
+- быстрее собирать типовые screens;
+- единый visual language и behavior;
+- меньше дублирования сложных controls;
+- централизованные fixes и improvements;
+- готовые primitives для focus/keyboard/accessibility — если library действительно качественно их реализует;
+- проще распространять design-system changes через одну dependency.
+
+Особенно заметна выгода на сложных components: dialog, combobox, date picker, table, menu, tooltip. Написать их
+визуально несложно; поддержать keyboard model, focus management, positioning, touch и edge cases значительно дороже.
+
+Минусы:
+
+- dependency/upgrade cost;
+- API ограничения и vendor lock-in;
+- лишний code/CSS, если tree-shaking недостаточен;
+- несовпадение design language с продуктом;
+- сложные overrides, если library не дает tokens/public styling API;
+- regressions при major migrations.
+
+Важно не считать label «accessible» гарантией. Перед выбором проверяют реальные keyboard/focus behavior, ARIA semantics,
+screen-reader scenarios и contrast.
+
+Для Angular/SSR application полезный evaluation checklist:
+
+1. Совместимые Angular/browser versions и понятный release policy.
+2. SSR/hydration-safe overlays и DOM access.
+3. Forms/control integration.
+4. Theming через public API/tokens, а не private selectors.
+5. Tree-shaking/lazy-loading сложных components.
+6. RTL/i18n.
+7. Testability и стабильные public contracts.
+
+Wrapping каждого UI Kit component собственным «универсальным wrapper» тоже может стать проблемой: такой слой часто
+скрывает новые возможности library и удваивает API surface. Adapter полезен там, где есть настоящий application
+contract, а не автоматически вокруг каждой button.
+
+Перед adoption полезен spike на нескольких самых сложных product scenarios и небольшой upgrade experiment.
+
+На интервью: **UI Kit ускоряет delivery и централизует сложные UI/accessibility primitives, но добавляет dependency,
+upgrade и customization cost; выбирать нужно по качеству public API, theming, accessibility и integration, а не только
+по внешнему виду demo**.
 
 </td></tr></table>
 
