@@ -7563,20 +7563,62 @@ Offsets меняют геометрию positioned element и могут зап�
 
 **Полный ответ**
 
-Offsets меняют геометрию positioned element и могут запускать layout и paint. Transform обычно перемещает готовый слой
-на этапе compositing. Итог зависит от элемента, поэтому анимацию измеряют.
+`top`/`left` меняют **layout position** positioned element, поэтому animation этих offsets может потребовать layout и
+последующий paint на каждом frame. `transform` меняет visual transform уже после layout и часто может обрабатываться на
+compositor stage.
+
+Например:
 
 ```css
-/* Плохо для частых анимаций */
+/* geometry меняется */
 .box {
-  left: 100px;
+  position: relative;
+  left: 0;
+  transition: left 200ms;
 }
 
-/* Обычно лучше */
-.box {
-  transform: translateX(100px);
+.box.is-open {
+  left: 10rem;
 }
 ```
+
+Для такого transition browser должен учитывать новое положение box в layout model.
+
+Вариант с transform:
+
+```css
+.box {
+  transform: translateX(0);
+  transition: transform 200ms;
+}
+
+.box.is-open {
+  transform: translateX(10rem);
+}
+```
+
+не меняет положение element в normal flow. Если browser может переиспользовать rasterized surface, animation иногда
+ограничивается compositing.
+
+Но «transform всегда быстрее» — слишком сильное правило.
+
+**Semantics важнее optimization.** Если соседние elements действительно должны перестроиться, transform даст визуальное
+смещение без изменения layout и будет неправильным решением.
+
+**Promotion не гарантирован.** Browser сам выбирает layer strategy.
+
+**Большие layers тоже дороги.** Moving huge surface может стоить заметного compositing/raster memory.
+
+**Visual quality может отличаться.** Fractional transforms иногда меняют rasterization текста/edges; это нужно
+проверять.
+
+Поэтому для decorative motion, drawer, tooltip, toast, drag preview и fade/slide effects transform обычно хороший
+default. Для настоящего layout transition сначала стоит проверить, нельзя ли изменить product interaction или
+использовать современный механизм animation layout с приемлемой стоимостью.
+
+На интервью: **`top`/`left` меняют geometry и часто ведут к layout/paint, а `transform` меняет visual presentation и
+часто может остаться на compositing stage; выбирать transform нужно только когда visual movement соответствует
+semantics**.
 
 </td></tr></table>
 
@@ -7593,8 +7635,73 @@ Offsets меняют геометрию positioned element и могут зап�
 
 **Полный ответ**
 
-Они требуют вычисления пикселей вокруг элемента, размытия и дополнительных offscreen surfaces. Большой blur radius и
-анимация на крупной области особенно дороги. Иногда дешевле использовать подготовленный asset или меньшую область.
+`box-shadow` и `filter` могут быть дорогими, потому что их стоимость зависит от **числа обрабатываемых pixels**, blur
+radius, размера области и частоты обновления.
+
+Например, большой shadow:
+
+```css
+.card {
+  box-shadow: 0 2rem 6rem rgb(0 0 0 / 0.35);
+}
+```
+
+может заставить engine обрабатывать область заметно больше самого card. Чем больше blur/spread и painted area, тем выше
+стоимость raster/paint.
+
+С `filter: blur(...)` ситуация похожа:
+
+```css
+.backdrop {
+  filter: blur(20px);
+}
+```
+
+Blur требует учитывать соседние pixels для каждого output pixel. На большой surface и особенно при animation это может
+стать bottleneck.
+
+Важно не сводить правило к «shadow всегда CPU paint, filter всегда GPU». Современный browser может использовать разные
+optimized paths, offscreen surfaces и hardware acceleration. Даже GPU shader остается вычислительной работой, и большой
+blur может выйти за frame budget.
+
+Особенно рискованные сценарии:
+
+- animation blur radius;
+- shadow/filter на fullscreen surface;
+- несколько overlapping translucent layers;
+- effect на content, который сам постоянно меняется;
+- большие retina/high-density surfaces.
+
+Практические способы уменьшить cost:
+
+- уменьшить blur radius и affected area;
+- не анимировать expensive effect каждый frame, если тот же visual result можно получить через opacity/transform;
+- вынести static glow/shadow в pseudo-element и анимировать его opacity;
+- использовать заранее подготовленный asset, если это действительно дешевле и не ухудшает responsive quality;
+- измерять в Performance panel на target devices.
+
+Например:
+
+```css
+.card::before {
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 2rem 6rem rgb(0 0 0 / 0.35);
+  content: '';
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+```
+
+Здесь сложный shadow можно rasterize как более стабильный visual layer, а animation свести к opacity — если конкретный
+browser действительно выберет подходящую compositing strategy.
+
+На интервью: **дорогими являются не названия `box-shadow`/`filter` сами по себе, а большая pixel area, blur и частые
+updates; оптимизацию подтверждают trace, а не предположением CPU vs GPU**.
 
 </td></tr></table>
 
@@ -7611,8 +7718,63 @@ Offsets меняют геометрию positioned element и могут зап�
 
 **Полный ответ**
 
-Это повторное чередование DOM writes и layout reads, вынуждающее браузер синхронно пересчитывать геометрию много раз за
-кадр. Проблема часто возникает в циклах. Чтения и записи нужно группировать.
+Layout thrashing — это серия **forced synchronous layouts**, возникающая при чередовании DOM/style writes и geometry
+reads в одном task/цикле.
+
+Плохой pattern:
+
+```js
+for (const item of items) {
+  item.style.width = `${container.offsetWidth}px`;
+}
+```
+
+На первой итерации browser читает `offsetWidth`. После записи `style.width` layout становится dirty. На следующей
+итерации снова нужен актуальный `offsetWidth`, поэтому engine может синхронно применить pending style changes и
+выполнить layout. Цикл превращается в:
+
+```text
+read -> write -> forced layout -> write -> forced layout -> ...
+```
+
+Это хуже обычного layout, потому что browser теряет возможность batching-ить работу до конца JavaScript task/начала
+следующего frame.
+
+Layout-triggering reads могут включать, в зависимости от ситуации:
+
+- `offsetWidth` / `offsetHeight`;
+- `clientWidth` / `clientHeight`;
+- `getBoundingClientRect()`;
+- часть computed style reads;
+- другие geometry APIs, которым нужен актуальный layout.
+
+Правильная стратегия — **read first, write later**:
+
+```js
+const width = container.offsetWidth;
+
+for (const item of items) {
+  item.style.width = `${width}px`;
+}
+```
+
+Теперь geometry read выполняется один раз до invalidating writes.
+
+Еще лучше — по возможности вообще не вычислять layout из JavaScript, если задачу можно выразить CSS:
+
+```css
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+```
+
+Современный Chrome DevTools умеет отдельно подсвечивать forced reflow/forced synchronous layout в Performance trace, что
+помогает найти call stack, который инициировал проблему.
+
+На интервью: **layout thrashing — repeated write/read cycles, которые заставляют browser делать layout синхронно много
+раз вместо одного batched calculation; основной прием — сгруппировать reads перед writes и уменьшить JS-driven
+geometry**.
 
 </td></tr></table>
 
@@ -7629,8 +7791,57 @@ Offsets меняют геометрию positioned element и могут зап�
 
 **Полный ответ**
 
-Сначала прочитать необходимые размеры, затем пакетно изменить DOM. Для кадра использовать `requestAnimationFrame`, для
-списков — class changes вместо множества inline writes. Профилировщик покажет forced synchronous layout.
+Главное правило — **не чередовать geometry reads и DOM/style writes**.
+
+Плохой код:
+
+```js
+for (const item of items) {
+  item.classList.add('expanded');
+  console.log(item.offsetHeight);
+}
+```
+
+Каждый class write может invalidate layout, а следующий `offsetHeight` требует актуальную geometry.
+
+Лучше сначала собрать reads:
+
+```js
+const heights = items.map((item) => item.offsetHeight);
+
+items.forEach((item, index) => {
+  item.style.setProperty('--previous-height', `${heights[index]}px`);
+  item.classList.add('expanded');
+});
+```
+
+Практические приемы:
+
+1. **Batch reads, затем batch writes.** Не смешивать их в одном tight loop.
+2. **Кэшировать geometry**, если значение не обязано быть пересчитано после каждого write.
+3. **Использовать CSS layout** вместо ручного JS sizing, когда это возможно.
+4. **Менять class/state целиком**, а не делать десятки последовательных inline writes.
+5. **Использовать ResizeObserver** для реакции на реальное изменение size вместо polling/частых manual reads.
+6. **Профилировать**, потому что не каждый geometry read обязательно вызывает layout: проблема возникает, когда layout
+   уже invalidated и read требует свежего значения.
+
+`requestAnimationFrame` полезен для синхронизации visual updates с frame, но сам по себе **не лечит thrashing**:
+
+```js
+requestAnimationFrame(() => {
+  element.style.width = '20rem';
+  console.log(element.offsetWidth); // все еще write -> read
+});
+```
+
+Внутри одного callback по-прежнему можно принудительно запустить synchronous layout.
+
+Если нужно разделить работу между frames/tasks, важно понимать UX cost: перенос write на следующий frame может добавить
+visual latency. Поэтому first choice — правильно упорядочить reads/writes, а не механически добавлять timers.
+
+На интервью: **избегают thrashing через read-before-write batching, CSS-native layout и кэширование geometry;
+`requestAnimationFrame` помогает планировать frame work, но не отменяет forced layout при write-then-read внутри
+callback**.
 
 </td></tr></table>
 
@@ -7648,9 +7859,57 @@ reflow.
 
 **Полный ответ**
 
-После write вычисленные размеры становятся устаревшими. Чтение `offsetWidth` требует актуального значения и заставляет
-браузер немедленно завершить style/layout вместо отложенной пакетной работы. Повторение этого паттерна создает forced
-reflow.
+После изменения DOM/style browser обычно не обязан немедленно пересчитывать layout. Он может пометить geometry как dirty
+и выполнить style/layout позже, ближе к rendering update.
+
+Например:
+
+```js
+element.style.width = '20rem';
+```
+
+может только invalidate layout.
+
+Но следующая строка требует **свежего вычисленного значения**:
+
+```js
+const width = element.offsetWidth;
+```
+
+Чтобы вернуть корректный `offsetWidth`, browser может быть вынужден прямо внутри JavaScript выполнить pending style
+recalculation и layout. Это называют forced synchronous layout/forced reflow.
+
+Само единичное чтение не обязательно проблема. Дорого становится, когда pattern повторяется:
+
+```js
+for (const item of items) {
+  item.style.width = `${item.offsetWidth + 10}px`;
+}
+```
+
+Здесь каждая итерация потенциально создает новый write -> read dependency.
+
+Лучше:
+
+```js
+const widths = items.map((item) => item.offsetWidth);
+
+items.forEach((item, index) => {
+  item.style.width = `${widths[index] + 10}px`;
+});
+```
+
+Все reads используют еще актуальную geometry до того, как writes сделали layout dirty.
+
+Nuance: browser rendering pipeline оптимизирован и implementation-specific. Не каждое обращение к `offsetWidth`
+запускает новый layout: если geometry уже актуальна, read может быть дешевым. Проблема именно в том, что **pending
+invalidation + layout-dependent read** заставляет engine синхронизироваться раньше, чем он планировал.
+
+В Performance trace стоит искать Layout/Recalculate Style рядом с JavaScript call stack; современные Chrome DevTools
+также имеют Forced Reflow insight для таких случаев.
+
+На интервью: **`offsetWidth` после layout-invalidating write может заставить browser немедленно завершить style/layout;
+поэтому geometry читают до writes и избегают повторяющихся write-read cycles**.
 
 </td></tr></table>
 
@@ -7667,8 +7926,53 @@ event, увидеть call stack и affected nodes. Paint flashing и Layers д�
 
 **Полный ответ**
 
-Запись trace показывает scripting, style recalculation, layout, paint и compositing по кадрам. Можно открыть дорогой
-event, увидеть call stack и affected nodes. Paint flashing и Layers дополняют анализ.
+Performance panel показывает временную линию frame/runtime work: JavaScript, style recalculation, layout, paint,
+raster/compositing-related activity и long tasks.
+
+Базовый workflow:
+
+1. открыть Performance;
+2. записать interaction, где виден jank;
+3. остановить trace;
+4. найти длинный frame/task;
+5. раскрыть события `Recalculate Style`, `Layout`, `Paint` и связанные call stacks;
+6. проверить affected nodes/regions и повторить experiment после изменения кода.
+
+Для layout проблем важно смотреть не только total time, но и **почему layout начался**. Forced synchronous layout часто
+можно связать с конкретным JavaScript read вроде `offsetWidth` после DOM write. В актуальном Chrome DevTools есть Forced
+Reflow insight, который помогает выделить такие call stacks.
+
+Для paint можно использовать дополнительные rendering tools, например Paint flashing: browser подсвечивает regions,
+которые реально перерисовываются. Это помогает увидеть неожиданно большую invalidation area.
+
+Layers/compositing tooling полезен, когда проблема связана с animation:
+
+- создан ли отдельный compositor layer;
+- насколько он большой;
+- не стало ли layers слишком много;
+- происходит ли повторный raster вместо cheap composite.
+
+Пример diagnostic sequence:
+
+```text
+janky click
+  -> long task
+  -> Layout 22ms
+  -> call stack
+  -> getBoundingClientRect()
+  -> перед ним class/style write
+  -> forced synchronous layout
+```
+
+После fix нужно записать **новый trace**, а не считать изменение успешным по коду. Performance optimization — это
+hypothesis -> measurement -> change -> measurement.
+
+Также полезно тестировать CPU throttling/медленные target devices: проблема, незаметная на developer laptop, может
+сильно влиять на interaction latency у пользователя.
+
+На интервью: **DevTools Performance позволяет связать дорогой style/layout/paint event с конкретным frame и call stack;
+forced reflow, paint flashing и Layers помогают определить тип bottleneck, а результат fix подтверждают повторным
+trace**.
 
 </td></tr></table>
 
