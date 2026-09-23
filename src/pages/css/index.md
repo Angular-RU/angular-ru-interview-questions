@@ -7989,8 +7989,45 @@ FPS — число отображенных кадров в секунду. Ни
 
 **Полный ответ**
 
-FPS — число отображенных кадров в секунду. Низкий или нестабильный FPS заметен как рывки анимации и scrolling. Важно
-смотреть не только среднее, но и пропущенные кадры.
+FPS, frames per second, — сколько **готовых кадров реально отображается за секунду**. Для UI важен не только высокий
+average FPS, но и равномерность frame delivery: редкие длинные frames заметны как jank даже при хорошем среднем
+значении.
+
+Важно отличать FPS от refresh rate display.
+
+- 60 Hz display дает browser примерно 60 возможностей обновить экран в секунду.
+- 120 Hz — примерно 120 возможностей.
+- Application может выдавать меньше кадров, если не успевает подготовить их вовремя.
+- Отрисовывать «90 FPS» на 60 Hz display обычно не означает, что пользователь увидит 90 уникальных refreshes.
+
+Например, при 60 Hz последовательность durations:
+
+```text
+16ms, 16ms, 16ms, 70ms, 16ms, 16ms
+```
+
+имеет всего один тяжелый frame, но именно он создаст заметный рывок.
+
+Поэтому performance analysis смотрит не только на число FPS, но и на:
+
+- dropped/missed frames;
+- long frames;
+- main-thread long tasks;
+- style/layout/paint cost;
+- responsiveness во время scroll/input.
+
+FPS также зависит от типа content. Static page не обязана постоянно «держать 60 FPS»: если ничего не меняется, browser
+может вообще не строить новые frames. Метрика становится важной при animations, scrolling, dragging, games и других
+continuous visual updates.
+
+На high-refresh displays требования жестче. UI, который стабильно укладывается в 16 ms, может уже не выдавать новый
+frame на каждый refresh при 120 Hz.
+
+Практически FPS измеряют вместе с Performance trace/frame timeline, а не одной средней цифрой.
+
+На интервью: **FPS показывает частоту реально отображаемых frames, но smoothness определяется еще и равномерностью frame
+times; refresh rate задает возможности display, а application может пропускать их, если rendering work не укладывается в
+доступный интервал**.
 
 </td></tr></table>
 
@@ -8007,8 +8044,61 @@ paint и compositing. На дисплеях 120Hz бюджет еще меньш
 
 **Полный ответ**
 
-Секунда делится на 60 интервалов: примерно `1000 / 60 = 16.6ms`. В этот бюджет входят input, JavaScript, style, layout,
-paint и compositing. На дисплеях 120Hz бюджет еще меньше.
+Display с refresh rate 60 Hz обновляется примерно 60 раз в секунду:
+
+```text
+1000 ms / 60 ≈ 16.67 ms
+```
+
+Поэтому, если application хочет подготовить **новый frame к каждому refresh**, вся необходимая работа должна уложиться
+примерно в этот интервал.
+
+В frame могут попадать:
+
+- input/event handling;
+- JavaScript;
+- style calculation;
+- layout;
+- paint/raster work;
+- compositing;
+- browser/OS overhead.
+
+Важно: 16.67 ms — не гарантированный «CPU budget для вашего JavaScript». Часть интервала уже может быть занята browser,
+другими tasks и rendering work. Поэтому practical target для application code обычно должен иметь запас.
+
+Для 120 Hz окно вдвое меньше:
+
+```text
+1000 ms / 120 ≈ 8.33 ms
+```
+
+Для 144 Hz:
+
+```text
+1000 ms / 144 ≈ 6.94 ms
+```
+
+Отсюда две важные вещи.
+
+**Нельзя hardcode-ить animation шаг на 16.6 ms.** На 120/144 Hz animation иначе будет двигаться с неправильной
+скоростью.
+
+**Один long task легко съедает несколько frames.** Например, 50 ms blocking JavaScript при 60 Hz перекрывает примерно
+три refresh intervals.
+
+```text
+50 / 16.67 ≈ 3
+```
+
+При этом browser scheduling не обязан идеально совпадать с простой арифметикой: реальные frame boundaries, compositor
+work и OS scheduling сложнее. 16.67 ms — удобная модель budget, а не жесткий SLA.
+
+Для animation progress лучше использовать elapsed time/timestamp, а не «прибавлять один фиксированный шаг на каждый
+callback».
+
+На интервью: **60 Hz дает около 16.67 ms между refresh opportunities, 120 Hz — около 8.33 ms; это общий frame interval,
+а не полностью доступный JS budget, поэтому work нужно минимизировать и рассчитывать animation по времени, а не по
+фиксированному числу кадров**.
 
 </td></tr></table>
 
@@ -8025,8 +8115,74 @@ Callback вызывается перед следующим paint и синхр�
 
 **Полный ответ**
 
-Callback вызывается перед следующим paint и синхронизирует обновление с refresh cycle. Браузер может приостанавливать
-его в фоновой вкладке. Тяжелая работа внутри callback все равно блокирует кадр.
+`requestAnimationFrame(callback)` просит browser вызвать callback **перед следующим repaint**, когда наступит подходящий
+animation frame. Это связывает JavaScript animation с refresh cycle display лучше, чем произвольный таймер.
+
+Базовый loop:
+
+```js
+let start;
+
+function animate(timestamp) {
+  start ??= timestamp;
+
+  const elapsed = timestamp - start;
+  const progress = Math.min(elapsed / 300, 1);
+
+  element.style.transform = `translateX(${progress * 200}px)`;
+
+  if (progress < 1) {
+    requestAnimationFrame(animate);
+  }
+}
+
+requestAnimationFrame(animate);
+```
+
+Есть несколько важных свойств API.
+
+**Вызов one-shot.** Один `requestAnimationFrame()` планирует один callback. Для следующего frame его нужно запросить
+снова.
+
+**Частота обычно соответствует display refresh rate.** На 120/144 Hz callbacks могут приходить чаще, чем на 60 Hz.
+
+**Нужно использовать timestamp/elapsed time.** Если просто прибавлять фиксированное расстояние на каждый callback,
+animation ускорится на high-refresh display.
+
+**Background tabs обычно throttled/paused.** Большинство browsers приостанавливает `requestAnimationFrame` в background
+tabs или hidden iframes, что экономит CPU/battery.
+
+Но `requestAnimationFrame` не делает тяжелую работу дешевой:
+
+```js
+requestAnimationFrame(() => {
+  doExpensiveWorkFor40Ms();
+});
+```
+
+Такой callback все равно может пропустить frame. API помогает **schedule-ить** visual work, но не ускоряет JavaScript,
+layout или paint.
+
+Он также не лечит layout thrashing автоматически:
+
+```js
+requestAnimationFrame(() => {
+  element.style.width = '20rem';
+  console.log(element.offsetWidth);
+});
+```
+
+write -> geometry read внутри callback все еще может вызвать forced synchronous layout.
+
+Если в одном frame зарегистрировано несколько rAF callbacks, browser может передать им одинаковый frame timestamp. Это
+еще одна причина строить animation от времени, а не от количества callback calls.
+
+Для declarative transitions/animations лучше часто оставить animation CSS/Web Animations engine; `requestAnimationFrame`
+особенно полезен, когда visual state зависит от JavaScript simulation, pointer/scroll state, canvas или custom timing.
+
+На интервью: **`requestAnimationFrame` синхронизирует JS update с animation frames и обычно с refresh rate display, но
+он one-shot и не создает бесплатный performance budget; progress считают по timestamp, а тяжелый JS или forced layout
+внутри callback все равно вызывают jank**.
 
 </td></tr></table>
 
