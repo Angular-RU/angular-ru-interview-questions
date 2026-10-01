@@ -29,7 +29,7 @@
     },
     "devDependencies": {
         "@astrojs/markdown-remark": "7.3.1",
-        "@astrojs/react": "6.0.5",
+        "@astrojs/react": "6.0.6",
         "@tailwindcss/vite": "4.3.3",
         "@types/node": "26.6.1",
         "@types/react": "19.3.0",
