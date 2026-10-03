@@ -8203,10 +8203,43 @@ FOUC, Flash of Unstyled Content, возникает, когда HTML уже от
 
 **Полный ответ**
 
-FOUC, Flash of Unstyled Content, возникает, когда HTML уже отрисован, а нужные CSS или fonts еще не применились.
-Помогают critical CSS, корректное размещение stylesheet, preload важных fonts, стабильные fallback fonts и отказ от
-поздней загрузки базовых стилей через JavaScript. В Angular также важно, чтобы server-rendered HTML и client styles
-давали согласованный first render.
+FOUC — это момент, когда пользователь успевает увидеть документ до применения ожидаемых styles. Обычно проблема
+возникает не потому, что CSS "медленный" сам по себе, а потому что critical styles стали доступны слишком поздно:
+stylesheet загружается после первого render, подключается через JavaScript, спрятан за цепочкой `@import` или разбит
+так, что базовый layout приезжает отдельным поздним chunk.
+
+Например, такой подход повышает риск FOUC:
+
+```html
+<script>
+  import('/styles/theme.js').then(({loadStyles}) => loadStyles());
+</script>
+```
+
+Если эти styles определяют базовую typography, размеры и layout, browser уже может показать HTML в user-agent styles, а
+после загрузки CSS резко перестроить страницу.
+
+Практически помогают:
+
+- подключать critical stylesheet обычным `<link rel="stylesheet">` как можно раньше в `<head>`;
+- избегать длинных CSS dependency chains через `@import`;
+- inline только небольшой действительно critical CSS, а не весь bundle;
+- не откладывать базовые styles до client-side initialization;
+- preload использовать только для реально приоритетных ресурсов, иначе он конкурирует за bandwidth;
+- для fonts подбирать `font-display` и fallback с близкими metrics, чтобы уменьшить FOIT/FOUT и layout shift.
+
+FOUC и FOUT связаны, но это не одно и то же: **FOUC относится к styles страницы в целом, FOUT — к временному показу
+fallback font вместо web font**.
+
+В SSR/Angular приложении отдельный edge case — разные styles между server и client. Если server HTML уже выглядит одним
+образом, а client после hydration подключает другой theme или поздний style chunk, пользователь увидит flash даже при
+быстром network.
+
+Искать проблему удобно с throttling в DevTools: отключить cache, замедлить network/CPU и посмотреть waterfall вместе с
+screenshots. Так видно, какой именно resource приходит после первого paint.
+
+На интервью: **FOUC уменьшают не "магическим preload всего", а тем, что critical styles делают доступными до первого
+render и не меняют базовый visual contract поздно на client**.
 
 </td></tr></table>
 
@@ -8224,9 +8257,57 @@ weights, тем выше риск медленного first render.
 
 **Полный ответ**
 
-Custom fonts могут задерживать отображение текста, влиять на LCP и вызывать FOUT или FOIT. Нужно выбирать WOFF2,
-`font-display`, preload только критичных начертаний, subset и fallback stack с близкими метриками. Чем больше font files
-и weights, тем выше риск медленного first render.
+Custom font добавляет отдельный network и rendering dependency. Browser сначала должен понять, что конкретный face
+нужен, загрузить font file, распарсить его и затем перерисовать текст. Поэтому влияние зависит не только от размера
+файла, но и от того, **когда browser обнаруживает font и что показывает до его загрузки**.
+
+Пример:
+
+```css
+@font-face {
+  font-family: 'App Sans';
+  src: url('/fonts/app-sans-latin.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: 'App Sans', system-ui, sans-serif;
+}
+```
+
+При `font-display: swap` browser быстро показывает fallback, а затем заменяет его web font. Это уменьшает риск invisible
+text, но может вызвать FOUT и layout shift, если metrics сильно отличаются.
+
+Для production обычно полезно:
+
+1. использовать WOFF2;
+2. не грузить начертания и character sets, которые не нужны странице;
+3. делать subset по языкам и при необходимости применять `unicode-range`;
+4. preload только font, который действительно нужен above the fold;
+5. настроить долгий immutable cache для versioned font files;
+6. подобрать fallback font с похожими metrics.
+
+Для уменьшения CLS можно точнее согласовать fallback через metric overrides:
+
+```css
+@font-face {
+  font-family: 'App Sans Fallback';
+  src: local('Arial');
+  size-adjust: 98%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+```
+
+Preload не бесплатен: если preload-нуть пять weights "на всякий случай", они могут вытеснить CSS, JavaScript или LCP
+image из network priority. Еще один частый промах — preload одного URL, а CSS затем запрашивает другой из-за неверного
+`crossorigin`, format или path, и получается двойная загрузка.
+
+На интервью: **оптимизация fonts — это баланс между временем появления текста, visual stability и качеством typography;
+ключевые инструменты — subset, `font-display`, разумный preload и metric-compatible fallback**.
 
 </td></tr></table>
 
@@ -8243,11 +8324,67 @@ CSSOM — object model разобранных CSS rules. Браузеру нуж
 
 **Полный ответ**
 
-CSSOM — object model разобранных CSS rules. Браузеру нужен CSSOM, чтобы вычислить стили и построить render tree, поэтому
-внешний stylesheet обычно является render-blocking resource для первого render.
+CSSOM — представление загруженных и разобранных CSS rules, с которым browser работает при selector matching, cascade и
+вычислении styles.
 
-Большой CSS, медленный CDN или `@import` могут задержать LCP. Помогают critical CSS, удаление unused CSS, разделение
-styles по routes и аккуратная загрузка fonts.
+Упрощенно:
+
+```text
+CSS bytes -> parsing -> CSSOM
+DOM + CSSOM -> computed styles -> layout/paint
+```
+
+Пока critical stylesheet не загружен и не разобран, browser не может надежно вычислить final styles для первого render.
+Поэтому обычный stylesheet в `<head>`:
+
+```html
+<link
+  rel="stylesheet"
+  href="/app.css"
+/>
+```
+
+обычно задерживает first paint. При этом HTML parser может продолжать строить DOM; "render-blocking" не означает, что
+вообще вся работа browser остановлена.
+
+Задержку увеличивают:
+
+- большой CSS bundle;
+- slow origin/CDN;
+- цепочки `@import`;
+- styles, которые загружаются только после выполнения JavaScript;
+- слишком большое количество route-independent CSS, хотя экран использует малую часть.
+
+Не каждый stylesheet одинаково блокирует render. Например, stylesheet с media condition может не блокировать текущий
+viewport так же, как unconditional critical CSS:
+
+```html
+<link
+  rel="stylesheet"
+  href="/print.css"
+  media="print"
+/>
+```
+
+Critical CSS может уменьшить время до первого meaningful render:
+
+```html
+<style>
+  .app-shell {
+    min-height: 100vh;
+  }
+</style>
+<link
+  rel="stylesheet"
+  href="/app.css"
+/>
+```
+
+Но aggressive inlining имеет trade-off: inline CSS увеличивает HTML и хуже переиспользуется из browser cache между
+страницами. Поэтому цель — inline минимальный critical subset, а не весь stylesheet.
+
+На интервью: **CSS блокирует render потому, что browser нужен результат cascade/computed styles до отрисовки;
+оптимизация состоит в сокращении critical CSS path, а не просто в уменьшении количества CSS файлов**.
 
 </td></tr></table>
 
@@ -8259,15 +8396,63 @@ styles по routes и аккуратная загрузка fonts.
 
 **Короткий ответ**
 
-Элементы вроде display: none не участвуют в render tree, хотя остаются в DOM.
+Render tree — полезная концептуальная модель видимых layout/paint объектов, полученных из DOM и computed styles.
+`display: none` не создает layout box, хотя node остается в DOM.
 
 **Полный ответ**
 
-- DOM представляет структуру HTML.
-- CSSOM содержит разобранные CSS-правила.
-- Render tree объединяет видимые DOM-узлы с вычисленными стилями.
+Render tree часто объясняют как промежуточное представление между DOM/CSSOM и layout: browser берет DOM nodes, вычисляет
+для них styles и создает internal objects, которые реально участвуют в rendering.
 
-Элементы вроде `display: none` не участвуют в render tree, хотя остаются в DOM.
+Концептуально:
+
+```text
+DOM + CSSOM
+    ↓
+computed styles
+    ↓
+render/layout objects
+    ↓
+layout -> paint -> composite
+```
+
+Важно не воспринимать render tree как один стандартизованный JavaScript-доступный объект: современные browser engines
+могут хранить rendering data иначе. Для интервью это **модель**, которая помогает объяснить, почему DOM node не всегда
+равен layout box.
+
+Например:
+
+```css
+.hidden {
+  display: none;
+}
+```
+
+Element остается в DOM и доступен JavaScript, но не создает обычный layout box и не занимает место.
+
+А при:
+
+```css
+.invisible {
+  visibility: hidden;
+}
+```
+
+место в layout сохраняется, хотя содержимое не рисуется обычным образом.
+
+Есть и другие edge cases:
+
+- pseudo-elements `::before` / `::after` могут создавать visual content, которого нет отдельным DOM node;
+- `display: contents` может убрать собственный principal box элемента, оставив children участвовать в layout;
+- text nodes тоже превращаются во внутренние layout objects;
+- fixed/absolute positioned elements участвуют в rendering, хотя выпадают из normal flow.
+
+Поэтому фраза "render tree содержит только видимые DOM nodes" слишком грубая. Точнее сказать: **browser строит internal
+rendering representation на основе DOM и computed styles, а создание layout boxes зависит от display model и других
+properties**.
+
+На интервью хороший пример — сравнить `display: none` и `visibility: hidden`: DOM остается в обоих случаях, но их
+участие в layout/paint разное.
 
 </td></tr></table>
 
@@ -8280,17 +8465,57 @@ styles по routes и аккуратная загрузка fonts.
 **Короткий ответ**
 
 Layout, или reflow, вычисляет размеры и положение элементов. Paint превращает styled boxes, text, borders и shadows в
-пиксели или paint commands. Compositing собирает слои в итоговый кадр и часто может выполняться без нового layout и
-paint.
+paint commands/rasterized content. Compositing собирает слои в итоговый кадр и иногда позволяет обновить кадр без нового
+layout и paint.
 
 **Полный ответ**
 
-Layout, или reflow, вычисляет размеры и положение элементов. Paint превращает styled boxes, text, borders и shadows в
-пиксели или paint commands. Compositing собирает слои в итоговый кадр и часто может выполняться без нового layout и
-paint.
+Это разные этапы rendering pipeline, и цена изменения зависит от того, до какого этапа browser должен вернуться.
 
-Чередование чтения layout-свойств и записи стилей в цикле может вызвать layout thrashing. Операции лучше группировать и
-измерять через browser Performance panel.
+**Layout** вычисляет geometry:
+
+```css
+.card {
+  width: 50%;
+  padding: 1rem;
+}
+```
+
+Если изменить `width`, browser может потребоваться пересчитать размеры и положение этого элемента и зависимых элементов.
+
+**Paint** определяет, как уже рассчитанные boxes выглядят: background, text, border, shadow и другие visual effects.
+Например, изменение `background-color` обычно не меняет geometry, но требует repaint.
+
+**Compositing** объединяет готовые layers в финальный frame. Изменения `transform` или `opacity` часто удается
+обработать на compositor stage, если нужный content уже находится в подходящем layer.
+
+Упрощенная стоимость:
+
+```text
+geometry change -> style -> layout -> paint -> composite
+visual change   -> style -> paint -> composite
+layer transform -> style -> composite
+```
+
+Это не жесткая таблица для всех browsers. Engine может оптимизировать invalidation, а compositor-only behavior зависит
+от layer promotion, размера элемента, memory pressure и конкретного property.
+
+Практический анти-паттерн:
+
+```js
+for (const item of items) {
+  item.style.width = item.offsetWidth + 1 + 'px';
+}
+```
+
+Здесь запись style чередуется с layout read, и browser может многократно форсировать synchronous layout. Лучше сначала
+собрать measurements, затем сделать writes.
+
+Также "GPU accelerated" не означает "бесплатно": много promoted layers потребляют memory, а большие translucent layers
+могут быть дорогими для raster/composite.
+
+На интервью: **сначала назвать роль каждого этапа, затем показать, что performance зависит от invalidation scope и
+частоты изменений, а не от списка "хороших" и "плохих" CSS properties в вакууме**.
 
 </td></tr></table>
 
@@ -8302,15 +8527,57 @@ paint.
 
 **Короткий ответ**
 
-Это последовательность получения HTML/CSS, построения DOM и CSSOM, создания render tree, layout, paint и compositing до
-появления пикселей. Блокирующие ресурсы и long tasks удлиняют путь. Оптимизация должна улучшать измеряемый LCP и первый
-render, а не только число запросов.
+Critical Rendering Path — цепочка работы, необходимой до появления начального контента: получить critical HTML/CSS,
+построить DOM/CSSOM, вычислить styles, выполнить layout, paint и compositing. Blocking resources, parser-blocking
+scripts и long tasks могут удлинять этот путь.
 
 **Полный ответ**
 
-Это последовательность получения HTML/CSS, построения DOM и CSSOM, создания render tree, layout, paint и compositing до
-появления пикселей. Блокирующие ресурсы и long tasks удлиняют путь. Оптимизация должна улучшать измеряемый LCP и первый
-render, а не только число запросов.
+Critical Rendering Path, CRP, описывает зависимости, которые должны быть обработаны до того, как browser сможет показать
+пользователю начальный UI.
+
+Упрощенная схема:
+
+```text
+HTML request
+  ↓
+HTML parsing -> DOM
+       ↘ discover CSS -> CSSOM
+DOM + CSSOM -> computed styles
+             -> layout
+             -> paint
+             -> composite
+             -> pixels
+```
+
+JavaScript может вмешиваться в этот path. Обычный synchronous script во время parsing останавливает HTML parser до
+выполнения script:
+
+```html
+<script src="/app.js"></script>
+```
+
+`defer` позволяет продолжить parsing и выполнить script после построения документа, а `async` выполняется, когда
+загрузка завершена, без сохранения порядка относительно других async scripts. Для application entrypoint выбор должен
+соответствовать dependency model, а не правилу "async всегда быстрее".
+
+CRP также связан с resource discovery. Если critical CSS или LCP image обнаруживается только после выполнения client
+JavaScript, browser начинает загружать его позднее.
+
+Практические способы сокращения path:
+
+- быстрый server response и streaming там, где это оправдано;
+- раннее обнаружение critical CSS;
+- минимизация parser/render-blocking dependencies;
+- `defer`/modules для scripts, которым не нужно блокировать parsing;
+- preload только ресурсов, приоритет которых browser иначе определит слишком поздно;
+- уменьшение long tasks перед first render.
+
+Важно различать метрики. Улучшение CRP может ускорить FCP/LCP, но "меньше requests" не гарантирует лучший результат:
+один огромный bundle может быть хуже нескольких хорошо приоритизированных chunks.
+
+На интервью: **CRP — это dependency chain до pixels; оптимизировать нужно measured bottleneck в waterfall/main thread, а
+не количество тегов само по себе**.
 
 </td></tr></table>
 
@@ -8322,13 +8589,72 @@ render, а не только число запросов.
 
 **Короткий ответ**
 
-Это ресурсы, без обработки которых браузер откладывает первый render. К ним обычно относятся stylesheets и часть
-синхронных scripts. Critical CSS, code splitting и корректные defer/async уменьшают блокировку.
+Render-blocking resources задерживают первый render, пока browser не сможет применить или выполнить необходимый
+resource. Обычно critical stylesheets блокируют render, а synchronous scripts в parsing path могут дополнительно
+задерживать DOM и styles processing.
 
 **Полный ответ**
 
-Это ресурсы, без обработки которых браузер откладывает первый render. К ним обычно относятся stylesheets и часть
-синхронных scripts. Critical CSS, code splitting и корректные `defer`/`async` уменьшают блокировку.
+Resource называют render-blocking, если browser откладывает initial rendering, пока этот resource не будет обработан.
+
+Классический пример — stylesheet:
+
+```html
+<link
+  rel="stylesheet"
+  href="/app.css"
+/>
+```
+
+Browser старается не показать страницу в заведомо неправильных styles, поэтому critical CSS должен быть загружен и
+разобран до первого render.
+
+Scripts имеют другой механизм: обычный script во время HTML parsing является **parser-blocking**. Он останавливает
+parser, а значит косвенно может задержать и render:
+
+```html
+<script src="/vendor.js"></script>
+```
+
+Для некритичного JavaScript чаще подходит:
+
+```html
+<script
+  src="/analytics.js"
+  defer
+></script>
+```
+
+или module script, который имеет defer-like execution semantics.
+
+CSS можно разделять по conditions:
+
+```html
+<link
+  rel="stylesheet"
+  href="/screen.css"
+/>
+<link
+  rel="stylesheet"
+  href="/print.css"
+  media="print"
+/>
+```
+
+`print.css` не является таким же critical resource для screen rendering.
+
+Типичные ошибки:
+
+- добавлять `preload` всем assets и создавать priority contention;
+- загружать base CSS через runtime JavaScript;
+- считать любой JavaScript "render-blocking" без различия parser/execution behavior;
+- дробить CSS настолько сильно, что появляется длинная waterfall chain.
+
+Проверять нужно через Network + Performance: какой request реально находится на critical path и что изменилось в FCP/LCP
+после оптимизации.
+
+На интервью: **stylesheets и scripts блокируют разные части pipeline; важно объяснить, что именно блокируется и почему,
+а затем выбрать `defer`, media conditions, critical CSS или preload по конкретной зависимости**.
 
 </td></tr></table>
 
@@ -8340,17 +8666,63 @@ render, а не только число запросов.
 
 **Короткий ответ**
 
-Нужно уменьшить работу на main thread во время scroll: использовать passive listeners, не читать и не писать layout в
-каждом событии, виртуализировать большие списки и избегать тяжелых shadows/filters на множестве элементов. Sticky,
-parallax и infinite scroll проверяют на реальных устройствах. В Angular важно не запускать лишние state updates и change
-detection на каждый пиксель прокрутки.
+Нужно уменьшить работу во время scroll: избегать тяжелых handlers и forced layout, виртуализировать большие списки,
+снижать paint cost и по возможности отдавать visual effects browser/CSS. Passive listeners помогают там, где event может
+блокировать native scrolling, но не делают тяжелый handler быстрым.
 
 **Полный ответ**
 
-Нужно уменьшить работу на main thread во время scroll: использовать passive listeners, не читать и не писать layout в
-каждом событии, виртуализировать большие списки и избегать тяжелых shadows/filters на множестве элементов. Sticky,
-parallax и infinite scroll проверяют на реальных устройствах. В Angular важно не запускать лишние state updates и change
-detection на каждый пиксель прокрутки.
+Scroll jank появляется, когда browser не успевает подготовить следующий frame: main thread занят JavaScript,
+style/layout, paint или слишком тяжелой raster/compositing work.
+
+Первое правило — не выполнять лишнюю работу на каждый `scroll`:
+
+```js
+window.addEventListener('scroll', () => {
+  const rect = panel.getBoundingClientRect();
+  panel.style.height = rect.height + 1 + 'px';
+});
+```
+
+Такой handler одновременно читает layout и пишет style, что может создавать forced synchronous layout.
+
+Если нужно реагировать на положение элементов, часто лучше `IntersectionObserver`:
+
+```js
+const observer = new IntersectionObserver(([entry]) => {
+  entry.target.classList.toggle('is-visible', entry.isIntersecting);
+});
+
+observer.observe(card);
+```
+
+Для `touchstart` / `touchmove` / `wheel` passive listener сообщает browser, что handler не вызовет `preventDefault()`:
+
+```js
+element.addEventListener('touchmove', onMove, {passive: true});
+```
+
+Это может позволить browser начать scrolling без ожидания handler. Но `passive: true` **не уменьшает CPU cost самого
+handler**.
+
+Другие практические меры:
+
+- виртуализировать тысячи rows/cards;
+- не делать state update/change detection на каждый pixel scroll;
+- использовать `requestAnimationFrame` для visual updates, если они действительно должны следовать frame cadence;
+- уменьшать большие blur/shadow/filter regions;
+- проверять sticky/parallax на low-end devices;
+- применять `content-visibility` или containment там, где они реально уменьшают off-screen work;
+- для простых scroll-linked effects рассмотреть native CSS scroll-driven animations, если target browsers подходят.
+
+Throttle/debounce полезны не всегда: throttle уменьшает частоту тяжелой бизнес-логики, но visual animation обычно лучше
+синхронизировать с `requestAnimationFrame`.
+
+В Angular отдельная проблема — listener может провоцировать слишком частые application updates. Стоит отделять raw
+scroll signal от редких semantic state changes и обновлять UI только когда значение действительно изменилось.
+
+На интервью: **scroll performance диагностируют по main-thread flame chart и frames, затем уменьшают JS/layout/paint
+work; passive listeners — только один точечный инструмент**.
 
 </td></tr></table>
 
@@ -8362,23 +8734,73 @@ detection на каждый пиксель прокрутки.
 
 **Короткий ответ**
 
-transition: all анимирует любые изменившиеся свойства, включая неожиданные и дорогие для layout. Это усложняет поддержку
-и может создавать случайные анимации.
+`transition: all` делает transition контракт неявным: любое новое transitionable property может неожиданно начать
+анимироваться, включая дорогие layout/paint changes. Лучше перечислять свойства явно.
 
 **Полный ответ**
 
-`transition: all` анимирует любые изменившиеся свойства, включая неожиданные и дорогие для layout. Это усложняет
-поддержку и может создавать случайные анимации.
+`transition: all` означает: "если изменится любое property, которое browser умеет transition-ить, попробуй его
+анимировать". Проблема прежде всего в поддерживаемости: будущая правка CSS может случайно попасть в animation contract.
 
-Лучше явно перечислить свойства:
+Например:
 
 ```css
-.button {
-  transition:
-    transform 150ms ease,
-    opacity 150ms ease;
+.card {
+  transition: all 200ms ease;
+}
+
+.card.expanded {
+  width: 100%;
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 20%);
+  opacity: 1;
 }
 ```
+
+Здесь browser может анимировать не только `opacity`, но и `width`, вызывая layout на промежуточных frames, а
+`box-shadow` добавит paint cost.
+
+Явный вариант лучше:
+
+```css
+.card {
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease;
+}
+```
+
+Так code review сразу показывает, какие visual changes являются частью interaction.
+
+Есть и функциональные edge cases. Допустим, позже разработчик добавит:
+
+```css
+.card {
+  color: var(--text);
+}
+```
+
+При `transition: all` смена theme может неожиданно стать плавной только у части UI. Или изменение layout property будет
+анимироваться там, где дизайн ожидал мгновенную перестройку.
+
+Это не значит, что каждый `transition: all` всегда создает performance bug: browser анимирует только transitionable
+properties, и конкретная стоимость зависит от property и rendering engine. Но explicit list дает более предсказуемый
+performance и API component styles.
+
+Также animation должна учитывать пользователя:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition-duration: 0.01ms;
+  }
+}
+```
+
+В реальном design system лучше централизованно определить reduced-motion strategy, а не копировать это буквально в
+каждый component.
+
+На интервью: **главный аргумент против `transition: all` — скрытый и расширяющийся contract; explicit properties
+защищают и performance, и предсказуемость UI**.
 
 </td></tr></table>
 
