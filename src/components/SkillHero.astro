@@ -1,0 +1,57 @@
+---
+import type {Skill} from '../data/skills';
+import {installCommand} from '../data/skills';
+import SkillInstall from './SkillInstall.astro';
+
+interface Props {
+    readonly skill: Skill;
+}
+
+const {skill} = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section
+    class="skill-hero"
+    aria-labelledby="skill-hero-title"
+>
+    <div class="skill-hero__content">
+        <p class="skill-hero__eyebrow">/{skill.slug} <span>· AI Skill</span></p>
+        <h1 id="skill-hero-title">{skill.title}</h1>
+        <p class="skill-hero__lead">{skill.description}</p>
+
+        <SkillInstall command={installCommand(skill.slug)} />
+
+        <div class="skill-hero__links">
+            <a href={`${base}/skills/`}>Все AI Skills</a>
+            <span aria-hidden="true">·</span>
+            <a
+                href={`https://github.com/Angular-RU/angular-ru-interview-questions/tree/main/skills/${skill.slug}`}
+                rel="noopener noreferrer"
+                target="_blank"
+            >Исходный код</a>
+        </div>
+    </div>
+
+    <div
+        class="skill-hero__visual"
+        aria-hidden="true"
+    >
+        <div class="skill-hero__window">
+            <div class="skill-hero__window-top">
+                <span class="skill-hero__dot"></span>
+                <span class="skill-hero__dot"></span>
+                <span class="skill-hero__dot"></span>
+                <span class="skill-hero__window-label">INTERVIEW SESSION</span>
+            </div>
+            <div class="skill-hero__terminal">
+                <div class="skill-hero__terminal-label">READY TO PRACTICE</div>
+                <div class="skill-hero__terminal-title">/{skill.slug}</div>
+                <div class="skill-hero__terminal-line"><span>01</span> Choose your level</div>
+                <div class="skill-hero__terminal-line"><span>02</span> Answer questions</div>
+                <div class="skill-hero__terminal-line"><span>03</span> Get feedback <i class="skill-hero__cursor"></i></div>
+                <div class="skill-hero__terminal-footer">Junior <span>·</span> Middle <span>·</span> Senior</div>
+            </div>
+        </div>
+    </div>
+</section>

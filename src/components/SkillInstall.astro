@@ -1,0 +1,54 @@
+---
+interface Props {
+    readonly command: string;
+}
+
+const {command} = Astro.props;
+---
+
+<div
+    class="skill-install"
+    role="group"
+    aria-label="Команда установки AI-скилла"
+>
+    <span
+        class="skill-install__prompt"
+        aria-hidden="true"
+    >$</span>
+    <code>{command}</code>
+    <button
+        class="skill-install__copy"
+        type="button"
+        data-copy-skill={command}
+        aria-label="Скопировать команду установки"
+    >
+        Копировать
+    </button>
+</div>
+
+<script>
+    document.addEventListener('click', async (event) => {
+        if (!(event.target instanceof Element)) {
+            return;
+        }
+
+        const button = event.target.closest<HTMLButtonElement>('[data-copy-skill]');
+
+        if (!button) {
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(button.dataset.copySkill ?? '');
+            button.textContent = 'Скопировано';
+        } catch {
+            button.textContent = 'Выделите команду';
+        }
+
+        window.setTimeout(() => {
+            if (button.isConnected) {
+                button.textContent = 'Копировать';
+            }
+        }, 1800);
+    });
+</script>

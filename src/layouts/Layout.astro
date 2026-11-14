@@ -3,6 +3,8 @@ import {ClientRouter} from 'astro:transitions';
 
 import SidebarNavigation from '../components/SidebarNavigation.astro';
 import SiteSearch from '../components/SiteSearch.astro';
+import SkillHero from '../components/SkillHero.astro';
+import {skills} from '../data/skills';
 import '../styles/global.css';
 
 interface MarkdownHeading {
@@ -33,6 +35,8 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
 const homeHref = `${basePath}/`;
 const isHomePage = currentPath === basePath;
+const skillSlug = currentPath.slice(basePath.length).replace(/^\/+|\/+$/g, '');
+const currentSkill = skills.find(({slug}) => slug === skillSlug);
 const showHomeLink = !isHomePage;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
@@ -122,6 +126,8 @@ const searchEnabled = import.meta.env.PROD;
                     showHomeLink={showHomeLink}
                     title={title}
                 />
+
+                {currentSkill && <SkillHero skill={currentSkill} />}
 
                 <slot />
             </article>

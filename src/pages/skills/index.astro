@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SkillInstall from '../../components/SkillInstall.astro';
+import {installAllCommand, skills} from '../../data/skills';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const groups = [...new Set(skills.map(({category}) => category))];
+---
+
+<Layout
+    title="AI Skills — Interview Handbook"
+    description="Установите AI-скиллы для подготовки к техническим собеседованиям по Angular, TypeScript, React и другим темам"
+>
+    <div class="skills-catalog">
+        <header class="skills-catalog__intro">
+            <p class="skills-catalog__eyebrow">/skills</p>
+            <h1>AI Skills для технических интервью</h1>
+            <p class="skills-catalog__lead">
+                Превратите справочник вопросов в персонального AI-интервьюера. Скиллы задают вопросы,
+                разбирают ответы и помогают подготовиться к техническому собеседованию.
+            </p>
+            <div class="skills-catalog__install">
+                <span>Установить все скиллы</span>
+                <SkillInstall command={installAllCommand} />
+            </div>
+        </header>
+
+        <div class="skills-catalog__summary">
+            <strong>{skills.length} скиллов</strong>
+            <span>Выберите тему и установите только то, что нужно</span>
+        </div>
+
+        {
+            groups.map((group) => (
+                <section class="skills-catalog__section" aria-label={group}>
+                    <h2>{group}</h2>
+                    <div class="skills-catalog__grid">
+                        {skills
+                            .filter(({category}) => category === group)
+                            .map((skill) => (
+                                <a class="skills-catalog__card" href={`${base}/${skill.slug}/`}>
+                                    <span class="skills-catalog__card-icon" aria-hidden="true">/{skill.slug.slice(0, 2)}</span>
+                                    <span class="skills-catalog__card-title">{skill.title}</span>
+                                    <span class="skills-catalog__card-description">{skill.description}</span>
+                                    <span class="skills-catalog__card-footer">
+                                        <code>/{skill.slug}</code>
+                                        <span aria-hidden="true">↗</span>
+                                    </span>
+                                </a>
+                            ))}
+                    </div>
+                </section>
+            ))
+        }
+    </div>
+</Layout>
