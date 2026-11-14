@@ -12,3 +12,7 @@ pnpm-debug.log*
 public/examples/angular
 public/examples/react
 dist
+
+# Generated AI skills are published as GitHub Release assets
+/skills/*/SKILL.md
+/skills/*/references/

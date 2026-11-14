@@ -1,0 +1,49 @@
+name: Publish Interview AI Skills
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-interview-skills
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 26
+
+      - name: Generate and verify skills
+        run: npm run skills:check
+
+      - name: Package skills
+        run: npm run skills:package
+
+      - name: Publish downloadable archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if ! gh release view skills-latest >/dev/null 2>&1; then
+            gh release create skills-latest \
+              --target "$GITHUB_SHA" \
+              --title "Interview AI Skills (latest)" \
+              --notes "Automatically generated from the interview handbook on main." \
+              --latest=false
+          fi
+          gh release upload skills-latest dist/skill-archives/*.zip --clobber

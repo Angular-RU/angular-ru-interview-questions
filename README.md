@@ -12,22 +12,21 @@
 Установить все тематические скиллы:
 
 ```bash
-npx skills@latest add Angular-RU/angular-ru-interview-questions
+npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/all.zip
 ```
 
 Или только Angular:
 
 ```bash
-npx skills@latest add Angular-RU/angular-ru-interview-questions --skill angular
+npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/angular.zip
 ```
 
-Скиллы находятся в [`skills/`](skills/). Генератор извлекает исходные вопросы и полные ответы из
-[`src/pages/`](src/pages/), преобразует их в Markdown и сохраняет в файлы `references/part-XX.md`. Установленные скиллы
-содержат все вопросы и ответы локально и работают **без доступа к сайту**. `SKILL.md` содержит инструкции интервьюера и
-оглавление сгенерированных файлов.
-
-После редактирования вопросов выполните `npm run skills:generate` и добавьте обновленные файлы в PR.
-`npm run skills:check` проверяет, что скиллы соответствуют исходным Markdown-файлам.
+Генератор использует `src/pages/**/index.md` как единственный источник вопросов и ответов. При сборке он
+создает `skills/<тема>/SKILL.md` и `references/part-XX.md` локально; эти файлы **не хранятся в Git**.
+После каждого push в `main` GitHub Actions публикует обновленные ZIP-архивы в
+[GitHub Release `skills-latest`](https://github.com/Angular-RU/angular-ru-interview-questions/releases/tag/skills-latest).
+Каждую тему можно установить отдельно, а `all.zip` содержит все 26 тем. После установки все вопросы и ответы
+доступны без доступа к сайту. Генерация и проверка выполняются автоматически через `npm run skills:check`.
 
 ## Основы и инструменты
 
