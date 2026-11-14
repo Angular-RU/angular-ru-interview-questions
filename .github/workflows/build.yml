@@ -30,6 +30,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Format files to inspect (temporary)
+        run: |
+          npm run format
+          node --input-type=module -e '
+          import {readFileSync} from "node:fs";
+          import {execFileSync} from "node:child_process";
+          const paths = execFileSync("git", ["diff", "--name-only", "-z"]).toString().split(String.fromCharCode(0)).filter(Boolean);
+          for (const path of paths) console.log("FORMATTED_FILE=" + JSON.stringify({path, content: readFileSync(path, "utf8")}));
+          '
+
       - name: Check formatting
         run: npm run format:check
 
