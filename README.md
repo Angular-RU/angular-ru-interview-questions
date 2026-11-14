@@ -21,12 +21,12 @@ npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questio
 npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/angular.zip
 ```
 
-Генератор использует `src/pages/**/index.md` как единственный источник вопросов и ответов. При сборке он
-создает `skills/<тема>/SKILL.md` и `references/part-XX.md` локально; эти файлы **не хранятся в Git**.
-После каждого push в `main` GitHub Actions публикует обновленные ZIP-архивы в
+Генератор использует `src/pages/**/index.md` как единственный источник вопросов и ответов. При сборке он создает
+`skills/<тема>/SKILL.md` и `references/part-XX.md` локально; эти файлы **не хранятся в Git**. После каждого push в
+`main` GitHub Actions публикует обновленные ZIP-архивы в
 [GitHub Release `skills-latest`](https://github.com/Angular-RU/angular-ru-interview-questions/releases/tag/skills-latest).
-Каждую тему можно установить отдельно, а `all.zip` содержит все 26 тем. После установки все вопросы и ответы
-доступны без доступа к сайту. Генерация и проверка выполняются автоматически через `npm run skills:check`.
+Каждую тему можно установить отдельно, а `all.zip` содержит все 26 тем. После установки все вопросы и ответы доступны
+без доступа к сайту. Генерация и проверка выполняются автоматически через `npm run skills:check`.
 
 ## Основы и инструменты
 
