@@ -147,13 +147,7 @@
         "title": "HTML",
         "category": "Frontend",
         "description": "Семантика, формы, доступность, metadata, SEO и структура документов.",
-        "topics": [
-            "semantic HTML",
-            "forms и validation",
-            "accessibility и ARIA",
-            "SEO и metadata",
-            "SVG и media"
-        ]
+        "topics": ["semantic HTML", "forms и validation", "accessibility и ARIA", "SEO и metadata", "SVG и media"]
     },
     {
         "slug": "infrastructure",
@@ -225,13 +219,7 @@
         "title": "Операционные системы",
         "category": "Основы и инструменты",
         "description": "Процессы, потоки, память, файловые системы и сетевые основы.",
-        "topics": [
-            "processes vs threads",
-            "scheduling",
-            "virtual memory",
-            "filesystems",
-            "I/O и networking"
-        ]
+        "topics": ["processes vs threads", "scheduling", "virtual memory", "filesystems", "I/O и networking"]
     },
     {
         "slug": "qa",

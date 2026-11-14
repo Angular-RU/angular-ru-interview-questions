@@ -16,8 +16,8 @@ const groups = [...new Set(skills.map(({category}) => category))];
             <p class="skills-catalog__eyebrow">/skills</p>
             <h1>AI Skills для технических интервью</h1>
             <p class="skills-catalog__lead">
-                Превратите справочник вопросов в персонального AI-интервьюера. Скиллы задают вопросы,
-                разбирают ответы и помогают подготовиться к техническому собеседованию.
+                Превратите справочник вопросов в персонального AI-интервьюера. Скиллы задают вопросы, разбирают ответы и
+                помогают подготовиться к техническому собеседованию.
             </p>
             <div class="skills-catalog__install">
                 <span>Установить все скиллы</span>
@@ -32,14 +32,25 @@ const groups = [...new Set(skills.map(({category}) => category))];
 
         {
             groups.map((group) => (
-                <section class="skills-catalog__section" aria-label={group}>
+                <section
+                    class="skills-catalog__section"
+                    aria-label={group}
+                >
                     <h2>{group}</h2>
                     <div class="skills-catalog__grid">
                         {skills
                             .filter(({category}) => category === group)
                             .map((skill) => (
-                                <a class="skills-catalog__card" href={`${base}/${skill.slug}/`}>
-                                    <span class="skills-catalog__card-icon" aria-hidden="true">/{skill.slug.slice(0, 2)}</span>
+                                <a
+                                    class="skills-catalog__card"
+                                    href={`${base}/${skill.slug}/`}
+                                >
+                                    <span
+                                        class="skills-catalog__card-icon"
+                                        aria-hidden="true"
+                                    >
+                                        /{skill.slug.slice(0, 2)}
+                                    </span>
                                     <span class="skills-catalog__card-title">{skill.title}</span>
                                     <span class="skills-catalog__card-description">{skill.description}</span>
                                     <span class="skills-catalog__card-footer">

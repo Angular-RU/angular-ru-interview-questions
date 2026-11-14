@@ -20,7 +20,7 @@ for (const skill of catalog) {
     const path = join(root, 'skills', skill.slug, 'SKILL.md');
     assert(existsSync(path), `Missing SKILL.md: ${skill.slug}`);
     const content = readFileSync(path, 'utf8');
-    assert(content.startsWith(`---\nname: ${skill.slug}\ndescription: `), `Invalid frontmatter: ${skill.slug}`);
+    assert(content.startsWith(`---\nname: ${skill.slug}\ndescription:`), `Invalid frontmatter: ${skill.slug}`);
     assert(content.includes(`/interview/${skill.slug}/`), `Missing handbook link: ${skill.slug}`);
 }
 

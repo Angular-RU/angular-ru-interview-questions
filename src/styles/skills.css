@@ -118,8 +118,7 @@
     color: #dbeafe;
     background:
         repeating-linear-gradient(0deg, transparent 0 3px, rgb(255 255 255 / 2%) 4px 5px),
-        radial-gradient(ellipse at 53% 46%, #1d3550, transparent 65%),
-        #0c1119;
+        radial-gradient(ellipse at 53% 46%, #1d3550, transparent 65%), #0c1119;
 }
 
 .skill-hero__window-top {
@@ -199,7 +198,9 @@
 }
 
 @keyframes skill-cursor-pulse {
-    50% { opacity: 0.1; }
+    50% {
+        opacity: 0.1;
+    }
 }
 
 .skills-catalog__intro {
@@ -281,7 +282,10 @@
     box-shadow: 0 9px 24px rgb(15 23 42 / 4%);
     font-weight: 400;
     text-decoration: none;
-    transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease;
 }
 
 .skills-catalog__card:hover {
