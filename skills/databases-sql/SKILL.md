@@ -1,51 +1,24 @@
 ---
 name: databases-sql
-description:
-  'Conduct a Базы данных technical interview, ask one question at a time, evaluate candidate answers, and explain gaps.
-  Use for SQL, проектирование схем, индексы, транзакции и производительность запросов.'
+description: "Вопросы и ответы для технического собеседования по теме Базы данных. Используйте для подготовки, проверки знаний и проведения интервью."
 ---
 
-# Базы данных — interview practice
+# Базы данных — подготовка к собеседованию
 
-Use this skill when the user wants to prepare for an interview, practice technical questions, receive feedback on an
-answer, or run a mock interview about **Базы данных**.
+Скилл содержит **31 вопросов с ответами** из репозитория Angular-RU/angular-ru-interview-questions. Материалы включены в папку references/ и доступны без интернета.
 
-## Topics to cover
+## Работа с вопросами
 
-- проектирование реляционной схемы
-- JOIN, GROUP BY и подзапросы
-- индексы и планы запросов
-- транзакции и изоляция
-- оптимизация SQL
+1. Учитывайте запрос пользователя: обучение, объяснение конкретной темы, тренировка или пробное интервью.
+2. При интервью задавайте **по одному вопросу** из файлов references/, не раскрывайте ответ до ответа кандидата.
+3. Оценивайте ответ, сопоставляя его с Коротким ответом и Полным ответом исходного материала. Уточняйте пробелы и приводите примеры из базы вопросов.
+4. Учитывайте желаемый уровень Junior, Middle или Senior. Не придумывайте содержимое источника и не выдавайте собственные дополнения за текст справочника.
+5. Если пользователь попросил объяснение, отвечайте сразу, а не запускайте обязательное интервью. Сохраняйте язык общения пользователя.
+6. Для API, которые могут измениться, отличайте формулировку источника от актуальных фактов. При необходимости проверяйте официальную документацию.
 
-## Interview workflow
+## Вопросы и ответы по разделам
 
-1. Use the role level and language already given by the candidate. Otherwise default to **Middle** and **Russian**, and
-   let the candidate change either at any time.
-2. Ask **one question at a time**. Choose questions from the topics above and vary between fundamentals, practical
-   situations, debugging, and trade-offs. Do not reveal the solution before the candidate answers.
-3. Wait for an answer, then assess **correctness**, **completeness**, **reasoning**, and **practical application**.
-   Point out inaccuracies explicitly and respectfully.
-4. Give a concise reference answer, explain the missing details and edge cases, and ask a focused follow-up before
-   moving to the next topic.
-5. Adapt difficulty: Junior focuses on fundamentals; Middle on real implementation and debugging; Senior on
-   architecture, constraints, and trade-offs.
-6. After several questions, provide a short progress summary: strengths, gaps, and the next topics to study. Never
-   invent a numerical score without stating the criteria.
+- [Основы, Основы и моделирование данных](references/part-01.md) — 24 вопросов
+- [SQL](references/part-02.md) — 7 вопросов
 
-## Grounding and boundaries
-
-- Use the [Базы данных interview handbook](https://angular-ru.github.io/interview/databases-sql/) as a **reference when
-  it is accessible**. The editable source is
-  [src/pages/databases-sql/index.md](https://github.com/Angular-RU/angular-ru-interview-questions/blob/main/src/pages/databases-sql/index.md).
-- This skill contains an interview **workflow and topic outline**, not a local copy of every question and answer. If the
-  reference cannot be opened, rely on your own knowledge and **do not claim to have verified the handbook**.
-- For version-dependent APIs, ask which version the user targets when that changes the answer. Prefer official
-  documentation for verification; state uncertainty instead of inventing behavior.
-- If the user requests a direct explanation instead of an interview, explain the topic without forcing the Q&A workflow.
-
-## Example requests
-
-- "Проведи со мной Middle-собеседование по Базы данных."
-- "Проверь мой ответ и скажи, что я упустил."
-- "Дай сложный практический вопрос для Senior по Базы данных."
+Исходный раздел: https://angular-ru.github.io/interview/databases-sql/

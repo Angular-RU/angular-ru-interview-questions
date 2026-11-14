@@ -1,51 +1,23 @@
 ---
 name: qa
-description:
-  'Conduct a QA technical interview, ask one question at a time, evaluate candidate answers, and explain gaps. Use for
-  Стратегия тестирования, unit/integration/e2e, метрики качества и анализ дефектов.'
+description: "Вопросы и ответы для технического собеседования по теме QA. Используйте для подготовки, проверки знаний и проведения интервью."
 ---
 
-# QA — interview practice
+# QA — подготовка к собеседованию
 
-Use this skill when the user wants to prepare for an interview, practice technical questions, receive feedback on an
-answer, or run a mock interview about **QA**.
+Скилл содержит **50 вопросов с ответами** из репозитория Angular-RU/angular-ru-interview-questions. Материалы включены в папку references/ и доступны без интернета.
 
-## Topics to cover
+## Работа с вопросами
 
-- testing pyramid
-- unit, integration и e2e
-- test design и edge cases
-- regression и flaky tests
-- quality metrics
+1. Учитывайте запрос пользователя: обучение, объяснение конкретной темы, тренировка или пробное интервью.
+2. При интервью задавайте **по одному вопросу** из файлов references/, не раскрывайте ответ до ответа кандидата.
+3. Оценивайте ответ, сопоставляя его с Коротким ответом и Полным ответом исходного материала. Уточняйте пробелы и приводите примеры из базы вопросов.
+4. Учитывайте желаемый уровень Junior, Middle или Senior. Не придумывайте содержимое источника и не выдавайте собственные дополнения за текст справочника.
+5. Если пользователь попросил объяснение, отвечайте сразу, а не запускайте обязательное интервью. Сохраняйте язык общения пользователя.
+6. Для API, которые могут измениться, отличайте формулировку источника от актуальных фактов. При необходимости проверяйте официальную документацию.
 
-## Interview workflow
+## Вопросы и ответы по разделам
 
-1. Use the role level and language already given by the candidate. Otherwise default to **Middle** and **Russian**, and
-   let the candidate change either at any time.
-2. Ask **one question at a time**. Choose questions from the topics above and vary between fundamentals, practical
-   situations, debugging, and trade-offs. Do not reveal the solution before the candidate answers.
-3. Wait for an answer, then assess **correctness**, **completeness**, **reasoning**, and **practical application**.
-   Point out inaccuracies explicitly and respectfully.
-4. Give a concise reference answer, explain the missing details and edge cases, and ask a focused follow-up before
-   moving to the next topic.
-5. Adapt difficulty: Junior focuses on fundamentals; Middle on real implementation and debugging; Senior on
-   architecture, constraints, and trade-offs.
-6. After several questions, provide a short progress summary: strengths, gaps, and the next topics to study. Never
-   invent a numerical score without stating the criteria.
+- [Основы, Quality mindset, Frontend QA, Node.js backend QA, Allure, reports and metrics, CI/CD and quality gates, Coverage and risk](references/part-01.md) — 50 вопросов
 
-## Grounding and boundaries
-
-- Use the [QA interview handbook](https://angular-ru.github.io/interview/qa/) as a **reference when it is accessible**.
-  The editable source is
-  [src/pages/qa/index.md](https://github.com/Angular-RU/angular-ru-interview-questions/blob/main/src/pages/qa/index.md).
-- This skill contains an interview **workflow and topic outline**, not a local copy of every question and answer. If the
-  reference cannot be opened, rely on your own knowledge and **do not claim to have verified the handbook**.
-- For version-dependent APIs, ask which version the user targets when that changes the answer. Prefer official
-  documentation for verification; state uncertainty instead of inventing behavior.
-- If the user requests a direct explanation instead of an interview, explain the topic without forcing the Q&A workflow.
-
-## Example requests
-
-- "Проведи со мной Middle-собеседование по QA."
-- "Проверь мой ответ и скажи, что я упустил."
-- "Дай сложный практический вопрос для Senior по QA."
+Исходный раздел: https://angular-ru.github.io/interview/qa/

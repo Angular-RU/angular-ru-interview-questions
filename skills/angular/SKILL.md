@@ -1,51 +1,31 @@
 ---
 name: angular
-description:
-  'Conduct a Angular technical interview, ask one question at a time, evaluate candidate answers, and explain gaps. Use
-  for Components, dependency injection, templates, signals, RxJS, routing, forms и SSR.'
+description: "Вопросы и ответы для технического собеседования по теме Angular. Используйте для подготовки, проверки знаний и проведения интервью."
 ---
 
-# Angular — interview practice
+# Angular — подготовка к собеседованию
 
-Use this skill when the user wants to prepare for an interview, practice technical questions, receive feedback on an
-answer, or run a mock interview about **Angular**.
+Скилл содержит **445 вопросов с ответами** из репозитория Angular-RU/angular-ru-interview-questions. Материалы включены в папку references/ и доступны без интернета.
 
-## Topics to cover
+## Работа с вопросами
 
-- standalone components и templates
-- dependency injection и providers
-- signals и change detection
-- RxJS и асинхронные потоки
-- routing, forms и SSR
+1. Учитывайте запрос пользователя: обучение, объяснение конкретной темы, тренировка или пробное интервью.
+2. При интервью задавайте **по одному вопросу** из файлов references/, не раскрывайте ответ до ответа кандидата.
+3. Оценивайте ответ, сопоставляя его с Коротким ответом и Полным ответом исходного материала. Уточняйте пробелы и приводите примеры из базы вопросов.
+4. Учитывайте желаемый уровень Junior, Middle или Senior. Не придумывайте содержимое источника и не выдавайте собственные дополнения за текст справочника.
+5. Если пользователь попросил объяснение, отвечайте сразу, а не запускайте обязательное интервью. Сохраняйте язык общения пользователя.
+6. Для API, которые могут измениться, отличайте формулировку источника от актуальных фактов. При необходимости проверяйте официальную документацию.
 
-## Interview workflow
+## Вопросы и ответы по разделам
 
-1. Use the role level and language already given by the candidate. Otherwise default to **Middle** and **Russian**, and
-   let the candidate change either at any time.
-2. Ask **one question at a time**. Choose questions from the topics above and vary between fundamentals, practical
-   situations, debugging, and trade-offs. Do not reveal the solution before the candidate answers.
-3. Wait for an answer, then assess **correctness**, **completeness**, **reasoning**, and **practical application**.
-   Point out inaccuracies explicitly and respectfully.
-4. Give a concise reference answer, explain the missing details and edge cases, and ask a focused follow-up before
-   moving to the next topic.
-5. Adapt difficulty: Junior focuses on fundamentals; Middle on real implementation and debugging; Senior on
-   architecture, constraints, and trade-offs.
-6. After several questions, provide a short progress summary: strengths, gaps, and the next topics to study. Never
-   invent a numerical score without stating the criteria.
+- [Основы, Основные концепции, Angular Core, Templates, Templates и content projection](references/part-01.md) — 38 вопросов
+- [Компоненты, директивы, сервисы и pipes, Angular low-level API, NgModules legacy, Pipes, Lifecycle и rendering, Angular component styling](references/part-02.md) — 49 вопросов
+- [Angular animations, Dependency Injection, Angular Change Detection, Angular Signals, RxJS, RxJS practical cases, Angular Forms](references/part-03.md) — 56 вопросов
+- [Angular HTTP, Angular Router, Login, logout и guards, Feature toggles в Angular, Управление состоянием](references/part-04.md) — 48 вопросов
+- [Security, Performance, SSR, hydration и SEO, Angular PWA и Service Worker](references/part-05.md) — 39 вопросов
+- [Testing, Angular coding questions, Архитектура Angular-приложений](references/part-06.md) — 42 вопросов
+- [Angular libraries и design systems, `sideEffects` в package.json и tree shaking, Micro Frontends, Базовые понятия, Native Federation и runtime loading, Dynamic components, Коммуникация между remote-приложениями](references/part-07.md) — 78 вопросов
+- [Loading, error states и fallback, SSR и hydration, Deployment, versioning и rollback, CSS, UI и Design System, Testing и security, Tooling, Frontend topics в Angular](references/part-08.md) — 84 вопросов
+- [Практика по Angular frontend tasks](references/part-09.md) — 11 вопросов
 
-## Grounding and boundaries
-
-- Use the [Angular interview handbook](https://angular-ru.github.io/interview/angular/) as a **reference when it is
-  accessible**. The editable source is
-  [src/pages/angular/index.md](https://github.com/Angular-RU/angular-ru-interview-questions/blob/main/src/pages/angular/index.md).
-- This skill contains an interview **workflow and topic outline**, not a local copy of every question and answer. If the
-  reference cannot be opened, rely on your own knowledge and **do not claim to have verified the handbook**.
-- For version-dependent APIs, ask which version the user targets when that changes the answer. Prefer official
-  documentation for verification; state uncertainty instead of inventing behavior.
-- If the user requests a direct explanation instead of an interview, explain the topic without forcing the Q&A workflow.
-
-## Example requests
-
-- "Проведи со мной Middle-собеседование по Angular."
-- "Проверь мой ответ и скажи, что я упустил."
-- "Дай сложный практический вопрос для Senior по Angular."
+Исходный раздел: https://angular-ru.github.io/interview/angular/

@@ -1,51 +1,27 @@
 ---
 name: javascript
-description:
-  'Conduct a JavaScript technical interview, ask one question at a time, evaluate candidate answers, and explain gaps.
-  Use for Язык, асинхронность, Event Loop, DOM, fetch и runtime браузера.'
+description: "Вопросы и ответы для технического собеседования по теме JavaScript. Используйте для подготовки, проверки знаний и проведения интервью."
 ---
 
-# JavaScript — interview practice
+# JavaScript — подготовка к собеседованию
 
-Use this skill when the user wants to prepare for an interview, practice technical questions, receive feedback on an
-answer, or run a mock interview about **JavaScript**.
+Скилл содержит **209 вопросов с ответами** из репозитория Angular-RU/angular-ru-interview-questions. Материалы включены в папку references/ и доступны без интернета.
 
-## Topics to cover
+## Работа с вопросами
 
-- types, references и memory
-- closures и prototypes
-- promises и async/await
-- Event Loop
-- DOM, fetch и browser APIs
+1. Учитывайте запрос пользователя: обучение, объяснение конкретной темы, тренировка или пробное интервью.
+2. При интервью задавайте **по одному вопросу** из файлов references/, не раскрывайте ответ до ответа кандидата.
+3. Оценивайте ответ, сопоставляя его с Коротким ответом и Полным ответом исходного материала. Уточняйте пробелы и приводите примеры из базы вопросов.
+4. Учитывайте желаемый уровень Junior, Middle или Senior. Не придумывайте содержимое источника и не выдавайте собственные дополнения за текст справочника.
+5. Если пользователь попросил объяснение, отвечайте сразу, а не запускайте обязательное интервью. Сохраняйте язык общения пользователя.
+6. Для API, которые могут измениться, отличайте формулировку источника от актуальных фактов. При необходимости проверяйте официальную документацию.
 
-## Interview workflow
+## Вопросы и ответы по разделам
 
-1. Use the role level and language already given by the candidate. Otherwise default to **Middle** and **Russian**, and
-   let the candidate change either at any time.
-2. Ask **one question at a time**. Choose questions from the topics above and vary between fundamentals, practical
-   situations, debugging, and trade-offs. Do not reveal the solution before the candidate answers.
-3. Wait for an answer, then assess **correctness**, **completeness**, **reasoning**, and **practical application**.
-   Point out inaccuracies explicitly and respectfully.
-4. Give a concise reference answer, explain the missing details and edge cases, and ask a focused follow-up before
-   moving to the next topic.
-5. Adapt difficulty: Junior focuses on fundamentals; Middle on real implementation and debugging; Senior on
-   architecture, constraints, and trade-offs.
-6. After several questions, provide a short progress summary: strengths, gaps, and the next topics to study. Never
-   invent a numerical score without stating the criteria.
+- [Основы, Значения, ссылки и память, Типы, функции и область видимости, Массивы, объекты и даты, Promise и асинхронность, URL и query params, Отмена асинхронных операций](references/part-01.md) — 51 вопросов
+- [Browser HTTP и fetch, HTTP и REST, DOM, SSR и hydration, JavaScript runtime, CPU и потоки, Event Loop, Расширенные основы JavaScript](references/part-02.md) — 45 вопросов
+- [Память, stack, heap и GC, JavaScript performance](references/part-03.md) — 42 вопросов
+- [JavaScript interview questions, JavaScript coding questions](references/part-04.md) — 66 вопросов
+- [Практика по JavaScript](references/part-05.md) — 5 вопросов
 
-## Grounding and boundaries
-
-- Use the [JavaScript interview handbook](https://angular-ru.github.io/interview/javascript/) as a **reference when it
-  is accessible**. The editable source is
-  [src/pages/javascript/index.md](https://github.com/Angular-RU/angular-ru-interview-questions/blob/main/src/pages/javascript/index.md).
-- This skill contains an interview **workflow and topic outline**, not a local copy of every question and answer. If the
-  reference cannot be opened, rely on your own knowledge and **do not claim to have verified the handbook**.
-- For version-dependent APIs, ask which version the user targets when that changes the answer. Prefer official
-  documentation for verification; state uncertainty instead of inventing behavior.
-- If the user requests a direct explanation instead of an interview, explain the topic without forcing the Q&A workflow.
-
-## Example requests
-
-- "Проведи со мной Middle-собеседование по JavaScript."
-- "Проверь мой ответ и скажи, что я упустил."
-- "Дай сложный практический вопрос для Senior по JavaScript."
+Исходный раздел: https://angular-ru.github.io/interview/javascript/

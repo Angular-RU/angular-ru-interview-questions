@@ -1,51 +1,25 @@
 ---
 name: react
-description:
-  'Conduct a React technical interview, ask one question at a time, evaluate candidate answers, and explain gaps. Use
-  for Components, hooks, state, rendering, routing, forms и экосистема React.'
+description: "Вопросы и ответы для технического собеседования по теме React. Используйте для подготовки, проверки знаний и проведения интервью."
 ---
 
-# React — interview practice
+# React — подготовка к собеседованию
 
-Use this skill when the user wants to prepare for an interview, practice technical questions, receive feedback on an
-answer, or run a mock interview about **React**.
+Скилл содержит **191 вопросов с ответами** из репозитория Angular-RU/angular-ru-interview-questions. Материалы включены в папку references/ и доступны без интернета.
 
-## Topics to cover
+## Работа с вопросами
 
-- components и JSX
-- hooks и effects
-- state и rendering
-- forms и data fetching
-- React architecture
+1. Учитывайте запрос пользователя: обучение, объяснение конкретной темы, тренировка или пробное интервью.
+2. При интервью задавайте **по одному вопросу** из файлов references/, не раскрывайте ответ до ответа кандидата.
+3. Оценивайте ответ, сопоставляя его с Коротким ответом и Полным ответом исходного материала. Уточняйте пробелы и приводите примеры из базы вопросов.
+4. Учитывайте желаемый уровень Junior, Middle или Senior. Не придумывайте содержимое источника и не выдавайте собственные дополнения за текст справочника.
+5. Если пользователь попросил объяснение, отвечайте сразу, а не запускайте обязательное интервью. Сохраняйте язык общения пользователя.
+6. Для API, которые могут измениться, отличайте формулировку источника от актуальных фактов. При необходимости проверяйте официальную документацию.
 
-## Interview workflow
+## Вопросы и ответы по разделам
 
-1. Use the role level and language already given by the candidate. Otherwise default to **Middle** and **Russian**, and
-   let the candidate change either at any time.
-2. Ask **one question at a time**. Choose questions from the topics above and vary between fundamentals, practical
-   situations, debugging, and trade-offs. Do not reveal the solution before the candidate answers.
-3. Wait for an answer, then assess **correctness**, **completeness**, **reasoning**, and **practical application**.
-   Point out inaccuracies explicitly and respectfully.
-4. Give a concise reference answer, explain the missing details and edge cases, and ask a focused follow-up before
-   moving to the next topic.
-5. Adapt difficulty: Junior focuses on fundamentals; Middle on real implementation and debugging; Senior on
-   architecture, constraints, and trade-offs.
-6. After several questions, provide a short progress summary: strengths, gaps, and the next topics to study. Never
-   invent a numerical score without stating the criteria.
+- [Основы, Зачем Angular-разработчику знать React, Короткая карта Angular -> React, React Core, State и rendering, Hooks, Forms, Data fetching, Routing, Context и state management, Отличия React от Angular, Разные React-стеки, Выбор React-стека, Старт проекта, Package manager и monorepo, Routing и fullstack frameworks, State management](references/part-01.md) — 79 вопросов
+- [Data fetching, Forms, Styling и UI libraries, Animation и charts, Testing, Auth, backend и database, Hosting, i18n, rich text, upload и drag and drop, Mobile и desktop, Выбор стека на интервью](references/part-02.md) — 57 вопросов
+- [Архитектурные вопросы, Практические задачки, Мини-проект: Travel Planner, Что важно не перепутать на интервью, Рекомендуемый порядок изучения, React и Next.js, Практика по React](references/part-03.md) — 55 вопросов
 
-## Grounding and boundaries
-
-- Use the [React interview handbook](https://angular-ru.github.io/interview/react/) as a **reference when it is
-  accessible**. The editable source is
-  [src/pages/react/index.md](https://github.com/Angular-RU/angular-ru-interview-questions/blob/main/src/pages/react/index.md).
-- This skill contains an interview **workflow and topic outline**, not a local copy of every question and answer. If the
-  reference cannot be opened, rely on your own knowledge and **do not claim to have verified the handbook**.
-- For version-dependent APIs, ask which version the user targets when that changes the answer. Prefer official
-  documentation for verification; state uncertainty instead of inventing behavior.
-- If the user requests a direct explanation instead of an interview, explain the topic without forcing the Q&A workflow.
-
-## Example requests
-
-- "Проведи со мной Middle-собеседование по React."
-- "Проверь мой ответ и скажи, что я упустил."
-- "Дай сложный практический вопрос для Senior по React."
+Исходный раздел: https://angular-ru.github.io/interview/react/
