@@ -1,2 +1,5 @@
 package-lock.json
 
+# Generated from src/pages/**/index.md; maintained by npm run skills:generate
+skills/*/SKILL.md
+skills/*/references/*.md
