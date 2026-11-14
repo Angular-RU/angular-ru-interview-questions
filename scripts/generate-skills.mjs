@@ -19,7 +19,10 @@ function convertQuestions(source, slug) {
         (_, question, content) => {
             convertedCount++;
             const title = question.replace(/<[^>]+>/g, '').trim();
-            let answer = content.trim().replace(/^<br\s*\/?>\s*/i, '').trim();
+            let answer = content
+                .trim()
+                .replace(/^<br\s*\/?>\s*/i, '')
+                .trim();
             answer = answer.replace(/^<table><tr><td>\s*/i, '').replace(/\s*<\/td><\/tr><\/table>$/i, '');
             return '\n\n#### Вопрос: ' + title + '\n\n' + answer.trim() + '\n\n';
         },
@@ -57,9 +60,7 @@ function splitIntoChunks(markdown) {
     for (const section of sections) {
         const match = section.match(/^###\s+(.+)$/m);
         if (match) lastTopic = match[1].trim();
-        const pieces = section.length > maxChunkSize
-            ? section.split(/(?=^#### Вопрос: )/m)
-            : [section];
+        const pieces = section.length > maxChunkSize ? section.split(/(?=^#### Вопрос: )/m) : [section];
 
         for (const piece of pieces) {
             if (!piece.trim()) continue;
@@ -83,44 +84,60 @@ function generateSkill(skill) {
         const file = 'skills/' + skill.slug + '/references/' + filename;
         const questions = (chunk.text.match(/^#### Вопрос: /gm) ?? []).length;
         const topics = chunk.topics.join(', ');
-        items.set(file, [
-            '# ' + skill.title + ' — вопросы и ответы, часть ' + (i + 1),
-            '',
-            '> Автоматически сгенерировано из src/pages/' + skill.slug + '/index.md. Не редактируйте вручную.',
-            '',
-            chunk.text,
-            '',
-        ].join('\n'));
+        items.set(
+            file,
+            [
+                '# ' + skill.title + ' — вопросы и ответы, часть ' + (i + 1),
+                '',
+                '> Автоматически сгенерировано из src/pages/' + skill.slug + '/index.md. Не редактируйте вручную.',
+                '',
+                chunk.text,
+                '',
+            ].join('\n'),
+        );
         index.push('- [' + topics + '](references/' + filename + ') — ' + questions + ' вопросов');
     }
-    assert.equal(chunks.reduce((sum, chunk) => sum + (chunk.text.match(/^#### Вопрос: /gm) ?? []).length, 0), count);
+    assert.equal(
+        chunks.reduce((sum, chunk) => sum + (chunk.text.match(/^#### Вопрос: /gm) ?? []).length, 0),
+        count,
+    );
 
-    items.set('skills/' + skill.slug + '/SKILL.md', [
-        '---',
-        'name: ' + skill.slug,
-        'description: ' + JSON.stringify('Вопросы и ответы для технического собеседования по теме ' + skill.title + '. Используйте для подготовки, проверки знаний и проведения интервью.'),
-        '---',
-        '',
-        '# ' + skill.title + ' — подготовка к собеседованию',
-        '',
-        'Скилл содержит **' + count + ' вопросов с ответами** из репозитория Angular-RU/angular-ru-interview-questions. Материалы включены в папку references/ и доступны без интернета.',
-        '',
-        '## Работа с вопросами',
-        '',
-        '1. Учитывайте запрос пользователя: обучение, объяснение конкретной темы, тренировка или пробное интервью.',
-        '2. При интервью задавайте **по одному вопросу** из файлов references/, не раскрывайте ответ до ответа кандидата.',
-        '3. Оценивайте ответ, сопоставляя его с Коротким ответом и Полным ответом исходного материала. Уточняйте пробелы и приводите примеры из базы вопросов.',
-        '4. Учитывайте желаемый уровень Junior, Middle или Senior. Не придумывайте содержимое источника и не выдавайте собственные дополнения за текст справочника.',
-        '5. Если пользователь попросил объяснение, отвечайте сразу, а не запускайте обязательное интервью. Сохраняйте язык общения пользователя.',
-        '6. Для API, которые могут измениться, отличайте формулировку источника от актуальных фактов. При необходимости проверяйте официальную документацию.',
-        '',
-        '## Вопросы и ответы по разделам',
-        '',
-        ...index,
-        '',
-        'Исходный раздел: https://angular-ru.github.io/interview/' + skill.slug + '/',
-        '',
-    ].join('\n'));
+    items.set(
+        'skills/' + skill.slug + '/SKILL.md',
+        [
+            '---',
+            'name: ' + skill.slug,
+            'description: ' +
+                JSON.stringify(
+                    'Вопросы и ответы для технического собеседования по теме ' +
+                        skill.title +
+                        '. Используйте для подготовки, проверки знаний и проведения интервью.',
+                ),
+            '---',
+            '',
+            '# ' + skill.title + ' — подготовка к собеседованию',
+            '',
+            'Скилл содержит **' +
+                count +
+                ' вопросов с ответами** из репозитория Angular-RU/angular-ru-interview-questions. Материалы включены в папку references/ и доступны без интернета.',
+            '',
+            '## Работа с вопросами',
+            '',
+            '1. Учитывайте запрос пользователя: обучение, объяснение конкретной темы, тренировка или пробное интервью.',
+            '2. При интервью задавайте **по одному вопросу** из файлов references/, не раскрывайте ответ до ответа кандидата.',
+            '3. Оценивайте ответ, сопоставляя его с Коротким ответом и Полным ответом исходного материала. Уточняйте пробелы и приводите примеры из базы вопросов.',
+            '4. Учитывайте желаемый уровень Junior, Middle или Senior. Не придумывайте содержимое источника и не выдавайте собственные дополнения за текст справочника.',
+            '5. Если пользователь попросил объяснение, отвечайте сразу, а не запускайте обязательное интервью. Сохраняйте язык общения пользователя.',
+            '6. Для API, которые могут измениться, отличайте формулировку источника от актуальных фактов. При необходимости проверяйте официальную документацию.',
+            '',
+            '## Вопросы и ответы по разделам',
+            '',
+            ...index,
+            '',
+            'Исходный раздел: https://angular-ru.github.io/interview/' + skill.slug + '/',
+            '',
+        ].join('\n'),
+    );
     return items;
 }
 
@@ -149,4 +166,6 @@ for (const skill of catalog) {
         }
     }
 }
-console.log((check ? 'Verified' : 'Generated') + ' question banks and skill instructions for ' + catalog.length + ' topics.');
+console.log(
+    (check ? 'Verified' : 'Generated') + ' question banks and skill instructions for ' + catalog.length + ' topics.',
+);
