@@ -15,7 +15,7 @@ function convertQuestions(source, slug) {
     let convertedCount = 0;
 
     const converted = body.replace(
-        /<details>\s*<summary>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi,
+        /<details>\s*<summary(?:\s[^>]*)?>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi,
         (_, question, content) => {
             convertedCount++;
             const title = question.replace(/<[^>]+>/g, '').trim();
