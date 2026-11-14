@@ -21,7 +21,7 @@ function convertQuestions(source, slug) {
             const title = question.replace(/<[^>]+>/g, '').trim();
             let answer = content.trim().replace(/^<br\s*\/?>\s*/i, '').trim();
             answer = answer.replace(/^<table><tr><td>\s*/i, '').replace(/\s*<\/td><\/tr><\/table>$/i, '');
-            return '\n\n#### ' + title + '\n\n' + answer.trim() + '\n\n';
+            return '\n\n#### Вопрос: ' + title + '\n\n' + answer.trim() + '\n\n';
         },
     );
 
@@ -58,7 +58,7 @@ function splitIntoChunks(markdown) {
         const match = section.match(/^###\s+(.+)$/m);
         if (match) lastTopic = match[1].trim();
         const pieces = section.length > maxChunkSize
-            ? section.split(/(?=^####\s)/m)
+            ? section.split(/(?=^#### Вопрос: )/m)
             : [section];
 
         for (const piece of pieces) {
@@ -81,7 +81,7 @@ function generateSkill(skill) {
     for (const [i, chunk] of chunks.entries()) {
         const filename = 'part-' + String(i + 1).padStart(2, '0') + '.md';
         const file = 'skills/' + skill.slug + '/references/' + filename;
-        const questions = (chunk.text.match(/^#### /gm) ?? []).length;
+        const questions = (chunk.text.match(/^#### Вопрос: /gm) ?? []).length;
         const topics = chunk.topics.join(', ');
         items.set(file, [
             '# ' + skill.title + ' — вопросы и ответы, часть ' + (i + 1),
@@ -93,7 +93,7 @@ function generateSkill(skill) {
         ].join('\n'));
         index.push('- [' + topics + '](references/' + filename + ') — ' + questions + ' вопросов');
     }
-    assert.equal(chunks.reduce((sum, chunk) => sum + (chunk.text.match(/^#### /gm) ?? []).length, 0), count);
+    assert.equal(chunks.reduce((sum, chunk) => sum + (chunk.text.match(/^#### Вопрос: /gm) ?? []).length, 0), count);
 
     items.set('skills/' + skill.slug + '/SKILL.md', [
         '---',
