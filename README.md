@@ -3,6 +3,31 @@
 Вопросы и практические задания для подготовки разработчиков к собеседованиям: инженерные основы, Frontend, Backend,
 архитектура, инфраструктура, командная работа и карьера.
 
+## AI Skills для подготовки к собеседованиям
+
+Кроме справочника, в репозитории есть [каталог AI Skills](https://angular-ru.github.io/interview/skills/). Каждый раздел
+вопросов доступен как отдельный скилл для AI-агентов: он проводит пробное интервью по теме, проверяет ответы, объясняет
+ошибки и адаптирует сложность под Junior, Middle или Senior.
+
+Установить все тематические скиллы:
+
+```bash
+npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/all.zip
+```
+
+Или только Angular:
+
+```bash
+npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/angular.zip
+```
+
+Генератор использует `src/pages/**/index.md` как единственный источник вопросов и ответов. При сборке он создает
+`skills/<тема>/SKILL.md` и `references/part-XX.md` локально; эти файлы **не хранятся в Git**. После каждого push в
+`main` GitHub Actions публикует обновленные ZIP-архивы в
+[GitHub Release `skills-latest`](https://github.com/Angular-RU/angular-ru-interview-questions/releases/tag/skills-latest).
+Каждую тему можно установить отдельно, а `all.zip` содержит все 26 тем. После установки все вопросы и ответы доступны
+без доступа к сайту. Генерация и проверка выполняются автоматически через `npm run skills:check`.
+
 ## Основы и инструменты
 
 ### Архитектура компьютера [<img src="public/logos/computer-science.svg" width="24" alt="Computer Science logo" />](public/logos/computer-science.svg)

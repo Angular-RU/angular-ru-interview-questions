@@ -1,0 +1,328 @@
+[
+    {
+        "slug": "ai",
+        "title": "AI",
+        "category": "Основы и инструменты",
+        "description": "AI-assisted development, агенты, промптинг, оценка качества AI-кода и безопасное применение моделей.",
+        "topics": [
+            "AI-assisted development",
+            "проверка AI-генерируемого кода",
+            "AI-агенты и MCP",
+            "prompt engineering",
+            "тестирование AI-результатов"
+        ]
+    },
+    {
+        "slug": "angular",
+        "title": "Angular",
+        "category": "Frontend",
+        "description": "Components, dependency injection, templates, signals, RxJS, routing, forms и SSR.",
+        "topics": [
+            "standalone components и templates",
+            "dependency injection и providers",
+            "signals и change detection",
+            "RxJS и асинхронные потоки",
+            "routing, forms и SSR"
+        ]
+    },
+    {
+        "slug": "architecture",
+        "title": "Распределенные системы",
+        "category": "Backend",
+        "description": "Микросервисы, надежность, согласованность данных и масштабирование.",
+        "topics": [
+            "монолит и микросервисы",
+            "CAP, consistency и availability",
+            "асинхронная коммуникация",
+            "fault tolerance и retries",
+            "масштабирование и наблюдаемость"
+        ]
+    },
+    {
+        "slug": "career-teamwork",
+        "title": "Карьера в команде",
+        "category": "Карьера",
+        "description": "Soft skills, командное взаимодействие, коммуникация и технические интервью.",
+        "topics": [
+            "собеседования и самопрезентация",
+            "коммуникация в команде",
+            "конфликты и обратная связь",
+            "лидерство и наставничество",
+            "карьерный рост"
+        ]
+    },
+    {
+        "slug": "computer-science",
+        "title": "Архитектура компьютера",
+        "category": "Основы и инструменты",
+        "description": "Процессоры, память, машинные инструкции и основы устройства компьютера.",
+        "topics": [
+            "CPU и инструкции",
+            "иерархия памяти и кэши",
+            "RAM и адресация",
+            "параллелизм и выполнение",
+            "системные ограничения"
+        ]
+    },
+    {
+        "slug": "css",
+        "title": "CSS",
+        "category": "Frontend",
+        "description": "Layout, Flexbox, Grid, каскад, адаптивность, rendering и performance.",
+        "topics": [
+            "cascade и specificity",
+            "Flexbox и Grid",
+            "responsive layout",
+            "CSS architecture",
+            "rendering и performance"
+        ]
+    },
+    {
+        "slug": "databases-sql",
+        "title": "Базы данных",
+        "category": "Backend",
+        "description": "SQL, проектирование схем, индексы, транзакции и производительность запросов.",
+        "topics": [
+            "проектирование реляционной схемы",
+            "JOIN, GROUP BY и подзапросы",
+            "индексы и планы запросов",
+            "транзакции и изоляция",
+            "оптимизация SQL"
+        ]
+    },
+    {
+        "slug": "development-process",
+        "title": "Процессы разработки",
+        "category": "Карьера",
+        "description": "Scrum, Kanban, планирование, декомпозиция и взаимодействие с аналитиками.",
+        "topics": [
+            "Agile, Scrum и Kanban",
+            "оценка и декомпозиция задач",
+            "планирование и приоритизация",
+            "определение готовности",
+            "сотрудничество аналитиков и разработчиков"
+        ]
+    },
+    {
+        "slug": "docker",
+        "title": "Docker",
+        "category": "Инфраструктура",
+        "description": "Образы, контейнеры, Dockerfile, Compose и практический запуск приложений.",
+        "topics": [
+            "images vs containers",
+            "Dockerfile и слои",
+            "volumes и networks",
+            "Docker Compose",
+            "безопасность и оптимизация образов"
+        ]
+    },
+    {
+        "slug": "frontend-architecture-patterns",
+        "title": "Организация кода",
+        "category": "Frontend",
+        "description": "Модульные границы, зависимости, архитектурные паттерны и организация frontend-кода.",
+        "topics": [
+            "границы модулей",
+            "layering и dependency direction",
+            "архитектурные паттерны",
+            "feature organization",
+            "trade-offs и рефакторинг"
+        ]
+    },
+    {
+        "slug": "git",
+        "title": "Git",
+        "category": "Основы и инструменты",
+        "description": "История изменений, ветвление, rebase, merge, pull requests и командная работа.",
+        "topics": [
+            "commits и branches",
+            "merge vs rebase",
+            "cherry-pick и revert",
+            "разрешение конфликтов",
+            "pull request workflow"
+        ]
+    },
+    {
+        "slug": "html",
+        "title": "HTML",
+        "category": "Frontend",
+        "description": "Семантика, формы, доступность, metadata, SEO и структура документов.",
+        "topics": ["semantic HTML", "forms и validation", "accessibility и ARIA", "SEO и metadata", "SVG и media"]
+    },
+    {
+        "slug": "infrastructure",
+        "title": "DevOps",
+        "category": "Инфраструктура",
+        "description": "CI/CD, deployment, delivery pipelines, feature flags и эксплуатация.",
+        "topics": [
+            "CI/CD pipelines",
+            "build и artifacts",
+            "deployment и rollback",
+            "feature flags",
+            "monitoring и reliability"
+        ]
+    },
+    {
+        "slug": "integrations",
+        "title": "Интеграции",
+        "category": "Backend",
+        "description": "REST, SOAP, очереди, брокеры сообщений и интеграционные паттерны.",
+        "topics": [
+            "REST API",
+            "SOAP и контрактные интеграции",
+            "message queues",
+            "синхронные и асинхронные взаимодействия",
+            "идемпотентность и retries"
+        ]
+    },
+    {
+        "slug": "javascript",
+        "title": "JavaScript",
+        "category": "Frontend",
+        "description": "Язык, асинхронность, Event Loop, DOM, fetch и runtime браузера.",
+        "topics": [
+            "types, references и memory",
+            "closures и prototypes",
+            "promises и async/await",
+            "Event Loop",
+            "DOM, fetch и browser APIs"
+        ]
+    },
+    {
+        "slug": "linux",
+        "title": "Linux / Unix",
+        "category": "Основы и инструменты",
+        "description": "Shell, файлы, права, процессы, сеть и рабочее окружение Unix.",
+        "topics": [
+            "shell commands",
+            "permissions и filesystem",
+            "processes и signals",
+            "network diagnostics",
+            "pipes и shell scripts"
+        ]
+    },
+    {
+        "slug": "nodejs",
+        "title": "Node.js",
+        "category": "Backend",
+        "description": "Node runtime, npm, HTTP, networking, tooling и observability.",
+        "topics": [
+            "Node.js runtime",
+            "event loop и async I/O",
+            "npm scripts",
+            "HTTP servers",
+            "diagnostics и observability"
+        ]
+    },
+    {
+        "slug": "operating-systems",
+        "title": "Операционные системы",
+        "category": "Основы и инструменты",
+        "description": "Процессы, потоки, память, файловые системы и сетевые основы.",
+        "topics": ["processes vs threads", "scheduling", "virtual memory", "filesystems", "I/O и networking"]
+    },
+    {
+        "slug": "qa",
+        "title": "QA",
+        "category": "Инфраструктура",
+        "description": "Стратегия тестирования, unit/integration/e2e, метрики качества и анализ дефектов.",
+        "topics": [
+            "testing pyramid",
+            "unit, integration и e2e",
+            "test design и edge cases",
+            "regression и flaky tests",
+            "quality metrics"
+        ]
+    },
+    {
+        "slug": "react",
+        "title": "React",
+        "category": "Frontend",
+        "description": "Components, hooks, state, rendering, routing, forms и экосистема React.",
+        "topics": [
+            "components и JSX",
+            "hooks и effects",
+            "state и rendering",
+            "forms и data fetching",
+            "React architecture"
+        ]
+    },
+    {
+        "slug": "state-management",
+        "title": "State Management",
+        "category": "Frontend",
+        "description": "Client/server/URL state, кэширование, нормализация и state managers.",
+        "topics": [
+            "local vs shared state",
+            "server state и caching",
+            "URL state и forms",
+            "normalization",
+            "reactivity и state managers"
+        ]
+    },
+    {
+        "slug": "system-analysis",
+        "title": "Системный анализ",
+        "category": "Архитектура",
+        "description": "Требования, user stories, процессы и аналитические артефакты.",
+        "topics": [
+            "functional vs non-functional requirements",
+            "user stories и acceptance criteria",
+            "BPMN и UML",
+            "API contracts",
+            "traceability и change management"
+        ]
+    },
+    {
+        "slug": "system-design",
+        "title": "Проектирование UI",
+        "category": "Frontend",
+        "description": "UI-архитектура, rendering strategies, масштабирование и технические компромиссы.",
+        "topics": [
+            "frontend system design",
+            "UI data flow",
+            "SSR, CSR и hydration",
+            "performance и accessibility",
+            "trade-offs и ограничения"
+        ]
+    },
+    {
+        "slug": "typescript",
+        "title": "TypeScript",
+        "category": "Frontend",
+        "description": "Типизация, generics, utility types, архитектура типов и runtime-контракты.",
+        "topics": [
+            "generics и constraints",
+            "union и narrowing",
+            "mapped и conditional types",
+            "type-safe API design",
+            "runtime validation"
+        ]
+    },
+    {
+        "slug": "ui-ux",
+        "title": "UI/UX",
+        "category": "Frontend",
+        "description": "Usability, accessibility, сценарии пользователей, интерфейсные состояния и продуктовые решения.",
+        "topics": [
+            "UX research",
+            "interaction design",
+            "accessibility",
+            "error и empty states",
+            "usability и product metrics"
+        ]
+    },
+    {
+        "slug": "web-protocols",
+        "title": "Веб-протоколы и безопасность",
+        "category": "Основы и инструменты",
+        "description": "HTTP, браузерная сеть, authentication, authorization и web security.",
+        "topics": [
+            "HTTP request lifecycle",
+            "HTTP caching и headers",
+            "cookies и sessions",
+            "authentication vs authorization",
+            "XSS, CSRF и CORS"
+        ]
+    }
+]
