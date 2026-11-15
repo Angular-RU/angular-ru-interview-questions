@@ -44,163 +44,35 @@
 }
 
 .skill-install__copy:focus-visible,
-.skill-hero a:focus-visible,
 .skills-catalog a:focus-visible {
     outline: 3px solid #8bb8ff;
     outline-offset: 3px;
 }
 
-.skill-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1.13fr) minmax(0, 0.87fr);
-    align-items: center;
-    gap: clamp(28px, 4vw, 56px);
-    padding: 22px 0 44px;
-    border-bottom: 1px solid var(--border);
+.skill-quick-install {
+    margin-bottom: 16px;
 }
 
-.content .skill-hero__eyebrow {
-    margin: 0 0 24px;
-    color: #575f6c;
-    font-family: monospace;
-    font-size: 0.9rem;
+.skill-quick-install summary {
+    width: fit-content;
+    color: #426ea1;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.skill-hero__eyebrow span {
-    color: #838b96;
+.skill-quick-install summary:hover {
+    text-decoration: underline;
 }
 
-.content .skill-hero h1 {
-    margin: 0;
-    color: #101216;
-    font-size: clamp(2.8rem, 5vw, 4.6rem);
-    line-height: 1;
-    letter-spacing: -0.06em;
+.skill-quick-install summary:focus-visible {
+    outline: 3px solid #8bb8ff;
+    outline-offset: 3px;
 }
 
-.content .skill-hero__lead {
-    margin: 26px 0 28px;
-    color: #49515d;
-    font-size: clamp(1.07rem, 1.6vw, 1.3rem);
-    line-height: 1.65;
-}
-
-.skill-hero__links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    margin-top: 18px;
-    color: #7f8791;
-    font-size: 0.88rem;
-}
-
-.content .skill-hero__links a {
-    color: #4a5568;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.skill-hero__visual {
-    min-width: 0;
-    padding: 10px;
-    border: 1px solid #dfe3e7;
-    border-radius: 23px;
-    background: #fff;
-    box-shadow: 0 9px 24px rgb(12 24 44 / 6%);
-}
-
-.skill-hero__window {
-    min-height: 310px;
-    overflow: hidden;
-    border: 1px solid #161d25;
-    border-radius: 15px;
-    color: #dbeafe;
-    background:
-        repeating-linear-gradient(0deg, transparent 0 3px, rgb(255 255 255 / 2%) 4px 5px),
-        radial-gradient(ellipse at 53% 46%, #1d3550, transparent 65%), #0c1119;
-}
-
-.skill-hero__window-top {
-    display: flex;
-    height: 48px;
-    align-items: center;
-    gap: 6px;
-    padding: 0 18px;
-    border-bottom: 1px solid rgb(255 255 255 / 8%);
-}
-
-.skill-hero__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 100%;
-    background: #52657a;
-}
-
-.skill-hero__window-label {
-    margin-left: auto;
-    color: #7c8da0;
-    font-family: monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.13em;
-}
-
-.skill-hero__terminal {
-    padding: 28px 30px 24px;
-    font-family: monospace;
-}
-
-.skill-hero__terminal-label {
-    color: #6db9ee;
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
-}
-
-.skill-hero__terminal-title {
-    margin: 12px 0 26px;
-    overflow-wrap: anywhere;
-    color: #fff;
-    font-size: clamp(1.5rem, 2.8vw, 2.5rem);
-    letter-spacing: -0.04em;
-    text-shadow: 0 0 24px rgb(80 183 255 / 45%);
-}
-
-.skill-hero__terminal-line {
-    margin-top: 13px;
-    color: #bbc7d8;
-    font-size: 0.78rem;
-}
-
-.skill-hero__terminal-line span {
-    margin-right: 12px;
-    color: #5f9dbb;
-}
-
-.skill-hero__cursor {
-    display: inline-block;
-    width: 7px;
-    height: 13px;
-    margin-left: 3px;
-    background: #65cfff;
-    vertical-align: -2px;
-    animation: skill-cursor-pulse 1.4s steps(2) infinite;
-}
-
-.skill-hero__terminal-footer {
-    margin-top: 26px;
-    color: #7d8ea2;
-    font-size: 0.68rem;
-}
-
-.skill-hero__terminal-footer span {
-    padding: 0 7px;
-    color: #5f7187;
-}
-
-@keyframes skill-cursor-pulse {
-    50% {
-        opacity: 0.1;
-    }
+.skill-quick-install__content {
+    max-width: 800px;
+    margin-top: 12px;
 }
 
 .skills-catalog__intro {
@@ -338,16 +210,6 @@
     font-size: 0.76rem;
 }
 
-@media (max-width: 900px) {
-    .skill-hero {
-        grid-template-columns: 1fr;
-    }
-
-    .skill-hero__window {
-        min-height: 270px;
-    }
-}
-
 @media (max-width: 600px) {
     .skill-install {
         align-items: flex-start;
@@ -358,20 +220,12 @@
         margin-left: auto;
     }
 
-    .skill-hero__terminal {
-        padding: 24px;
-    }
-
     .skills-catalog__grid {
         grid-template-columns: 1fr;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .skill-hero__cursor {
-        animation: none;
-    }
-
     .skills-catalog__card {
         transition: none;
     }
