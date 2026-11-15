@@ -3,7 +3,7 @@ import {ClientRouter} from 'astro:transitions';
 
 import SidebarNavigation from '../components/SidebarNavigation.astro';
 import SiteSearch from '../components/SiteSearch.astro';
-import SkillHero from '../components/SkillHero.astro';
+import SkillQuickInstall from '../components/SkillQuickInstall.astro';
 import {skills} from '../data/skills';
 import '../styles/global.css';
 
@@ -127,7 +127,7 @@ const searchEnabled = import.meta.env.PROD;
                     title={title}
                 />
 
-                {currentSkill && <SkillHero skill={currentSkill} />}
+                {currentSkill && <SkillQuickInstall skill={currentSkill} />}
 
                 <slot />
             </article>

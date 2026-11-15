@@ -1,0 +1,18 @@
+---
+import type {Skill} from '../data/skills';
+import {installCommand} from '../data/skills';
+import SkillInstall from './SkillInstall.astro';
+
+interface Props {
+    readonly skill: Skill;
+}
+
+const {skill} = Astro.props;
+---
+
+<details class="skill-quick-install">
+    <summary>Установить AI Skill</summary>
+    <div class="skill-quick-install__content">
+        <SkillInstall command={installCommand(skill.slug)} />
+    </div>
+</details>
