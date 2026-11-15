@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SkillInstall from '../../components/SkillInstall.astro';
-import {installAllCommand, skills} from '../../data/skills';
+import {installAllCommand, skillName, skills} from '../../data/skills';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const groups = [...new Set(skills.map(({category}) => category))];
@@ -54,7 +54,7 @@ const groups = [...new Set(skills.map(({category}) => category))];
                                     <span class="skills-catalog__card-title">{skill.title}</span>
                                     <span class="skills-catalog__card-description">{skill.description}</span>
                                     <span class="skills-catalog__card-footer">
-                                        <code>/{skill.slug}</code>
+                                        <code>/{skillName(skill.slug)}</code>
                                         <span aria-hidden="true">↗</span>
                                     </span>
                                 </a>

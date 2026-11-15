@@ -47,3 +47,11 @@ jobs:
               --latest=false
           fi
           gh release upload skills-latest dist/skill-archives/*.zip --clobber
+
+          # Remove unprefixed archives only after the renamed archives are published.
+          gh release view skills-latest --json assets --jq '.assets[].name' > "$RUNNER_TEMP/interview-skill-assets.txt"
+          while IFS= read -r slug; do
+            if grep -Fxq "$slug.zip" "$RUNNER_TEMP/interview-skill-assets.txt"; then
+              gh release delete-asset skills-latest "$slug.zip" --yes
+            fi
+          done < <(node --input-type=module -e "import {readFileSync} from 'node:fs'; for (const {slug} of JSON.parse(readFileSync('skills/catalog.json'))) console.log(slug)")
