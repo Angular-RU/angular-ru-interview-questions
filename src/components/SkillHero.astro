@@ -1,6 +1,6 @@
 ---
 import type {Skill} from '../data/skills';
-import {installCommand} from '../data/skills';
+import {installCommand, skillName} from '../data/skills';
 import SkillInstall from './SkillInstall.astro';
 
 interface Props {
@@ -16,7 +16,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     aria-labelledby="skill-hero-title"
 >
     <div class="skill-hero__content">
-        <p class="skill-hero__eyebrow">/{skill.slug} <span>· AI Skill</span></p>
+        <p class="skill-hero__eyebrow">/{skillName(skill.slug)} <span>· AI Skill</span></p>
         <h1 id="skill-hero-title">{skill.title}</h1>
         <p class="skill-hero__lead">{skill.description}</p>
 
@@ -26,7 +26,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <a href={`${base}/skills/`}>Все AI Skills</a>
             <span aria-hidden="true">·</span>
             <a
-                href={`https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/${skill.slug}.zip`}
+                href={`https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/${skillName(skill.slug)}.zip`}
                 rel="noopener noreferrer"
                 target="_blank"
             >
@@ -48,7 +48,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             </div>
             <div class="skill-hero__terminal">
                 <div class="skill-hero__terminal-label">READY TO PRACTICE</div>
-                <div class="skill-hero__terminal-title">/{skill.slug}</div>
+                <div class="skill-hero__terminal-title">/{skillName(skill.slug)}</div>
                 <div class="skill-hero__terminal-line"><span>01</span> Choose your level</div>
                 <div class="skill-hero__terminal-line"><span>02</span> Answer questions</div>
                 <div class="skill-hero__terminal-line">

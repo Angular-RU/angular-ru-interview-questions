@@ -15,14 +15,16 @@
 npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/all.zip
 ```
 
-Или только Angular:
+Или только Angular (все имена имеют префикс `angular-ru-interview-`, чтобы не конфликтовать с другими скиллами):
 
 ```bash
-npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/angular.zip
+npx skills@latest add https://github.com/Angular-RU/angular-ru-interview-questions/releases/download/skills-latest/angular-ru-interview-angular.zip
 ```
 
+Если вы устанавливали старые скиллы (`angular`, `react` и т. д.), удалите их и установите заново: установленное имя не переименуется автоматически. URL страниц справочника остаются прежними.
+
 Генератор использует `src/pages/**/index.md` как единственный источник вопросов и ответов. При сборке он создает
-`skills/<тема>/SKILL.md` и `references/part-XX.md` локально; эти файлы **не хранятся в Git**. После каждого push в
+`skills/angular-ru-interview-<тема>/SKILL.md` и `references/part-XX.md` локально; эти файлы **не хранятся в Git**. После каждого push в
 `main` GitHub Actions публикует обновленные ZIP-архивы в
 [GitHub Release `skills-latest`](https://github.com/Angular-RU/angular-ru-interview-questions/releases/tag/skills-latest).
 Каждую тему можно установить отдельно, а `all.zip` содержит все 26 тем. После установки все вопросы и ответы доступны

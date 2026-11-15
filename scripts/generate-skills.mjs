@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict';
-import {existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync} from 'node:fs';
+import {existsSync, mkdirSync, readFileSync, readdirSync, rmSync, unlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const catalog = JSON.parse(readFileSync(join(root, 'skills/catalog.json'), 'utf8'));
+const {prefix} = JSON.parse(readFileSync(join(root, 'skills/naming.json'), 'utf8'));
+assert.match(prefix, /^[a-z0-9]+(?:-[a-z0-9]+)*-$/);
+const skillName = (slug) => `${prefix}${slug}`;
 const check = process.argv.includes('--check');
 const maxChunkSize = 48_000;
 const generated = new Set();
@@ -74,6 +77,8 @@ function splitIntoChunks(markdown) {
 }
 
 function generateSkill(skill) {
+    const name = skillName(skill.slug);
+    assert(name.length <= 64, `Skill name exceeds 64 characters: ${name}`);
     const page = readFileSync(join(root, 'src/pages', skill.slug, 'index.md'), 'utf8');
     const {markdown, count} = convertQuestions(page, skill.slug);
     const chunks = splitIntoChunks(markdown);
@@ -81,7 +86,7 @@ function generateSkill(skill) {
     const index = [];
     for (const [i, chunk] of chunks.entries()) {
         const filename = 'part-' + String(i + 1).padStart(2, '0') + '.md';
-        const file = 'skills/' + skill.slug + '/references/' + filename;
+        const file = 'skills/' + name + '/references/' + filename;
         const questions = (chunk.text.match(/^#### Вопрос: /gm) ?? []).length;
         const topics = chunk.topics.join(', ');
         items.set(
@@ -103,10 +108,10 @@ function generateSkill(skill) {
     );
 
     items.set(
-        'skills/' + skill.slug + '/SKILL.md',
+        'skills/' + name + '/SKILL.md',
         [
             '---',
-            'name: ' + skill.slug,
+            'name: ' + name,
             'description: ' +
                 JSON.stringify(
                     'Вопросы и ответы для технического собеседования по теме ' +
@@ -141,6 +146,23 @@ function generateSkill(skill) {
     return items;
 }
 
+// Skill names used to match page slugs. Remove only directories produced by the old generator.
+for (const {slug} of catalog) {
+    const legacyDirectory = join(root, 'skills', slug);
+    if (!existsSync(legacyDirectory)) continue;
+
+    const legacySkillFile = join(legacyDirectory, 'SKILL.md');
+    assert(existsSync(legacySkillFile), `Unexpected legacy directory: skills/${slug}`);
+    const content = readFileSync(legacySkillFile, 'utf8');
+    assert(
+        content.startsWith(`---\nname: ${slug}\ndescription:`) &&
+            content.includes('Angular-RU/angular-ru-interview-questions'),
+        `Refusing to remove an unknown skill directory: skills/${slug}`,
+    );
+    if (check) throw new Error(`Stale unprefixed skill directory: skills/${slug}`);
+    rmSync(legacyDirectory, {recursive: true, force: true});
+}
+
 for (const skill of catalog) {
     const items = generateSkill(skill);
     for (const [relative, content] of items) {
@@ -155,10 +177,10 @@ for (const skill of catalog) {
         }
     }
 
-    const references = join(root, 'skills', skill.slug, 'references');
+    const references = join(root, 'skills', skillName(skill.slug), 'references');
     if (existsSync(references)) {
         for (const filename of readdirSync(references)) {
-            const relative = 'skills/' + skill.slug + '/references/' + filename;
+            const relative = 'skills/' + skillName(skill.slug) + '/references/' + filename;
             if (!generated.has(relative) && filename.startsWith('part-') && filename.endsWith('.md')) {
                 if (check) throw new Error('Stale generated file: ' + relative);
                 unlinkSync(join(references, filename));
