@@ -11,40 +11,7 @@ const {skill} = Astro.props;
 ---
 
 <details class="skill-quick-install">
-    <summary>
-        <svg
-            class="skill-quick-install__icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-        >
-            <rect
-                x="3"
-                y="4"
-                width="18"
-                height="16"
-                rx="2"
-            />
-            <path d="m7 9 3 3-3 3M13 15h4" />
-        </svg>
-        <span>Установить AI Skill</span>
-        <svg
-            class="skill-quick-install__chevron"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-        >
-            <path d="m6 9 6 6 6-6" />
-        </svg>
-    </summary>
+    <summary>Установить AI Skill</summary>
     <div class="skill-quick-install__content">
         <SkillInstall command={installCommand(skill.slug)} />
     </div>
