@@ -118,12 +118,14 @@ const searchEnabled = import.meta.env.PROD;
                 class="content"
                 data-pagefind-body
             >
-                {!isHomePage && (currentSkill || searchEnabled) && (
-                    <div class:list={['page-tools', currentSkill && 'page-tools--with-skill']}>
-                        {currentSkill && <SkillQuickInstall skill={currentSkill} />}
-                        <SiteSearch pagePath={currentPath} />
-                    </div>
-                )}
+                {
+                    !isHomePage && (currentSkill || searchEnabled) && (
+                        <div class:list={['page-tools', currentSkill && 'page-tools--with-skill']}>
+                            {currentSkill && <SkillQuickInstall skill={currentSkill} />}
+                            <SiteSearch pagePath={currentPath} />
+                        </div>
+                    )
+                }
 
                 <SidebarNavigation
                     headings={headings}
