@@ -1,49 +1,41 @@
 .skill-install {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 8px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     min-width: 0;
-    padding: 6px;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px 8px 16px;
     border: 1px solid #dce5ef;
     border-radius: 12px;
     background: #fff;
 }
 
-.skill-install__command {
-    display: flex;
-    min-width: 0;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 10px;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    white-space: nowrap;
-}
-
 .skill-install__prompt {
-    flex-shrink: 0;
     color: #8995a7;
     font-family: monospace;
     font-size: 0.85rem;
 }
 
 .content .skill-install code {
-    flex-shrink: 0;
-    padding: 0;
+    display: block;
+    min-width: 0;
+    padding: 8px 0;
+    overflow-x: auto;
     color: #273347;
     background: transparent;
     font-size: 0.8rem;
     line-height: 1.5;
+    scrollbar-width: thin;
     white-space: nowrap;
 }
 
 .skill-install__copy {
     display: inline-flex;
+    min-height: 38px;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    min-height: 38px;
+    gap: 8px;
     padding: 8px 12px;
     border: 1px solid #c9def5;
     border-radius: 9px;
@@ -56,10 +48,13 @@
     cursor: pointer;
 }
 
-.skill-install__copy svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+.skill-install__copy::before {
+    width: 13px;
+    height: 13px;
+    color: inherit;
+    font-size: 1rem;
+    line-height: 1;
+    content: '⧉';
 }
 
 .skill-install__copy:hover {
@@ -67,14 +62,8 @@
     background: #e0f0ff;
 }
 
-.skill-install__copy[data-copy-state='copied'] {
-    border-color: #b5ddca;
-    color: #24724b;
-    background: #edfaf2;
-}
-
 .skill-install__copy:focus-visible,
-.skill-install__command:focus-visible,
+.content .skill-install code:focus-visible,
 .skills-catalog a:focus-visible {
     outline: 3px solid #8bb8ff;
     outline-offset: 3px;
@@ -90,8 +79,8 @@
 .content .skill-quick-install > summary {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 13px 16px;
+    gap: 12px;
+    padding: 12px 16px;
     list-style: none;
     color: var(--accent-strong);
     font-size: 0.9rem;
@@ -101,6 +90,32 @@
 
 .content .skill-quick-install > summary::-webkit-details-marker {
     display: none;
+}
+
+.content .skill-quick-install > summary::before {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: 9px;
+    color: var(--accent-strong);
+    background: #e3f1ff;
+    font-family: monospace;
+    font-size: 0.8rem;
+    content: '>_';
+}
+
+.content .skill-quick-install > summary::after {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+    margin-left: auto;
+    border-right: 2px solid #7d8ba2;
+    border-bottom: 2px solid #7d8ba2;
+    content: '';
+    transform: rotate(45deg);
+    transition: transform 160ms ease;
 }
 
 .content .skill-quick-install > summary:hover {
@@ -117,23 +132,8 @@
     background: transparent;
 }
 
-.skill-quick-install__icon {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-}
-
-.skill-quick-install__chevron {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-    margin-left: auto;
-    color: #718096;
-    transition: transform 160ms ease;
-}
-
-.skill-quick-install[open] .skill-quick-install__chevron {
-    transform: rotate(180deg);
+.content details.skill-quick-install[open] > summary::after {
+    transform: rotate(225deg);
 }
 
 .skill-quick-install__content {
@@ -278,13 +278,8 @@
 
 @media (max-width: 600px) {
     .skill-install {
-        gap: 4px;
-        padding: 4px;
-    }
-
-    .skill-install__command {
         gap: 8px;
-        padding: 8px;
+        padding: 6px 8px;
     }
 
     .skill-install__copy {
@@ -297,7 +292,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .skill-quick-install__chevron,
+    .content .skill-quick-install > summary::after,
     .skills-catalog__card {
         transition: none;
     }
