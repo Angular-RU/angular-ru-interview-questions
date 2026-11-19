@@ -11,46 +11,89 @@ const {command} = Astro.props;
     role="group"
     aria-label="Команда установки AI-скилла"
 >
-    <span
-        class="skill-install__prompt"
-        aria-hidden="true"
+    <div
+        class="skill-install__command"
+        role="region"
+        aria-label="Команда установки, горизонтальная прокрутка"
+        tabindex="0"
     >
-        $
-    </span>
-    <code>{command}</code>
+        <span
+            class="skill-install__prompt"
+            aria-hidden="true"
+        >
+            $
+        </span>
+        <code>{command}</code>
+    </div>
     <button
         class="skill-install__copy"
         type="button"
         data-copy-skill={command}
         aria-label="Скопировать команду установки"
     >
-        Копировать
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+        >
+            <rect
+                x="8"
+                y="8"
+                width="12"
+                height="12"
+                rx="2"
+            />
+            <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+        </svg>
+        <span data-copy-label>Копировать</span>
     </button>
 </div>
 
 <script>
+    const resetTimers = new WeakMap<HTMLButtonElement, number>();
+
     document.addEventListener('click', async (event) => {
         if (!(event.target instanceof Element)) {
             return;
         }
 
         const button = event.target.closest<HTMLButtonElement>('[data-copy-skill]');
+        const label = button?.querySelector<HTMLElement>('[data-copy-label]');
 
-        if (!button) {
+        if (!button || !label) {
             return;
+        }
+
+        const previousTimer = resetTimers.get(button);
+
+        if (previousTimer !== undefined) {
+            window.clearTimeout(previousTimer);
         }
 
         try {
             await navigator.clipboard.writeText(button.dataset.copySkill ?? '');
-            button.textContent = 'Скопировано';
+            label.textContent = 'Скопировано';
+            button.dataset.copyState = 'copied';
+            button.setAttribute('aria-label', 'Команда скопирована');
         } catch {
-            button.textContent = 'Выделите команду';
+            label.textContent = 'Выделите команду';
+            button.removeAttribute('data-copy-state');
+            button.setAttribute('aria-label', 'Не удалось скопировать команду');
         }
 
-        window.setTimeout(() => {
-            if (button.isConnected) {
-                button.textContent = 'Копировать';
-            }
-        }, 1800);
+        resetTimers.set(
+            button,
+            window.setTimeout(() => {
+                if (button.isConnected) {
+                    label.textContent = 'Копировать';
+                    button.removeAttribute('data-copy-state');
+                    button.setAttribute('aria-label', 'Скопировать команду установки');
+                }
+            }, 1800),
+        );
     });
 </script>
