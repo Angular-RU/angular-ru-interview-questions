@@ -14,6 +14,8 @@
 }
 
 .page-tools {
+    --page-tool-height: 36px;
+
     display: flex;
     justify-content: flex-end;
     margin-bottom: 24px;
@@ -32,6 +34,8 @@
 }
 
 .page-tools .site-search {
+    --pf-input-height: var(--page-tool-height);
+
     min-width: 0;
     margin-bottom: 0;
 }
