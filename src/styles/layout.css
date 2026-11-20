@@ -15,6 +15,8 @@
 
 .page-tools {
     --page-tool-height: 36px;
+    --page-tool-border-color: var(--border);
+    --page-tool-border-radius: 10px;
 
     display: flex;
     justify-content: flex-end;
@@ -35,6 +37,8 @@
 
 .page-tools .site-search {
     --pf-input-height: var(--page-tool-height);
+    --pf-border: var(--page-tool-border-color);
+    --pf-border-radius: var(--page-tool-border-radius);
 
     min-width: 0;
     margin-bottom: 0;

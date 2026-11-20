@@ -71,8 +71,8 @@
 
 .content details.skill-quick-install {
     margin: 0 0 24px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--page-tool-border-color, var(--border));
+    border-radius: var(--page-tool-border-radius, 10px);
     background: var(--surface);
 }
 
