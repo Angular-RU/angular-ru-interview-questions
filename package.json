@@ -33,7 +33,7 @@
     "devDependencies": {
         "@astrojs/markdown-remark": "7.3.6",
         "@astrojs/react": "6.0.6",
-        "@tailwindcss/vite": "4.3.4",
+        "@tailwindcss/vite": "4.3.5",
         "@types/node": "26.6.6",
         "@types/react": "19.3.0",
         "@types/react-dom": "19.3.0",
