@@ -4109,6 +4109,88 @@ readonly selected = linkedSignal(() => this.options()[0] ?? null);
 
 </details>
 
+
+<details>
+<summary>Практическая задача: в чем проблема с каскадными computed() при фильтрации комментариев?</summary><br>
+<table><tr><td>
+
+**Короткий ответ**
+
+Каскадные `computed()` корректны: Angular вычисляет их лениво, кеширует результаты и отслеживает зависимости.
+Проблема возможна в повторной фильтрации одного массива, если нужны оба списка, и в неочевидной логике `hasTriggers()`.
+Само по себе количество `computed()` не означает лишних пересчетов.
+
+**Полный ответ**
+
+Посмотрите на код. Что произойдет при изменении `allComments()`, сколько раз будет выполнена фильтрация и как можно
+упростить реализацию?
+
+```ts
+protected readonly triggerTabComments = computed(() =>
+  this.allComments().filter((comment) => comment.isTrigger),
+);
+
+protected readonly otherTabComments = computed(() =>
+  this.allComments().filter((comment) => !comment.isTrigger),
+);
+
+protected readonly allTabComments = computed(() =>
+  this.hasTriggers() ? this.otherTabComments() : this.allComments(),
+);
+```
+
+**Разбор:**
+
+- `triggerTabComments` и `otherTabComments` независимо фильтруют один источник. Если прочитать оба значения после
+  изменения `allComments()`, произойдут два прохода по массиву. На небольших списках это обычно не проблема.
+- `computed()` выполняется только при чтении, запоминает результат и пересчитывается при следующем чтении после
+  изменения зависимости. Объявление нескольких `computed()` не запускает все фильтры на каждом change detection.
+- Зависимости `allTabComments` динамические: при `hasTriggers() === true` он читает `otherTabComments()`, иначе —
+  напрямую `allComments()`. Неиспользуемая ветка не вычисляется только из-за этого `computed()`.
+- При `hasTriggers() === false` вкладка «Все» получает исходный массив, включая комментарии с `isTrigger`.
+  Это корректно только если соответствует требованиям. Из фрагмента не видно, что именно означает `hasTriggers()`.
+
+Если оба отфильтрованных списка нужны одновременно и профилирование показало затраты, можно разбить комментарии
+на группы за один проход:
+
+```ts
+protected readonly commentsByType = computed(() => {
+  const comments = this.allComments();
+  const trigger: Array<(typeof comments)[number]> = [];
+  const other: Array<(typeof comments)[number]> = [];
+
+  for (const comment of comments) {
+    if (comment.isTrigger) {
+      trigger.push(comment);
+    } else {
+      other.push(comment);
+    }
+  }
+
+  return {trigger, other};
+});
+
+protected readonly triggerTabComments = computed(() => this.commentsByType().trigger);
+protected readonly otherTabComments = computed(() => this.commentsByType().other);
+
+protected readonly allTabComments = computed(() =>
+  this.hasTriggers() ? this.otherTabComments() : this.allComments(),
+);
+```
+
+Так классификация выполняется за один проход, когда читается хотя бы одна группа. Компромисс: вычисляются обе
+группы, даже если нужна только одна. Если используется лишь вкладка «Все», исходный вариант может оказаться дешевле
+благодаря ленивым вычислениям.
+
+**Вывод:** не следует заменять каскадные `computed()` одним большим вычислением без причины. Сначала проверьте
+бизнес-логику, фактические чтения signals и стоимость фильтрации; оптимизируйте только обнаруженную проблему.
+
+Документация: [Angular Signals](https://angular.dev/guide/signals).
+
+</td></tr></table>
+
+</details>
+
 <details>
 <summary>Когда использовать resource(), httpResource() и RxJS?</summary><br>
 <table><tr><td>
