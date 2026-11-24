@@ -4109,7 +4109,6 @@ readonly selected = linkedSignal(() => this.options()[0] ?? null);
 
 </details>
 
-
 <details>
 <summary>Практическая задача: в чем проблема с каскадными computed() при фильтрации комментариев?</summary><br>
 <table><tr><td>
