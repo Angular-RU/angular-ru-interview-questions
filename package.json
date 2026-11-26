@@ -42,7 +42,7 @@
         "markdown-it": "14.3.3",
         "markdown-it-anchor": "9.2.1",
         "pagefind": "1.6.0",
-        "prettier": "3.9.10",
+        "prettier": "3.10.1",
         "prettier-plugin-astro": "0.14.1",
         "react": "19.3.1",
         "react-dom": "19.3.1",
