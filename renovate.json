@@ -9,7 +9,10 @@
     "packageRules": [
         {
             "matchPackageNames": ["/^@angular\\//", "/^@angular-devkit\\//", "/^@schematics\\//", "ng-packagr"],
-            "separateMinorPatch": false
+            "separateMinorPatch": false,
+            "postUpgradeTasks": {
+                "commands": []
+            }
         }
     ]
 }
