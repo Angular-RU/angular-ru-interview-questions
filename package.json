@@ -31,7 +31,7 @@
         "skills:package": "bash scripts/package-skills.sh"
     },
     "devDependencies": {
-        "@astrojs/markdown-remark": "7.3.8",
+        "@astrojs/markdown-remark": "7.3.9",
         "@astrojs/react": "6.0.6",
         "@tailwindcss/vite": "4.3.5",
         "@types/node": "26.6.6",
